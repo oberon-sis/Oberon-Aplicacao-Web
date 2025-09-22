@@ -11,4 +11,8 @@ router.post("/autenticar", function (req, res) {
   usuarioController.autenticar(req, res);
 });
 
+router.get("/permissoes/:idUsuario", function (req, res) {
+  usuarioController.permissoes(req, res);
+});
+
 module.exports = router;

@@ -34,6 +34,23 @@
         })
         .catch(error => console.error('Erro ao carregar o menu:', error));
     });
+    idUsuario = 5
+document.addEventListener('DOMContentLoaded', function() {
+    fetch(`/usuarios/permissoes/${idUsuario}`, { cache: 'no-store' })
+        .then(function (response) {
+            if (response.ok) {
+                response.json().then(function (dados) {
+                    console.log(dados);
+                    
+                });
+            } else {
+                console.error('Nenhum dado encontrado ou erro na API');
+            }
+        })
+        .catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ ranking: ${error.message}`);
+        });
+})
   </script>
 </body>
 </html>

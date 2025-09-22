@@ -1,5 +1,4 @@
 var usuarioModel = require("../models/usuarioModel");
-var aquarioModel = require("../models/aquarioModel");
 
 function autenticar(req, res) {
   var email = req.body.emailServer;
@@ -82,7 +81,30 @@ function cadastrar(req, res) {
   }
 }
 
+function permissoes(req, res) {
+  var idUsuario = req.params.idUsuario;
+
+  if (idUsuario == undefined) {
+    res.status(400).send("Seu idUsuario está undefined!");
+  }  else {
+    usuarioModel
+      .permissoes(idUsuario)
+      .then(function (resultado) {
+        res.json(resultado);
+      })
+      .catch(function (erro) {
+        console.log(erro);
+        console.log(
+          "\nHouve um erro ao realizar a procura de permissoes! Erro: ",
+          erro.sqlMessage
+        );
+        res.status(500).json(erro.sqlMessage);
+      });
+  }
+}
+
 module.exports = {
   autenticar,
   cadastrar,
+  permissoes,
 };
