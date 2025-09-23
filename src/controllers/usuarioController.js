@@ -1,6 +1,5 @@
 var usuarioModel = require("../models/usuarioModel");
-const modulos  = require('../utils/menuData');
-
+const { modulos } = require('../utils/menuData');
 function autenticar(req, res) {
   var email = req.body.emailServer;
   var senha = req.body.senhaServer;
