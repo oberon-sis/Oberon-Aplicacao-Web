@@ -29,9 +29,9 @@ function cadastrar(nome, email, senha, fkEmpresa) {
   return database.executar(instrucaoSql);
 }
 
-function permissoes(idUsuario) {
+function getMenu(idUsuario) {
   console.log(
-    "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function permissoes(): ",
+    "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function getMenu(): ",
     idUsuario
   );
   var instrucaoSql = `
@@ -45,5 +45,5 @@ function permissoes(idUsuario) {
 module.exports = {
   autenticar,
   cadastrar,
-  permissoes,
+  getMenu,
 };
