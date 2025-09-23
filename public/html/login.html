@@ -1,11 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="../css/login.css">
+  <title>OBERON - Login</title>
 </head>
+
 <body>
-  
+  <a class="logo-oberon">
+    <img src="../assets/marca/logo_branco.png" alt="OBERON" class="logo" width="48" height="48">
+  </a>
+  <div class="full-screen">
+    <div class="login-container">
+      <h1 class="login-title">LOGIN</h1>
+
+      <form id="loginForm">
+        <div class="form-grupo">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-grupo">
+          <label for="password">Senha</label>
+          <div class="input-container">
+            <input type="password" id="password" name="password" required>
+            <button type="button" class="password-toggle">
+              <img src="../assets/marca/show.png" alt="Mostrar senha" width="20" height="20">
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="login-btn">ENTRAR</button>
+      </form>
+
+      <div class="redirecionamento">
+        <a href="#">Esqueci minha senha</a> • <a href="./cadastro.html">Não possui uma conta?</a>
+      </div>
+    </div>
+
+    <div class="frase-impacto">
+      <div class="text">
+        <div class="title">Segurança que move seu negócio.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelector('.password-toggle').onclick = function () {
+      const input = document.getElementById('password');
+      const img = this.querySelector("img");
+
+      if (input.type === "password") {
+        input.type = "text";
+        img.src = "../assets/marca/hide.png";
+        img.alt = "Ocultar senha";
+      } else {
+        input.type = "password";
+        img.src = "../assets/marca/show.png"; 
+        img.alt = "Mostrar senha";
+      }
+    }
+  </script>
 </body>
+
 </html>

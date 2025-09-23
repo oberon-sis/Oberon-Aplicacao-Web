@@ -1,0 +1,447 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+    background: linear-gradient(90deg, #000000 0%, #16213e 100%);
+    color: #f8fafc;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    line-height: 1.6;
+}
+
+.logo-oberon{
+  position: fixed;
+  top: 16px;   
+  left: 16px;  
+  z-index: 9999;
+  display: inline-block;
+  border-radius: 8px;
+  padding: 4px; 
+}
+
+.logo{
+  display: block;
+  width: 64px; 
+  height: 64px;
+  object-fit: contain;
+}
+
+
+.full-screen {
+    display: flex;
+    gap: 48px;
+    width: 100%;
+    max-width: 1200px;
+    align-items: center;
+}
+
+.login-container {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    padding: 48px;
+    border-radius: 16px;
+    width: 420px;
+    border: 1px solid #008faa;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.login-title {
+    font-size: 32px;
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 32px;
+    letter-spacing: 4px;
+    color: #ffffff;
+}
+
+.form-grupo {
+    margin-bottom: 24px;
+}
+
+label {
+    display: block;
+    color: #cbd5e1;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: #008faa;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+input::placeholder {
+    color: rgba(203, 213, 225, 0.5);
+}
+
+.input-container {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px;
+    transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+    color: #3b82f6;
+}
+
+.login-btn {
+    width: 100%;
+    margin-top: 32px;
+    padding: 16px;
+    background: linear-gradient(135deg, #008faa 0%, #1d4ed8 100%);
+    border: none;
+    border-radius: 12px;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+.redirecionamento {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 14px;
+    color: #94a3b8;
+}
+
+.redirecionamento a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.redirecionamento a:hover {
+    color: #60a5fa;
+    text-decoration: underline;
+}
+
+.frase-impacto {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+}
+
+.frase-impacto .text {
+    max-width: 600px;
+}
+
+.frase-impacto .title {
+    font-weight: 200;
+    color: #ffffff;
+    margin-bottom: 16px;
+    font-size: clamp(28px, 4vw, 48px);
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+}
+
+.frase-impacto .title:hover {
+    transform: translateY(-10px);
+    transition: 0.3s;
+}
+
+@media (max-width: 375px) {
+    body {
+        padding: 12px;
+    }
+
+    .logo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .full-screen {
+        flex-direction: column;
+        gap: 12px;
+        max-width: 100%;
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .login-container {
+        width: 100%;
+        padding: 16px;
+        border-radius: 10px;
+    }
+
+    .login-title {
+        font-size: 20px;
+        letter-spacing: 2px;
+        margin-bottom: 18px;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+        padding: 12px 10px;
+        font-size: 14px;
+    }
+
+    .password-toggle {
+        right: 10px;
+        font-size: 16px;
+    }
+
+    .input-container img {
+        width: 18px;
+        height: 18px;
+    }
+
+    .login-btn {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .frase-impacto {
+        display: none;
+    }
+}
+
+@media (min-width: 376px) and (max-width: 768px) {
+    .logo {
+        width: 56px;
+        height: 56px;
+    }
+
+    .full-screen {
+        flex-direction: column;
+        gap: 20px;
+        max-width: 720px;
+        padding: 18px;
+    }
+
+    .login-container {
+        width: 100%;
+        max-width: 480px;
+        padding: 24px;
+        margin: 0 auto;
+    }
+
+    .login-title {
+        font-size: 24px;
+        letter-spacing: 3px;
+    }
+
+    .login-btn {
+        font-size: 15px;
+        padding: 14px;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+        padding: 14px 12px;
+        font-size: 15px;
+    }
+
+    .frase-impacto {
+        display: flex;
+        padding: 20px;
+        min-height: 160px;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .frase-impacto .title {
+        font-size: clamp(20px, 6vw, 32px);
+        line-height: 1.08;
+    }
+
+    .frase-impacto .subtitle {
+        font-size: 14px;
+    }
+
+    .frase-impacto .cta {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1439px) {
+    .logo {
+        width: 72px;
+        height: 72px;
+    }
+
+    .full-screen {
+        gap: 40px;
+        max-width: 1100px;
+    }
+
+    .login-container {
+        width: 420px;
+        padding: 36px;
+    }
+
+    .frase-impacto {
+        padding: 36px;
+        min-height: 380px;
+    }
+
+    .frase-impacto .title {
+        font-size: clamp(28px, 4vw, 48px);
+    }
+
+    .frase-impacto .subtitle {
+        font-size: 16px;
+    }
+}
+
+@media (min-width: 1440px) {
+    body {
+        padding: 32px;
+    }
+
+    .logo {
+        width: 96px;
+        height: 96px;
+    }
+
+    .full-screen {
+        gap: 56px;
+        max-width: 1400px;
+        align-items: center;
+    }
+
+    .login-container {
+        width: 480px;
+        padding: 56px;
+        border-radius: 18px;
+        box-shadow: 0 14px 48px rgba(0, 0, 0, 0.45);
+    }
+
+    .login-title {
+        font-size: 36px;
+        letter-spacing: 5px;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+        padding: 18px 20px;
+        font-size: 17px;
+    }
+
+    .login-btn {
+        padding: 18px;
+        font-size: 17px;
+    }
+
+    .frase-impacto {
+        padding: 56px;
+        min-height: 520px;
+    }
+
+    .frase-impacto .title {
+        font-size: 56px;
+        line-height: 1.03;
+    }
+
+    .frase-impacto .subtitle {
+        font-size: 18px;
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 2560px) {
+    body {
+        padding: 48px;
+    }
+
+    .logo {
+        width: 120px;
+        height: 120px;
+    }
+
+    .full-screen {
+        gap: 96px;
+        max-width: 2000px;
+    }
+
+    .login-container {
+        width: 640px;
+        padding: 80px;
+        border-radius: 22px;
+    }
+
+    .login-title {
+        font-size: 48px;
+        letter-spacing: 6px;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+        padding: 22px 24px;
+        font-size: 18px;
+    }
+
+    .login-btn {
+        padding: 20px;
+        font-size: 18px;
+    }
+
+    .frase-impacto {
+        padding: 80px;
+        min-height: 760px;
+    }
+
+    .frase-impacto .title {
+        font-size: 84px;
+        line-height: 1.02;
+    }
+
+    .frase-impacto .subtitle {
+        font-size: 22px;
+        max-width: 920px;
+    }
+}
