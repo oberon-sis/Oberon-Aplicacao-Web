@@ -11,7 +11,6 @@ const modulos = {
 const linksPrincipais = ['home', 'paineis', 'alertas', 'suporte'];
 const linksGestao = ['usuarios', 'maquinas', 'empresa'];
 
-// Torna os objetos e listas disponíveis para outros arquivos
 module.exports = {
     modulos,
     linksPrincipais,

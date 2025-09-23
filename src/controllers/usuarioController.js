@@ -1,5 +1,6 @@
 var usuarioModel = require("../models/usuarioModel");
-const { modulos, linksPrincipais, linksGestao } = require('../utils/menuData');
+const modulos  = require('../utils/menuData');
+
 function autenticar(req, res) {
   var email = req.body.emailServer;
   var senha = req.body.senhaServer;
@@ -83,7 +84,6 @@ function cadastrar(req, res) {
 
 function getMenu(req, res) {
   const idUsuario = req.params.idUsuario;
-
   if (idUsuario == undefined) {
     return res.status(400).send("Seu idUsuario está undefined!");
   }
@@ -93,13 +93,10 @@ function getMenu(req, res) {
       if (resultado.length === 0) {
         return res.status(404).json({ mensagem: "Usuário não encontrado." });
       }
-
       const permissoesDoBanco = resultado[0].permissoes;
       const permissoesArray = permissoesDoBanco.split(';');
 
-      // Geração de HTML para cada seção do menu
       const menu = {
-        // Menu de PC
         alertaSuportePC: gerarLinkHTML(modulos.home) +
           (permissoesArray.includes('ver_alertas') ? gerarLinkHTML(modulos.alertas) : '') +
           (permissoesArray.includes('ver_suporte') ? gerarLinkHTML(modulos.suporte) : ''),
@@ -107,7 +104,6 @@ function getMenu(req, res) {
         painelPC: permissoesArray.includes('ver_paineis') ? gerarDropdownHTML(modulos.paineis, false) : '',
         gestaoAreaPC: gerarSecaoGestaoHTML(permissoesArray, false),
 
-        // Menu Mobile (com flag isMobile = true)
         alertaSuporteMobile: gerarLinkHTML(modulos.home) +
           (permissoesArray.includes('ver_alertas') ? gerarLinkHTML(modulos.alertas) : '') +
           (permissoesArray.includes('ver_suporte') ? gerarLinkHTML(modulos.suporte) : ''),
@@ -146,11 +142,10 @@ function gerarDropdownHTML(item, isMobile) {
         </div>`;
 }
 
-function gerarSecaoGestaoHTML(permissoesArray, isMobile) {
+function gerarSecaoGestaoHTML(permissoesArray) {
   let htmlGestao = '';
   const linksGestao = ['usuarios', 'maquinas', 'empresa'];
 
-  // Verifica se o usuário tem alguma permissão de gestão para mostrar a seção
   const temPermissaoGestao = linksGestao.some(linkId => permissoesArray.includes(modulos[linkId].permissao));
 
   if (temPermissaoGestao) {
@@ -160,7 +155,6 @@ function gerarSecaoGestaoHTML(permissoesArray, isMobile) {
       }
     });
 
-    // Retorna a seção completa com o título e os links
     return `
             <div class="mt-4">
                 <h6 class="text-uppercase text-secondary mb-3 small">Gestão</h6>
@@ -169,7 +163,7 @@ function gerarSecaoGestaoHTML(permissoesArray, isMobile) {
                 </div>
             </div>`;
   }
-  return ''; // Retorna string vazia se não houver permissão
+  return ''; 
 }
 module.exports = {
   autenticar,
