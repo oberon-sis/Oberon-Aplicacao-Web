@@ -6,69 +6,72 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
-    background: linear-gradient(90deg, #000000 0%, #16213e 100%);
-    color: #f8fafc;
+    background: #f9f9f9;
+    color: #111;
     min-height: 100vh;
     display: flex;
+    overflow: hidden;
     align-items: center;
     justify-content: center;
-    padding: 24px;
-    line-height: 1.6;
+    padding: 0;
+    margin: 0;
 }
 
-.logo-oberon{
-  position: fixed;
-  top: 16px;   
-  left: 16px;  
-  z-index: 9999;
-  display: inline-block;
-  border-radius: 8px;
-  padding: 4px; 
+.logo-oberon {
+    position: fixed;
+    top: clamp(12px, 2vw, 20px);
+    left: clamp(12px, 2vw, 20px);
+    z-index: 9999;
+    display: inline-block;
+    border-radius: 8px;
+    padding: 0;
 }
 
-.logo{
-  display: block;
-  width: 64px; 
-  height: 64px;
-  object-fit: contain;
+.logo {
+    display: block;
+    width: clamp(60px, 12vw, 96px);
+    height: clamp(60px, 12vw, 96px);
+    object-fit: contain;
 }
 
 
 .full-screen {
     display: flex;
-    gap: 48px;
     width: 100%;
-    max-width: 1200px;
-    align-items: center;
+    height: 100vh;
+    max-width: none;
+    align-items: stretch;
 }
 
 .login-container {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    padding: 48px;
-    border-radius: 16px;
-    width: 420px;
-    border: 1px solid #008faa;
+    background: #1a1a1a;
+    color: #ffffff;
+    padding: clamp(24px, 5vw, 56px);
+    border-radius: 0;
+    width: clamp(100%, 40vw, 480px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .login-title {
-    font-size: 32px;
-    font-weight: 300;
+    font-size: clamp(24px, 5vw, 36px);
+    font-weight: 400;
     text-align: center;
-    margin-bottom: 32px;
-    letter-spacing: 4px;
+    margin-bottom: clamp(24px, 4vw, 40px);
+    letter-spacing: clamp(1px, 0.3vw, 4px);
     color: #ffffff;
 }
 
 .form-grupo {
-    margin-bottom: 24px;
+    margin-bottom: clamp(18px, 3vw, 28px);
 }
 
 label {
     display: block;
-    color: #cbd5e1;
-    font-size: 14px;
+    color: #d1d5db;
+    font-size: clamp(13px, 2vw, 15px);
     font-weight: 500;
     margin-bottom: 8px;
     letter-spacing: 0.5px;
@@ -78,12 +81,12 @@ input[type="email"],
 input[type="password"],
 input[type="text"] {
     width: 100%;
-    padding: 16px 20px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.05);
+    padding: clamp(12px, 2.5vw, 18px) clamp(16px, 3vw, 22px);
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #2a2a2a;
     color: #ffffff;
-    font-size: 16px;
+    font-size: clamp(14px, 2.5vw, 16px);
     transition: all 0.3s ease;
 }
 
@@ -95,7 +98,7 @@ input:focus {
 }
 
 input::placeholder {
-    color: rgba(203, 213, 225, 0.5);
+    color: #888;
 }
 
 .input-container {
@@ -104,38 +107,46 @@ input::placeholder {
 
 .password-toggle {
     position: absolute;
-    right: 16px;
+    right: clamp(12px, 2vw, 16px);
     top: 50%;
     transform: translateY(-50%);
     background: transparent;
     border: none;
-    color: #64748b;
     cursor: pointer;
-    font-size: 18px;
-    padding: 4px;
-    transition: color 0.2s ease;
+    padding: 6px;
+    border-radius: 4px;
+    transition: opacity 0.2s ease;
+}
+
+.password-toggle img {
+    width: clamp(18px, 3vw, 22px);
+    height: clamp(18px, 3vw, 22px);
+    filter: invert(1);
+    opacity: 0.7;
 }
 
 .password-toggle:hover {
+    opacity: 0.7;
     color: #3b82f6;
 }
 
 .login-btn {
     width: 100%;
-    margin-top: 32px;
-    padding: 16px;
-    background: linear-gradient(135deg, #008faa 0%, #1d4ed8 100%);
+    margin-top: clamp(24px, 4vw, 36px);
+    padding: clamp(14px, 2.5vw, 18px);
+    background: #fff;
     border: none;
-    border-radius: 12px;
-    color: #ffffff;
+    border-radius: 8px;
+    color: #000000;
     font-weight: 600;
-    font-size: 16px;
+    font-size: clamp(14px, 2.5vw, 16px);
     cursor: pointer;
     letter-spacing: 0.5px;
     transition: all 0.3s ease;
 }
 
 .login-btn:hover {
+    background: #e5e5e5;
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
 }
@@ -145,100 +156,143 @@ input::placeholder {
 }
 
 .redirecionamento {
-    margin-top: 24px;
+    margin-top: clamp(16px, 3vw, 24px);
     text-align: center;
-    font-size: 14px;
-    color: #94a3b8;
+    font-size: clamp(12px, 2vw, 14px);
+    color: #aaa;
 }
 
 .redirecionamento a {
-    color: #3b82f6;
+    color: #bbb;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s ease;
 }
 
 .redirecionamento a:hover {
-    color: #60a5fa;
+    color: #ddd;
     text-decoration: underline;
 }
 
 .frase-impacto {
     flex: 1;
+    height: 100vh;
+    background: url(../assets/marca/bg-login.jpg) center / cover;
     display: flex;
+    position: relative;
     align-items: center;
     justify-content: center;
-    padding: 48px;
+    padding: clamp(24px, 5vw, 60px);
+    min-height: 100vh;
+}
+
+.frase-impacto::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(2px);
 }
 
 .frase-impacto .text {
+    position: relative;
+    z-index: 1;
     max-width: 600px;
+    text-align: center;
 }
 
 .frase-impacto .title {
-    font-weight: 200;
-    color: #ffffff;
+    font-weight: 300;
+    color: #111;
     margin-bottom: 16px;
-    font-size: clamp(28px, 4vw, 48px);
+    font-size: clamp(24px, 6vw, 56px);
     line-height: 1.2;
     letter-spacing: -0.5px;
+    transition: transform 0.3s ease;
 }
 
 .frase-impacto .title:hover {
-    transform: translateY(-10px);
-    transition: 0.3s;
+    transform: translateY(-8px);
 }
 
 @media (max-width: 375px) {
     body {
-        padding: 12px;
+        padding: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .logo-oberon {
+        top: 16px;
+        left: 16px;
     }
 
     .logo {
-        width: 40px;
-        height: 40px;
+        width: 72px;
+        height: 72px;
     }
 
     .full-screen {
         flex-direction: column;
-        gap: 12px;
-        max-width: 100%;
-        width: 100%;
-        align-items: stretch;
+        height: auto;
+        min-height: 100vh;
     }
 
     .login-container {
-        width: 100%;
-        padding: 16px;
-        border-radius: 10px;
+        width: 100vw;
+        height: 100vh;
+        padding: 80px 20px 32px 20px;
+        border-radius: 0;
+        min-height: 100vh;
+        justify-content: flex-start;
+        padding-top: 80px;
     }
 
     .login-title {
-        font-size: 20px;
+        font-size: 24px;
         letter-spacing: 2px;
-        margin-bottom: 18px;
+        margin-bottom: 32px;
+        margin-top: 20px;
+    }
+
+    .form-grupo {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-size: 14px;
+        margin-bottom: 6px;
     }
 
     input[type="email"],
     input[type="password"],
     input[type="text"] {
-        padding: 12px 10px;
-        font-size: 14px;
+        padding: 14px 16px;
+        font-size: 16px;
+        border-radius: 8px;
     }
 
     .password-toggle {
-        right: 10px;
-        font-size: 16px;
+        right: 14px;
+        padding: 8px;
     }
 
-    .input-container img {
-        width: 18px;
-        height: 18px;
+    .password-toggle img {
+        width: 20px;
+        height: 20px;
     }
 
     .login-btn {
-        padding: 10px;
+        padding: 16px;
+        font-size: 16px;
+        margin-top: 32px;
+        border-radius: 8px;
+    }
+
+    .redirecionamento {
+        margin-top: 24px;
         font-size: 14px;
+        line-height: 1.4;
     }
 
     .frase-impacto {
@@ -246,202 +300,80 @@ input::placeholder {
     }
 }
 
-@media (min-width: 376px) and (max-width: 768px) {
-    .logo {
-        width: 56px;
-        height: 56px;
-    }
 
+
+@media (min-width: 481px) and (max-width: 768px) {
     .full-screen {
         flex-direction: column;
-        gap: 20px;
-        max-width: 720px;
-        padding: 18px;
+        gap: 0;
     }
 
     .login-container {
         width: 100%;
-        max-width: 480px;
-        padding: 24px;
-        margin: 0 auto;
-    }
-
-    .login-title {
-        font-size: 24px;
-        letter-spacing: 3px;
-    }
-
-    .login-btn {
-        font-size: 15px;
-        padding: 14px;
-    }
-
-    input[type="email"],
-    input[type="password"],
-    input[type="text"] {
-        padding: 14px 12px;
-        font-size: 15px;
+        min-height: 60vh;
     }
 
     .frase-impacto {
-        display: flex;
-        padding: 20px;
-        min-height: 160px;
-        text-align: center;
-        justify-content: center;
-    }
-
-    .frase-impacto .title {
-        font-size: clamp(20px, 6vw, 32px);
-        line-height: 1.08;
-    }
-
-    .frase-impacto .subtitle {
-        font-size: 14px;
-    }
-
-    .frase-impacto .cta {
-        padding: 10px 16px;
-        font-size: 13px;
+        min-height: 40vh;
     }
 }
 
-@media (min-width: 769px) and (max-width: 1439px) {
-    .logo {
-        width: 72px;
-        height: 72px;
-    }
-
+@media (min-width: 769px) and (max-width: 1024px) {
     .full-screen {
-        gap: 40px;
-        max-width: 1100px;
+        flex-direction: row;
+        gap: 0;
     }
 
     .login-container {
-        width: 420px;
-        padding: 36px;
+        width: 35%;
+        min-width: 400px;
     }
 
     .frase-impacto {
-        padding: 36px;
-        min-height: 380px;
-    }
-
-    .frase-impacto .title {
-        font-size: clamp(28px, 4vw, 48px);
-    }
-
-    .frase-impacto .subtitle {
-        font-size: 16px;
+        width: 65%;
     }
 }
 
-@media (min-width: 1440px) {
-    body {
-        padding: 32px;
-    }
-
-    .logo {
-        width: 96px;
-        height: 96px;
-    }
-
-    .full-screen {
-        gap: 56px;
-        max-width: 1400px;
-        align-items: center;
-    }
-
+@media (min-width: 1025px) and (max-width: 1440px) {
     .login-container {
-        width: 480px;
-        padding: 56px;
-        border-radius: 18px;
-        box-shadow: 0 14px 48px rgba(0, 0, 0, 0.45);
-    }
-
-    .login-title {
-        font-size: 36px;
-        letter-spacing: 5px;
-    }
-
-    input[type="email"],
-    input[type="password"],
-    input[type="text"] {
-        padding: 18px 20px;
-        font-size: 17px;
-    }
-
-    .login-btn {
-        padding: 18px;
-        font-size: 17px;
+        width: 40%;
     }
 
     .frase-impacto {
-        padding: 56px;
-        min-height: 520px;
-    }
-
-    .frase-impacto .title {
-        font-size: 56px;
-        line-height: 1.03;
-    }
-
-    .frase-impacto .subtitle {
-        font-size: 18px;
-        max-width: 720px;
+        width: 60%;
     }
 }
 
-@media (min-width: 2560px) {
-    body {
-        padding: 48px;
-    }
-
-    .logo {
-        width: 120px;
-        height: 120px;
-    }
-
-    .full-screen {
-        gap: 96px;
-        max-width: 2000px;
-    }
-
+@media (min-width: 1441px) {
     .login-container {
-        width: 640px;
-        padding: 80px;
-        border-radius: 22px;
-    }
-
-    .login-title {
-        font-size: 48px;
-        letter-spacing: 6px;
-    }
-
-    input[type="email"],
-    input[type="password"],
-    input[type="text"] {
-        padding: 22px 24px;
-        font-size: 18px;
-    }
-
-    .login-btn {
-        padding: 20px;
-        font-size: 18px;
+        width: 35%;
     }
 
     .frase-impacto {
-        padding: 80px;
-        min-height: 760px;
+        width: 65%;
+    }
+}
+
+@media (min-width: 1921px) {
+    .login-container {
+        width: 30%;
     }
 
-    .frase-impacto .title {
-        font-size: 84px;
-        line-height: 1.02;
+    .frase-impacto {
+        width: 70%;
+    }
+}
+
+@media (max-height: 600px) and (min-width: 769px) {
+    .login-container {
+        padding: clamp(20px, 3vw, 32px);
     }
 
-    .frase-impacto .subtitle {
-        font-size: 22px;
-        max-width: 920px;
+    .login-title {
+        margin-bottom: clamp(16px, 2vw, 24px);
+    }
+
+    .form-grupo {
+        margin-bottom: clamp(12px, 2vw, 20px);
     }
 }

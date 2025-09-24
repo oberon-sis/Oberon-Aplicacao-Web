@@ -9,30 +9,30 @@
 </head>
 
 <body>
-  <a class="logo-oberon">
-    <img src="../assets/marca/logo_branco.png" alt="OBERON" class="logo" width="48" height="48">
-  </a>
   <div class="full-screen">
+    <a class="logo-oberon">
+      <img src="../assets/marca/logo_branco.png" alt="OBERON" class="logo" width="48" height="48">
+    </a>
     <div class="login-container">
       <h1 class="login-title">LOGIN</h1>
 
       <form id="loginForm">
         <div class="form-grupo">
-          <label for="email">E-mail</label>
-          <input type="email" id="email" name="email" required>
+          <label for="email">E-Mail</label>
+          <input type="email" id="email" name="email" placeholder="seu@email.com" required>
         </div>
 
         <div class="form-grupo">
           <label for="password">Senha</label>
           <div class="input-container">
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
             <button type="button" class="password-toggle">
               <img src="../assets/marca/show.png" alt="Mostrar senha" width="20" height="20">
             </button>
           </div>
         </div>
 
-        <button type="submit" class="login-btn">ENTRAR</button>
+        <button type="submit" class="login-btn" href="../html/cadastroUsuario.html">ENTRAR</button>
       </form>
 
       <div class="redirecionamento">
@@ -46,23 +46,23 @@
       </div>
     </div>
   </div>
-
-  <script>
-    document.querySelector('.password-toggle').onclick = function () {
-      const input = document.getElementById('password');
-      const img = this.querySelector("img");
-
-      if (input.type === "password") {
-        input.type = "text";
-        img.src = "../assets/marca/hide.png";
-        img.alt = "Ocultar senha";
-      } else {
-        input.type = "password";
-        img.src = "../assets/marca/show.png"; 
-        img.alt = "Mostrar senha";
-      }
-    }
-  </script>
 </body>
+
+<script>
+  document.querySelector('.password-toggle').onclick = function () {
+    const input = document.getElementById('password');
+    const img = this.querySelector("img");
+
+    if (input.type === "password") {
+      input.type = "text";
+      img.src = "../assets/marca/hide.png";
+      img.alt = "Ocultar senha";
+    } else {
+      input.type = "password";
+      img.src = "../assets/marca/show.png";
+      img.alt = "Mostrar senha";
+    }
+  }
+</script>
 
 </html>
