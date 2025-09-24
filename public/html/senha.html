@@ -42,4 +42,32 @@
     </div>
   </div>
 </body>
+
+<script>
+  document.getElementById("recoverForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+
+    try {
+      const resp = await fetch("http://localhost:3000/auth/esqueci-senha", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      });
+
+      const data = await resp.json();
+
+      if (resp.ok) {
+        alert("✅ " + data.msg); // mensagem sucesso
+      } else {
+        alert("⚠️ " + data.msg); // mensagem erro
+      }
+    } catch (err) {
+      alert("❌ Erro ao conectar com o servidor");
+      console.error(err);
+    }
+  });
+</script>
+
 </html>
