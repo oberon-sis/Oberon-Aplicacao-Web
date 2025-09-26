@@ -1,11 +1,12 @@
 
 function cadastrar() {
-    var nome = "Jhoel";
-    var cpf = "12345678910"
-    var email = "jhoel.mamani@gmail.com"
+    var nome = "Jhoe1l";
+    var cpf = "12345678940"
+    var email = "jhoel.maman1i@gmail.com"
     var fkTipoUsuario = 1000
     var senha = "123456789"
-
+    // var idFuncionario = sessionStorage.ID_USUARIO
+    var idFuncionario = 1
 
     fetch("/gerenciamentoUsuario/cadastrar", {
         method: "POST",
@@ -17,7 +18,8 @@ function cadastrar() {
             cpfServer: cpf,
             emailServer: email,
             fkTipoUsuarioServer: fkTipoUsuario,
-            senhaServer: senha
+            senhaServer: senha,
+            idFuncionarioServer: idFuncionario,
         }),
     })
         .then(function (resposta) {

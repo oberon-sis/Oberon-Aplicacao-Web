@@ -1,5 +1,4 @@
-var usuarioModel = require("../models/gerenciamentoUsuarioModel");
-const { modulos } = require('../utils/menuData');
+var gerenciamentoUsuarioModel = require("../models/gerenciamentoUsuarioModel");
 function autenticar(req, res) {
   var email = req.body.emailServer;
   var senha = req.body.senhaServer;
@@ -30,7 +29,7 @@ function autenticar(req, res) {
                   aquarios: resultadoAquarios,
                 });
               } else {
-                res.status(204).json({ aquarios: [] });
+                res.status(204).send("Email e/ou senha inválido(s)");
               }
             });
         } else if (resultadoAutenticar.length == 0) {
@@ -55,9 +54,11 @@ function cadastrar(req, res) {
   var email = req.body.emailServer;
   var cpf = req.body.cpfServer;
   // var fkEmpresa = req.body.fkEmpresaServer;
-   var fkEmpresa = 1;
+  var fkEmpresa = 0;
   var fkTipoUsuario = req.body.fkTipoUsuarioServer;
   var senha = req.body.senhaServer;
+  var idFuncionario = req.body.idFuncionarioServer
+
 
   if (nome == undefined) {
     res.status(400).send("Seu nome está undefined!");
@@ -67,25 +68,50 @@ function cadastrar(req, res) {
     res.status(400).send("Sua empresa a vincular está undefined!");
   } else if (fkTipoUsuario == undefined) {
     res.status(400).send("Seu TipoUsuario a vincular está undefined!");
-  }  else if (senha == undefined) {
+  } else if (senha == undefined) {
     res.status(400).send("Sua senha está undefined!");
-  }  else if (email == undefined) {
+  } else if (email == undefined) {
     res.status(400).send("Seu email está undefined!");
+  } else if (idFuncionario == undefined) {
+    res.status(400).send("Seu id não deu retorno está undefined!");
   }
   else {
-    usuarioModel
-      .cadastrar(nome, cpf, email, fkEmpresa, fkTipoUsuario, senha)
+    gerenciamentoUsuarioModel
+      .getFkEmpresa(idFuncionario)
       .then(function (resultado) {
-        res.json(resultado);
+
+
+        if (resultado.length > 0) {
+          fkEmpresa = resultado[0].fkEmpresa
+          gerenciamentoUsuarioModel
+            .cadastrar(nome, cpf, email, fkEmpresa, fkTipoUsuario, senha)
+            .then(function (resultado) {
+              res.json(resultado);
+            })
+            .catch(function (erro) {
+              console.log(erro);
+              console.log(
+                "\nHouve um erro ao realizar o cadastro! Erro: ",
+                erro.sqlMessage
+              );
+              res.status(500).json(erro.sqlMessage);
+            });
+        }
+        else {
+          res.status(204).send("Não foi encontrado o fkEmpresa");
+
+        }
       })
       .catch(function (erro) {
         console.log(erro);
         console.log(
-          "\nHouve um erro ao realizar o cadastro! Erro: ",
+          "\nHouve um erro ao buscar a fkEmpresa! Erro: ",
           erro.sqlMessage
         );
         res.status(500).json(erro.sqlMessage);
       });
+
+
   }
 }
 
