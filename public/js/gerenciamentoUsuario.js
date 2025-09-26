@@ -45,3 +45,31 @@ function cadastrar() {
     return false;
 }
 
+
+function getUsuariobyID() {
+    var idFuncionario = 2;
+    var dados_usuario = document.getElementById("dados_usuario")
+    var ipt_nome = document.getElementById("ipt_nome")
+    fetch(`/gerenciamentoUsuario/getUsuariobyID/${idFuncionario}`)
+        .then(resposta => {
+            if (!resposta.ok) { 
+                throw new Error(`Erro na API: ${resposta.status}`);
+            }
+            return resposta.json();
+        })
+        .then(dados => {
+            console.log("Dados recebidos:", dados);
+
+            if (dados.length > 0) {
+                let usuario = dados[0];
+                alert(`Nome: ${usuario.nome}\nEmail: ${usuario.email}\nTipo: ${usuario.tipoUsuario}`);
+                dados_usuario.innerHTML = (usuario.nome)
+                ipt_nome.value = usuario.nome;
+            } else {
+                alert("Nenhum usuário encontrado!");
+            }
+        })
+        .catch(error => {
+            console.error("Erro na obtenção dos dados:", error.message);
+        });
+}

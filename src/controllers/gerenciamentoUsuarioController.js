@@ -1,53 +1,27 @@
 var gerenciamentoUsuarioModel = require("../models/gerenciamentoUsuarioModel");
-function autenticar(req, res) {
-  var email = req.body.emailServer;
-  var senha = req.body.senhaServer;
+function getUsuariobyID(req, res) {
+  var idFuncionario = req.params.idFuncionarioServer;
 
-  if (email == undefined) {
-    res.status(400).send("Seu email está undefined!");
-  } else if (senha == undefined) {
-    res.status(400).send("Sua senha está indefinida!");
-  } else {
-    usuarioModel
-      .autenticar(email, senha)
-      .then(function (resultadoAutenticar) {
-        console.log(`\nResultados encontrados: ${resultadoAutenticar.length}`);
-        console.log(`Resultados: ${JSON.stringify(resultadoAutenticar)}`);
-
-        if (resultadoAutenticar.length == 1) {
-          console.log(resultadoAutenticar);
-
-          aquarioModel
-            .buscarAquariosPorEmpresa(resultadoAutenticar[0].empresaId)
-            .then((resultadoAquarios) => {
-              if (resultadoAquarios.length > 0) {
-                res.json({
-                  id: resultadoAutenticar[0].id,
-                  email: resultadoAutenticar[0].email,
-                  nome: resultadoAutenticar[0].nome,
-                  senha: resultadoAutenticar[0].senha,
-                  aquarios: resultadoAquarios,
-                });
-              } else {
-                res.status(204).send("Email e/ou senha inválido(s)");
-              }
-            });
-        } else if (resultadoAutenticar.length == 0) {
-          res.status(403).send("Email e/ou senha inválido(s)");
-        } else {
-          res.status(403).send("Mais de um usuário com o mesmo login e senha!");
-        }
-      })
-      .catch(function (erro) {
-        console.log(erro);
-        console.log(
-          "\nHouve um erro ao realizar o login! Erro: ",
-          erro.sqlMessage
-        );
-        res.status(500).json(erro.sqlMessage);
-      });
+  if (!idFuncionario) {
+    return res.status(400).send("Não foi possível puxar o idFuncionario!");
   }
+
+  gerenciamentoUsuarioModel.getUsuariobyID(idFuncionario)
+    .then(function (resultadoAutenticar) {
+      if (resultadoAutenticar.length > 0) {
+        console.log("Usuário(s) encontrado(s):", resultadoAutenticar);
+        res.json(resultadoAutenticar); // retorna todos os dados do JSON
+      } else {
+        res.status(404).send("Usuário não encontrado");
+      }
+    })
+    .catch(function (erro) {
+      console.log("\nHouve um erro ao buscar o usuário! Erro: ", erro.sqlMessage || erro.message);
+      res.status(500).json(erro.sqlMessage || erro.message);
+    });
 }
+
+
 
 function cadastrar(req, res) {
   var nome = req.body.nomeServer;
@@ -57,7 +31,7 @@ function cadastrar(req, res) {
   var fkEmpresa = 0;
   var fkTipoUsuario = req.body.fkTipoUsuarioServer;
   var senha = req.body.senhaServer;
-  var idFuncionario = req.body.idFuncionarioServer
+  var idFuncionario = req.body.idFuncionarioServer;
 
 
   if (nome == undefined) {
@@ -116,6 +90,6 @@ function cadastrar(req, res) {
 }
 
 module.exports = {
-  autenticar,
+  getUsuariobyID,
   cadastrar,
 };
