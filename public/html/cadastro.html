@@ -29,7 +29,7 @@
           </div>
         </div>
 
-        <button type="submit" class="login-btn" href="../html/cadastroUsuario.html">CADASTRAR</button>
+        <button type="submit" class="login-btn">CADASTRAR</button>
       </form>
 
       <div class="redirecionamento">
@@ -44,5 +44,11 @@
     </div>
   </div>
 </body>
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      window.location.href = '../html/cadastroUsuario.html';
+    });
+  </script>
 
 </html>
