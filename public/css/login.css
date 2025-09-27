@@ -240,7 +240,7 @@ input::placeholder {
 
     .login-container {
         width: 100vw;
-        height: auto;
+        height: 100vh;
         min-height: 75vh;
         padding: 80px 20px 24px 20px;
         border-radius: 0;
@@ -297,24 +297,7 @@ input::placeholder {
     }
 
     .frase-impacto {
-        width: 100vw;
-        min-height: 25vh;
-        height: auto;
-        padding: 20px 20px;
-        order: 2;
-        background-size: cover;
-        background-position: center;
-    }
-
-    .frase-impacto .title {
-        font-size: clamp(16px, 6vw, 24px);
-        line-height: 1.1;
-        margin-bottom: 0;
-        font-weight: 400;
-    }
-
-    .frase-impacto .title:hover {
-        transform: none;
+        display: none;
     }
 }
 
@@ -327,11 +310,11 @@ input::placeholder {
 
     .login-container {
         width: 100%;
-        min-height: 60vh;
+        height: 100vh;
     }
 
     .frase-impacto {
-        min-height: 40vh;
+        display: none;
     }
 }
 

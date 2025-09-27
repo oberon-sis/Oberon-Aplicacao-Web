@@ -5,6 +5,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="../css/login.css">
+  <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
+
   <title>OBERON - Cadastrar Empresa</title>
 </head>
 
@@ -29,7 +31,7 @@
           </div>
         </div>
 
-        <button type="submit" class="login-btn" href="../html/cadastroUsuario.html">CADASTRAR</button>
+        <button type="submit" class="login-btn">CADASTRAR</button>
       </form>
 
       <div class="redirecionamento">
@@ -44,5 +46,11 @@
     </div>
   </div>
 </body>
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      window.location.href = '../html/cadastroUsuario.html';
+    });
+  </script>
 
 </html>
