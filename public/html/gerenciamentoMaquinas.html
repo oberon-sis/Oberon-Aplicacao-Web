@@ -16,7 +16,7 @@
 
   <div id="menu-container"></div>
 
-    <main class="content flex-grow-1 padding_main">
+    <main class="content flex-grow-1 padding_main main">
         <button class="btn btn-secondary d-md-none mb-4 " type="button" data-bs-toggle="offcanvas" 
             data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar"
             style="margin-left: 1rem;"
@@ -29,9 +29,9 @@
         <div class="container-fluid py-4">
             <h2 class="mb-4 text-black">Gerenciamento de Máquinas</h2>
 
-            <div class="d-flex flex-column flex-md-row align-items-md-center mb-4 gap-2">
+            <div class="d-flex flex-column flex-md-row align-items-md-center mb-4 gap-2 div_pesquisa">
 
-                <div class="input-group flex-grow-1" style="max-width: 450px;">
+                <div  style="max-width: 450px;" class="input-group flex-grow-1 div_justify">
                     <input type="text" class="form-control border-start-0  shadow-none input_pesquisa"  placeholder="Buscar por hostname ou macaddress">
                     
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -43,14 +43,14 @@
                     </ul>
                 </div>
 
-                <div class="d-flex gap-2 flex-grow-1 justify-content-end">
-                    <button class="btn btn-light border fw-semibold flex-fill flex-md-grow-0 botao_branco" style="color: #385e5c; white-space: nowrap;">
-                        <img src="../assets/svg/setting_preto.svg" alt="">
-                        <i class=" me-2"></i>Configurar Padrão
+                <div class="d-flex gap-2 flex-grow-1 justify-content-end div_pesquisa div_botoes">
+                    <button class="btn btn-light border fw-semibold flex-fill flex-md-grow-0 botao_branco botao_configuracao" style="color: #385e5c; white-space: nowrap;">
+                        <img src="../assets/svg/setting_preto.svg" alt="" class="icone_botao">
+                        <i class=" me-2 espaco_branco"></i>Configurar Padrão
                     </button>
-                    <button class="btn fw-semibold flex-fill flex-md-grow-0 verde_claro " style=" white-space: nowrap;">
-                        <img src="../assets/svg/plus_preto.svg" alt="">
-                        <i class="bi bi-plus me-2"></i>Nova Máquina
+                    <button class="btn fw-semibold border flex-fill flex-md-grow-0 verde_claro botao_configuracao botao_nova_maquina" style=" white-space: nowrap;">
+                        <img src="../assets/svg/plus_preto.svg" alt="" class="icone_botao">
+                        <i class=" me-2 espaco_branco "></i>Nova Máquina
                     </button>
                 </div>
             </div>

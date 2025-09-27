@@ -1,0 +1,40 @@
+@media (max-width: 425px) {
+    .div_pesquisa{
+        max-width: 100% !important;
+    }
+    .main{
+        max-width: 96%;
+        padding-right: 0.2rem !important;
+    }
+    .botao_configuracao{
+        width: 48%;
+    }
+    .icone_botao{
+        display: none;
+    }
+    .espaco_branco{
+       margin-right: 1px !important;
+    }
+}
+@media (min-width: 768px) and (max-width: 1045px) {
+    .div_pesquisa{
+        flex-direction: column !important;
+        justify-content: start  !important;
+        align-items:flex-start !important;
+    }
+    .div_botoes{
+        flex-direction: row !important;
+        width: 100% !important;
+    }
+    .div_justify{
+        flex-direction: row !important;
+        justify-content: start  !important;
+    }
+    .botao_configuracao{
+        width: 50%;
+    }
+    .botao_nova_maquina{
+        padding-top: 9px;
+        padding-bottom: 9px;
+    }
+}
