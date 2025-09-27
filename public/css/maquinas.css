@@ -81,7 +81,10 @@
         width: 91.2dvw;
     }
 }
-.div_tabela{
-    min-height: 600px;
-    margin-inline: 11px !important;
+
+@media (min-width: 767px) {
+    .div_tabela {
+        min-height: 650px;
+        margin-inline: 11px !important;
+    }
 }
