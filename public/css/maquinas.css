@@ -1,40 +1,87 @@
 @media (max-width: 425px) {
-    .div_pesquisa{
+    .div_pesquisa {
         max-width: 100% !important;
     }
-    .main{
+
+    .main {
         max-width: 96%;
         padding-right: 0.2rem !important;
     }
-    .botao_configuracao{
+
+    .botao_configuracao {
         width: 48%;
     }
-    .icone_botao{
+
+    .icone_botao {
         display: none;
     }
-    .espaco_branco{
-       margin-right: 1px !important;
+
+    .espaco_branco {
+        margin-right: 1px !important;
     }
 }
+
 @media (min-width: 768px) and (max-width: 1045px) {
-    .div_pesquisa{
+    .div_pesquisa {
         flex-direction: column !important;
-        justify-content: start  !important;
-        align-items:flex-start !important;
+        justify-content: start !important;
+        align-items: flex-start !important;
     }
-    .div_botoes{
+
+    .div_botoes {
         flex-direction: row !important;
         width: 100% !important;
     }
-    .div_justify{
+
+    .div_justify {
         flex-direction: row !important;
-        justify-content: start  !important;
+        justify-content: start !important;
     }
-    .botao_configuracao{
+
+    .botao_configuracao {
         width: 50%;
     }
-    .botao_nova_maquina{
+
+    .botao_nova_maquina {
         padding-top: 9px;
         padding-bottom: 9px;
     }
+}
+
+.table-container {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.table-fixed {
+    table-layout: fixed;
+    min-width: 900px;
+    white-space: nowrap;
+}
+
+.table-fixed th,
+.table-fixed td {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.table-responsive table {
+    min-width: 1200px;
+    white-space: nowrap;
+}
+
+.content-wrapper {
+    max-width: 100%;
+    overflow-x: hidden !important;
+}
+
+@media (max-width: 1000px) {
+    .div_tabela {
+        width: 91.2dvw;
+    }
+}
+.div_tabela{
+    min-height: 600px;
+    margin-inline: 11px !important;
 }
