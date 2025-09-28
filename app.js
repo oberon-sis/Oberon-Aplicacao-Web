@@ -16,7 +16,11 @@ var app = express();
 // --- IMPORTAÇÃO DAS ROTAS (agrupadas) ---
 var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
+<<<<<<< HEAD
 var empresaRouter = require("./src/routes/empresas"); // Corrigido o nome do arquivo para 'empresas'
+=======
+var gerenciamentoMaquinasRouter = require("./src/routes/maquinas");
+>>>>>>> 1251a4ba5466e9af7356601991e514dc2ed43cd7
 
 // --- CONFIGURAÇÃO DOS MIDDLEWARES ---
 app.use(express.json());
@@ -27,8 +31,12 @@ app.use(cors());
 // --- REGISTRO DAS ROTAS ---
 app.use("/", indexRouter);
 app.use("/usuarios", usuarioRouter);
+<<<<<<< HEAD
 // CORRIGIDO: O prefixo agora está no plural para corresponder ao front-end
 app.use("/empresas", empresaRouter); 
+=======
+app.use("/gerenciamentoMaquinas", gerenciamentoMaquinasRouter);
+>>>>>>> 1251a4ba5466e9af7356601991e514dc2ed43cd7
 
 
 app.listen(PORTA_APP, function () {
