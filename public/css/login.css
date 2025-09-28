@@ -394,3 +394,32 @@ input::placeholder {
         margin-bottom: clamp(12px, 2vw, 20px);
     }
 }
+.mensagem {
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 8px; 
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.9em;
+    border: 1px solid transparent;
+    display: none; 
+}
+
+
+.mensagem-erro {
+    color: #721c24; 
+    background-color: #f8d7da; 
+    border-color: #f5c6cb;
+    display: block; 
+}
+
+
+.mensagem-sucesso {
+    color: #155724; 
+    background-color: #d4edda;
+    border-color: #c3e6cb; 
+    display: block; 
+}
+.hidden {
+    display: none !important;
+}
