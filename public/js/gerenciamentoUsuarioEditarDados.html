@@ -7,29 +7,42 @@
     <SCript src="gerenciamentoUsuario.js"></SCript>
 </head>
 <body onload="getUsuariobyID()">
-  <h1>Editar Usuário</h1>
+  <h2>Atualizar dados do Usuário</h2>
+  <div class="container">
+    <!-- Coluna de dados atuais -->
+    <div class="col">
+      <h3>Dados Atuais</h3>
+      <p><b>Nome Completo:</b> <span id="nome_atual">Carregando...</span></p>
+      <p><b>E-mail:</b> <span id="email_atual">Carregando...</span></p>
+      <!-- <p><b>Telefone:</b> <span id="telefone_atual">Carregando...</span></p> -->
+      <!-- <p><b>Cargo:</b> <span id="cargo_atual">Carregando...</span></p> -->
+      <p><b>Tipo de Usuário:</b> <span id="tipoUsuario_atual">Carregando...</span></p>
+    </div>
 
-  <form id="form_usuario">
-    <label>Nome:</label><br>
-    <input type="text" id="ipt_nome"><br><br>
+    <!-- Coluna para edição -->
+    <div class="col">
+      <h3>Editar Dados</h3>
+      <label for="ipt_nome">Nome</label>
+      <input type="text" id="ipt_nome">
 
-    <label>CPF:</label><br>
-    <input type="text" id="ipt_cpf"><br><br>
+      <label for="ipt_email">E-mail</label>
+      <input type="text" id="ipt_email">
 
-    <label>Email:</label><br>
-    <input type="email" id="ipt_email"><br><br>
+      <!-- <label for="ipt_telefone">Telefone</label>
+      <input type="text" id="ipt_telefone"> -->
 
-    <label>Senha:</label><br>
-    <input type="password" id="ipt_senha"><br><br>
+      <!-- <label for="ipt_cargo">Cargo</label>
+      <input type="text" id="ipt_cargo"> -->
 
-    <label>Tipo de Usuário:</label><br>
-    <input type="text" id="ipt_tipoUsuario"><br><br>
+      <label for="ipt_tipoUsuario">Tipo de Usuário</label>
+      <input type="text" id="ipt_tipoUsuario">
 
-    <label>Permissões:</label><br>
-    <textarea id="ipt_permissoes" rows="4" cols="40"></textarea><br><br>
+      <label for="ipt_senha">Senha</label>
+      <input type="password" id="ipt_senha">
 
-    <button type="button" onclick="salvarEdicao()">Salvar Alterações</button>
-  </form>
+      <button class="btn" onclick="salvarEdicao()">Salvar Alterações</button>
+    </div>
+  </div>
 
 <script>
 </script>
