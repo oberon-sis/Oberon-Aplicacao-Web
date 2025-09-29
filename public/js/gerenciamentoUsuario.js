@@ -47,29 +47,34 @@ function cadastrar() {
 
 
 function getUsuariobyID() {
-    var idFuncionario = 2;
-    var dados_usuario = document.getElementById("dados_usuario")
-    var ipt_nome = document.getElementById("ipt_nome")
-    fetch(`/gerenciamentoUsuario/getUsuariobyID/${idFuncionario}`)
+      var idFuncionario = 2;
+
+      fetch(`/gerenciamentoUsuario/getUsuariobyID/${idFuncionario}`)
         .then(resposta => {
-            if (!resposta.ok) { 
-                throw new Error(`Erro na API: ${resposta.status}`);
-            }
-            return resposta.json();
+          if (!resposta.ok) { 
+            throw new Error(`Erro na API: ${resposta.status}`);
+          }
+          return resposta.json();
         })
         .then(dados => {
-            console.log("Dados recebidos:", dados);
+          if (dados.length > 0) {
+            let usuario = dados[0];
 
-            if (dados.length > 0) {
-                let usuario = dados[0];
-                alert(`Nome: ${usuario.nome}\nEmail: ${usuario.email}\nTipo: ${usuario.tipoUsuario}`);
-                dados_usuario.innerHTML = (usuario.nome)
-                ipt_nome.value = usuario.nome;
-            } else {
-                alert("Nenhum usuário encontrado!");
-            }
+            
+            document.getElementById("ipt_nome").value = usuario.nome;
+            document.getElementById("ipt_cpf").value = usuario.cpf;
+            document.getElementById("ipt_email").value = usuario.email;
+            document.getElementById("ipt_senha").value = usuario.senha ?? "";
+            document.getElementById("ipt_tipoUsuario").value = usuario.tipoUsuario;
+            document.getElementById("ipt_permissoes").value = usuario.permissoes;
+          } else {
+            alert("Nenhum usuário encontrado!");
+          }
         })
         .catch(error => {
-            console.error("Erro na obtenção dos dados:", error.message);
+          console.error("Erro na obtenção dos dados:", error.message);
         });
-}
+    }
+
+
+

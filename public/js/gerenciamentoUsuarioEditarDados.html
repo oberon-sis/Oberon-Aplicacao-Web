@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <SCript src="gerenciamentoUsuario.js"></SCript>
+</head>
+<body onload="getUsuariobyID()">
+  <h1>Editar Usuário</h1>
+
+  <form id="form_usuario">
+    <label>Nome:</label><br>
+    <input type="text" id="ipt_nome"><br><br>
+
+    <label>CPF:</label><br>
+    <input type="text" id="ipt_cpf"><br><br>
+
+    <label>Email:</label><br>
+    <input type="email" id="ipt_email"><br><br>
+
+    <label>Senha:</label><br>
+    <input type="password" id="ipt_senha"><br><br>
+
+    <label>Tipo de Usuário:</label><br>
+    <input type="text" id="ipt_tipoUsuario"><br><br>
+
+    <label>Permissões:</label><br>
+    <textarea id="ipt_permissoes" rows="4" cols="40"></textarea><br><br>
+
+    <button type="button" onclick="salvarEdicao()">Salvar Alterações</button>
+  </form>
+
+<script>
+</script>
+</html>

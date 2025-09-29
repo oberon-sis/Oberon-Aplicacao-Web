@@ -1,4 +1,6 @@
 var gerenciamentoUsuarioModel = require("../models/gerenciamentoUsuarioModel");
+
+
 function getUsuariobyID(req, res) {
   var idFuncionario = req.params.idFuncionarioServer;
 
@@ -10,7 +12,7 @@ function getUsuariobyID(req, res) {
     .then(function (resultadoAutenticar) {
       if (resultadoAutenticar.length > 0) {
         console.log("Usuário(s) encontrado(s):", resultadoAutenticar);
-        res.json(resultadoAutenticar); // retorna todos os dados do JSON
+        res.json(resultadoAutenticar); 
       } else {
         res.status(404).send("Usuário não encontrado");
       }
