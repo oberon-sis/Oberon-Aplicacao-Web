@@ -41,6 +41,26 @@ function getTipoUsuario() {
 }
 
 
+function salvarEdicao(nome,cpf,email,fkTipoUsuario,senha,idFuncionario) {
+  console.log(
+    "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
+    nome,
+    cpf,
+    email,
+    fkTipoUsuario,
+    senha,
+    idFuncionario,
+  );
+  var instrucaoSql = `
+         UPDATE funcionario
+          SET nome = '${nome}', cpf = '${cpf}', email = '${email}', 
+          fkTipoUsuario = ${fkTipoUsuario} , senha = '${senha}' 
+          WHERE idFuncionario = ${idFuncionario}; 
+    `;
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+
 
 function getUsuariobyID(idFuncionario) {
   console.log(
@@ -88,4 +108,5 @@ module.exports = {
   getFkEmpresa,
   getUsuariobyID,
   getTipoUsuario,
+  salvarEdicao,
 };

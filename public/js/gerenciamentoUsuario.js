@@ -35,14 +35,16 @@ function cadastrar() {
 
 
 document.addEventListener("DOMContentLoaded", function() {
-    getTipoUsuario(); 
+    getTipoUsuario();
+    getUsuariobyID();
 });
 
 
 
 
+
 function getTipoUsuario() {
-    const select = document.getElementById('tipo_usuario_select');
+    var select = document.getElementById('tipo_usuario_select');
     
     fetch("/gerenciamentoUsuario/getTipoUsuario")
         .then(res => {
@@ -70,34 +72,80 @@ function getTipoUsuario() {
 
 
 function getUsuariobyID() {
-        var idFuncionario = 2;
-      fetch(`/gerenciamentoUsuario/getUsuariobyID/${idFuncionario}`)
+    var idFuncionario = 17;
+
+    fetch(`/gerenciamentoUsuario/getUsuariobyID/${idFuncionario}`)
         .then(res => {
-          if (!res.ok) throw new Error(`Erro na API: ${res.status}`);
-          return res.json();
+            if (!res.ok) throw new Error(`Erro na API: ${res.status}`);
+            return res.json();
         })
         .then(dados => {
-          if (dados.length > 0) {
-            let usuario = dados[0];
+            if (dados.length === 0) {
+                alert("Usuário não encontrado!");
+                return;
+            }
+
+            var usuario = dados[0];
 
             document.getElementById("nome_atual").innerText = usuario.nome;
             document.getElementById("email_atual").innerText = usuario.email;
-            // document.getElementById("telefone_atual").innerText = usuario.telefone || "Não informado";
-            // document.getElementById("cargo_atual").innerText = usuario.cargo || "Não informado";
             document.getElementById("tipoUsuario_atual").innerText = usuario.tipoUsuario;
 
             document.getElementById("ipt_nome").value = usuario.nome;
             document.getElementById("ipt_email").value = usuario.email;
-            // document.getElementById("ipt_telefone").value = usuario.telefone || "";
-            document.getElementById("ipt_cargo").value = usuario.cargo || "";
-            document.getElementById("ipt_tipoUsuario").value = usuario.tipoUsuario;
             document.getElementById("ipt_senha").value = usuario.senha || "";
-          } else {
-            alert("Usuário não encontrado!");
-          }
+
+            var selectTipo = document.getElementById("tipo_usuario_select");
+            if(selectTipo) {
+                const intervalo = setInterval(() => {
+                    if(selectTipo.options.length > 1) { 
+                        selectTipo.value = usuario.fkTipoUsuario;
+                        clearInterval(intervalo);
+                    }
+                }, 100);
+            }
         })
         .catch(error => console.error("Erro:", error));
+}
+
+
+function salvarEdicao() {
+
+    var idFuncionario = 17; 
+    var nome = document.getElementById("ipt_nome").value;
+    var email = document.getElementById("ipt_email").value;
+    var senha = document.getElementById("ipt_senha").value;
+    var fkTipoUsuario = document.getElementById("tipo_usuario_select").value;
+
+    if (!nome || !email || !fkTipoUsuario) {
+        alert("Preencha todos os campos obrigatórios!");
+        return;
     }
+
+
+    const bodyData = {
+        idFuncionarioServer: idFuncionario,
+        nomeServer: nome,
+        emailServer: email,
+        senhaServer: senha,
+        fkTipoUsuarioServer: fkTipoUsuario
+    };
+
+    fetch("/gerenciamentoUsuario/salvarEdicao", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bodyData)
+    })
+    .then(res => {
+        if (res.ok) {
+            alert("Alterações salvas com sucesso!");
+            getUsuariobyID();
+        } else {
+            res.json().then(json => alert(`Erro ao salvar: ${json}`));
+        }
+    })
+    .catch(err => alert("Erro de rede: " + err));
+}
 
 
 

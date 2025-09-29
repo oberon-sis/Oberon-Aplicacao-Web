@@ -15,6 +15,9 @@ router.get("/getTipoUsuario", function (req, res) {
     gerenciamentoUsuarioController.getTipoUsuario(req, res);
 });
 
+router.post("/salvarEdicao", function (req, res) {
+    gerenciamentoUsuarioController.salvarEdicao(req, res);
+});
 
 
 module.exports = router;
