@@ -47,16 +47,19 @@
                 </div>
 
                 <div class="d-flex gap-2 flex-grow-1 justify-content-end div_pesquisa div_botoes">
-                    <button
+                    <button onmouseenter="mudar_icone_on('icone_conf')" onmouseleave="mudar_icone_lv('icone_conf')"
                         class="btn btn-light border fw-semibold flex-fill flex-md-grow-0 botao_branco botao_configuracao"
                         style="color: #385e5c; white-space: nowrap;">
-                        <img src="../assets/svg/setting_preto.svg" alt="" class="icone_botao">
+                        <img src="../assets/svg/setting_preto.svg" data-hover-src="../assets/svg/setting_white.svg"
+                            alt="" class="icone_botao" id="icone_conf">
                         <i class=" me-2 espaco_branco"></i>Configurar Padrão
                     </button>
-                    <button
+
+                    <button onmouseenter="mudar_icone_on('icone_nova')" onmouseleave="mudar_icone_lv('icone_nova')"
                         class="btn fw-semibold border flex-fill flex-md-grow-0 verde_claro botao_configuracao botao_nova_maquina"
                         style=" white-space: nowrap;">
-                        <img src="../assets/svg/plus_preto.svg" alt="" class="icone_botao">
+                        <img src="../assets/svg/plus_preto.svg" data-hover-src="../assets/svg/plus_white.svg" alt=""
+                            class="icone_botao" id="icone_nova">
                         <i class=" me-2 espaco_branco "></i>Nova Máquina
                     </button>
                 </div>
@@ -66,6 +69,7 @@
         <div class="table-responsive shadow-sm border rounded div_tabela">
             <table class="table table-hover mb-0" <thead>
                 <tr>
+                    <th scope="col" class="py-3">ID</th>
                     <th scope="col" class="py-3">Hostname <i class="bi bi-arrow-down-up ms-1"></i>
                     </th>
                     <th scope="col" class="py-3">Modelo</th>
@@ -78,37 +82,169 @@
                     <th scope="col" class="py-3">Ver Mais</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="Conteudo_real">
                     <tr>
+                        <td>001</td>
                         <td><i class="bi bi-person-circle me-2"></i>Exemplo</td>
                         <td>Exemplo Text</td>
                         <td>Exemplo Text</td>
                         <td>Exemplo Text</td>
                         <td>Exemplo Text</td>
                         <td>Exemplo Text</td>
-                        <td><a href="#" class="text-primary">fds<i class="bi bi-arrow-clockwise"></i></a></td>
-                        <td><a href="#" class="text-danger">fsda<i class="bi bi-trash"></i></a></td>
-                        <td><a href="#" class="text-danger">fsda<i class="bi bi-trash"></i></a></td>
+                        <td><span class="opcao_crud text-primary">
+                                <img src="../assets/svg/atualizar_blue.svg" alt="">
+                                Atualizar<i class="bi bi-arrow-clockwise"></i></span>
+                        </td>
+                        <td><span class="opcao_crud text-danger">
+                                <img src="../assets/svg/excluir_red.svg" alt="">
+                                Excluir<i class="bi bi-trash"></i></span>
+                        </td>
+                        <td><span class="opcao_crud detalhes">
+                                <img src="../assets/svg/eye_black.svg" alt="">
+                                Detalhes<i class="bi bi-trash"></i></span>
+                        </td>
                     </tr>
                     <tr>
+                        <td>002</td>
                         <td><i class="bi bi-person-circle me-2"></i>Exemplo</td>
                         <td>Exemplo Text</td>
                         <td>Exemplo Text</td>
                         <td>Exemplo Text</td>
                         <td>Exemplo Text</td>
                         <td>Exemplo Text</td>
-                        <td><a href="#" class="text-primary">dfs<i class="bi bi-arrow-clockwise"></i></a></td>
-                        <td><a href="#" class="text-danger">fdsa<i class="bi bi-trash"></i></a></td>
-                        <td><a href="#" class="text-danger">fdsa<i class="bi bi-trash"></i></a></td>
+                        <td><span class="opcao_crud text-primary">
+                                <img src="../assets/svg/atualizar_blue.svg" alt="">
+                                Atualizar<i class="bi bi-arrow-clockwise"></i></span>
+                        </td>
+                        <td><span class="opcao_crud text-danger">
+                                <img src="../assets/svg/excluir_red.svg" alt="">
+                                Excluir<i class="bi bi-trash"></i></span>
+                        </td>
+                        <td><span class="opcao_crud detalhes">
+                                <img src="../assets/svg/eye_black.svg" alt="">
+                                Detalhes<i class="bi bi-trash"></i></span>
+                        </td>
                     </tr>
+                </tbody>
+                <tbody id="Estrutura_esqueleto_carregamento">
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                    </tr>
+                                        <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                    </tr>
+                                        <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                    </tr>
+                </tbody>
+                </span>
                 </tbody>
             </table>
         </div>
 
-        <nav class="d-flex justify-content-center mt-3">
+        <nav class="d-flex justify-content-center mt-3 div_paginas">
             <ul class="pagination pagination-sm">
                 <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active_pagina"><a class="page-link" href="#">1</a></li>
                 <li class="page-item"><a class="page-link" href="#">2</a></li>
                 <li class="page-item"><a class="page-link" href="#">3</a></li>
                 <li class="page-item disabled"><span class="page-link">...</span></li>
@@ -128,3 +264,4 @@
 
 </html>
 <script src="../component/menu/Menu.js"></script>
+<script src="../js/maquinas.js"></script>
