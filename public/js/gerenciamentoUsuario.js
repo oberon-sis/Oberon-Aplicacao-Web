@@ -1,12 +1,20 @@
 
 function cadastrar() {
-    var nome = "Jhoe1l";
-    var cpf = "12345678940"
-    var email = "jhoel.maman1i@gmail.com"
-    var fkTipoUsuario = 1000
-    var senha = "123456789"
-    // var idFuncionario = sessionStorage.ID_USUARIO
-    var idFuncionario = 1
+    var ID_FUNCIONARIO_LOGADO = 5; 
+    
+    var nome = document.getElementById('nome_input').value;
+    var email = document.getElementById('email_input').value;
+    var cpf = document.getElementById('cpf_input').value; 
+    var senha = document.getElementById('senha_input').value;
+
+    var fkTipoUsuario = 1001; 
+
+    var idFuncionario = ID_FUNCIONARIO_LOGADO; 
+
+
+    if (!nome || !email || !cpf || !senha) {
+      alert("OS dados que voce forneceu estao errados....")
+    }
 
     fetch("/gerenciamentoUsuario/cadastrar", {
         method: "POST",
@@ -22,25 +30,26 @@ function cadastrar() {
             idFuncionarioServer: idFuncionario,
         }),
     })
-        .then(function (resposta) {
-            console.log("resposta: ", resposta);
+    .then(function (resposta) {
+        console.log("resposta: ", resposta);
 
-            if (resposta.ok) {
-
-                alert(
-                    "Cadastro realizado com sucesso! Redirecionando para tela de Login...");
-
-                setTimeout(() => {
-                    alert("deu")
-                }, "2000");
-
-            } else {
-                throw "Houve um erro ao tentar realizar o cadastro!";
-            }
-        })
-        .catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`);
-        });
+        if (resposta.ok) {
+            alert("Cadastro realizado com sucesso!");
+        } else if (resposta.status === 204) {
+             alert("Erro no cadastro: Funcionário logado não tem vínculo de empresa.");             
+        } else {
+            resposta.json().then(json => {
+                const erroMsg = json.message || resposta.statusText;
+                alert(`Houve um erro ao tentar realizar o cadastro! ${erroMsg}`);
+            }).catch(() => {
+                alert(`Erro desconhecido! Status: ${resposta.status}`);
+            });
+        }
+    })
+    .catch(function (erro) {
+        console.log(`#ERRO: ${erro}`);
+        alert("Erro de rede ao conectar com o servidor.");
+    });
 
     return false;
 }
@@ -57,14 +66,12 @@ function getUsuariobyID() {
           if (dados.length > 0) {
             let usuario = dados[0];
 
-            // Exibir dados atuais (fixos)
             document.getElementById("nome_atual").innerText = usuario.nome;
             document.getElementById("email_atual").innerText = usuario.email;
             // document.getElementById("telefone_atual").innerText = usuario.telefone || "Não informado";
             // document.getElementById("cargo_atual").innerText = usuario.cargo || "Não informado";
             document.getElementById("tipoUsuario_atual").innerText = usuario.tipoUsuario;
 
-            // Preencher inputs com valores atuais
             document.getElementById("ipt_nome").value = usuario.nome;
             document.getElementById("ipt_email").value = usuario.email;
             // document.getElementById("ipt_telefone").value = usuario.telefone || "";
