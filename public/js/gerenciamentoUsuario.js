@@ -69,36 +69,35 @@ function getTipoUsuario() {
 }
 
 
-function getTipoUsuario() {
-    const select = document.getElementById('tipo_usuario_select');
-    
-    fetch("/gerenciamentoUsuario/getTipoUsuario") 
+function getUsuariobyID() {
+        var idFuncionario = 2;
+      fetch(`/gerenciamentoUsuario/getUsuariobyID/${idFuncionario}`)
         .then(res => {
-            if (res.status === 204) {
-        
-                select.innerHTML = '<option value="" disabled selected>Nenhum tipo cadastrado (204)</option>';
-                throw new Error("Nenhum tipo de usuário encontrado.");
-            }
-            if (!res.ok) {
-                throw new Error(`Erro HTTP ao buscar tipos: ${res.status}`);
-            }
-            return res.json();
+          if (!res.ok) throw new Error(`Erro na API: ${res.status}`);
+          return res.json();
         })
-        .then(tipos => {
-            select.innerHTML = '<option value="" disabled selected>Selecione o tipo de usuário</option>'; 
-            
-            tipos.forEach(tipo => {
-                const option = document.createElement('option');
-                option.value = tipo.idTipoUsuario;      
-                option.text = tipo.nomeTipo;            
-                select.appendChild(option);
-            });
+        .then(dados => {
+          if (dados.length > 0) {
+            let usuario = dados[0];
+
+            document.getElementById("nome_atual").innerText = usuario.nome;
+            document.getElementById("email_atual").innerText = usuario.email;
+            // document.getElementById("telefone_atual").innerText = usuario.telefone || "Não informado";
+            // document.getElementById("cargo_atual").innerText = usuario.cargo || "Não informado";
+            document.getElementById("tipoUsuario_atual").innerText = usuario.tipoUsuario;
+
+            document.getElementById("ipt_nome").value = usuario.nome;
+            document.getElementById("ipt_email").value = usuario.email;
+            // document.getElementById("ipt_telefone").value = usuario.telefone || "";
+            document.getElementById("ipt_cargo").value = usuario.cargo || "";
+            document.getElementById("ipt_tipoUsuario").value = usuario.tipoUsuario;
+            document.getElementById("ipt_senha").value = usuario.senha || "";
+          } else {
+            alert("Usuário não encontrado!");
+          }
         })
-        .catch(erro => {
-            console.error("Falha ao carregar tipos de usuário:", erro);
-            select.innerHTML = '<option value="" disabled selected>Erro ao carregar (Verifique o servidor)</option>';
-        });
-}
+        .catch(error => console.error("Erro:", error));
+    }
 
 
 
