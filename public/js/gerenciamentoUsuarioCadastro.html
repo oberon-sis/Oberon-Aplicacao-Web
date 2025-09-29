@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <SCript src="gerenciamentoUsuario.js"></SCript>
 </head>
 
 <body>
@@ -24,21 +23,19 @@
       <label for="cpf_input">CPF</label>
       <input id="cpf_input" placeholder="123.456.789.00" required>
 
-      <div id="modalCadastro">
-        <label for="tipo_usuario_select">Tipo de usuário</label>
-        <select id="tipo_usuario_select" required>
-          <option value="" disabled selected>Carregando tipos...</option>
-        </select>
-
-      </div>
-
-      <label for="senha_input">Senha</label>
-      <input type="password" id="senha_input" placeholder="Mínimo 8 caracteres" required>
-
-      <button onclick="cadastrar()" id="btn_cadastrar">Cadastrar</button>
+      <label for="tipo_usuario_select">Tipo de usuário</label>
+      <select id="tipo_usuario_select" required>
+        <option value="" disabled selected>Carregando tipos...</option>
+      </select>
 
     </div>
+
+    <label for="senha_input">Senha</label>
+    <input type="password" id="senha_input" placeholder="Mínimo 8 caracteres" required>
+
+    <button onclick="cadastrar()" id="btn_cadastrar">Cadastrar</button>
+
   </div>
 </body>
-
+<SCript src="gerenciamentoUsuario.js"></SCript>
 </html>

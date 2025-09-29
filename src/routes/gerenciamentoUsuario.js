@@ -11,6 +11,9 @@ router.get("/getUsuariobyID/:idFuncionarioServer", function (req, res) {
   gerenciamentoUsuarioController.getUsuariobyID(req, res);
 });
 
+router.get("/getTipoUsuario", function (req, res) {
+    gerenciamentoUsuarioController.getTipoUsuario(req, res);
+});
 
 
 

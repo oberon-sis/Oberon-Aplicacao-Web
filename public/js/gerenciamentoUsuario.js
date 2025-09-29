@@ -1,90 +1,104 @@
 
 function cadastrar() {
-    var ID_FUNCIONARIO_LOGADO = 5; 
-    
     var nome = document.getElementById('nome_input').value;
     var email = document.getElementById('email_input').value;
     var cpf = document.getElementById('cpf_input').value; 
     var senha = document.getElementById('senha_input').value;
+    var fkTipoUsuario = document.getElementById('tipo_usuario_select').value;
+    var idFuncionario = 5; // administrador logado
 
-    var fkTipoUsuario = 1001; 
-
-    var idFuncionario = ID_FUNCIONARIO_LOGADO; 
-
-
-    if (!nome || !email || !cpf || !senha) {
-      alert("OS dados que voce forneceu estao errados....")
+    if (!nome || !email || !cpf || !senha || !fkTipoUsuario) {
+        alert("Preencha todos os campos corretamente!");
+        return;
     }
 
     fetch("/gerenciamentoUsuario/cadastrar", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             nomeServer: nome,
             cpfServer: cpf,
             emailServer: email,
             fkTipoUsuarioServer: fkTipoUsuario,
             senhaServer: senha,
-            idFuncionarioServer: idFuncionario,
+            idFuncionarioServer: idFuncionario
         }),
     })
-    .then(function (resposta) {
-        console.log("resposta: ", resposta);
-
-        if (resposta.ok) {
-            alert("Cadastro realizado com sucesso!");
-        } else if (resposta.status === 204) {
-             alert("Erro no cadastro: Funcionário logado não tem vínculo de empresa.");             
-        } else {
-            resposta.json().then(json => {
-                const erroMsg = json.message || resposta.statusText;
-                alert(`Houve um erro ao tentar realizar o cadastro! ${erroMsg}`);
-            }).catch(() => {
-                alert(`Erro desconhecido! Status: ${resposta.status}`);
-            });
-        }
+    .then(res => {
+        if (res.ok) alert("Cadastro realizado com sucesso!");
+        else res.json().then(json => alert(`Erro: ${json}`));
     })
-    .catch(function (erro) {
-        console.log(`#ERRO: ${erro}`);
-        alert("Erro de rede ao conectar com o servidor.");
-    });
-
-    return false;
+    .catch(err => alert("Erro de rede: " + err));
 }
 
 
-function getUsuariobyID() {
-        var idFuncionario = 2;
-      fetch(`/gerenciamentoUsuario/getUsuariobyID/${idFuncionario}`)
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    getTipoUsuario(); 
+});
+
+
+
+
+function getTipoUsuario() {
+    const select = document.getElementById('tipo_usuario_select');
+    
+    fetch("/gerenciamentoUsuario/getTipoUsuario")
         .then(res => {
-          if (!res.ok) throw new Error(`Erro na API: ${res.status}`);
-          return res.json();
+            if (res.status === 204) {
+                select.innerHTML = '<option value="" disabled selected>Nenhum tipo cadastrado</option>';
+                throw new Error("Nenhum tipo de usuário encontrado.");
+            }
+            if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
+            return res.json();
         })
-        .then(dados => {
-          if (dados.length > 0) {
-            let usuario = dados[0];
-
-            document.getElementById("nome_atual").innerText = usuario.nome;
-            document.getElementById("email_atual").innerText = usuario.email;
-            // document.getElementById("telefone_atual").innerText = usuario.telefone || "Não informado";
-            // document.getElementById("cargo_atual").innerText = usuario.cargo || "Não informado";
-            document.getElementById("tipoUsuario_atual").innerText = usuario.tipoUsuario;
-
-            document.getElementById("ipt_nome").value = usuario.nome;
-            document.getElementById("ipt_email").value = usuario.email;
-            // document.getElementById("ipt_telefone").value = usuario.telefone || "";
-            document.getElementById("ipt_cargo").value = usuario.cargo || "";
-            document.getElementById("ipt_tipoUsuario").value = usuario.tipoUsuario;
-            document.getElementById("ipt_senha").value = usuario.senha || "";
-          } else {
-            alert("Usuário não encontrado!");
-          }
+        .then(tipos => {
+            select.innerHTML = '<option value="" disabled selected>Selecione o tipo de usuário</option>'; 
+            tipos.forEach(tipo => {
+                const option = document.createElement('option');
+                option.value = tipo.idTipoUsuario;
+                option.text = tipo.nomeTipo;       
+                select.appendChild(option);
+            });
         })
-        .catch(error => console.error("Erro:", error));
-    }
+        .catch(erro => {
+            console.error("Falha ao carregar tipos de usuário:", erro);
+            select.innerHTML = '<option value="" disabled selected>Erro ao carregar</option>';
+        });
+}
 
+
+function getTipoUsuario() {
+    const select = document.getElementById('tipo_usuario_select');
+    
+    fetch("/gerenciamentoUsuario/getTipoUsuario") 
+        .then(res => {
+            if (res.status === 204) {
+        
+                select.innerHTML = '<option value="" disabled selected>Nenhum tipo cadastrado (204)</option>';
+                throw new Error("Nenhum tipo de usuário encontrado.");
+            }
+            if (!res.ok) {
+                throw new Error(`Erro HTTP ao buscar tipos: ${res.status}`);
+            }
+            return res.json();
+        })
+        .then(tipos => {
+            select.innerHTML = '<option value="" disabled selected>Selecione o tipo de usuário</option>'; 
+            
+            tipos.forEach(tipo => {
+                const option = document.createElement('option');
+                option.value = tipo.idTipoUsuario;      
+                option.text = tipo.nomeTipo;            
+                select.appendChild(option);
+            });
+        })
+        .catch(erro => {
+            console.error("Falha ao carregar tipos de usuário:", erro);
+            select.innerHTML = '<option value="" disabled selected>Erro ao carregar (Verifique o servidor)</option>';
+        });
+}
 
 
 

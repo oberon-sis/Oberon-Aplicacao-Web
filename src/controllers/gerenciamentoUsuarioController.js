@@ -24,32 +24,55 @@ function getUsuariobyID(req, res) {
 }
 
 
+function getTipoUsuario(req, res) {
+  
+    gerenciamentoUsuarioModel.getTipoUsuario()
+        .then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send("Nenhum tipo de usuário encontrado!");
+            }
+        })
+        .catch(function (erro) {
+            console.error("Houve um erro ao listar os tipos de usuário! Erro: ", erro.sqlMessage);
+            res.status(500).json(erro.sqlMessage);
+        });
+}
+
+
 
 function cadastrar(req, res) {
 
     var nome = req.body.nomeServer;
     var email = req.body.emailServer;
-    var cpf = req.body.cpfServer; // Recebe o telefone
-    var fkEmpresa = 0; // Inicializado para ser preenchido
+    var cpf = req.body.cpfServer;
+    var fkEmpresa = 0; 
     var fkTipoUsuario = req.body.fkTipoUsuarioServer;
     var senha = req.body.senhaServer;
     var idFuncionario = req.body.idFuncionarioServer; // ID do usuário logado
 
 
-    if (nome == undefined) {
-      res.status(400).send("Seu nome está undefined!");
-    } else if (cpf == undefined) {
-      res.status(400).send("Seu cpf está undefined!");
-    } else if (fkEmpresa == undefined) {
-      res.status(400).send("Sua empresa a vincular está undefined!");
-    } else if (fkTipoUsuario == undefined) {
-      res.status(400).send("Seu TipoUsuario a vincular está undefined!");
-    } else if (senha == undefined) {
-      res.status(400).send("Sua senha está undefined!");
-    } else if (email == undefined) {
-      res.status(400).send("Seu email está undefined!");
-    } else if (idFuncionario == undefined) {
-      res.status(400).send("Seu id não deu retorno está undefined!");
+      if (!nome) {
+      return res.status(400).send("O campo Nome está vazio ou indefinido!");
+    } 
+    else if (!cpf) {
+      return res.status(400).send("O campo CPF/Telefone está vazio ou indefinido!");
+    } 
+    else if (fkEmpresa === undefined) { 
+      return res.status(400).send("Sua fkEmpresa está indefinida!");
+    } 
+    else if (!fkTipoUsuario) {
+      return res.status(400).send("O campo Tipo de Usuário está vazio ou indefinido!");
+    } 
+    else if (!senha) {
+      return res.status(400).send("O campo Senha está vazio ou indefinido!");
+    } 
+    else if (!email) {
+      return res.status(400).send("O campo E-mail está vazio ou indefinido!");
+    } 
+    else if (!idFuncionario) {
+      return res.status(400).send("O ID do funcionário logado (idFuncionarioServer) não foi retornado!");
     }
     else {
       gerenciamentoUsuarioModel
@@ -95,4 +118,5 @@ function cadastrar(req, res) {
 module.exports = {
   getUsuariobyID,
   cadastrar,
+  getTipoUsuario,
 };
