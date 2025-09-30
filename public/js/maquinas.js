@@ -68,13 +68,6 @@ function excluir_maquina() {
                 confirmButtonColor: '#0C8186',
                 confirmButtonText: 'OK'
             });
-            Swal.fire({
-                title: 'Exclusão Cancelada',
-                text: 'A exclusão da máquina foi cancelada.',
-                icon: 'error',
-                confirmButtonColor: '#0C8186',
-                confirmButtonText: 'OK'
-            });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
             Swal.fire({
                 title: 'Exclusão Cancelada',
@@ -147,4 +140,104 @@ document.addEventListener('DOMContentLoaded', function () {
     btnAvancar.addEventListener('click', () => navigateSteps('next'));
     btnVoltar.addEventListener('click', () => navigateSteps('prev'));
     toggleParametros();
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const step1 = document.getElementById('step-update-1');
+    const step2 = document.getElementById('step-update-2');
+
+    const btnAvancar = document.getElementById('btnAvancarUpd');
+    const btnVoltar = document.getElementById('btnVoltarUpd');
+    const btnCadastrar = document.getElementById('btnCadastrarUpd');
+
+    const dadosAtuaisIdentificacao = document.getElementById('dadosAtuaisIdentificacao');
+    const dadosAtuaisAlertas = document.getElementById('dadosAtuaisAlertas');
+
+    const checkboxEmpresa = document.getElementById('alertaEmpresaUpd');
+    const checkboxOberon = document.getElementById('alertaOberonUpd');
+    const paramsContainer = document.getElementById('parametrizacaoIndividualUpd');
+    const paramInputs = paramsContainer.querySelectorAll('input');
+
+
+    function toggleParametros() {
+        const isDisabled = checkboxEmpresa.checked || checkboxOberon.checked;
+        paramInputs.forEach(input => {
+            input.disabled = isDisabled;
+        });
+        paramsContainer.classList.toggle('text-muted', isDisabled);
+    }
+
+    function handleCheckboxChange(event) {
+        const clickedCheckbox = event.target;
+        if (clickedCheckbox.checked) {
+            if (clickedCheckbox.id === 'alertaEmpresaUpd') {
+                checkboxOberon.checked = false;
+            } else if (clickedCheckbox.id === 'alertaOberonUpd') {
+                checkboxEmpresa.checked = false;
+            }
+        }
+        toggleParametros();
+    }
+
+    function navigateSteps(direction) {
+        if (direction === 'next') {
+            // Transição para Etapa 2
+            step1.style.display = 'none';
+            btnAvancar.style.display = 'none';
+
+            step2.style.display = 'block';
+            btnVoltar.style.display = 'inline-block';
+            btnCadastrar.style.display = 'inline-block';
+
+            dadosAtuaisIdentificacao.style.display = 'none';
+            dadosAtuaisAlertas.style.display = 'block';
+
+        } else if (direction === 'prev') {
+            step2.style.display = 'none';
+            btnVoltar.style.display = 'none';
+            btnCadastrar.style.display = 'none';
+
+            step1.style.display = 'block';
+            btnAvancar.style.display = 'inline-block';
+
+            dadosAtuaisIdentificacao.style.display = 'block';
+            dadosAtuaisAlertas.style.display = 'none';
+        }
+    }
+
+    checkboxEmpresa.addEventListener('change', handleCheckboxChange);
+    checkboxOberon.addEventListener('change', handleCheckboxChange);
+
+    btnAvancar.addEventListener('click', () => navigateSteps('next'));
+    btnVoltar.addEventListener('click', () => navigateSteps('prev'));
+
+    const modalElement = document.getElementById('modalAtualizarMaquina');
+    modalElement.addEventListener('show.bs.modal', function (event) {
+        
+        navigateSteps('prev');
+        toggleParametros();
+
+        // care
+    });
+
+    toggleParametros();
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('formConfigParametros');
+    const modalElement = document.getElementById('modalConfigParametros');
+    const configModal = new bootstrap.Modal(modalElement);
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        configModal.hide();
+        Swal.fire({
+            title: 'Configuração Salva!',
+            text: 'Os Parâmetros Padrão da Empresa foram atualizados com sucesso.',
+            icon: 'success',
+            confirmButtonColor: '#0C8186',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+        });
+    });
 });

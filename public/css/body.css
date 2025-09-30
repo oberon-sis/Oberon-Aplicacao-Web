@@ -2,11 +2,23 @@
   --verde_claro: #BADCDA;
   --verde_obscuro: #0C8186;
 }
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+     background-color: rgb(255, 255, 255);
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--verde_claro);
+    border-radius: 10px;
+}
 
 html {
      min-height: 100dvh;
      width: 100dvw;
-     background-color: #ff0000;
 }
 
 body {
@@ -52,12 +64,18 @@ body {
     outline: none !important;
     box-shadow: 0 0 0 1px var(--verde_obscuro)!important; /* Exemplo de verde com um pouco de transparência */
 }
-@media (min-width: 2000px) {
-  main {
-    max-width: 1200px; 
-    margin: 0 auto;  
-  }
-}
+
 a{
      text-decoration: none;
+}
+@media (min-width: 767px){
+     main{
+          max-width: calc(100% - 250px);
+     }
+}
+@media (min-width: 2000px) {
+  main {
+    max-width: 1700px; 
+    margin: 0 auto;  
+  }
 }
