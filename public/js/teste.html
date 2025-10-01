@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Usuários (Sem CSS)</title>
+</head>
+<body>
+
+    <div class="page">
+    <header>
+      <h1>Gestão de Usuários</h1>
+      <div>
+        <button id="btn_new_user">+ Novo Usuário</button>
+      </div>
+    </header>
+
+    <div class="search-bar" style="margin-bottom:12px;">
+      <input id="search_input" type="search" placeholder="Buscar por nome ou e-mail" aria-label="Buscar por nome ou e-mail">
+      <button id="btn_search" class="secondary">Buscar</button>
+      <button id="btn_clear" class="secondary">Limpar</button>
+    </div>
+
+    <div id="msg_box" class="msg"></div>
+
+    <div style="overflow:auto; border-radius:6px;">
+      <table id="usuarios_table" aria-describedby="Lista com usuários">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
+            <th>Tipo de Usuário</th>
+            <th style="width:130px">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="usuarios_tbody">
+          <!-- linhas serão inseridas via JS -->
+        </tbody>
+      </table>
+      <div id="empty_area" class="empty" style="display:none;">Nenhum usuário encontrado.</div>
+    </div>
+  </div>
+
+</body>
+</html>
