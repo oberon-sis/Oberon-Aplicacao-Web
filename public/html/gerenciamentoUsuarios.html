@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciamento de Máquinas - OBERON</title>
+    <title>Gerenciamento de Usúario - OBERON</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/body.css">
@@ -116,9 +116,11 @@
                         <td><span class="opcao_crud text-primary" data-bs-toggle="modal"
                                 data-bs-target="#modalAtualizarMaquina">
                                 <img src="../assets/svg/atualizar_blue.svg" alt="">
-                                Atualizar<i class="bi bi-arrow-clockwise"></i></span>
+                                Atualizar<i class="bi bi-arrow-clockwise"
+                                onclick="getUsuariobyID(1)"
+                                ></i></span>
                         </td>
-                        <td><span class="opcao_crud text-danger" onclick="excluir_maquina()">
+                        <td><span class="opcao_crud text-danger" onclick="ExcluirUsuario(5)">
                                 <img src="../assets/svg/excluir_red.svg" alt="">
                                 Excluir<i class="bi bi-trash"></i></span>
                         </td>
@@ -281,7 +283,7 @@
 
                         <div id="step-1">
 
-                            <h6 class="fs-5 fw-bold mb-4">Identificação do Equipamento</h6>
+                            <h6 class="fs-5 fw-bold mb-4">Identificação do Usúario</h6>
 
                             <div class="mb-3">
                                 <label for="hostname" class="form-label text-muted">Nome</label>
@@ -374,7 +376,7 @@
                                 <div id="dadosAtuaisIdentificacao">
                                     <div class="mb-3">
                                         <label class="form-label text-muted small mb-0">Nome</label>
-                                        <p class="fw-bold">Máquina-094</p>
+                                        <p class="fw-bold" id="nome_atual"></p>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label text-muted small mb-0">Modelo</label>
@@ -489,84 +491,6 @@
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="modalConfigParametros" tabindex="-1" aria-labelledby="modalConfigParametrosLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content shadow-lg">
-                <div class="modal-header border-0 pb-0 d-block text-center mb-4">
-                    <h5 class="modal-title fs-4 fw-bold" id="modalConfigParametrosLabel">Configurar Parâmetros Padrão da
-                        Empresa</h5>
-                </div>
-
-                <div class="modal-body pt-0">
-                    <form id="formConfigParametros">
-
-                        <div class="row">
-                            <div class="col-md-6 border-end">
-                                <h6 class="fs-5 fw-bold mb-3">Dados Atuais</h6>
-
-                                <div class="mb-4">
-                                    <label class="form-label text-muted small mb-0">CPU - Porcentagem de uso</label>
-                                    <p class="fw-bold">80 %</p>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label text-muted small mb-0">Memória RAM - Porcentagem de
-                                        uso</label>
-                                    <p class="fw-bold">80 %</p>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label text-muted small mb-0">Disco Duro - Porcentagem de
-                                        uso</label>
-                                    <p class="fw-bold">80 %</p>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label text-muted small mb-0">Taxa de transferência de
-                                        rede</label>
-                                    <p class="fw-bold">80 mbps</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <h6 class="fs-5 fw-bold mb-3">Definir Limites de Alerta</h6>
-
-                                <div class="mb-3">
-                                    <label for="cpu_config" class="form-label small">CPU - Porcentagem de uso</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="cpu_config"
-                                        placeholder="Insira o valor limite">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="ram_config" class="form-label small">Memória RAM - Porcentagem de
-                                        uso</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="ram_config"
-                                        placeholder="Insira o valor limite">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="disco_config" class="form-label small">Disco Duro - Porcentagem de
-                                        uso</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="disco_config"
-                                        placeholder="Insira o valor limite">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="rede_config" class="form-label small">Taxa de transferência de
-                                        rede</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="rede_config"
-                                        placeholder="Insira o valor limite">
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="modal-footer justify-content-center border-0 p-4" >
-                    <button type="submit" form="formConfigParametros"
-                        class="btn fw-semibold border flex-fill flex-md-grow-0 verde_claro px-4">Definir</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

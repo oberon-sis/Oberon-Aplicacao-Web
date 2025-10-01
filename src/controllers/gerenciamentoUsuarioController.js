@@ -42,6 +42,67 @@ function getTipoUsuario(req, res) {
 
 
 
+function ExcluirUsuario(req, res) {
+
+    var idFuncionario = req.params.idFuncionarioServer; // ID do funcionário a ser excluído
+    var senhaGerente = req.body.senha; // Senha para autenticação (vem do corpo)
+    var idGerente = req.body.idGerente; // ID para autenticação (vem do corpo)
+
+    // 1. Validação inicial dos dados obrigatórios
+    if (!idFuncionario) {
+        return res.status(400).send("ID do funcionário a ser excluído não fornecido na URL!");
+    }
+    if (!idGerente || !senhaGerente) {
+        return res.status(400).send("ID do Gerente e Senha são obrigatórios para a exclusão.");
+    }
+    
+    // 2. Busca o Gerente no banco para verificar a senha
+    // Mudei o nome da variável de 'res' para 'resultadoBusca' para evitar conflito com 'res' do Express.
+    gerenciamentoUsuarioModel.getUsuariobyID(idGerente) 
+        .then(function(resultadoBusca) {
+            
+            // Verifica se o Gerente foi encontrado
+            if (resultadoBusca.length === 0) {
+                return res.status(404).send("Gerente de autorização não encontrado.");
+            }
+            
+            // 3. Verifica se a senha está correta
+            // NOTA: Em produção, você DEVE usar hash (como bcrypt) para a senha!
+            if (senhaGerente === resultadoBusca[0].senha) { 
+                
+                // Senha correta, prossegue com a exclusão
+                gerenciamentoUsuarioModel.ExcluirUsuario(idFuncionario)
+                    .then(function (resultadoExclusao) { 
+                        if (resultadoExclusao.affectedRows > 0) {
+                            console.log(`Funcionário de ID ${idFuncionario} excluído com sucesso.`);
+                            // Usa 200 OK ou 204 No Content para sucesso de DELETE
+                            res.status(200).send("Funcionário excluído com sucesso."); 
+                        } else {
+                            // Se affectedRows = 0, o ID não existe
+                            res.status(404).send("Funcionário a ser excluído não encontrado ou já excluído.");
+                        }
+                    })
+                    .catch(function (erro) {
+                        // Erro durante a exclusão no banco de dados
+                        console.log("\nHouve um erro ao tentar excluir o usuário! Erro: ", erro.sqlMessage || erro.message);
+                        res.status(500).json(erro.sqlMessage || erro.message);
+                    });
+
+            } else {
+                // 4. Senha incorreta
+                console.log("Tentativa de exclusão falhou: Senha do gerente incorreta.");
+                return res.status(403).send("Senha do gerente de autorização incorreta."); // 403 Forbidden
+            }
+        })
+        .catch(function(erro) { 
+            // 5. Erro durante a busca do Gerente no banco de dados
+            console.log("\nHouve um erro ao buscar o Gerente para autenticação! Erro: ", erro.sqlMessage || erro.message);
+            res.status(500).json(erro.sqlMessage || erro.message);
+        });
+}
+
+
+
 function salvarEdicao(req, res) {
 
   var nome = req.body.nomeServer;
@@ -146,4 +207,5 @@ module.exports = {
   cadastrar,
   getTipoUsuario,
   salvarEdicao,
+  ExcluirUsuario,
 };
