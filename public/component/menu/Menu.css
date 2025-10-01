@@ -65,7 +65,7 @@
   height: 90px;
 }
 
-@media (min-width: 767px) {
+@media (min-width: 768px) {
   .sidebar_temp {
     min-width: 250px;
     max-width: 250px;

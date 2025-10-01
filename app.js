@@ -15,6 +15,7 @@ var app = express();
 
 // --- IMPORTAÇÃO DAS ROTAS (agrupadas) ---
 var indexRouter = require("./src/routes/index");
+var menuRouter = require("./src/routes/menu");
 var usuarioRouter = require("./src/routes/usuarios");
 var empresaRouter = require("./src/routes/empresas"); // Corrigido o nome do arquivo para 'empresas'
 var gerenciamentoMaquinasRouter = require("./src/routes/maquinas");
@@ -27,6 +28,7 @@ app.use(cors());
 
 // --- REGISTRO DAS ROTAS ---
 app.use("/", indexRouter);
+app.use("/menu", menuRouter);
 app.use("/usuarios", usuarioRouter);
 // CORRIGIDO: O prefixo agora está no plural para corresponder ao front-end
 app.use("/empresas", empresaRouter); 
