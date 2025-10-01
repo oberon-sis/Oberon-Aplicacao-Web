@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const idUsuario = 5;// mocado 
+    const idUsuario = 3;// mocado 
     // const idUsuario = sessionStorage.ID_USUARIO
 
     fetch('/component/menu/Menu.html')

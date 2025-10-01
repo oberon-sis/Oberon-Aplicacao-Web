@@ -11,14 +11,24 @@
     background-color: #ffffff;
     
 }
+@media (max-width: 900px) {
+.cont_tudo{
+    flex-direction: column;
+    width: 100%;
+}
+.container01{
+    width: 100% !important;
+}
+}
 .container01{
     background-color: white;
     width: 50%;
     height: 60% ;
     padding: 30px;
-
+    border-radius: 0.5rem;
     display: block;
     justify-content: flex-start;
+     border-radius: 10px;
     
 }
 
@@ -29,13 +39,15 @@
 
 
 .excluir-btn{
-    margin-top: 2px;
-    background-color: #883C3C;
+    margin-top: 8px;
+    
+    background-color: #003b46;
     height: 5vh;
     width: 98%;
     color: white;
     border: none;
     align-self: center;
+     border-radius: 10px;
 }
 
 .atualizar-btn{
@@ -45,7 +57,19 @@
     color: black;
     border: none;
     justify-self: center;
+     border-radius: 10px;
     
+}
+
+.excluir-btn:hover {
+  background-color: #883C3C;
+  
+}
+
+.atualizar-btn:hover {
+  background-color: #076e26;
+  color: #fff !important;
+  
 }
 
 .ipt{
@@ -55,6 +79,17 @@
     padding: 20px;
     height: 3vh;
     width: 100%;
+    
+}
+input::placeholder {
+    color: #888;
+}
+
+input:focus {
+    outline: none;
+    border-color: none;
+    box-shadow: none;
+    background:none;
 }
 
 .label-esp{
@@ -71,13 +106,13 @@
 
 
 .cont-usuario{
-    background-image: url(../assets/marca/2\ 2.png);
+    /* background-image: url(../assets/marca/2\ 2.png); */
     height: 25vh; 
     background-repeat: space;
     pad: 10px;
-
- 
-    
+    width: 99%;
+    background-color: #BADCDA;
+    border-radius: 10px;
 }
 
 #txt-tudo{
