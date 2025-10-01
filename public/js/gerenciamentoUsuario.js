@@ -2,7 +2,7 @@
 function cadastrar() {
     var nome = document.getElementById('nome_input').value;
     var email = document.getElementById('email_input').value;
-    var cpf = document.getElementById('cpf_input').value; 
+    var cpf = document.getElementById('cpf_input').value;
     var senha = document.getElementById('senha_input').value;
     var fkTipoUsuario = document.getElementById('tipo_usuario_select').value;
     var idFuncionario = 5; // administrador logado
@@ -24,17 +24,17 @@ function cadastrar() {
             idFuncionarioServer: idFuncionario
         }),
     })
-    .then(res => {
-        if (res.ok) alert("Cadastro realizado com sucesso!");
-        else res.json().then(json => alert(`Erro: ${json}`));
-    })
-    .catch(err => alert("Erro de rede: " + err));
+        .then(res => {
+            if (res.ok) alert("Cadastro realizado com sucesso!");
+            else res.json().then(json => alert(`Erro: ${json}`));
+        })
+        .catch(err => alert("Erro de rede: " + err));
 }
 
 
 
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     getTipoUsuario();
     getUsuariobyID();
 });
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function getTipoUsuario() {
     var select = document.getElementById('tipo_usuario_select');
-    
+
     fetch("/gerenciamentoUsuario/getTipoUsuario")
         .then(res => {
             if (res.status === 204) {
@@ -56,11 +56,11 @@ function getTipoUsuario() {
             return res.json();
         })
         .then(tipos => {
-            select.innerHTML = '<option value="" disabled selected>Selecione o tipo de usuário</option>'; 
+            select.innerHTML = '<option value="" disabled selected>Selecione o tipo de usuário</option>';
             tipos.forEach(tipo => {
                 const option = document.createElement('option');
                 option.value = tipo.idTipoUsuario;
-                option.text = tipo.nomeTipo;       
+                option.text = tipo.nomeTipo;
                 select.appendChild(option);
             });
         })
@@ -96,9 +96,9 @@ function getUsuariobyID() {
             document.getElementById("ipt_senha").value = usuario.senha || "";
 
             var selectTipo = document.getElementById("tipo_usuario_select");
-            if(selectTipo) {
+            if (selectTipo) {
                 const intervalo = setInterval(() => {
-                    if(selectTipo.options.length > 1) { 
+                    if (selectTipo.options.length > 1) {
                         selectTipo.value = usuario.fkTipoUsuario;
                         clearInterval(intervalo);
                     }
@@ -111,7 +111,7 @@ function getUsuariobyID() {
 
 function salvarEdicao() {
 
-    var idFuncionario = 17; 
+    var idFuncionario = 17;
     var nome = document.getElementById("ipt_nome").value;
     var email = document.getElementById("ipt_email").value;
     var senha = document.getElementById("ipt_senha").value;
@@ -123,7 +123,7 @@ function salvarEdicao() {
     }
 
 
-    const bodyData = {
+    var bodyData = {
         idFuncionarioServer: idFuncionario,
         nomeServer: nome,
         emailServer: email,
@@ -136,15 +136,15 @@ function salvarEdicao() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bodyData)
     })
-    .then(res => {
-        if (res.ok) {
-            alert("Alterações salvas com sucesso!");
-            getUsuariobyID();
-        } else {
-            res.json().then(json => alert(`Erro ao salvar: ${json}`));
-        }
-    })
-    .catch(err => alert("Erro de rede: " + err));
+        .then(res => {
+            if (res.ok) {
+                alert("Alterações salvas com sucesso!");
+                getUsuariobyID();
+            } else {
+                res.json().then(json => alert(`Erro ao salvar: ${json}`));
+            }
+        })
+        .catch(err => alert("Erro de rede: " + err));
 }
 
 
