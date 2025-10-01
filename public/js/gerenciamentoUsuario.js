@@ -109,9 +109,8 @@ function getUsuariobyID() {
 }
 
 
-function salvarEdicao() {
+function salvarEdicao(idFuncionario) {
 
-    var idFuncionario = 17;
     var nome = document.getElementById("ipt_nome").value;
     var email = document.getElementById("ipt_email").value;
     var senha = document.getElementById("ipt_senha").value;
@@ -149,3 +148,69 @@ function salvarEdicao() {
 
 
 
+function excluir_maquina() {
+    Swal.fire({
+        title: 'Excluir Máquina',
+        html: `
+      <div class="form-group text-left mb-3">
+        <p class="text-muted mb-3">Para confirmar a exclusão da Máquina, por favor, confirme abaixo</p>
+        <label for="swal-input-senha" class="form-label font-weight-bold">Senha</label>
+        <input type="password" id="swal-input-senha" class="form-control border-start-0  shadow-none input_pesquisa" placeholder="********">
+      </div>
+      <div class="form-group text-left">
+        <label for="swal-input-confirmar-senha" class="form-label font-weight-bold">Confirmar Senha</label>
+        <input type="password" id="swal-input-confirmar-senha" class="form-control border-start-0  shadow-none input_pesquisa" placeholder="********">
+      </div>
+    `,
+        icon: 'warning',
+        iconColor: '#ffc107',
+
+        showCancelButton: true,
+        confirmButtonText: 'Excluir',
+        cancelButtonText: 'Cancelar',
+
+        focusConfirm: false,
+
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-danger btn-lg mx-2',
+            cancelButton: 'btn btn-secondary btn-lg mx-2',
+            popup: 'shadow-lg',
+            input: 'form-control'
+        },
+        preConfirm: () => {
+            const senha = Swal.getPopup().querySelector('#swal-input-senha').value;
+            const confirmarSenha = Swal.getPopup().querySelector('#swal-input-confirmar-senha').value;
+
+            if (!senha || !confirmarSenha) {
+                Swal.showValidationMessage('Por favor, preencha ambos os campos de senha.');
+                return false;
+            }
+
+            if (senha !== confirmarSenha) {
+                Swal.showValidationMessage('As senhas digitadas não são iguais.');
+                return false;
+            }
+
+            return { senha: senha };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Máquina Excluída!',
+                text: 'A máquina foi excluída com sucesso.',
+                icon: 'success',
+                confirmButtonColor: '#0C8186',
+                confirmButtonText: 'OK'
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire({
+                title: 'Exclusão Cancelada',
+                text: 'A exclusão da máquina foi cancelada.',
+                icon: 'error',
+                confirmButtonColor: '#0C8186',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+}
