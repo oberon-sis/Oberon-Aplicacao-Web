@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="stylesheet" href="../css/login.css">
-    <title>OBERON - Cadastrar Empresa</title>
+    <title>OBERON - Cadastrar Usuário</title>
 </head>
 
 <!DOCTYPE html>
@@ -15,12 +15,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="stylesheet" href="../css/login.css">
-    <title>OBERON - Cadastrar Empresa</title>
-</head>
-
 <body>
     <div class="full-screen">
-        <a class="logo-oberon">
+        <a class="logo-oberon" href="./home.html">
             <img src="../assets/marca/logo_branco.png" alt="OBERON" class="logo" width="48" height="48">
         </a>
         <div class="login-container">
@@ -31,17 +28,14 @@
                     <label for="nome">Nome Completo</label>
                     <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required>
                 </div>
-
                 <div class="form-grupo">
                     <label for="cpf">CPF</label>
-                    <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" maxlength="14" required>
+                    <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required>
                 </div>
-
                 <div class="form-grupo">
                     <label for="email">E-mail</label>
                     <input type="email" id="email" name="email" placeholder="seu@email.com" required>
                 </div>
-
                 <div class="form-grupo">
                     <label for="password">Senha</label>
                     <div class="input-container">
@@ -51,49 +45,32 @@
                         </button>
                     </div>
                 </div>
-
                 <div class="form-grupo">
                     <label for="confirmPassword">Confirmar Senha</label>
                     <div class="input-container">
-                        <input type="password" id="confirmPassword" name="confirmPassword"
-                            placeholder="Confirme sua senha" required>
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirme sua senha" required>
                         <button type="button" class="password-toggle" id="toggleConfirmPassword">
                             <img src="../assets/marca/show.png" alt="Mostrar senha" width="20" height="20">
                         </button>
                     </div>
                 </div>
-
-                <button type="submit" class="login-btn">CADASTRAR</button>
+                <button type="submit" class="login-btn">FINALIZAR CADASTRO</button>
             </form>
+
+            <div id="mensagem-validacao" class="mensagem"></div>
 
             <div class="redirecionamento">
                 <a href="./login.html">Já possui uma conta?</a>
             </div>
         </div>
-
         <div class="frase-impacto">
             <div class="text">
                 <div class="title">Segurança que move seu negócio.</div>
             </div>
         </div>
     </div>
-
-    <script>
-        document.querySelector('.password-toggle').onclick = function () {
-            const input = document.getElementById('password');
-            const img = this.querySelector("img");
-
-            if (input.type === "password") {
-                input.type = "text";
-                img.src = "../assets/marca/hide.png";
-                img.alt = "Ocultar senha";
-            } else {
-                input.type = "password";
-                img.src = "../assets/marca/show.png";
-                img.alt = "Mostrar senha";
-            }
-        }
-    </script>
+    <script src="../js/cadastroUsuario.js" defer></script>
+    <script src="../js/mascaras.js"></script>
 </body>
 
 </html>

@@ -5,6 +5,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="../css/login.css">
+  <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
+
   <title>OBERON - Login</title>
 </head>
 
@@ -35,6 +37,8 @@
         <button type="submit" class="login-btn" href="../html/cadastroUsuario.html">ENTRAR</button>
       </form>
 
+      <div id="mensagem-validacao" class="mensagem"></div>
+
       <div class="redirecionamento">
         <a href="./senha.html">Esqueci minha senha</a> • <a href="./cadastro.html">Não possui uma conta?</a>
       </div>
@@ -48,21 +52,7 @@
   </div>
 </body>
 
-<script>
-  document.querySelector('.password-toggle').onclick = function () {
-    const input = document.getElementById('password');
-    const img = this.querySelector("img");
-
-    if (input.type === "password") {
-      input.type = "text";
-      img.src = "../assets/marca/hide.png";
-      img.alt = "Ocultar senha";
-    } else {
-      input.type = "password";
-      img.src = "../assets/marca/show.png";
-      img.alt = "Mostrar senha";
-    }
-  }
-</script>
+<script src="../js/login.js"></script>
+<script src="../js/mascaras.js"></script>
 
 </html>

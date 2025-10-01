@@ -13,46 +13,55 @@ var HOST_APP = process.env.APP_HOST;
 
 var app = express();
 
+// --- IMPORTAÇÃO DAS ROTAS (agrupadas) ---
 var indexRouter = require("./src/routes/index");
+var menuRouter = require("./src/routes/menu");
 var usuarioRouter = require("./src/routes/usuarios");
-var usuarioRouter = require("./src/routes/gerenciamentoUsuario");
+var gerenciamentoUsuarioRouter = require("./src/routes/gerenciamentoUsuario");
+var empresaRouter = require("./src/routes/empresas");
+var gerenciamentoMaquinasRouter = require("./src/routes/maquinas");
 
+// --- CONFIGURAÇÃO DOS MIDDLEWARES ---
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
-
 app.use(cors());
 
+// --- REGISTRO DAS ROTAS ---
 app.use("/", indexRouter);
+app.use("/menu", menuRouter);
 app.use("/usuarios", usuarioRouter);
-app.use("/gerenciamentoUsuario", usuarioRouter);
+app.use("/gerenciamentoUsuario", gerenciamentoUsuarioRouter);
+// CORRIGIDO: O prefixo agora está no plural para corresponder ao front-end
+app.use("/empresas", empresaRouter); 
+app.use("/gerenciamentoMaquinas", gerenciamentoMaquinasRouter);
 
 
 app.listen(PORTA_APP, function () {
   console.log(`
 
-       ------------                                                                                                     
-   #+---------------  ##                                                                                                
-   ###+-------------- ##      ########       #########     ##########  #########        ########      ####       ###    
-   #####        ----- ##    ############     ###########   ##########  ###########    ############    #####      ###    
-   ##### --     ----- ##   ###        ###    ##      ###   ###         ###     ###   ###        ###   ######     ###    
-   ##### --     ----- ##   ##          ###   ##     ####   ###         ###     ###  ###          ###  ### ###    ###    
-   ##### --     ----- ##  ###          ###   ##########    #########   ##########   ###          ###  ###  ####  ###    
-   ##### --     ----- ##   ##          ###   ##      ###   ###         #########    ###          ###  ###   #### ###    
-   ##### --     ----- ##   ###        ###    ##      ###   ###         ###    ###    ###        ###   ###     ######    
-   ######++######+--- ##    ###### #####     ###########   #########   ###     ###    ############    ###      #####    
-    ###############+- ##      #########      #########     ##########  ###      ###     ########      ###       ####    
-     ###########+-----+#                                                                                                
-        # -----------                                                                                                   
+      ------------                                                                                          
+  #+---------------  ##                                                                                     
+  ###+-------------- ##      ########       #########      ##########  #########        ########      ####       ###    
+  #####         ----- ##     ############     ###########   ##########  ###########     ############      #####       ###    
+  ##### --      ----- ##   ###          ###    ##       ###   ###         ###       ###   ###          ###    ######       ###    
+  ##### --      ----- ##   ##              ###   ##      ####   ###         ###       ###  ###              ###  ### ###      ###    
+  ##### --      ----- ##  ###              ###   ##########     #########   ##########   ###              ###  ###  ####     ###    
+  ##### --      ----- ##   ##              ###   ##       ###   ###         #########    ###              ###  ###   ####    ###    
+  ##### --      ----- ##   ###          ###    ##       ###   ###         ###      ###   ###          ###   ###      ######    
+  ######++######+--- ##      ###### #####     ###########   #########   ###       ###    ############    ###        #####    
+   ##############+- ##         #########       #########    ##########  ###        ###     ########      ###         ####     
+     ###########+-----+#                                                                                
+       # -----------                                                                                  
 
-        ##   ##  ######   #####             ####       ##     ######     ##              ##  ##    ####    ######  
-        ##   ##  ##       ##  ##            ## ##     ####      ##      ####             ##  ##     ##         ##  
-        ##   ##  ##       ##  ##            ##  ##   ##  ##     ##     ##  ##            ##  ##     ##        ##   
-        ## # ##  ####     #####    ######   ##  ##   ######     ##     ######   ######   ##  ##     ##       ##    
-        #######  ##       ##  ##            ##  ##   ##  ##     ##     ##  ##            ##  ##     ##      ##     
-        ### ###  ##       ##  ##            ## ##    ##  ##     ##     ##  ##             ####      ##     ##      
-        ##   ##  ######   #####             ####     ##  ##     ##     ##  ##              ##      ####    ######  
-        \n\n\n                                                                                                 
+       ##   ##  ######   #####          ####       ##      ######      ##                 ##  ##      ####      ######  
+       ##   ##  ##       ##  ##          ## ##     ####        ##     ####                 ##  ##       ##          ##  
+       ##   ##  ##       ##  ##          ##  ##   ##  ##       ##    ##  ##                 ##  ##       ##         ##   
+       ## # ##  ####     #####   ######   ##  ##   ######       ##    ######   ######   ##  ##       ##         ##    
+       #######  ##       ##  ##          ##  ##   ##  ##       ##    ##  ##           ##  ##       ##        ##     
+       ### ###  ##       ##  ##          ## ##    ##  ##       ##    ##  ##            ####         ##       ##      
+       ##   ##  ######   #####          ####     ##  ##       ##    ##  ##             ##        ####      ######  
+       \n\n\n                                                                                        
     Servidor do site já está rodando! Acesse o caminho a seguir para visualizar .: http://${HOST_APP}:${PORTA_APP} :. \n\n
     Você está rodando sua aplicação em ambiente de .:${process.env.AMBIENTE_PROCESSO}:. \n\n
     \tSe .:desenvolvimento:. você está se conectando ao banco local. \n

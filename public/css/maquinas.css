@@ -1,0 +1,178 @@
+@media (max-width: 500px) {
+    .div_pesquisa {
+        max-width: 100% !important;
+    }
+
+    .main {
+        max-width: 96%;
+        padding-right: 0.2rem !important;
+    }
+
+    .botao_configuracao {
+        width: 48%;
+    }
+
+    .icone_botao {
+        display: none;
+    }
+
+    .espaco_branco {
+        margin-right: 1px !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1045px) {
+    .div_pesquisa {
+        flex-direction: column !important;
+        justify-content: start !important;
+        align-items: flex-start !important;
+    }
+
+    .div_botoes {
+        flex-direction: row !important;
+        width: 100% !important;
+    }
+
+    .div_justify {
+        flex-direction: row !important;
+        justify-content: start !important;
+    }
+
+    .botao_configuracao {
+        width: 50%;
+    }
+
+    .botao_nova_maquina {
+        padding-top: 9px;
+        padding-bottom: 9px;
+    }
+}
+
+.table-container {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.table-fixed {
+    table-layout: fixed;
+    min-width: 900px;
+    white-space: nowrap;
+}
+
+.table-fixed th,
+.table-fixed td {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.table-responsive table {
+    min-width: 1200px;
+    white-space: nowrap;
+}
+
+.content-wrapper {
+    max-width: 100%;
+    overflow-x: hidden !important;
+}
+
+@media (max-width: 1000px) {
+    .div_tabela {
+        width: 91.2dvw;
+    }
+}
+
+@media (min-width: 767px) {
+    .div_tabela {
+        min-height: 640px;
+        margin-inline: 11px !important;
+    }
+}
+.detalhes{
+    color: black;
+}
+.opcao_crud{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+.div_paginas a{
+    color: black !important;
+}
+.div_paginas a:hover{
+     background-color: var(--verde_obscuro) !important;
+     color: white;
+}
+.active_pagina a{
+    background-color: var(--verde_obscuro) !important;
+}
+
+.skeleton-row td {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    vertical-align: middle;
+}
+
+.skeleton-text,
+.skeleton-icon {
+    display: inline-block; 
+    height: 12px; 
+    background-color: #e2e5e7; 
+    border-radius: 4px; 
+    margin-right: 8px; 
+    opacity: 0.7;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+.skeleton-text.short { 
+    width: 40px; 
+}
+.skeleton-text.medium { 
+    width: 80px; 
+}
+.skeleton-text.long { 
+    width: 120px; 
+}
+
+.skeleton-icon { 
+    width: 16px; 
+    height: 16px; 
+    border-radius: 50%; 
+}
+
+
+@keyframes pulse {
+    0% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    100% {
+        opacity: 0.7;
+    }
+}
+
+
+@media (min-width: 425px) and (max-width: 766px) {
+    .div_tabela{
+        margin-left: 0.7rem;
+        width: 93vw;
+    }
+}
+
+@media (min-width: 767px){
+    .div_tabela{
+        width: 95%;
+    }
+}
+@media (min-width: 1135px){
+    .div_tabela{
+        width: 98%;
+    }
+}
+@media (min-width: 424px)and (max-width: 515px) {
+    .div_tabela{
+        width: 90vw
+    }
+}

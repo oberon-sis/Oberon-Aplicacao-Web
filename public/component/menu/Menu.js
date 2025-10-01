@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(html => {
             document.getElementById('menu-container').innerHTML = html;
 
-            return fetch(`/usuarios/getMenu/${idUsuario}`);
+            return fetch(`/menu/getMenu/${idUsuario}`);
         })
         .then(response => {
             if (!response.ok) {
@@ -21,13 +21,15 @@ document.addEventListener('DOMContentLoaded', function () {
             return response.json();
         })
         .then(data => {
-            document.getElementById('painelPC').innerHTML = data.painelPC;
-            document.getElementById('gestaoAreaPC').innerHTML = data.gestaoAreaPC;
-            document.getElementById('alertaSuportePC').innerHTML = data.alertaSuportePC;
+            console.log(data.painelPC)
+            console.log(document.getElementById('painelPC'))
+            document.getElementById('painelPC').innerHTML += data.painelPC;
+            document.getElementById('alertaSuportePC').innerHTML += data.alertaSuportePC;
+            document.getElementById('gestaoAreaPC').innerHTML += data.gestaoAreaPC;
 
-            document.getElementById('painelMobile').innerHTML = data.painelMobile;
-            document.getElementById('gestaoAreaMobile').innerHTML = data.gestaoAreaMobile;
-            document.getElementById('alertaSuporteMobile').innerHTML = data.alertaSuporteMobile;
+            document.getElementById('painelMobile').innerHTML += data.painelMobile;
+            document.getElementById('gestaoAreaMobile').innerHTML += data.gestaoAreaMobile;
+            document.getElementById('alertaSuporteMobile').innerHTML += data.alertaSuporteMobile;
         })
         .catch(error => {
             console.error('Falha ao carregar o menu:', error);
