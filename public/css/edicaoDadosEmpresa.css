@@ -1,0 +1,86 @@
+
+.txt-dados{
+    border-bottom: 1px solid  grey  ;
+}
+
+.cont_tudo{
+    display: flex;
+    justify-content: flex-start;
+    height: 50%;
+    width: 90%;
+    background-color: #ffffff;
+    
+}
+.container01{
+    background-color: white;
+    width: 50%;
+    height: 60% ;
+    padding: 30px;
+
+    display: block;
+    justify-content: flex-start;
+    
+}
+
+#razao, #CNPJ{
+    padding-left: 10px;
+}
+
+
+
+.excluir-btn{
+    margin-top: 2px;
+    background-color: #883C3C;
+    height: 5vh;
+    width: 98%;
+    color: white;
+    border: none;
+    align-self: center;
+}
+
+.atualizar-btn{
+     background-color: #BADCDA;
+    height: 5vh;
+    width: 99%;
+    color: black;
+    border: none;
+    justify-self: center;
+    
+}
+
+.ipt{
+    border: none;
+    background-color: #F2F4F8;
+    border-bottom: 1px solid gray ;
+    padding: 20px;
+    height: 3vh;
+    width: 100%;
+}
+
+.label-esp{
+    padding: 5px;
+}
+
+
+
+#CNPJ{
+    border-bottom: 1px solid gray;
+    padding-bottom: 16px;
+}
+
+
+
+.cont-usuario{
+    background-image: url(../assets/marca/2\ 2.png);
+    height: 25vh; 
+    background-repeat: space;
+    pad: 10px;
+
+ 
+    
+}
+
+#txt-tudo{
+    padding: 20px;
+}
+

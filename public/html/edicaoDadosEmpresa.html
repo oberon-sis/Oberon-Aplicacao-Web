@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/edicaoDadosEmpresa.css">
+    <link rel="stylesheet" href="../component/menu/Menu.css">
+    <link rel="stylesheet" href="../css/body.css">
+  <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
+    <title>Edição de Dados Da Empresa</title>
+</head>
+<body>
+      <h1 >Edição de dados da Empresa</h1>
+
+      <div class="cont-usuario">
+         <h2>Olá Fernanda Caramico - Geremte de Operações</h2>
+         <h3>Upfinity Banco</h3>
+         <p>Dados organizados, resultados otimizados. Gerencie as informações<br>da sua empresa com facilidade.</p>
+      </div>
+ 
+     <!-- Excluir empresa -->
+      <div class="cont_tudo">
+      <div class="container01">
+        
+        <h3 class="txt-dados">Dados Atuais</h3>
+        <div class="dadosAtuais">
+          <label for="name">Razão Social</label>
+        
+          <p id="razao" name="razao">Upfinity Banco</p>
+         
+        </div>
+
+        <br>
+        <br>
+        <div class="form-grupo">
+          <label for="id">CNPJ</label>
+          <div class="input-container">
+            
+            <p id="CNPJ" name="CNPJ">42.591.651/0001-43   </p>
+           
+          </div>
+        </div>
+
+       
+
+        <button type="submit" class="excluir-btn">Excluir Empresa</button>
+</div>
+         <!-- Editar empresa -->
+
+         <br>
+         <br>
+         <div class="container01">
+          <h3 class="txt-dados">Novos dados</h3>
+        <form id="editarEmpresa">
+        <div class="form-empresa">
+          <label class="label-esp" for="name">Razão Social</label>
+           <br> <br>
+         
+          <input type="text" class="ipt" name="razao" placeholder="Digite a Razão Social de sua empresa" required>
+        </div>
+ <br>
+          
+         <br>
+        <div class="form-empresa">
+          <label  class="label-esp" for="id">CNPJ</label>
+          <br>
+         <br>
+            <input type="text" class="ipt" name="CNPJ" placeholder="Digite seu CNPJ" required>
+         
+        </div>
+
+         <br>
+        
+        <button type="submit" class="atualizar-btn">Atualizar</button>
+      </form>
+    
+      </div>
+</div>
+</body>
+</html>
