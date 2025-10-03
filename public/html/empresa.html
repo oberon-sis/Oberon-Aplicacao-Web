@@ -12,6 +12,9 @@
   <link rel="stylesheet" href="../css/maquinas.css">
   <link rel="stylesheet" href="../css/edicaoDadosEmpresa.css">
   <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+ 
 
 </head>
 
@@ -66,7 +69,7 @@
 
 
 
-        <button type="submit" class="excluir-btn">Excluir Empresa</button>
+        <button type="button" class="excluir-btn" onclick="ExcluirUsuario(10)">Excluir Empresa</button>
       </div>
       <!-- Editar empresa -->
 
@@ -96,7 +99,7 @@
 
          
         </form>
-         <button type="submit" class="atualizar-btn">Atualizar</button>
+         <button type="submit" class="atualizar-btn" onclick="AtualizarUsuario()">Atualizar</button>
 
       </div>
     </div>
@@ -104,10 +107,11 @@
 
 
   </main>
-
+<script src="../component/menu/Menu.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/edicaoDadosEmpresa.js"></script>
 
 </body>
 
 </html>
-<script src="../component/menu/Menu.js"></script>
+  

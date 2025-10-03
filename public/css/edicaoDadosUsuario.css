@@ -106,13 +106,13 @@ input:focus {
 
 
 .cont-usuario{
-    /* background-image: url(../assets/marca/2\ 2.png); */
+    background-image: url(../assets/marca/Banner.jpg);
+    background-repeat: no-repeat;
     height: 25vh; 
     background-repeat: space;
-    pad: 5px;
+    pad: 10px;
     margin-left: 8px;
-    width: 95%;
-    background-color: #BADCDA;
+    width: 99%;
     border-radius: 10px;
 }
 
