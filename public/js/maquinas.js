@@ -13,7 +13,10 @@ function mudar_icone_lv(id_da_img) {
     const srcNormal = icone.dataset.srcNormal;
     icone.src = srcNormal;
 }
-function excluir_maquina() {
+
+const ID_FUNCIONARIO_GERENTE_MOCK = 6;
+
+function excluir_maquina(idMaquina) {
     Swal.fire({
         title: 'Excluir Máquina',
         html: `
@@ -59,30 +62,71 @@ function excluir_maquina() {
 
             return { senha: senha };
         }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire({
-                title: 'Máquina Excluída!',
-                text: 'A máquina foi excluída com sucesso.',
-                icon: 'success',
-                confirmButtonColor: '#0C8186',
-                confirmButtonText: 'OK'
-            });
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-            Swal.fire({
-                title: 'Exclusão Cancelada',
-                text: 'A exclusão da máquina foi cancelada.',
-                icon: 'error',
-                confirmButtonColor: '#0C8186',
-                confirmButtonText: 'OK'
-            });
-        }
+    })
+        .then((resultadoSwal) => {
+
+            if (resultadoSwal.isConfirmed) {
+
+                const idFuncionarioGerente = ID_FUNCIONARIO_GERENTE_MOCK;
+                const senhaGerente = resultadoSwal.value.senha;
+                        console.log(senhaGerente)
+
+                return fetch(`/maquinas/excluirMaquina/${idMaquina}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        idGerente: idFuncionarioGerente,
+                        senha: senhaGerente
+                    })
+                })
+                    .then(res => {
+                        console.log("=====================")
+                        console.log(res)
+                        console.log("=====================")
+                        if (res.ok) {
+                            exibirSucesso('Exclusão Concluída', 'A Máquina foi excluída com sucesso.');
+                        } else {
+                            res.text().then(mensagemErro => {
+                                exibirErro('Erro na Exclusão', mensagemErro || 'Erro desconhecido ao tentar excluir.');
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        exibirErro('Erro de Rede', 'Não foi possível conectar ao servidor: ' + err);
+                    });
+
+            } else if (resultadoSwal.dismiss === Swal.DismissReason.cancel) {
+                exibirErro('Exclusão Cancelada', 'A exclusão da Máquina foi cancelada pelo usuário.');
+            }
+
+        });
+}
+
+function exibirSucesso(titulo, texto) {
+    Swal.fire({
+        title: titulo,
+        text: texto,
+        icon: 'success',
+        confirmButtonColor: '#0C8186',
+        confirmButtonText: 'OK'
+    });
+}
+
+function exibirErro(titulo, texto) {
+    Swal.fire({
+        title: titulo,
+        text: texto,
+        icon: 'error',
+        confirmButtonColor: '#0C8186',
+        confirmButtonText: 'OK'
     });
 }
 
 
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function cadastrarMaquina() {
     const step1 = document.getElementById('step-1');
     const step2 = document.getElementById('step-2');
     const btnAvancar = document.getElementById('btnAvancar');
@@ -181,7 +225,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function navigateSteps(direction) {
         if (direction === 'next') {
-            // Transição para Etapa 2
             step1.style.display = 'none';
             btnAvancar.style.display = 'none';
 
@@ -213,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const modalElement = document.getElementById('modalAtualizarMaquina');
     modalElement.addEventListener('show.bs.modal', function (event) {
-        
+
         navigateSteps('prev');
         toggleParametros();
 

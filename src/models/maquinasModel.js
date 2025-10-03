@@ -60,13 +60,25 @@ function getFkMaquinaComponente(fkMaquina) {
   return database.executar(instrucaoSql);
 }
 
+function getParametrosEspecificos(fkMaquinaComponente) {
+  console.log(
+    "[MODEL] - function getParametrosEspecificos():",
+    fkMaquinaComponente,
+  );
+  var instrucaoSql = `
+        SELECT idParametro from Parametro where fkMaquinaComponente = ${fkMaquinaComponente};
+    `;
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+
 function getFkEmpresa(idFuncionario) {
   console.log(
     "[MODEL] - function getFkEmpresa():",
     idFuncionario,
   );
   var instrucaoSql = `
-        SELECT fkEmpresa FROM funcionario WHERE idFuncionario = ${idFuncionario};
+        SELECT fkEmpresa FROM Funcionario WHERE idFuncionario = ${idFuncionario};
     `;
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
@@ -78,12 +90,34 @@ function getSenha(idFuncionario) {
     idFuncionario,
   );
   var instrucaoSql = `
-        SELECT senha from funcionario where idFuncionario = ${idFuncionario};
+        SELECT senha from Funcionario where idFuncionario = ${idFuncionario};
+    `;
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+function getParametrosPadrao(fkEmpresa) {
+  console.log(
+    "[MODEL] - function getParametrosPadrao():",
+    fkEmpresa,
+  );
+  var instrucaoSql = `
+        SELECT limite from Parametro where fkEmpresa = ${fkEmpresa};
     `;
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
 }
 
+function excluirParametroEspecifico(fkMaquinaComponente) {
+  console.log(
+    "[MODEL] - function getParametrosEspecifico():",
+    fkEmpresa,
+  );
+  var instrucaoSql = `
+        DELETE from MaquinaComponente where fkMaquinaComponente = ${fkMaquinaComponente}
+    `;
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
 
 
 function atualizarMaquina(nome, modelo, macAdress, status, fkEmpresa) {
@@ -161,13 +195,15 @@ function eliminarMaquinaComponente(idMaquina) {
   console.log(
     "[MODEL] - function eliminarMaquinaComponente():",
     idMaquina,
+
   );
 
-  var instrucaoSql = `
-        Delete from MaquinaComponente where fkMaquina = ${idMaquina};
+    var instrucaoSql = `
+        Delete from Parametro where fkMaquina = ${idMaquina};
     `;
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
+
 }
 
 function eliminarRegistros(fkMaquinaComponente) {
@@ -198,20 +234,23 @@ function eliminarAlertas(fkMaquinaComponente) {
 
 
 module.exports = {
-    cadastrarMaquina,
-    cadastrarParametro,
-    
-    getFkAlerta,
-    getFkMaquinaComponente,
-    getFkEmpresa, 
-    getSenha,     
+  cadastrarMaquina,
+  cadastrarParametro,
 
-    atualizarMaquina,
-    atualizarParametro,
-    atualizarAlerta,
-    
-    eliminarMaquina,
-    eliminarMaquinaComponente,
-    eliminarRegistros,
-    eliminarAlertas
-};
+  getFkAlerta,
+  getFkMaquinaComponente,
+  getFkEmpresa,
+  getSenha,
+  getParametrosPadrao,
+  getParametrosEspecificos,
+
+  atualizarMaquina,
+  atualizarParametro,
+  atualizarAlerta,
+
+  eliminarMaquina,
+  eliminarMaquinaComponente,
+  eliminarRegistros,
+  eliminarAlertas,
+  excluirParametroEspecifico
+}
