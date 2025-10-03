@@ -7,7 +7,7 @@ function autenticar(email, senha) {
     senha,
   );
   var instrucaoSql = `
-        SELECT idFuncionario, nome, cpf, email, fkTipoUsuario as cargo, fkEmpresa as Empresa FROM funcionario WHERE email = '${email}' AND senha = '${senha}';
+        SELECT idFuncionario, nome, cpf, email, fkTipoUsuario as cargo, fkEmpresa as Empresa FROM Funcionario WHERE email = '${email}' AND senha = '${senha}';
     `;
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
@@ -20,7 +20,7 @@ function autenticar(email, senha) {
 function cadastrarEmpresaEFuncionario(empresa, usuario) {
     console.log("ACESSEI O MODEL para cadastrar EMPRESA e FUNCIONÁRIO:", empresa, usuario);
     var instrucaoSqlEmpresa = `
-        INSERT INTO empresa (razaoSocial, cnpj) VALUES ('${empresa.razaoSocial}', '${empresa.cnpj}');
+        INSERT INTO Empresa (razaoSocial, cnpj) VALUES ('${empresa.razaoSocial}', '${empresa.cnpj}');
     `;
     console.log("Executando SQL para Empresa: \n" + instrucaoSqlEmpresa);
 
@@ -31,7 +31,7 @@ function cadastrarEmpresaEFuncionario(empresa, usuario) {
             throw new Error("Falha ao obter o ID da nova empresa. Cadastro cancelado.");
         }
         var instrucaoSqlFuncionario = `
-            INSERT INTO funcionario (nome, cpf, email, senha, fkTipoUsuario, fkEmpresa) 
+            INSERT INTO Funcionario (nome, cpf, email, senha, fkTipoUsuario, fkEmpresa) 
             VALUES ('${usuario.nome}', '${usuario.cpf}', '${usuario.email}', '${usuario.senha}',1000,${idNovaEmpresa});
         `;
         console.log("Executando SQL para Funcionário: \n" + instrucaoSqlFuncionario);
@@ -39,7 +39,7 @@ function cadastrarEmpresaEFuncionario(empresa, usuario) {
     });
 }
 function verificarDuplicidade(razaoSocial, cnpj) {
-    var instrucaoSql = `SELECT razaoSocial, cnpj from empresa WHERE razaoSocial = '${razaoSocial}' OR cnpj = '${cnpj}';`;
+    var instrucaoSql = `SELECT razaoSocial, cnpj from Empresa WHERE razaoSocial = '${razaoSocial}' OR cnpj = '${cnpj}';`;
     return database.executar(instrucaoSql);
 }
 function buscarPorEmail(email) {
@@ -48,7 +48,7 @@ function buscarPorEmail(email) {
     // ATENÇÃO: A query usa o nome da sua tabela, que é 'funcionario'
     // Seleciona TUDO do funcionário (incluindo a senha criptografada)
     var instrucaoSql = `
-        SELECT * FROM funcionario WHERE email = '${email}';
+        SELECT * FROM Funcionario WHERE email = '${email}';
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
