@@ -36,7 +36,7 @@ function cadastrar() {
 
 document.addEventListener("DOMContentLoaded", function () {
     getTipoUsuario();
-    getUsuariobyID();
+    // getUsuariobyID();
 });
 
 
@@ -72,7 +72,6 @@ function getTipoUsuario() {
 
 
 function getUsuariobyID(idFuncionario) {
-    // alert(idFuncionario)
     fetch(`/gerenciamentoUsuario/getUsuariobyID/${idFuncionario}`)
         .then(res => {
             if (!res.ok) throw new Error(`Erro na API: ${res.status}`);
@@ -108,8 +107,7 @@ function getUsuariobyID(idFuncionario) {
 }
 
 
-function salvarEdicao() {
-
+function salvarEdicao(idFuncionario) {
     var nome = document.getElementById("ipt_nome").value;
     var email = document.getElementById("ipt_email").value;
     var senha = document.getElementById("ipt_senha").value;
@@ -128,16 +126,16 @@ function salvarEdicao() {
         senhaServer: senha,
         fkTipoUsuarioServer: fkTipoUsuario
     };
+    console.log(bodyData)
 
     fetch("/gerenciamentoUsuario/salvarEdicao", {
-        method: "UPDATE",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bodyData)
-    })
-        .then(res => {
+    }) 
+    .then(res => {
             if (res.ok) {
                 alert("Alterações salvas com sucesso!");
-                getUsuariobyID();
             } else {
                 res.json().then(json => alert(`Erro ao salvar: ${json}`));
             }

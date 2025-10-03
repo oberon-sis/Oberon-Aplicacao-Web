@@ -21,7 +21,7 @@ router.delete("/ExcluirUsuario/:idFuncionarioServer", function (req, res) {
 });
 
 
-router.post("/salvarEdicao", function (req, res) {
+router.put("/salvarEdicao", function (req, res) {
     gerenciamentoUsuarioController.salvarEdicao(req, res);
 });
 

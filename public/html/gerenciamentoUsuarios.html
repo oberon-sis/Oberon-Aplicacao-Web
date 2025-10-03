@@ -35,8 +35,9 @@
             <div class="d-flex flex-column flex-md-row align-items-md-center mb-4 gap-2 div_pesquisa">
 
                 <div style="max-width: 450px;" class="input-group flex-grow-1 div_justify">
-                    <input required="required" type="text" class="form-control border-start-0  shadow-none input_pesquisa"
-                        placeholder="Buscar por hostname ou macaddress">
+                    <input required="required" type="text"
+                        class="form-control border-start-0  shadow-none input_pesquisa"
+                        placeholder="Buscar por nome ou email">
 
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
@@ -44,8 +45,7 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end hover_verde">
                         <li><a class="dropdown-item" href="#">Nome</a></li>
-                        <li><a class="dropdown-item" href="#">Hostname</a></li>
-                        <li><a class="dropdown-item" href="#">Mac Address</a></li>
+                        <li><a class="dropdown-item" href="#">E-mail</a></li>
                     </ul>
                 </div>
 
@@ -57,7 +57,7 @@
                         style=" white-space: nowrap;">
                         <img src="../assets/svg/plus_preto.svg" data-hover-src="../assets/svg/plus_white.svg" alt=""
                             class="icone_botao" id="icone_nova">
-                        <i class=" me-2 espaco_branco "></i>Nova Máquina
+                        <i class=" me-2 espaco_branco "></i>Novo Usúario
                     </button>
                 </div>
             </div>
@@ -69,12 +69,9 @@
                     <th scope="col" class="py-3">ID</th>
                     <th scope="col" class="py-3">Nome <i class="bi bi-arrow-down-up ms-1"></i>
                     </th>
-                    <th scope="col" class="py-3">Hostname</th>
-                    <th scope="col" class="py-3">Modelo</th>
-                    <th scope="col" class="py-3">Status</th>
-                    <th scope="col" class="py-3">SO</th>
-                    <th scope="col" class="py-3">Mac Adress</th>
-                    <th scope="col" class="py-3">IP</th>
+                    <th scope="col" class="py-3">CPF</th>
+                    <th scope="col" class="py-3">E-mail</th>
+                    <th scope="col" class="py-3">Função</th>
                     <th scope="col" class="py-3">Atualizar</th>
                     <th scope="col" class="py-3">Excluir</th>
                     <!-- <th scope="col" class="py-3">Ver Mais</th> -->
@@ -87,15 +84,12 @@
                         <td>Exemplo Text</td>
                         <td>Exemplo Text</td>
                         <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td><span class="opcao_crud text-primary" data-bs-toggle="modal"
+                        <td><span class="opcao_crud text-primary" data-bs-toggle="modal" onclick="getUsuariobyID(1)"
                                 data-bs-target="#modalAtualizarMaquina">
                                 <img src="../assets/svg/atualizar_blue.svg" alt="">
                                 Atualizar<i class="bi bi-arrow-clockwise"></i></span>
                         </td>
-                        <td><span class="opcao_crud text-danger" onclick="excluir_maquina()">
+                        <td><span class="opcao_crud text-danger" onclick="ExcluirUsuario()">
                                 <img src="../assets/svg/excluir_red.svg" alt="">
                                 Excluir<i class="bi bi-trash"></i></span>
                         </td>
@@ -110,17 +104,12 @@
                         <td>Exemplo Text</td>
                         <td>Exemplo Text</td>
                         <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td><span class="opcao_crud text-primary" data-bs-toggle="modal"
+                        <td><span class="opcao_crud text-primary" data-bs-toggle="modal" onclick="getUsuariobyID(2)"
                                 data-bs-target="#modalAtualizarMaquina">
                                 <img src="../assets/svg/atualizar_blue.svg" alt="">
-                                Atualizar<i class="bi bi-arrow-clockwise"
-                                onclick="getUsuariobyID(1)"
-                                ></i></span>
+                                Atualizar<i class="bi bi-arrow-clockwise"></i></span>
                         </td>
-                        <td><span class="opcao_crud text-danger" onclick="ExcluirUsuario(5)">
+                        <td><span class="opcao_crud text-danger" onclick="ExcluirUsuario()">
                                 <img src="../assets/svg/excluir_red.svg" alt="">
                                 Excluir<i class="bi bi-trash"></i></span>
                         </td>
@@ -137,31 +126,12 @@
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
                         <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
                     </tr>
                     <tr class="skeleton-row">
                         <td><span class="skeleton-text short"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
-                    </tr>
-                    <tr class="skeleton-row">
-                        <td><span class="skeleton-text short"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
@@ -176,31 +146,12 @@
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
                         <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
                     </tr>
                     <tr class="skeleton-row">
                         <td><span class="skeleton-text short"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
-                    </tr>
-                    <tr class="skeleton-row">
-                        <td><span class="skeleton-text short"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
@@ -215,6 +166,13 @@
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
@@ -228,9 +186,6 @@
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
                         <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
@@ -240,6 +195,13 @@
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
@@ -275,7 +237,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content shadow-lg">
                 <div class="modal-header border-0 pb-0 d-block text-center">
-                    <h5 class="modal-title fs-4 fw-bold" id="modalCadastrarMaquinaLabel">Cadastrar Máquina</h5>
+                    <h5 class="modal-title fs-4 fw-bold" id="modalCadastrarMaquinaLabel">Cadastrar Usuário</h5>
                 </div>
 
                 <div class="modal-body pt-3">
@@ -287,61 +249,67 @@
 
                             <div class="mb-3">
                                 <label for="hostname" class="form-label text-muted">Nome</label>
-                                <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="hostname"
-                                    placeholder="Insira o nome de identificação da máquina">
+                                <input required="required" type="text" class="form-control shadow-none input_pesquisa"
+                                    id="hostname" placeholder="Insira o nome de identificação da máquina">
                             </div>
 
                             <div class="mb-3">
                                 <label for="modelo" class="form-label text-muted">Modelo</label>
-                                <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="modelo"
-                                    placeholder="Insira o modelo do equipamento">
+                                <input required="required" type="text" class="form-control shadow-none input_pesquisa"
+                                    id="modelo" placeholder="Insira o modelo do equipamento">
                             </div>
 
                             <div class="mb-3">
                                 <label for="mac" class="form-label text-muted">Mac Adress</label>
-                                <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="mac"
-                                    placeholder="Ex: 00:1A:2B:3C:4D:5E">
+                                <input required="required" type="text" class="form-control shadow-none input_pesquisa"
+                                    id="mac" placeholder="Ex: 00:1A:2B:3C:4D:5E">
                             </div>
                         </div>
 
-                        <div id="step-2" style="display: none;">
+                        <!-- <div id="step-2" style="display: none;">
                             <h6 class="fs-5 fw-bold mb-4">Definir Limites de Alerta</h6>
 
                             <div id="parametrizacaoIndividual">
                                 <div class="mb-3">
                                     <label for="cpu" class="form-label small">CPU - Porcentagem de uso </label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="cpu"
+                                    <input required="required" type="text"
+                                        class="form-control shadow-none input_pesquisa" id="cpu"
                                         placeholder="Insira o valor limite">
                                 </div>
                                 <div class="mb-3">
                                     <label for="ram" class="form-label small">Memória RAM - Porcentagem de uso</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="ram"
+                                    <input required="required" type="text"
+                                        class="form-control shadow-none input_pesquisa" id="ram"
                                         placeholder="Insira o valor limite">
                                 </div>
                                 <div class="mb-3">
                                     <label for="disco" class="form-label small">Disco Duro - Porcentagem de uso</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="disco"
+                                    <input required="required" type="text"
+                                        class="form-control shadow-none input_pesquisa" id="disco"
                                         placeholder="Insira o valor limite">
                                 </div>
                                 <div class="mb-4">
                                     <label for="rede" class="form-label small">Rede - Taxa de transferência </label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="rede"
+                                    <input required="required" type="text"
+                                        class="form-control shadow-none input_pesquisa" id="rede"
                                         placeholder="Insira o valor limite">
                                 </div>
                             </div>
 
                             <div class="form-check mb-2">
-                                <input required="required" class="form-check-input" type="checkbox" value="" id="alertaEmpresa">
+                                <input required="required" class="form-check-input" type="checkbox" value=""
+                                    id="alertaEmpresa">
                                 <label class="form-check-label" for="alertaEmpresa">Usar Limite de Alertas Padrão da
                                     Empresa</label>
                             </div>
                             <div class="form-check mb-4">
-                                <input required="required" class="form-check-input" type="checkbox" value="" id="alertaOberon" checked>
+                                <input required="required" class="form-check-input" type="checkbox" value=""
+                                    id="alertaOberon" checked>
                                 <label class="form-check-label" for="alertaOberon">Usar Limite de Alertas Padrão da
                                     Oberon</label>
                             </div>
 
-                        </div>
+                        </div> -->
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0 p-4">
@@ -363,7 +331,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content shadow-lg">
                 <div class="modal-header border-0 pb-0 d-block text-center mb-4">
-                    <h5 class="modal-title fs-4 fw-bold" id="modalAtualizarMaquinaLabel">Atualizar Dados Da Máquina</h5>
+                    <h5 class="modal-title fs-4 fw-bold" id="modalAtualizarMaquinaLabel">Atualizar Dados Usúario</h5>
                 </div>
 
                 <div class="modal-body pt-0">
@@ -379,60 +347,47 @@
                                         <p class="fw-bold" id="nome_atual"></p>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label text-muted small mb-0">Modelo</label>
-                                        <p class="fw-bold">Dell 05049-</p>
+                                        <label class="form-label text-muted small mb-0">E-mail</label>
+                                        <p class="fw-bold" id="email_atual"></p>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label text-muted small mb-0">Mac Adress</label>
-                                        <p class="fw-bold">00:1A:2B:3C:4D:5E</p>
-                                    </div>
-                                </div>
-
-                                <div id="dadosAtuaisAlertas" style="display: none;">
-                                    <div class="mb-3">
-                                        <label class="form-label text-muted small mb-0">CPU - Porcentagem de uso</label>
-                                        <p class="fw-bold">80 %</p>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label text-muted small mb-0">Memória RAM - Porcentagem de
-                                            uso</label>
-                                        <p class="fw-bold">80 %</p>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label text-muted small mb-0">Disco Duro - Porcentagem de
-                                            uso</label>
-                                        <p class="fw-bold">80 %</p>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label text-muted small mb-0">Taxa de transferência de
-                                            rede</label>
-                                        <p class="fw-bold">80 mbps</p>
+                                        <label class="form-label text-muted small mb-0">Tipo de Usúario</label>
+                                        <p class="fw-bold" id="tipoUsuario_atual"></p>
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-md-6">
                                 <div id="step-update-1">
-                                    <h6 class="fs-5 fw-bold mb-3">Identificação do Equipamento</h6>
+                                    <h6 class="fs-5 fw-bold mb-3">Atualização Dados Pessoais</h6>
                                     <div class="mb-3">
-                                        <label for="nome_upd" class="form-label text-muted">Nome</label>
-                                        <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="nome_upd"
-                                            placeholder="Insira o nome de identificação da máquina">
+                                        <label for="nome_upd" class="form-label text-muted">Nome(apelido)</label>
+                                        <input required="required" type="text"
+                                            class="form-control shadow-none input_pesquisa" id="ipt_nome"
+                                            placeholder="ex: Roberto lima...">
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="modelo_upd" class="form-label text-muted">Modelo</label>
-                                        <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                            id="modelo_upd" placeholder="Insira o modelo do equipamento">
+                                        <label for="modelo_upd" class="form-label text-muted">Email</label>
+                                        <input required="required" type="text"
+                                            class="form-control shadow-none input_pesquisa" id="ipt_email"
+                                            placeholder="Ex: robertolima@gmail.com ">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="mac_upd" class="form-label text-muted">Mac Adress</label>
-                                        <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="mac_upd"
-                                            placeholder="Ex: 00:1A:2B:3C:4D:5E">
+                                        <label for="mac_upd" class="form-label text-muted">Senha</label>
+                                        <input required="required" type="text"
+                                            class="form-control shadow-none input_pesquisa" id="ipt_senha"
+                                            placeholder="Ex: Nova senha">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="mac_upd" class="form-label text-muted">Função</label>
+                                        <label for="tipo_usuario_select">Tipo de Usuário</label>
+                                        <select id="tipo_usuario_select">
+                                            <option value="" disabled selected>Carregando...</option>
+                                        </select>
                                     </div>
                                 </div>
 
-                                <div id="step-update-2" style="display: none;">
+                                <!-- <div id="step-update-2" style="display: none;">
                                     <h6 class="fs-5 fw-bold mb-3">Definir Limites de Alerta</h6>
 
                                     <div id="parametrizacaoIndividualUpd">
@@ -473,7 +428,7 @@
                                         <label class="form-check-label" for="alertaOberonUpd">Usar Limite de Alertas
                                             Padrão da Oberon</label>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </form>
@@ -482,11 +437,11 @@
                 <div class="modal-footer justify-content-center border-0 p-4">
                     <button type="button" id="btnVoltarUpd" class="btn  fw-bold px-5 botao_branco botao_configuracao"
                         style="display: none;">Voltar Atrás</button>
-                    <button type="button" id="btnAvancarUpd"
-                        class="btn fw-bold px-5 verde_claro botao_configuracao">Avançar</button>
-                    <button type="submit" form="formAtualizarMaquina" id="btnCadastrarUpd"
+                    <button type="button" id="btnAvancarUpd" class="btn fw-bold px-5 verde_claro botao_configuracao"
+                        onclick="salvarEdicao(1)">Finalizar</button>
+                    <!-- <button type="submit" form="formAtualizarMaquina" id="btnCadastrarUpd"
                         class="btn fw-bold px-5 verde_claro botao_configuracao"
-                        style="display: none;" onclick="salvarEdicao(1)">Cadastrar</button>
+                        style="display: none;" onclick="salvarEdicao(1)">Cadastrar</button> -->
                 </div>
             </div>
         </div>

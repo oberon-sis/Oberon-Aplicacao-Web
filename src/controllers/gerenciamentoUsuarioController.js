@@ -105,15 +105,13 @@ function ExcluirUsuario(req, res) {
 
 function salvarEdicao(req, res) {
 
-  var nome = req.body.nomeServer;
-  var cpf = req.body.cpfServer;
-  var email = req.body.emailServer;
-  var fkTipoUsuario = req.body.fkTipoUsuarioServer;
-  var senha = req.body.senhaServer;
   var idFuncionario = req.body.idFuncionarioServer;
+  var nome = req.body.nomeServer;
+  var email = req.body.emailServer;
+  var senha = req.body.senhaServer;
+  var fkTipoUsuario = req.body.fkTipoUsuarioServer;
 
-
-  gerenciamentoUsuarioModel.salvarEdicao(nome, cpf, email, fkTipoUsuario, senha, idFuncionario)
+  gerenciamentoUsuarioModel.salvarEdicao(nome, email, fkTipoUsuario, senha, idFuncionario)
     .then(function (resultado) {
       if (resultado.affectedRows > 0) {
         res.status(200).json({ mensagem: "Alterações salvas com sucesso!" });
