@@ -6,7 +6,7 @@ function cadastrarMaquina(nome, modelo, macAdress, fkEmpresa) {
     nome,
     modelo,
     macAdress,
-    fkEmpresa,
+    fkEmpresa
   );
 
   var instrucaoSql = `
@@ -22,7 +22,7 @@ function cadastrarParametro(limite, fkEmpresa, fkMaquinaComponente) {
     "[MODEL] - function cadastrarParametro():",
     limite,
     fkEmpresa,
-    fkMaquinaComponente,
+    fkMaquinaComponente
   );
 
   var instrucaoSql = `
@@ -33,13 +33,8 @@ function cadastrarParametro(limite, fkEmpresa, fkMaquinaComponente) {
   return database.executar(instrucaoSql);
 }
 
-
-
 function getFkAlerta(fkMaquina) {
-  console.log(
-    "[MODEL] - function getFkAlerta():",
-    fkMaquina,
-  );
+  console.log("[MODEL] - function getFkAlerta():", fkMaquina);
 
   var instrucaoSql = `
         SELECT idAlerta from Alerta WHERE fkMaquina = ${fkMaquina};
@@ -49,10 +44,7 @@ function getFkAlerta(fkMaquina) {
 }
 
 function getFkMaquinaComponente(fkMaquina) {
-  console.log(
-    "[MODEL] - function getFkMaquinaComponente():",
-    fkMaquina,
-  );
+  console.log("[MODEL] - function getFkMaquinaComponente():", fkMaquina);
   var instrucaoSql = `
         SELECT idMaquinaComponente from MaquinaComponente where fkMaquina = ${fkMaquina};
     `;
@@ -63,7 +55,7 @@ function getFkMaquinaComponente(fkMaquina) {
 function getParametrosEspecificos(fkMaquinaComponente) {
   console.log(
     "[MODEL] - function getParametrosEspecificos():",
-    fkMaquinaComponente,
+    fkMaquinaComponente
   );
   var instrucaoSql = `
         SELECT idParametro from Parametro where fkMaquinaComponente = ${fkMaquinaComponente};
@@ -73,10 +65,7 @@ function getParametrosEspecificos(fkMaquinaComponente) {
 }
 
 function getFkEmpresa(idFuncionario) {
-  console.log(
-    "[MODEL] - function getFkEmpresa():",
-    idFuncionario,
-  );
+  console.log("[MODEL] - function getFkEmpresa():", idFuncionario);
   var instrucaoSql = `
         SELECT fkEmpresa FROM Funcionario WHERE idFuncionario = ${idFuncionario};
     `;
@@ -85,10 +74,7 @@ function getFkEmpresa(idFuncionario) {
 }
 
 function getSenha(idFuncionario) {
-  console.log(
-    "[MODEL] - function getSenha():",
-    idFuncionario,
-  );
+  console.log("[MODEL] - function getSenha():", idFuncionario);
   var instrucaoSql = `
         SELECT senha from Funcionario where idFuncionario = ${idFuncionario};
     `;
@@ -96,10 +82,7 @@ function getSenha(idFuncionario) {
   return database.executar(instrucaoSql);
 }
 function getParametrosPadrao(fkEmpresa) {
-  console.log(
-    "[MODEL] - function getParametrosPadrao():",
-    fkEmpresa,
-  );
+  console.log("[MODEL] - function getParametrosPadrao():", fkEmpresa);
   var instrucaoSql = `
         SELECT limite from Parametro where fkEmpresa = ${fkEmpresa};
     `;
@@ -108,17 +91,13 @@ function getParametrosPadrao(fkEmpresa) {
 }
 
 function excluirParametroEspecifico(fkMaquinaComponente) {
-  console.log(
-    "[MODEL] - function getParametrosEspecifico():",
-    fkEmpresa,
-  );
+  console.log("[MODEL] - function getParametrosEspecifico():", fkEmpresa);
   var instrucaoSql = `
         DELETE from MaquinaComponente where fkMaquinaComponente = ${fkMaquinaComponente}
     `;
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
 }
-
 
 function atualizarMaquina(nome, modelo, macAdress, status, fkEmpresa) {
   console.log(
@@ -127,7 +106,7 @@ function atualizarMaquina(nome, modelo, macAdress, status, fkEmpresa) {
     modelo,
     macAdress,
     status,
-    fkEmpresa,
+    fkEmpresa
   );
 
   var instrucaoSql = `
@@ -148,7 +127,7 @@ function atualizarParametro(limite, fkEmpresa, fkMaquinaComponente) {
     "[MODEL] - function atualizarParametro():",
     limite,
     fkEmpresa,
-    fkMaquinaComponente,
+    fkMaquinaComponente
   );
 
   var instrucaoSql = `
@@ -162,11 +141,7 @@ function atualizarParametro(limite, fkEmpresa, fkMaquinaComponente) {
 }
 
 function atualizarAlerta(horarioFinal, fkAlerta) {
-  console.log(
-    "[MODEL] - function atualizarAlerta():",
-    horarioFinal,
-    fkAlerta
-  );
+  console.log("[MODEL] - function atualizarAlerta():", horarioFinal, fkAlerta);
 
   var instrucaoSql = `
         UPDATE Alerta SET horarioFinal = '${horarioFinal}'
@@ -176,13 +151,8 @@ function atualizarAlerta(horarioFinal, fkAlerta) {
   return database.executar(instrucaoSql);
 }
 
-
-
 function eliminarMaquina(idMaquina) {
-  console.log(
-    "[MODEL] - function eliminarMaquina():",
-    idMaquina,
-  );
+  console.log("[MODEL] - function eliminarMaquina():", idMaquina);
 
   var instrucaoSql = `
         Delete from Maquina where idMaquina = ${idMaquina};
@@ -192,25 +162,17 @@ function eliminarMaquina(idMaquina) {
 }
 
 function eliminarMaquinaComponente(idMaquina) {
-  console.log(
-    "[MODEL] - function eliminarMaquinaComponente():",
-    idMaquina,
+  console.log("[MODEL] - function eliminarMaquinaComponente():", idMaquina);
 
-  );
-
-    var instrucaoSql = `
+  var instrucaoSql = `
         Delete from Parametro where fkMaquina = ${idMaquina};
     `;
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
-
 }
 
 function eliminarRegistros(fkMaquinaComponente) {
-  console.log(
-    "[MODEL] - function eliminarRegistros():",
-    fkMaquinaComponente,
-  );
+  console.log("[MODEL] - function eliminarRegistros():", fkMaquinaComponente);
 
   var instrucaoSql = `
         Delete from Registro where fkMaquinaComponente = ${fkMaquinaComponente};
@@ -220,10 +182,7 @@ function eliminarRegistros(fkMaquinaComponente) {
 }
 
 function eliminarAlertas(fkMaquinaComponente) {
-  console.log(
-    "[MODEL] - function eliminarAlertas():",
-    fkMaquinaComponente,
-  );
+  console.log("[MODEL] - function eliminarAlertas():", fkMaquinaComponente);
 
   var instrucaoSql = `
         Delete from Alerta where fkMaquinaComponente = ${fkMaquinaComponente};
@@ -232,14 +191,19 @@ function eliminarAlertas(fkMaquinaComponente) {
   return database.executar(instrucaoSql);
 }
 
+function listarMaquinasPorEmpresa(
+  fkEmpresa,
+  limite,
+  offset,
+  condicao,
+  termoDePesquisa
+) {
+  console.log(
+    "[MODEL] - function listarMaquinasPorEmpresa():",
+    `Empresa: ${fkEmpresa}, Limite: ${limite}, Offset: ${offset}, Condicao: ${condicao}, termo:${termoDePesquisa}`
+  );
 
-function listarMaquinasPorEmpresa(fkEmpresa, limite, offset,condicao, termoDePesquisa) {
-    console.log(
-        "[MODEL] - function listarMaquinasPorEmpresa():",
-        `Empresa: ${fkEmpresa}, Limite: ${limite}, Offset: ${offset}, Condicao: ${condicao}, termo:${termoDePesquisa}`
-    );
-
-    var instrucaoDadosSql = `
+  var instrucaoDadosSql = `
         SELECT idMaquina, nome, hostname, modelo, status, sistemaOperacional, 
             macAddress, ip
         FROM Maquina 
@@ -250,27 +214,27 @@ function listarMaquinasPorEmpresa(fkEmpresa, limite, offset,condicao, termoDePes
         OFFSET ${offset}
     `;
 
-    console.log("Executando a instrução SQL de DADOS: \n" + instrucaoDadosSql);
-    
-    return database.executar(instrucaoDadosSql);
+  console.log("Executando a instrução SQL de DADOS: \n" + instrucaoDadosSql);
+
+  return database.executar(instrucaoDadosSql);
 }
 
-function contarMaquinasPorEmpresa(fkEmpresa,condicao,  termoDePesquisa) {
-    console.log(
-        "[MODEL] - function contarMaquinasPorEmpresa():",
-        `Empresa: ${fkEmpresa}`, `Termo: ${termoDePesquisa}`
-    );
+function contarMaquinasPorEmpresa(fkEmpresa, condicao, termoDePesquisa) {
+  console.log(
+    "[MODEL] - function contarMaquinasPorEmpresa():",
+    `Empresa: ${fkEmpresa}`,
+    `Termo: ${termoDePesquisa}`
+  );
 
-    var instrucaoCountSql = `
+  var instrucaoCountSql = `
         SELECT COUNT(idMaquina) AS totalRegistros FROM Maquina
         WHERE fkEmpresa = ${fkEmpresa} AND ${condicao} LIKE '%${termoDePesquisa}%'
     `;
 
-    console.log("Executando a instrução SQL de COUNT: \n" + instrucaoCountSql);
-    
-    return database.executar(instrucaoCountSql);
-}
+  console.log("Executando a instrução SQL de COUNT: \n" + instrucaoCountSql);
 
+  return database.executar(instrucaoCountSql);
+}
 
 module.exports = {
   cadastrarMaquina,
@@ -295,4 +259,4 @@ module.exports = {
 
   listarMaquinasPorEmpresa,
   contarMaquinasPorEmpresa,
-}
+};

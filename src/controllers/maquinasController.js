@@ -8,7 +8,9 @@ const ID_REDE = 4;
 async function getParametrosPadrao(req, res) {
   const idFuncionarioServer = req.params.idFuncionario;
   if (!idFuncionarioServer) {
-    return res.status(400).send("O ID do funcionario (idFuncionarioServer) é obrigatório!");
+    return res
+      .status(400)
+      .send("O ID do funcionario (idFuncionarioServer) é obrigatório!");
   }
   try {
     const resultadoBusca = await maquinasModel.getFkEmpresa(idFuncionario);
@@ -20,26 +22,28 @@ async function getParametrosPadrao(req, res) {
     const resultado = await maquinasModel.getParametrosPadrao(fkEmpresa);
 
     if (resultado.length === 0) {
-      return res.status(204).send("Nenhum parâmetro padrão encontrado para esta empresa.");
+      return res
+        .status(204)
+        .send("Nenhum parâmetro padrão encontrado para esta empresa.");
     }
     res.status(200).json(resultado);
-
   } catch (erro) {
-    console.error(`\nHouve um erro ao buscar os parâmetros padrão. Erro: ${erro.sqlMessage || erro.message}`);
+    console.error(
+      `\nHouve um erro ao buscar os parâmetros padrão. Erro: ${erro.sqlMessage || erro.message}`
+    );
     res.status(500).json({
       mensagem: "Erro interno no servidor ao buscar parâmetros.",
-      detalhe: erro.sqlMessage || erro.message
+      detalhe: erro.sqlMessage || erro.message,
     });
   }
 }
 
 async function cadastrarMaquina(req, res) {
-
   const {
     nomeServer: nome,
     modeloServer: modelo,
     macAdressServer: macAdress,
-    idFuncionarioServer: idFuncionario
+    idFuncionarioServer: idFuncionario,
   } = req.body;
 
   const limiteParametro = req.body.limiteParametroServer;
@@ -51,20 +55,24 @@ async function cadastrarMaquina(req, res) {
     }
     const fkEmpresa = resultadoBusca[0].fkEmpresa;
 
-    const resultadoMaquina = await maquinasModel.cadastrarMaquina(nome, modelo, macAdress, fkEmpresa);
+    const resultadoMaquina = await maquinasModel.cadastrarMaquina(
+      nome,
+      modelo,
+      macAdress,
+      fkEmpresa
+    );
 
     const fkMaquina = resultadoMaquina.insertId;
 
     const componentesACadastrar = [ID_CPU, ID_MEMORIA, ID_DISCO, ID_REDE];
 
-    const promisesComponentes = componentesACadastrar.map(fkComponente => {
+    const promisesComponentes = componentesACadastrar.map((fkComponente) => {
       return maquinasModel.cadastrarMaquinaComponente(fkMaquina, fkComponente);
     });
 
     const resultadosComponentes = await Promise.all(promisesComponentes);
 
     if (limiteParametro && resultadosComponentes.length > 0) {
-
       const fkMaquinaComponente = resultadosComponentes[0].insertId;
 
       await maquinasModel.cadastrarParametro(
@@ -73,28 +81,34 @@ async function cadastrarMaquina(req, res) {
         fkMaquinaComponente
       );
     }
-    res.status(201).json({ mensagem: "Máquina, componentes e parâmetros cadastrados com sucesso!" });
-
+    res
+      .status(201)
+      .json({
+        mensagem: "Máquina, componentes e parâmetros cadastrados com sucesso!",
+      });
   } catch (erro) {
-    console.error(`\nHouve um erro ao realizar o cadastro da máquina. Erro: ${erro.sqlMessage || erro.message}`);
+    console.error(
+      `\nHouve um erro ao realizar o cadastro da máquina. Erro: ${erro.sqlMessage || erro.message}`
+    );
     res.status(500).json({
       mensagem: "Erro interno no servidor ao cadastrar a máquina.",
-      detalhe: erro.sqlMessage || erro.message
+      detalhe: erro.sqlMessage || erro.message,
     });
   }
 }
 
-
 async function excluirMaquina(req, res) {
   const idMaquinaServer = req.params.idMaquina;
-  const idGerenteServer = req.body.idGerente; 
+  const idGerenteServer = req.body.idGerente;
   const senhaServer = req.body.senha;
 
   if (!idMaquinaServer) {
     return res.status(400).send("O ID da máquina é obrigatório na rota.");
   }
   if (!idGerenteServer) {
-    return res.status(400).send("O ID do gerente é obrigatório no corpo da requisição.");
+    return res
+      .status(400)
+      .send("O ID do gerente é obrigatório no corpo da requisição.");
   }
   if (!senhaServer) {
     return res.status(400).send("A senha é obrigatória.");
@@ -102,113 +116,144 @@ async function excluirMaquina(req, res) {
 
   try {
     const resultadoBusca = await maquinasModel.getFkEmpresa(idGerenteServer);
-    
+
     if (resultadoBusca.length === 0) {
-      return res.status(403).send("Gerente não encontrado ou sem permissão de acesso à empresa.");
+      return res
+        .status(403)
+        .send("Gerente não encontrado ou sem permissão de acesso à empresa.");
     }
     const fkEmpresa = resultadoBusca[0].fkEmpresa;
-    
+
     const senhaBanco = await maquinasModel.getSenha(idGerenteServer);
 
     if (!senhaBanco || senhaBanco.length === 0) {
       return res.status(404).send("Dados do gerente inválidos ou incompletos.");
     }
 
-    const senhaBancoHash = senhaBanco[0].senha; 
+    const senhaBancoHash = senhaBanco[0].senha;
 
-    if (senhaBancoHash !== senhaServer) { 
+    if (senhaBancoHash !== senhaServer) {
       return res.status(401).send("Credenciais inválidas. Senha não confere.");
     }
 
-    const maquinasComponentes = await maquinasModel.getFkMaquinaComponente(idMaquinaServer); 
-    
+    const maquinasComponentes =
+      await maquinasModel.getFkMaquinaComponente(idMaquinaServer);
+
     const promisesExclusao = [];
-    
-    const promisesBuscaParametros = maquinasComponentes.map(async ID => {
-        const parametroEspecifico = await maquinasModel.getParametrosEspecificos(ID.idMaquinaComponente); 
 
-        promisesExclusao.push(maquinasModel.eliminarRegistros(ID.idMaquinaComponente)); 
-        promisesExclusao.push(maquinasModel.eliminarAlertas(ID.idMaquinaComponente));
+    const promisesBuscaParametros = maquinasComponentes.map(async (ID) => {
+      const parametroEspecifico = await maquinasModel.getParametrosEspecificos(
+        ID.idMaquinaComponente
+      );
 
-        if (parametroEspecifico && parametroEspecifico.length > 0) {
-            promisesExclusao.push(maquinasModel.excluirParametroEspecifico(ID.idMaquinaComponente));
-        }
+      promisesExclusao.push(
+        maquinasModel.eliminarRegistros(ID.idMaquinaComponente)
+      );
+      promisesExclusao.push(
+        maquinasModel.eliminarAlertas(ID.idMaquinaComponente)
+      );
+
+      if (parametroEspecifico && parametroEspecifico.length > 0) {
+        promisesExclusao.push(
+          maquinasModel.excluirParametroEspecifico(ID.idMaquinaComponente)
+        );
+      }
     });
 
     await Promise.all(promisesBuscaParametros);
 
     await Promise.all(promisesExclusao);
 
-    const resultadoExclusao = await maquinasModel.eliminarMaquina(idMaquinaServer);
-    
+    const resultadoExclusao =
+      await maquinasModel.eliminarMaquina(idMaquinaServer);
+
     if (resultadoExclusao.affectedRows === 0) {
-      return res.status(500).send("A máquina não foi excluída, mas os dados relacionados foram.");
+      return res
+        .status(500)
+        .send("A máquina não foi excluída, mas os dados relacionados foram.");
     }
 
-    return res.status(200).send(`Máquina de ID ${idMaquinaServer} excluída com sucesso!`);
-
+    return res
+      .status(200)
+      .send(`Máquina de ID ${idMaquinaServer} excluída com sucesso!`);
   } catch (erro) {
-    console.error(`\nHouve um erro ao excluir a máquina. Erro: ${erro.sqlMessage || erro.message}`);
+    console.error(
+      `\nHouve um erro ao excluir a máquina. Erro: ${erro.sqlMessage || erro.message}`
+    );
     res.status(500).json({
       mensagem: "Erro interno no servidor ao excluir a máquina.",
-      detalhe: erro.sqlMessage || erro.message
+      detalhe: erro.sqlMessage || erro.message,
     });
   }
 }
 
-
-
 async function listarMaquinas(req, res) {
-    const idGerenteServer = req.query.idGerente; 
-    const pagina = parseInt(req.query.pagina) || 1; 
-    const limite = parseInt(req.query.limite) || 14; 
-    const termoDePesquisa = req.query.termoDePesquisa || '';
-    const condicao = req.query.valorParametro || 'nome';
+  const idGerenteServer = req.query.idGerente;
+  const pagina = parseInt(req.query.pagina);
+  const limite = parseInt(req.query.limite);
+  const termoDePesquisa = req.query.termoDePesquisa;
+  const condicao = req.query.valorParametro;
 
-    if (!idGerenteServer) {
-        return res.status(400).send("O ID do gerente é obrigatório na URL (Query String)."); 
+  if (!idGerenteServer) {
+    return res
+      .status(400)
+      .send("O ID do gerente é obrigatório na URL (Query String).");
+  }
+
+  try {
+    const resultadoBusca = await maquinasModel.getFkEmpresa(idGerenteServer);
+    if (resultadoBusca.length === 0) {
+      return res
+        .status(403)
+        .send("Gerente não encontrado ou sem permissão de acesso.");
     }
-    
-    try {
-        const resultadoBusca = await maquinasModel.getFkEmpresa(idGerenteServer);
-        if (resultadoBusca.length === 0) {
-            return res.status(403).send("Gerente não encontrado ou sem permissão de acesso.");
-        }
-        const fkEmpresa = resultadoBusca[0].fkEmpresa;
+    const fkEmpresa = resultadoBusca[0].fkEmpresa;
 
-        const offset = (pagina - 1) * limite;
+    const offset = (pagina - 1) * limite;
 
-        const [dadosResultado, countResultado] = await Promise.all([
-            maquinasModel.listarMaquinasPorEmpresa(fkEmpresa, limite, offset, condicao, termoDePesquisa),
-            maquinasModel.contarMaquinasPorEmpresa(fkEmpresa, condicao, termoDePesquisa)
-        ]);
+    const [dadosResultado, countResultado] = await Promise.all([
+      maquinasModel.listarMaquinasPorEmpresa(
+        fkEmpresa,
+        limite,
+        offset,
+        condicao,
+        termoDePesquisa
+      ),
+      maquinasModel.contarMaquinasPorEmpresa(
+        fkEmpresa,
+        condicao,
+        termoDePesquisa
+      ),
+    ]);
 
-        const totalRegistros = countResultado.length > 0 ? countResultado[0].totalRegistros : 0;
-        
-        const dados = dadosResultado || [];
+    const totalRegistros =
+      countResultado.length > 0 ? countResultado[0].totalRegistros : 0;
 
-        const totalPaginas = Math.ceil(totalRegistros / limite);
+    const dados = dadosResultado || [];
 
-        return res.status(200).json({
-            dados,
-            paginaAtual: pagina,
-            totalRegistros,
-            totalPaginas,
-            limite
-        });
+    const totalPaginas = Math.ceil(totalRegistros / limite);
 
-    } catch (erro) {
-        console.error(`\nHouve um erro ao listar as máquinas. Erro: ${erro.sqlMessage || erro.message}`);
-        res.status(500).json({
-            mensagem: "Erro interno no servidor ao listar máquinas.",
-            detalhe: erro.sqlMessage || erro.message
-        });
-    }
+    return res.status(200).json({
+      dados,
+      paginaAtual: pagina,
+      totalRegistros,
+      totalPaginas,
+      limite,
+    });
+  } catch (erro) {
+    console.error(
+      `\nHouve um erro ao listar as máquinas. Erro: ${erro.sqlMessage || erro.message}`
+    );
+    res.status(500).json({
+      mensagem: "Erro interno no servidor ao listar máquinas.",
+      detalhe: erro.sqlMessage || erro.message,
+    });
+  }
 }
 
 module.exports = {
   getParametrosPadrao,
   cadastrarMaquina,
   excluirMaquina,
-  listarMaquinas
+  listarMaquinas,
 };
