@@ -233,6 +233,45 @@ function eliminarAlertas(fkMaquinaComponente) {
 }
 
 
+function listarMaquinasPorEmpresa(fkEmpresa, limite, offset,condicao, termoDePesquisa) {
+    console.log(
+        "[MODEL] - function listarMaquinasPorEmpresa():",
+        `Empresa: ${fkEmpresa}, Limite: ${limite}, Offset: ${offset}, Condicao: ${condicao}, termo:${termoDePesquisa}`
+    );
+
+    var instrucaoDadosSql = `
+        SELECT idMaquina, nome, hostname, modelo, status, sistemaOperacional, 
+            macAddress, ip
+        FROM Maquina 
+        WHERE fkEmpresa = ${fkEmpresa}
+          AND ${condicao} LIKE '%${termoDePesquisa}%' 
+        ORDER BY idMaquina ASC
+        LIMIT ${limite}
+        OFFSET ${offset}
+    `;
+
+    console.log("Executando a instrução SQL de DADOS: \n" + instrucaoDadosSql);
+    
+    return database.executar(instrucaoDadosSql);
+}
+
+function contarMaquinasPorEmpresa(fkEmpresa,condicao,  termoDePesquisa) {
+    console.log(
+        "[MODEL] - function contarMaquinasPorEmpresa():",
+        `Empresa: ${fkEmpresa}`, `Termo: ${termoDePesquisa}`
+    );
+
+    var instrucaoCountSql = `
+        SELECT COUNT(idMaquina) AS totalRegistros FROM Maquina
+        WHERE fkEmpresa = ${fkEmpresa} AND ${condicao} LIKE '%${termoDePesquisa}%'
+    `;
+
+    console.log("Executando a instrução SQL de COUNT: \n" + instrucaoCountSql);
+    
+    return database.executar(instrucaoCountSql);
+}
+
+
 module.exports = {
   cadastrarMaquina,
   cadastrarParametro,
@@ -252,5 +291,8 @@ module.exports = {
   eliminarMaquinaComponente,
   eliminarRegistros,
   eliminarAlertas,
-  excluirParametroEspecifico
+  excluirParametroEspecifico,
+
+  listarMaquinasPorEmpresa,
+  contarMaquinasPorEmpresa,
 }

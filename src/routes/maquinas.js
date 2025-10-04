@@ -14,4 +14,8 @@ router.delete("/excluirMaquina/:idMaquina", function (req, res) {
   maquinasController.excluirMaquina(req, res);
 });
 
+router.get("/listarMaquinas", function (req, res) {
+  maquinasController.listarMaquinas(req, res);
+});
+
 module.exports = router;

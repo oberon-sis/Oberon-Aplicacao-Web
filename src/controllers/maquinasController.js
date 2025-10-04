@@ -156,8 +156,59 @@ async function excluirMaquina(req, res) {
   }
 }
 
+
+
+async function listarMaquinas(req, res) {
+    const idGerenteServer = req.query.idGerente; 
+    const pagina = parseInt(req.query.pagina) || 1; 
+    const limite = parseInt(req.query.limite) || 14; 
+    const termoDePesquisa = req.query.termoDePesquisa || '';
+    const condicao = req.query.valorParametro || 'nome';
+
+    if (!idGerenteServer) {
+        return res.status(400).send("O ID do gerente é obrigatório na URL (Query String)."); 
+    }
+    
+    try {
+        const resultadoBusca = await maquinasModel.getFkEmpresa(idGerenteServer);
+        if (resultadoBusca.length === 0) {
+            return res.status(403).send("Gerente não encontrado ou sem permissão de acesso.");
+        }
+        const fkEmpresa = resultadoBusca[0].fkEmpresa;
+
+        const offset = (pagina - 1) * limite;
+
+        const [dadosResultado, countResultado] = await Promise.all([
+            maquinasModel.listarMaquinasPorEmpresa(fkEmpresa, limite, offset, condicao, termoDePesquisa),
+            maquinasModel.contarMaquinasPorEmpresa(fkEmpresa, condicao, termoDePesquisa)
+        ]);
+
+        const totalRegistros = countResultado.length > 0 ? countResultado[0].totalRegistros : 0;
+        
+        const dados = dadosResultado || [];
+
+        const totalPaginas = Math.ceil(totalRegistros / limite);
+
+        return res.status(200).json({
+            dados,
+            paginaAtual: pagina,
+            totalRegistros,
+            totalPaginas,
+            limite
+        });
+
+    } catch (erro) {
+        console.error(`\nHouve um erro ao listar as máquinas. Erro: ${erro.sqlMessage || erro.message}`);
+        res.status(500).json({
+            mensagem: "Erro interno no servidor ao listar máquinas.",
+            detalhe: erro.sqlMessage || erro.message
+        });
+    }
+}
+
 module.exports = {
   getParametrosPadrao,
   cadastrarMaquina,
-  excluirMaquina
+  excluirMaquina,
+  listarMaquinas
 };
