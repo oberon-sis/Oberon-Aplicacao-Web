@@ -34,17 +34,24 @@
             <div class="d-flex flex-column flex-md-row align-items-md-center mb-4 gap-2 div_pesquisa">
 
                 <div style="max-width: 450px;" class="input-group flex-grow-1 div_justify">
-                    <input required="required" type="text" class="form-control border-start-0  shadow-none input_pesquisa"
-                        placeholder="Buscar por hostname ou macaddress">
+                    <input 
+                        required="required" 
+                        type="text"
+                        class="form-control border-start-0 shadow-none input_pesquisa"
+                        placeholder="Buscar por hostname ou macaddress"
+                        id="ipt_pesquisa"
+                        >
 
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        Nome
+                        <span id="valor_pesquisa">Nome</span>
+                        
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end hover_verde">
-                        <li><a class="dropdown-item" href="#">Nome</a></li>
-                        <li><a class="dropdown-item" href="#">Hostname</a></li>
-                        <li><a class="dropdown-item" href="#">Mac Address</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_parametro_lista(1)">Nome</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_parametro_lista(2)" >Hostname</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_parametro_lista(3)">Mac Address</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_parametro_lista(4)">IP</a></li>
                     </ul>
                 </div>
 
@@ -88,54 +95,35 @@
                 </tr>
                 </thead>
                 <tbody id="Conteudo_real">
-                    <tr >
-                        <td>001</td>
-                        <td><i class="bi bi-person-circle me-2"></i>Exemplo</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo   dText</td>
-                        <td><span class="opcao_crud text-primary" data-bs-toggle="modal"
-                                data-bs-target="#modalAtualizarMaquina">
-                                <img src="../assets/svg/atualizar_blue.svg" alt="">
-                                Atualizar<i class="bi bi-arrow-clockwise"></i></span>
-                        </td>
-                        <td><span class="opcao_crud text-danger" onclick="excluir_maquina(4)">
-                                <img src="../assets/svg/excluir_red.svg" alt="">
-                                Excluir<i class="bi bi-trash"></i></span>
-                        </td>
-                        <!-- <td><span class="opcao_crud detalhes">
-                                <img src="../assets/svg/eye_black.svg" alt="">
-                                Detalhes<i class="bi bi-trash"></i></span>
-                        </td> -->
-                    </tr>
-                    <tr>
-                        <td>002</td>
-                        <td><i class="bi bi-person-circle me-2"></i>Exemplo</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td><span class="opcao_crud text-primary" data-bs-toggle="modal"
-                                data-bs-target="#modalAtualizarMaquina">
-                                <img src="../assets/svg/atualizar_blue.svg" alt="">
-                                Atualizar<i class="bi bi-arrow-clockwise"></i></span>
-                        </td>
-                        <td><span class="opcao_crud text-danger" onclick="excluir_maquina()">
-                                <img src="../assets/svg/excluir_red.svg" alt="">
-                                Excluir<i class="bi bi-trash"></i></span>
-                        </td>
-                        <!-- <td><span class="opcao_crud detalhes">
-                                <img src="../assets/svg/eye_black.svg" alt="">
-                                Detalhes<i class="bi bi-trash"></i></span>
-                        </td> -->
-                    </tr>
+
                 </tbody>
                 <tbody id="Estrutura_esqueleto_carregamento">
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
+                    </tr>
                     <tr class="skeleton-row">
                         <td><span class="skeleton-text short"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
@@ -259,7 +247,7 @@
             </table>
         </div>
 
-        <nav class="d-flex justify-content-center mt-3 div_paginas">
+        <nav class="d-flex justify-content-center mt-3 div_paginas" id="paginazacao">
             <ul class="pagination pagination-sm">
                 <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
                 <li class="page-item active_pagina"><a class="page-link" href="#">1</a></li>
@@ -292,20 +280,20 @@
 
                             <div class="mb-3">
                                 <label for="hostname" class="form-label text-muted">Nome</label>
-                                <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="hostname"
-                                    placeholder="Insira o nome de identificação da máquina">
+                                <input required="required" type="text" class="form-control shadow-none input_pesquisa"
+                                    id="hostname" placeholder="Insira o nome de identificação da máquina">
                             </div>
 
                             <div class="mb-3">
                                 <label for="modelo" class="form-label text-muted">Modelo</label>
-                                <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="modelo"
-                                    placeholder="Insira o modelo do equipamento">
+                                <input required="required" type="text" class="form-control shadow-none input_pesquisa"
+                                    id="modelo" placeholder="Insira o modelo do equipamento">
                             </div>
 
                             <div class="mb-3">
                                 <label for="mac" class="form-label text-muted">Mac Adress</label>
-                                <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="mac"
-                                    placeholder="Ex: 00:1A:2B:3C:4D:5E">
+                                <input required="required" type="text" class="form-control shadow-none input_pesquisa"
+                                    id="mac" placeholder="Ex: 00:1A:2B:3C:4D:5E">
                             </div>
                         </div>
 
@@ -315,33 +303,39 @@
                             <div id="parametrizacaoIndividual">
                                 <div class="mb-3">
                                     <label for="cpu" class="form-label small">CPU - Porcentagem de uso </label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="cpu"
+                                    <input required="required" type="text"
+                                        class="form-control shadow-none input_pesquisa" id="cpu"
                                         placeholder="Insira o valor limite">
                                 </div>
                                 <div class="mb-3">
                                     <label for="ram" class="form-label small">Memória RAM - Porcentagem de uso</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="ram"
+                                    <input required="required" type="text"
+                                        class="form-control shadow-none input_pesquisa" id="ram"
                                         placeholder="Insira o valor limite">
                                 </div>
                                 <div class="mb-3">
                                     <label for="disco" class="form-label small">Disco Duro - Porcentagem de uso</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="disco"
+                                    <input required="required" type="text"
+                                        class="form-control shadow-none input_pesquisa" id="disco"
                                         placeholder="Insira o valor limite">
                                 </div>
                                 <div class="mb-4">
                                     <label for="rede" class="form-label small">Rede - Taxa de transferência </label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="rede"
+                                    <input required="required" type="text"
+                                        class="form-control shadow-none input_pesquisa" id="rede"
                                         placeholder="Insira o valor limite">
                                 </div>
                             </div>
 
                             <div class="form-check mb-2">
-                                <input required="required" class="form-check-input" type="checkbox" value="" id="alertaEmpresa">
+                                <input required="required" class="form-check-input" type="checkbox" value=""
+                                    id="alertaEmpresa">
                                 <label class="form-check-label" for="alertaEmpresa">Usar Limite de Alertas Padrão da
                                     Empresa</label>
                             </div>
                             <div class="form-check mb-4">
-                                <input required="required" class="form-check-input" type="checkbox" value="" id="alertaOberon" checked>
+                                <input required="required" class="form-check-input" type="checkbox" value=""
+                                    id="alertaOberon" checked>
                                 <label class="form-check-label" for="alertaOberon">Usar Limite de Alertas Padrão da
                                     Oberon</label>
                             </div>
@@ -421,18 +415,21 @@
                                     <h6 class="fs-5 fw-bold mb-3">Identificação do Equipamento</h6>
                                     <div class="mb-3">
                                         <label for="nome_upd" class="form-label text-muted">Nome</label>
-                                        <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="nome_upd"
+                                        <input required="required" type="text"
+                                            class="form-control shadow-none input_pesquisa" id="nome_upd"
                                             placeholder="Insira o nome de identificação da máquina">
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="modelo_upd" class="form-label text-muted">Modelo</label>
-                                        <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                            id="modelo_upd" placeholder="Insira o modelo do equipamento">
+                                        <input required="required" type="text"
+                                            class="form-control shadow-none input_pesquisa" id="modelo_upd"
+                                            placeholder="Insira o modelo do equipamento">
                                     </div>
                                     <div class="mb-3">
                                         <label for="mac_upd" class="form-label text-muted">Mac Adress</label>
-                                        <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="mac_upd"
+                                        <input required="required" type="text"
+                                            class="form-control shadow-none input_pesquisa" id="mac_upd"
                                             placeholder="Ex: 00:1A:2B:3C:4D:5E">
                                     </div>
                                 </div>
@@ -444,37 +441,42 @@
                                         <div class="mb-3">
                                             <label for="cpu_upd" class="form-label small">CPU - Porcentagem de
                                                 uso</label>
-                                            <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                                id="cpu_upd" placeholder="Insira o valor limite">
+                                            <input required="required" type="text"
+                                                class="form-control shadow-none input_pesquisa" id="cpu_upd"
+                                                placeholder="Insira o valor limite">
                                         </div>
                                         <div class="mb-3">
                                             <label for="ram_upd" class="form-label small">Memória RAM - Porcentagem de
                                                 uso</label>
-                                            <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                                id="ram_upd" placeholder="Insira o valor limite">
+                                            <input required="required" type="text"
+                                                class="form-control shadow-none input_pesquisa" id="ram_upd"
+                                                placeholder="Insira o valor limite">
                                         </div>
                                         <div class="mb-3">
                                             <label for="disco_upd" class="form-label small">Disco Duro - Porcentagem de
                                                 uso</label>
-                                            <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                                id="disco_upd" placeholder="Insira o valor limite">
+                                            <input required="required" type="text"
+                                                class="form-control shadow-none input_pesquisa" id="disco_upd"
+                                                placeholder="Insira o valor limite">
                                         </div>
                                         <div class="mb-3">
                                             <label for="rede_upd" class="form-label small">Taxa de transferência de
                                                 rede</label>
-                                            <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                                id="rede_upd" placeholder="Insira o valor limite">
+                                            <input required="required" type="text"
+                                                class="form-control shadow-none input_pesquisa" id="rede_upd"
+                                                placeholder="Insira o valor limite">
                                         </div>
                                     </div>
 
                                     <div class="form-check mb-2">
-                                        <input required="required" class="form-check-input" type="checkbox" value="" id="alertaEmpresaUpd">
+                                        <input required="required" class="form-check-input" type="checkbox" value=""
+                                            id="alertaEmpresaUpd">
                                         <label class="form-check-label" for="alertaEmpresaUpd">Usar Limite de Alertas
                                             Padrão da Empresa</label>
                                     </div>
                                     <div class="form-check mb-4">
-                                        <input required="required" class="form-check-input" type="checkbox" value="" id="alertaOberonUpd"
-                                            checked>
+                                        <input required="required" class="form-check-input" type="checkbox" value=""
+                                            id="alertaOberonUpd" checked>
                                         <label class="form-check-label" for="alertaOberonUpd">Usar Limite de Alertas
                                             Padrão da Oberon</label>
                                     </div>
@@ -539,25 +541,29 @@
 
                                 <div class="mb-3">
                                     <label for="cpu_config" class="form-label small">CPU - Porcentagem de uso</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="cpu_config"
+                                    <input required="required" type="text"
+                                        class="form-control shadow-none input_pesquisa" id="cpu_config"
                                         placeholder="Insira o valor limite">
                                 </div>
                                 <div class="mb-3">
                                     <label for="ram_config" class="form-label small">Memória RAM - Porcentagem de
                                         uso</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="ram_config"
+                                    <input required="required" type="text"
+                                        class="form-control shadow-none input_pesquisa" id="ram_config"
                                         placeholder="Insira o valor limite">
                                 </div>
                                 <div class="mb-3">
                                     <label for="disco_config" class="form-label small">Disco Duro - Porcentagem de
                                         uso</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="disco_config"
+                                    <input required="required" type="text"
+                                        class="form-control shadow-none input_pesquisa" id="disco_config"
                                         placeholder="Insira o valor limite">
                                 </div>
                                 <div class="mb-3">
                                     <label for="rede_config" class="form-label small">Taxa de transferência de
                                         rede</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="rede_config"
+                                    <input required="required" type="text"
+                                        class="form-control shadow-none input_pesquisa" id="rede_config"
                                         placeholder="Insira o valor limite">
                                 </div>
                             </div>
@@ -565,7 +571,7 @@
                     </form>
                 </div>
 
-                <div class="modal-footer justify-content-center border-0 p-4" >
+                <div class="modal-footer justify-content-center border-0 p-4">
                     <button type="submit" form="formConfigParametros"
                         class="btn fw-semibold border flex-fill flex-md-grow-0 verde_claro px-4">Definir</button>
                 </div>

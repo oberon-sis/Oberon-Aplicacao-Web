@@ -1,3 +1,10 @@
+// const ID_GERENTE = sessionStorage.getItem('idUsuario'); 
+const ID_GERENTE = 5;
+let paginaAtual = 1;
+const limitePorPagina = 14;
+let termo =  ''
+
+
 function mudar_icone_on(id_da_img) {
     const icone = document.getElementById(id_da_img);
     if (!icone) return;
@@ -69,7 +76,7 @@ function excluir_maquina(idMaquina) {
 
                 const idFuncionarioGerente = ID_FUNCIONARIO_GERENTE_MOCK;
                 const senhaGerente = resultadoSwal.value.senha;
-                        console.log(senhaGerente)
+                console.log(senhaGerente)
 
                 return fetch(`/maquinas/excluirMaquina/${idMaquina}`, {
                     method: "DELETE",
@@ -87,6 +94,7 @@ function excluir_maquina(idMaquina) {
                         console.log("=====================")
                         if (res.ok) {
                             exibirSucesso('Exclusão Concluída', 'A Máquina foi excluída com sucesso.');
+                            carregarMaquinas(paginaAtual,valor_parametro,  termo)
                         } else {
                             res.text().then(mensagemErro => {
                                 exibirErro('Erro na Exclusão', mensagemErro || 'Erro desconhecido ao tentar excluir.');
@@ -284,3 +292,201 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+
+var valor_parametro = ''
+
+
+async function carregarMaquinas(pagina, valor_parametro,  termoDePesquisa) {
+    getTermo()
+    document.getElementById("Conteudo_real").style.display="none"
+    document.getElementById("Estrutura_esqueleto_carregamento").style.display="1"
+    var pesquisa= termoDePesquisa
+
+    if (!ID_GERENTE) {
+        alert("Erro: ID do gerente não encontrado. Faça login novamente.");
+        return;
+    }
+
+    paginaAtual = pagina;
+
+    try {
+        const response = await fetch(`/maquinas/listarMaquinas?idGerente=${ID_GERENTE}&pagina=${paginaAtual}&limite=${limitePorPagina}&valorParametro=${valor_parametro}&termoDePesquisa=${pesquisa}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const erro = await response.text();
+            throw new Error(`Erro na API: ${erro}`);
+        }
+
+        const data = await response.json();
+        // alert("deu certo")
+        renderizarTabela(data.dados);
+        renderizarPaginacao(data.totalPaginas, data.paginaAtual); 
+
+    } catch (error) {
+        console.error('Falha ao carregar máquinas:', error);
+        elementoTabela.innerHTML = `<tr><td colspan="9" style="text-align:center;">Erro ao carregar dados: ${error.message}</td></tr>`;
+        elementoPaginacao.innerHTML = '';
+    }
+}
+
+
+function renderizarTabela(maquinas) {
+    let html = '';
+    if (maquinas.length === 0) {
+        html = '<tr><td colspan="9" style="text-align:center;">Nenhuma máquina encontrada.</td></tr>';
+    } else {
+        maquinas.forEach(m => {
+            html += `
+                <tr data-id-maquina="${m.idMaquina}">
+                    <td>${m.idMaquina}</td>
+                    <td><i class="bi bi-person-circle me-2"></i>${m.nome}</td>
+                    <td>${m.hostname}</td>
+                    <td>${m.modelo}</td>
+                    <td>${m.status}</td>
+                    <td>${m.sistemaOperacional}</td>
+                    <td>${m.macAddress}</td>
+                    <td>${m.ip}</td>
+                    <td><span class="opcao_crud text-primary" data-bs-toggle="modal"
+                                data-bs-target="#modalAtualizarMaquina"
+                                onClick="getDadosById(${m.idMaquina})"
+                                >
+                                <img src="../assets/svg/atualizar_blue.svg" alt="">
+                                Atualizar
+                                
+                                <i class="bi bi-arrow-clockwise"></i>
+                        </span>
+                    </td>
+                    <td><span class="opcao_crud text-danger" onclick="excluir_maquina(${m.idMaquina})">
+                                <img src="../assets/svg/excluir_red.svg" alt="">
+                                Excluir
+                                <i class="bi bi-trash"></i></span>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+    setTimeout(() => {
+        document.getElementById("Estrutura_esqueleto_carregamento").style.display="none"
+        document.getElementById("Conteudo_real").innerHTML = html;
+    }, 500);
+    document.getElementById("Conteudo_real").style.display=""
+
+}
+function getDadosById(idMaquina) {
+    alert(idMaquina)
+}
+
+
+function renderizarPaginacao(totalPaginas, paginaAtual) {
+    const elementoPaginacao = document.getElementById('paginazacao'); 
+
+    let htmlLista = '';
+    
+    const desabilitarAnterior = paginaAtual === 1 ? 'disabled' : '';
+    const paginaAnterior = paginaAtual - 1;
+    htmlLista += `
+        <li class="page-item ${desabilitarAnterior}">
+            <a class="page-link"  onclick="carregarMaquinas(${paginaAtual}, ${valor_parametro}, ${termo})"; return false;">Anterior</a>
+        </li>
+    `;
+
+    for (let i = 1; i <= totalPaginas; i++) {
+        const ativo = i === paginaAtual ? 'active_pagina' : '';
+        
+        if (i === 1 || i === totalPaginas || (i >= paginaAtual - 2 && i <= paginaAtual + 2)) {
+            htmlLista += `
+                <li class="page-item ${ativo}">
+                    <a class="page-link"  onclick="carregarMaquinas(${i}, ${valor_parametro}, ${termo})"; return false;">${i}</a>
+                </li>
+            `;
+        } 
+        else if ((i === paginaAtual - 3) || (i === paginaAtual + 3)) {
+            htmlLista += `
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            `;
+        }
+    }
+
+    const desabilitarSeguinte = paginaAtual === totalPaginas ? 'disabled' : '';
+    const paginaSeguinte = paginaAtual + 1;
+    htmlLista += `
+        <li class="page-item ${desabilitarSeguinte}">
+            <a class="page-link" onclick="carregarMaquinas(${paginaAtual}, ${paginaSeguinte}, ${termo})"; return false;">Seguinte</a>
+        </li>
+    `;
+
+    elementoPaginacao.innerHTML = `
+        <ul class="pagination pagination-sm">
+            ${htmlLista}
+        </ul>
+    `;
+}
+
+window.onload = function () {
+    if (ID_GERENTE) {
+        carregarMaquinas(1,'nome',  ''); 
+    } else {
+        alert("Sessão inválida. Por favor, faça login.");
+    }
+};
+
+
+
+function atualizar_parametro_lista(valor) {
+    var span_txt =  document.getElementById('valor_pesquisa')
+    var texto = ''
+    
+    if (valor == 1) {
+        texto = 'Nome'
+        valor_parametro = 'nome'
+    } if (valor == 2) {
+        texto = 'Hostname'
+        valor_parametro = 'hostname'
+    }if (valor == 3) {
+        texto = 'Mac Address'
+        valor_parametro = 'macAddres'
+    }if (valor == 4) {
+        texto = 'IP'
+        valor_parametro = 'ip'
+    }
+    alert(valor_parametro)
+    span_txt.innerHTML = texto
+}
+
+function debounce(func, delay = 400) {
+    let timeoutId;
+    return function(...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            func.apply(this, args);
+        }, delay);
+    };
+}
+function buscarEFiltrar(termoDeBusca) {
+    const termo = termoDeBusca.trim();
+    carregarMaquinas(paginaAtual, valor_parametro, termo);
+}
+
+const buscarDebounced = debounce(buscarEFiltrar, 400); 
+
+document.addEventListener('DOMContentLoaded', function() {
+    const inputElement = document.getElementById('ipt_pesquisa');
+    inputElement.addEventListener('input', (event) => {
+        if (event.target.value == '') {
+            valor_parametro = ''
+        }
+        buscarDebounced(event.target.value);
+    });
+});
+function getTermo() {
+    const inputElement = document.getElementById('ipt_pesquisa').value;
+    termo = inputElement
+}
