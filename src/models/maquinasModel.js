@@ -1,22 +1,50 @@
 var database = require("../database/config");
 
-function cadastrarMaquina(nome, modelo, macAdress, fkEmpresa) {
+function cadastrarMaquina(nome, modelo, macAddress, fkEmpresa) {
   console.log(
     "[MODEL] - function cadastrarMaquina():",
     nome,
     modelo,
-    macAdress,
+    macAddress,
     fkEmpresa
   );
 
   var instrucaoSql = `
-        INSERT INTO Maquina (nome, modelo, macAdress, status, fkEmpresa) VALUES 
-        ('${nome}', '${modelo}', '${macAdress}', 'off-line' , ${fkEmpresa})
+        INSERT INTO Maquina (nome, modelo, macAddress, status, fkEmpresa) VALUES 
+        ('${nome}', '${modelo}', '${macAddress}', 'Aguardando' , ${fkEmpresa})
     `;
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
 }
+function cadastrarMaquinaComponente(fkMaquina, fkComponente, origemParametro) {
+  console.log(
+    "[MODEL] - function cadastrarMaquinaComponente():",
+    fkMaquina,
+    fkComponente,
+    origemParametro
+  );
 
+  var instrucaoSql = `
+        INSERT INTO MaquinaComponente (fkMaquina, fkComponente, origemParametro) VALUES 
+        (${fkMaquina}, ${fkComponente}, '${origemParametro}')
+    `;
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+function cadastrarParametroEspecifico(limite, fkMaquinaComponente) {
+  console.log(
+    "[MODEL] - function cadastrarParametroEspecifico():",
+    limite,
+    fkMaquinaComponente
+  );
+
+  var instrucaoSql = `
+        INSERT INTO ParametroEspecifico (limite, fkMaquinaComponente) VALUES 
+        (${limite}, ${fkMaquinaComponente})
+    `;
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
 function cadastrarParametro(limite, fkEmpresa, fkMaquinaComponente) {
   console.log(
     "[MODEL] - function cadastrarParametro():",
@@ -99,12 +127,12 @@ function excluirParametroEspecifico(fkMaquinaComponente) {
   return database.executar(instrucaoSql);
 }
 
-function atualizarMaquina(nome, modelo, macAdress, status, fkEmpresa) {
+function atualizarMaquina(nome, modelo, macAddress, status, fkEmpresa) {
   console.log(
     "[MODEL] - function atualizarMaquina():",
     nome,
     modelo,
-    macAdress,
+    macAddress,
     status,
     fkEmpresa
   );
@@ -113,7 +141,7 @@ function atualizarMaquina(nome, modelo, macAdress, status, fkEmpresa) {
         UPDATE Maquina SET 
           nome = '${nome}', 
           modelo = '${modelo}',
-          macAdress = '${macAdress}', 
+          macAddress = '${macAddress}', 
           status = '${status}' 
         WHERE idMaquina = ${fkEmpresa};
         -- Nota: A FK Empresa está sendo usada como ID da Máquina no WHERE
@@ -204,11 +232,18 @@ function listarMaquinasPorEmpresa(
   );
 
   var instrucaoDadosSql = `
-        SELECT idMaquina, nome, hostname, modelo, status, sistemaOperacional, 
-            macAddress, ip
+        SELECT 
+            idMaquina, 
+            nome, 
+            IFNULL(hostname, 'Aguardando Captura') AS hostname, 
+            IFNULL(modelo, 'Não Especificado') AS modelo, 
+            IFNULL(status, 'Aguardando') AS status, 
+            IFNULL(sistemaOperacional, 'Capturando SO') AS sistemaOperacional, 
+            IFNULL(macAddress, 'MAC Ausente') AS macAddress, 
+            IFNULL(ip, 'Aguardando IP') AS ip
         FROM Maquina 
         WHERE fkEmpresa = ${fkEmpresa}
-          AND ${condicao} LIKE '%${termoDePesquisa}%' 
+          AND (${condicao} LIKE '%${termoDePesquisa}%' OR ${condicao} = '${termoDePesquisa}')
         ORDER BY idMaquina ASC
         LIMIT ${limite}
         OFFSET ${offset}
@@ -228,7 +263,8 @@ function contarMaquinasPorEmpresa(fkEmpresa, condicao, termoDePesquisa) {
 
   var instrucaoCountSql = `
         SELECT COUNT(idMaquina) AS totalRegistros FROM Maquina
-        WHERE fkEmpresa = ${fkEmpresa} AND ${condicao} LIKE '%${termoDePesquisa}%'
+        WHERE fkEmpresa = ${fkEmpresa} AND (${condicao} LIKE '%${termoDePesquisa}%'
+          OR ${condicao} = '${termoDePesquisa}')
     `;
 
   console.log("Executando a instrução SQL de COUNT: \n" + instrucaoCountSql);
@@ -239,6 +275,8 @@ function contarMaquinasPorEmpresa(fkEmpresa, condicao, termoDePesquisa) {
 module.exports = {
   cadastrarMaquina,
   cadastrarParametro,
+  cadastrarMaquinaComponente,
+  cadastrarParametroEspecifico,
 
   getFkAlerta,
   getFkMaquinaComponente,

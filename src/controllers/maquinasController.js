@@ -40,52 +40,91 @@ async function getParametrosPadrao(req, res) {
 
 async function cadastrarMaquina(req, res) {
   const {
-    nomeServer: nome,
-    modeloServer: modelo,
-    macAdressServer: macAdress,
-    idFuncionarioServer: idFuncionario,
+    idFuncionario: idFuncionario,
+    nome: nome,
+    modelo: modelo,
+    macAddress: macAddress,
+    origemParametro: origemParametro, // 'EMPRESA', 'OBERON', ou 'ESPECIFICO'
+    limites: limites, // Array de { tipo, limite } se for ESPECIFICO
   } = req.body;
 
-  const limiteParametro = req.body.limiteParametroServer;
-
   try {
+    // 1. OBTÉM fkEmpresa
     const resultadoBusca = await maquinasModel.getFkEmpresa(idFuncionario);
     if (resultadoBusca.length === 0) {
-      return res.status(404).send("Empresa não encontrada.");
+      return res
+        .status(404)
+        .send("Empresa não encontrada para o funcionário informado.");
     }
     const fkEmpresa = resultadoBusca[0].fkEmpresa;
 
+    // 2. CADASTRA A MÁQUINA
     const resultadoMaquina = await maquinasModel.cadastrarMaquina(
       nome,
       modelo,
-      macAdress,
+      macAddress,
       fkEmpresa
     );
-
     const fkMaquina = resultadoMaquina.insertId;
 
-    const componentesACadastrar = [ID_CPU, ID_MEMORIA, ID_DISCO, ID_REDE];
+    // IDs dos componentes (A tabela Componente precisa ter IDs fixos)
+    // Você deve garantir que estes IDs são mapeados corretamente no seu DDL/seed.
+    // Exemplo: 1=CPU, 2=RAM, 3=DISCO, 4=REDE
+    const COMPONENTES_MAP = {
+      CPU: 1,
+      RAM: 2,
+      "Disco Duro": 3,
+      PlacaRede: 4,
+    };
+    const componentesDoFront = limites.map((l) => l.tipo); // Tipos que o front enviou, se houver.
 
-    const promisesComponentes = componentesACadastrar.map((fkComponente) => {
-      return maquinasModel.cadastrarMaquinaComponente(fkMaquina, fkComponente);
-    });
+    // 3. CADASTRA MaquinaComponente
+    // Cria um array de objetos para rastrear {fkComponente, insertId}
+    const componentesParaCadastro = [
+      COMPONENTES_MAP["CPU"],
+      COMPONENTES_MAP["RAM"],
+      COMPONENTES_MAP["Disco Duro"],
+      COMPONENTES_MAP["PlacaRede"],
+    ];
 
-    const resultadosComponentes = await Promise.all(promisesComponentes);
+    let componentesCadastrados = [];
 
-    if (limiteParametro && resultadosComponentes.length > 0) {
-      const fkMaquinaComponente = resultadosComponentes[0].insertId;
-
-      await maquinasModel.cadastrarParametro(
-        limiteParametro,
-        fkEmpresa,
-        fkMaquinaComponente
+    // Cadastra cada componente e armazena o novo ID
+    for (const fkComponente of componentesParaCadastro) {
+      const resultadoMC = await maquinasModel.cadastrarMaquinaComponente(
+        fkMaquina,
+        fkComponente,
+        origemParametro // PASSA A ORIGEM AQUI
       );
-    }
-    res
-      .status(201)
-      .json({
-        mensagem: "Máquina, componentes e parâmetros cadastrados com sucesso!",
+      componentesCadastrados.push({
+        fkComponente: fkComponente,
+        fkMaquinaComponente: resultadoMC.insertId,
       });
+    }
+
+    // 4. CADASTRA PARÂMETROS ESPECÍFICOS (SE NECESSÁRIO)
+    if (origemParametro === "ESPECIFICO" && limites.length > 0) {
+      const promisesLimites = limites.map((limiteFront) => {
+        // Encontra o fkMaquinaComponente correspondente ao tipo de componente
+        const fkComponenteId = COMPONENTES_MAP[limiteFront.tipo];
+        const componenteCadastrado = componentesCadastrados.find(
+          (c) => c.fkComponente === fkComponenteId
+        );
+
+        if (componenteCadastrado) {
+          return maquinasModel.cadastrarParametroEspecifico(
+            limiteFront.limite,
+            componenteCadastrado.fkMaquinaComponente
+          );
+        }
+        return Promise.resolve(); 
+      });
+      await Promise.all(promisesLimites);
+    }
+
+    res.status(201).json({
+      mensagem: "Máquina, componentes e parâmetros cadastrados com sucesso!",
+    });
   } catch (erro) {
     console.error(
       `\nHouve um erro ao realizar o cadastro da máquina. Erro: ${erro.sqlMessage || erro.message}`

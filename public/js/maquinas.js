@@ -3,7 +3,7 @@ const ID_FUNCIONARIO_GERENTE_MOCK = 6;
 const limitePorPagina = 14;
 
 let paginaAtual = 1;
-var valor_parametro = "nome";
+let valor_parametro = "nome";
 let termo = "";
 
 const parametroOberon = {
@@ -11,6 +11,12 @@ const parametroOberon = {
   ram: 10,
   disco: 20,
   rede: 30,
+};
+const parametroEmpresa = {
+  cpu: 90,
+  ram: 5,
+  disco: 10,
+  rede: 15,
 };
 
 let ipt_nome_cad, ipt_modelo_cad, ipt_mac_cad;
@@ -156,10 +162,31 @@ function toggleParametros(
   paramInputs
 ) {
   const isDisabled = checkboxEmpresa.checked || checkboxOberon.checked;
+
+  let dataSource = null;
+  if (checkboxOberon.checked) {
+    dataSource = parametroOberon;
+  } else if (checkboxEmpresa.checked) {
+    dataSource = parametroEmpresa;
+  }
+
   paramInputs.forEach((input) => {
+    const inputId = input.id;
+    let valor = "";
+
+    if (dataSource) {
+      if (inputId.includes("cpu")) valor = dataSource.cpu;
+      else if (inputId.includes("ram")) valor = dataSource.ram;
+      else if (inputId.includes("disco")) valor = dataSource.disco;
+      else if (inputId.includes("rede")) valor = dataSource.rede;
+    }
+
+    input.value = valor !== undefined ? valor : "";
+
     input.disabled = isDisabled;
     input.classList.toggle("text-muted", isDisabled);
   });
+
   if (paramsContainer)
     paramsContainer.classList.toggle("text-muted", isDisabled);
 }
@@ -299,8 +326,7 @@ async function carregarMaquinas(pagina, valor_parametro, termoDePesquisa) {
     renderizarTabela(data.dados);
     renderizarPaginacao(data.totalPaginas, data.paginaAtual);
   } catch (error) {
-    console.error("Falha ao carregar máquinas:", error);
-    // Assumindo que Conteudo_real é definido
+    console.error("Falha ao carregar máquinas:", error); // Assumindo que Conteudo_real é definido
     const elementoTabela = document.getElementById("Conteudo_real");
     const elementoPaginacao = document.getElementById("paginazacao");
     elementoTabela.innerHTML = `<tr><td colspan="9" style="text-align:center;">Erro ao carregar dados: ${error.message}</td></tr>`;
@@ -373,7 +399,7 @@ function renderizarPaginacao(totalPaginas, paginaAtual) {
   const paginaAnterior = paginaAtual - 1;
   htmlLista += `
         <li class="page-item ${desabilitarAnterior}">
-            <a class="page-link"  onclick="carregarMaquinas(${paginaAnterior}, '${valor_parametro}', '${termo}')"; return false;">Anterior</a>
+            <a class="page-link" onclick="carregarMaquinas(${paginaAnterior}, '${valor_parametro}', '${termo}'); return false;">Anterior</a>
         </li>
     `;
 
@@ -387,7 +413,7 @@ function renderizarPaginacao(totalPaginas, paginaAtual) {
     ) {
       htmlLista += `
                 <li class="page-item ${ativo}">
-                    <a class="page-link"  onclick="carregarMaquinas(${i}, '${valor_parametro}', '${termo}')"; return false;">${i}</a>
+                    <a class="page-link" onclick="carregarMaquinas(${i}, '${valor_parametro}', '${termo}'); return false;">${i}</a>
                 </li>
             `;
     } else if (i === paginaAtual - 3 || i === paginaAtual + 3) {
@@ -403,16 +429,115 @@ function renderizarPaginacao(totalPaginas, paginaAtual) {
   const paginaSeguinte = paginaAtual + 1;
   htmlLista += `
         <li class="page-item ${desabilitarSeguinte}">
-            <a class="page-link" onclick="carregarMaquinas(${paginaSeguinte}, '${valor_parametro}', '${termo}')"; return false;">Seguinte</a>
+            <a class="page-link" onclick="carregarMaquinas(${paginaSeguinte}, '${valor_parametro}', '${termo}'); return false;">Seguinte</a>
         </li>
     `;
 
   elementoPaginacao_ul.innerHTML = htmlLista;
 }
 
+function getOrigemLimite(checkboxEmpresa, checkboxOberon) {
+  if (checkboxEmpresa.checked) {
+    return "EMPRESA";
+  } else if (checkboxOberon.checked) {
+    return "OBERON";
+  }
+  return "ESPECIFICO";
+}
+async function atualizarMaquina() {}
+
+async function cadastrarMaquina() {
+  const nome = ipt_nome_cad ? ipt_nome_cad.value : "";
+  const modelo = ipt_modelo_cad ? ipt_modelo_cad.value : "";
+  const macAddress = ipt_mac_cad ? ipt_mac_cad.value : "";
+
+  const checkboxEmpresa = document.getElementById("alertaEmpresa");
+  const checkboxOberon = document.getElementById("alertaOberon");
+
+  const cpuLimite = ipt_cpu_cad ? ipt_cpu_cad.value : "";
+  const ramLimite = ipt_ram_cad ? ipt_ram_cad.value : "";
+  const discoLimite = ipt_disco_cad ? ipt_disco_cad.value : "";
+  const redeLimite = ipt_rede_cad ? ipt_rede_cad.value : "";
+
+  if (!nome || !macAddress) {
+    exibirErro(
+      "Campos Obrigatórios",
+      "Por favor, preencha o nome e o Mac Address da máquina."
+    );
+    return;
+  }
+
+  const origemParametro = getOrigemLimite(checkboxEmpresa, checkboxOberon);
+
+  if (origemParametro === "ESPECIFICO") {
+    if (!cpuLimite || !ramLimite || !discoLimite || !redeLimite) {
+      exibirErro(
+        "Limites Faltando",
+        "Por favor, defina todos os limites de alerta individualmente."
+      );
+      return;
+    }
+  }
+
+  const dadosMaquina = {
+    idFuncionario: ID_GERENTE,
+    nome,
+    modelo,
+    macAddress,
+    origemParametro,
+
+    limites:
+      origemParametro === "ESPECIFICO"
+        ? [
+            { tipo: "CPU", limite: parseFloat(cpuLimite) },
+            { tipo: "RAM", limite: parseFloat(ramLimite) },
+            { tipo: "Disco Duro", limite: parseFloat(discoLimite) },
+            { tipo: "PlacaRede", limite: parseFloat(redeLimite) },
+          ]
+        : [],
+  };
+
+  try {
+    const response = await fetch("/maquinas/cadastrarMaquina", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dadosMaquina),
+    });
+
+    if (response.ok) {
+      exibirSucesso(
+        "Cadastro Concluído",
+        `A máquina ${nome} foi cadastrada com sucesso!`
+      );
+      carregarMaquinas(1, valor_parametro, termo);
+    } else {
+      const erro = await response.text();
+      exibirErro(
+        "Erro no Cadastro",
+        erro || "Erro desconhecido ao cadastrar a máquina."
+      );
+    }
+  } catch (error) {
+    console.error("Erro de rede ao cadastrar:", error);
+    exibirErro(
+      "Erro de Rede",
+      "Não foi possível conectar ao servidor para cadastrar."
+    );
+  }
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   ipt_pesquisa = document.getElementById("ipt_pesquisa");
+
+  ipt_nome_cad = document.getElementById("ipt_nome_cad");
+  ipt_modelo_cad = document.getElementById("ipt_modelo_cad");
+  ipt_mac_cad = document.getElementById("ipt_mac_cad");
+  ipt_cpu_cad = document.getElementById("ipt_cpu_cad");
+  ipt_ram_cad = document.getElementById("ipt_ram_cad");
+  ipt_disco_cad = document.getElementById("ipt_disco_cad");
+  ipt_rede_cad = document.getElementById("ipt_rede_cad");
 
   const formConfig = document.getElementById("formConfigParametros");
   const modalElementConfig = document.getElementById("modalConfigParametros");
@@ -422,17 +547,23 @@ document.addEventListener("DOMContentLoaded", function () {
   const btnAvancar = document.getElementById("btnAvancar");
   const btnVoltar = document.getElementById("btnVoltar");
   const btnCadastrar = document.getElementById("btnCadastrar");
-  const checkboxEmpresa = document.getElementById("alertaEmpresa");
-  const checkboxOberon = document.getElementById("alertaOberon");
-  const paramsContainer = document.getElementById("parametrizacaoIndividual");
-  const paramInputs = paramsContainer
-    ? paramsContainer.querySelectorAll("input")
-    : [];
 
   const step1Upd = document.getElementById("step-update-1");
   const step2Upd = document.getElementById("step-update-2");
   const btnAvancarUpd = document.getElementById("btnAvancarUpd");
   const btnVoltarUpd = document.getElementById("btnVoltarUpd");
+  const btnAtualizar = document.getElementById("btnCadastrarUpd");
+
+  const checkboxEmpresa = document.getElementById("alertaEmpresa");
+  const checkboxOberon = document.getElementById("alertaOberon");
+  const paramsContainer = document.getElementById("parametrizacaoIndividual");
+  const paramInputs = [
+    ipt_cpu_cad,
+    ipt_ram_cad,
+    ipt_disco_cad,
+    ipt_rede_cad,
+  ].filter(Boolean);
+
   const dadosAtuaisIdentificacao = document.getElementById(
     "dadosAtuaisIdentificacao"
   );
@@ -451,7 +582,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const btnAbrir = document.getElementById("btnOpenMacHelp");
   const btnFecharX = document.getElementById("btnCloseMacHelp");
   const btnFechar = document.getElementById("btnFecharMacHelp");
-
 
   if (ID_GERENTE) {
     carregarMaquinas(1, "nome", "");
@@ -498,7 +628,6 @@ document.addEventListener("DOMContentLoaded", function () {
         paramInputs
       );
     };
-
     checkboxEmpresa.addEventListener("change", handleCheckboxChange);
     checkboxOberon.addEventListener("change", handleCheckboxChange);
     toggleParametros(
@@ -516,6 +645,10 @@ document.addEventListener("DOMContentLoaded", function () {
     btnVoltar.addEventListener("click", () =>
       navigateSteps("prev", step1, step2, btnAvancar, btnVoltar, btnCadastrar)
     );
+
+  if (btnCadastrar) {
+    btnCadastrar.addEventListener("click", cadastrarMaquina);
+  }
 
   if (checkboxEmpresaUpd && checkboxOberonUpd) {
     const handleCheckboxChangeUpd = (event) => {
@@ -551,7 +684,7 @@ document.addEventListener("DOMContentLoaded", function () {
         step2Upd,
         btnAvancarUpd,
         btnVoltarUpd,
-        null,
+        btnAtualizar,
         dadosAtuaisIdentificacao,
         dadosAtuaisAlertas
       )
@@ -564,7 +697,7 @@ document.addEventListener("DOMContentLoaded", function () {
         step2Upd,
         btnAvancarUpd,
         btnVoltarUpd,
-        null,
+        btnAtualizar,
         dadosAtuaisIdentificacao,
         dadosAtuaisAlertas
       )
@@ -578,7 +711,7 @@ document.addEventListener("DOMContentLoaded", function () {
         step2Upd,
         btnAvancarUpd,
         btnVoltarUpd,
-        null,
+        btnAtualizar,
         dadosAtuaisIdentificacao,
         dadosAtuaisAlertas
       );
@@ -589,6 +722,10 @@ document.addEventListener("DOMContentLoaded", function () {
         paramInputsUpd
       );
     });
+  }
+
+  if (btnAtualizar) {
+    btnAtualizar.addEventListener("click", atualizarMaquina);
   }
 
   if (formConfig && modalElementConfig) {
