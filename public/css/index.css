@@ -1,18 +1,40 @@
+/* ========================================= */
+/* --- ESTILOS GERAIS E BASE --- */
+/* ========================================= */
 body,
 html {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  font-family: Arial, sans-serif;
+  font-family: "Montserrat", sans-serif;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  overflow-x: hidden;
 }
 
-/* Navbar */
+/* Utilitários */
+.text-light-gray {
+  color: #cccccc;
+}
 
+.bg-dark-2 {
+  background-color: #212121;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+/* ========================================= */
+/* --- NAVBAR & HERO SECTION --- */
+/* ========================================= */
 
 .navbar {
   background: transparent;
   padding: 1rem 2rem;
+  transition: background-color 0.3s ease;
 }
 
 .navbar-brand {
@@ -28,14 +50,12 @@ html {
 }
 
 .nav-link:hover {
-  color: #008CBA !important;
+  color: #008cba !important;
 }
 
-
-
-/* Banner Hero */
 .hero {
-  background: url('https://maxmonitoramento.com.br/wp-content/uploads/2023/11/image-28.png') no-repeat center center/cover;
+  /* Fundo responsivo */
+  background: url("https://maxmonitoramento.com.br/wp-content/uploads/2023/11/image-28.png") no-repeat center center/cover;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -51,19 +71,25 @@ html {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
-  /* escurece a imagem para melhor leitura */
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 500px;
+  max-width: 550px;
 }
 
 .hero h1 {
-  font-size: 3rem;
-  font-weight: bold;
+  font-size: 3.5rem;
+  font-weight: 800;
   margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.hero p {
+  color: #cccccc;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
 }
 
 .hero-buttons .btn {
@@ -75,13 +101,9 @@ html {
 }
 
 .hero-buttons .btn-primary {
-  background-color: #008CBA;
+  background-color: #008cba;
   border: none;
   color: #fff;
-}
-
-.hero-buttons .btn-primary:hover {
-  background-color: #005f73;
 }
 
 .hero-buttons .btn-outline-light {
@@ -90,38 +112,480 @@ html {
   background: transparent;
 }
 
-.hero-buttons .btn-outline-light:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+
+/* ========================================= */
+/* --- O QUE FAZEMOS (SECURITY SECTION) --- */
+/* ========================================= */
+
+.security-section {
+  min-height: auto;
+  display: flex;
+  align-items: center;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  padding-left: 125px;
+  background-color: #1a1a1a;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-  .hero {
-    padding-left: 5%;
-  }
+/* Ajuste de Padding para Equalizar as Colunas no Desktop */
+.text-content {
+  /* Reduzido de 5rem para 3rem, para dar mais espaço ao texto sem comprometer a proporção */
+  padding-right: 3rem;
+  padding-left: 0;
+}
 
-  .hero h1 {
-    font-size: 2rem;
-  }
+.visual-content {
+  position: relative;
+  /* Define padding-left igual ao padding-right do text-content para igualar o espaço */
+  padding-left: 3rem;
+  padding-right: 0;
+  align-items: flex-start !important;
+}
 
-  .hero-buttons .btn {
-    font-size: 0.9rem;
-    padding: 8px 20px;
+.o-que-fazemos {
+  color: #aaaaaa;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+}
+
+.title-main {
+  font-weight: 700;
+  line-height: 1.1;
+  font-size: 3rem;
+}
+
+.lead-text {
+  color: #cccccc;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin-bottom: 2rem !important;
+}
+
+.feature-item {
+  font-size: 1rem;
+  color: #ffffff;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.bullet-point {
+  height: 8px;
+  width: 8px;
+  background-color: #00ff00;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 10px;
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+
+/* Visuais e Imagem */
+.team-container {
+  max-width: 450px;
+  width: 100%;
+  align-self: flex-start;
+  margin-right: 100px;
+}
+
+.team-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.team-tag {
+  background-color: #ffffff;
+  color: #000000;
+  position: absolute;
+  top: 10%;
+  right: -80px;
+  z-index: 10;
+  min-width: 150px;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.avatars {
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-sm {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  margin-left: -8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.avatar-sm:first-child {
+  margin-left: 0;
+}
+
+/* KPIs */
+.kpi-block {
+  position: relative;
+  z-index: 1;
+  margin-top: -30px;
+  padding-left: 20px;
+  justify-content: flex-start !important;
+  width: auto !important;
+  align-self: flex-start;
+}
+
+.kpi-item {
+  padding-right: 20px;
+}
+
+.kpi-value {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #00ff00;
+  margin-bottom: 0;
+}
+
+.kpi-description {
+  font-size: 1rem;
+  color: #cccccc;
+  line-height: 1.3;
+}
+
+/* Objeto 3D */
+.object-placeholder {
+  position: absolute;
+  bottom: -20px;
+  right: -100px;
+  width: 250px;
+  max-width: 30vw;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.object-placeholder img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ========================================= */
+/* --- BENEFÍCIOS (BENEFITS SECTION) --- */
+/* ========================================= */
+
+.benefits-section {
+  background-color: #ffffff;
+  color: #333;
+  padding-bottom: 10rem;
+  padding-top: 5rem;
+}
+
+/* Estilos de cabeçalho comuns (replicando o estilo da imagem) */
+.benefits-section .section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.benefits-section .title-small {
+  font-size: 0.9em;
+  color: #007bff;
+  /* Cor azul para o título/tag da seção */
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.benefits-section .title-large {
+  font-size: 2.5em;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.benefits-section .subtitle {
+  font-size: 1.1em;
+  color: #555;
+}
+
+/* Configuração do Grid de Benefícios */
+.benefits-grid {
+  display: grid;
+  /* 3 colunas: 1/3 para texto, 1.5/3 para imagem, 1/3 para texto */
+  grid-template-columns: 1fr 1.5fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* Bloco Central de Imagens */
+.central-content {
+  grid-column: 2 / 3;
+  position: relative;
+  text-align: center;
+  padding-top: 50px;
+}
+
+.main-image-top {
+  width: 100%;
+  max-width: 450px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+
+.main-image-bottom {
+  position: absolute;
+  right: -50px;
+  bottom: -150px;
+  width: 400px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 3;
+}
+
+/* Itens de Benefício (Texto) */
+.benefit-item {
+  padding: 15px;
+  margin-bottom: 40px;
+}
+
+.benefit-item h3 {
+  font-size: 1.25em;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.benefit-item p {
+  font-size: 0.95em;
+  color: #666;
+}
+
+.icon-placeholder {
+  font-size: 2.5em;
+  color: #007bff;
+  /* Cor azul do ícone */
+  margin-bottom: 10px;
+}
+
+.text-left {
+  text-align: left;
+  grid-column: 1 / 2;
+}
+
+.text-right {
+  text-align: right;
+  grid-column: 3 / 4;
+}
+
+/* Alinhamento de Ícones Flutuantes */
+.text-right .icon-placeholder {
+  float: right;
+  margin-left: 10px;
+}
+
+.text-left .icon-placeholder {
+  float: left;
+  margin-right: 10px;
+}
+
+/* Limpar o float para o texto */
+.text-right h3,
+.text-right p {
+  clear: right;
+}
+
+.text-left h3,
+.text-left p {
+  clear: left;
+}
+
+
+/* ========================================= */
+/* --- SERVIÇOS (SERVICES SECTION) --- */
+/* ========================================= */
+
+/* Separador/Título da Seção de Serviços */
+.services-separator {
+  text-align: center;
+  padding: 150px 0 50px;
+  /* Padding alto para acomodar a sobreposição da imagem */
+  position: relative;
+  z-index: 1;
+  background-color: #ffffff;
+  /* Fundo do separador deve ser branco/claro */
+  color: #333;
+}
+
+.services-separator .text-small {
+  font-size: 0.9em;
+  color: #007bff;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.services-separator h2 {
+  font-size: 2em;
+  font-weight: 800;
+}
+
+/* Bloco de Destaque de Serviço (Monitore Hardware) */
+.service-feature {
+  padding: 50px 0;
+  background-color: #ffffff;
+  color: #333;
+}
+
+.feature-content {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.feature-image-block {
+  flex: 1;
+  min-width: 0;
+}
+
+.feature-image-main {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.feature-text-block {
+  flex: 1;
+  padding: 20px;
+}
+
+.feature-text-block h2 {
+  font-size: 2em;
+  font-weight: 800;
+  margin-bottom: 15px;
+}
+
+.feature-text-block p {
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  background-color: #fff;
+  color: #007bff;
+  padding: 10px 20px;
+  border: 2px solid #007bff;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.cta-button:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.icon-placeholder-small {
+  font-size: 1.2em;
+  margin-right: 8px;
+}
+
+.cta-button:hover .icon-placeholder-small {
+  color: #fff;
+}
+
+
+/* Estilos das Seções de Rodapé/CTAs (Mantidos) */
+
+.footer-cta-boxes {
+  padding: 5rem 0;
+  background-color: #1a1a1a;
+}
+
+.cta-box {
+  background-color: #2c2c2c;
+  padding: 2rem;
+  border-radius: 10px;
+  height: 100%;
+}
+
+.cta-box h6 {
+  color: #008cba;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+footer {
+  background-color: #111111;
+  padding-top: 4rem;
+  padding-bottom: 2rem;
+}
+
+footer .logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+footer a {
+  color: #cccccc;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s;
+}
+
+footer a:hover {
+  color: #008cba;
+}
+
+.social-icons a {
+  display: inline-block;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+}
+
+/* ========================================= */
+/* --- RESPONSIVIDADE (MOBILE/TABLET) --- */
+/* ========================================= */
+@media (min-width: 992px) {
+  .benefit-item .icon-circle.float-end {
+    margin-left: 1rem;
+    margin-right: 0;
   }
 }
 
-@media (max-width: 991px) {
+@media (max-width: 991.98px) {
+
+  /* Navbar */
   .navbar-collapse {
-    position: fixed;
-    top: 0;
+    position: absolute;
+    top: 100%;
     left: 0;
     width: 100%;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.95);
+    height: auto;
+    max-height: 80vh;
+    overflow-y: auto;
+    background-color: rgba(26, 26, 26, 0.98);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    padding: 1rem 0;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    padding: 0;
     display: none;
     z-index: 1050;
   }
@@ -133,21 +597,204 @@ html {
   .navbar-nav {
     flex-direction: column;
     text-align: center;
+    width: 100%;
   }
 
   .navbar-nav .nav-link {
-    font-size: 1.5rem;
-    margin: 1rem 0;
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+    padding: 0.5rem 1rem;
+  }
+
+  .navbar .d-lg-flex {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 80%;
+    margin-top: 1rem !important;
+  }
+
+  .navbar .d-lg-flex a.btn {
+    width: 100%;
+    margin: 0.2rem 0 !important;
   }
 
   .navbar-toggler {
     z-index: 1100;
   }
 
-  .navbar .d-flex.ms-3 {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    z-index: 1100;
+  /* Hero */
+  .hero {
+    padding-left: 5%;
+    height: 80vh;
+    text-align: center;
+  }
+
+  .hero-content {
+    max-width: 90%;
+    margin: 0 auto;
+  }
+
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .hero-buttons .btn {
+    margin-right: 0;
+    width: 100%;
+  }
+
+  /* Seção O que Fazemos */
+  .security-section {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+
+  .title-main {
+    font-size: 2.2rem;
+  }
+
+  /* Ajuste de Padding para Mobile */
+  .text-content {
+    padding-right: 15px;
+    padding-left: 15px;
+    /* Adiciona padding-left para centralizar o conteúdo da coluna */
+    margin-bottom: 2rem;
+  }
+
+  .visual-content {
+    align-items: center !important;
+    padding-left: 15px;
+    /* Adiciona padding para mobile */
+    padding-right: 15px;
+    margin-top: 0 !important;
+  }
+
+
+  /* KPIs: Tornam-se o foco principal da coluna visual no mobile */
+  .kpi-block {
+    flex-direction: column;
+    align-items: center !important;
+    justify-content: center !important;
+    padding-left: 0;
+    margin-top: 20px;
+  }
+
+  .kpi-item {
+    margin-right: 0 !important;
+    margin-bottom: 2rem !important;
+    text-align: center !important;
+  }
+
+  /* Removendo estilos de imagens que estão escondidas no HTML */
+  .team-container,
+  .team-tag,
+  .object-placeholder {
+    /* Estas classes não precisam de estilos de margem/posição no mobile, já que estão com d-none */
+    margin-right: 0 !important;
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    transform: none !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* ========================================= */
+  /* --- RESPONSIVIDADE BENEFÍCIOS --- */
+  /* ========================================= */
+  .benefits-grid {
+    grid-template-columns: 1fr;
+    /* Coluna única no mobile */
+  }
+
+  .central-content {
+    grid-column: 1 / 2;
+    order: -1;
+    /* Move a imagem para o topo da seção no mobile */
+    padding-top: 0;
+    margin-bottom: 20px;
+  }
+
+  /* Imagem main-image-bottom já está com d-none no HTML */
+
+  .text-right,
+  .text-left {
+    grid-column: 1 / 2;
+    text-align: left;
+    /* Alinha o texto à esquerda */
+  }
+
+  .text-right .icon-placeholder {
+    float: left;
+    /* Alinha o ícone à esquerda também */
+    margin-right: 10px;
+    margin-left: 0;
+  }
+
+  .text-right h3,
+  .text-right p,
+  .text-left h3,
+  .text-left p {
+    clear: both;
+  }
+
+  /* ========================================= */
+  /* --- RESPONSIVIDADE SERVIÇOS --- */
+  /* ========================================= */
+  .services-separator {
+    padding-top: 50px;
+  }
+
+  .feature-content {
+    flex-direction: column;
+  }
+
+  .feature-text-block {
+    padding: 0;
+  }
+
+
+  /* Seção Footer */
+  .footer-cta-boxes {
+    padding: 3rem 0;
+  }
+
+  .cta-box {
+    margin-bottom: 1rem;
+  }
+
+  footer .col-lg-3,
+  footer .col-lg-2,
+  footer .col-lg-4 {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  footer .col-lg-2:last-child {
+    margin-bottom: 0;
+  }
+
+  footer .logo {
+    justify-content: center;
+  }
+
+  footer a {
+    text-align: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-collapse {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
   }
 }
