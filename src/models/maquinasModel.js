@@ -11,7 +11,7 @@ function cadastrarMaquina(nome, modelo, macAddress, fkEmpresa) {
 
   var instrucaoSql = `
         INSERT INTO Maquina (nome, modelo, macAddress, status, fkEmpresa) VALUES 
-        ('${nome}', '${modelo}', '${macAddress}', 'Aguardando' , ${fkEmpresa})
+        ('${nome}', null, '${macAddress}', 'Aguardando' , ${fkEmpresa})
     `;
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
@@ -79,6 +79,21 @@ function getFkMaquinaComponente(fkMaquina) {
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
 }
+function getComponentesPorMaquina(idMaquina) {
+  console.log("[MODEL] - function getComponentesPorMaquina():", idMaquina);
+  var instrucaoSql = `
+        SELECT
+            MC.idMaquinaComponente,
+            C.tipoComponente,
+            MC.origemParametro
+        FROM MaquinaComponente AS MC
+        JOIN Componente AS C ON MC.fkComponente = C.idComponente
+        WHERE MC.fkMaquina = ${idMaquina};
+    `;
+
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
 
 function getParametrosEspecificos(fkMaquinaComponente) {
   console.log(
@@ -110,10 +125,7 @@ function getSenha(idFuncionario) {
   return database.executar(instrucaoSql);
 }
 function getParametrosPadrao(fkEmpresa) {
-  console.log(
-    "[MODEL] - function getParametrosPadrao():",
-    fkEmpresa
-  );
+  console.log("[MODEL] - function getParametrosPadrao():", fkEmpresa);
 
   var instrucaoSql = `
         SELECT
@@ -135,58 +147,6 @@ function excluirParametroEspecifico(fkMaquinaComponente) {
   console.log("[MODEL] - function getParametrosEspecifico():", fkEmpresa);
   var instrucaoSql = `
         DELETE from MaquinaComponente where fkMaquinaComponente = ${fkMaquinaComponente}
-    `;
-  console.log("Executando a instrução SQL: \n" + instrucaoSql);
-  return database.executar(instrucaoSql);
-}
-
-function atualizarMaquina(nome, modelo, macAddress, status, fkEmpresa) {
-  console.log(
-    "[MODEL] - function atualizarMaquina():",
-    nome,
-    modelo,
-    macAddress,
-    status,
-    fkEmpresa
-  );
-
-  var instrucaoSql = `
-        UPDATE Maquina SET 
-          nome = '${nome}', 
-          modelo = '${modelo}',
-          macAddress = '${macAddress}', 
-          status = '${status}' 
-        WHERE idMaquina = ${fkEmpresa};
-        -- Nota: A FK Empresa está sendo usada como ID da Máquina no WHERE
-    `;
-  console.log("Executando a instrução SQL: \n" + instrucaoSql);
-  return database.executar(instrucaoSql);
-}
-
-function atualizarParametro(limite, fkEmpresa, fkMaquinaComponente) {
-  console.log(
-    "[MODEL] - function atualizarParametro():",
-    limite,
-    fkEmpresa,
-    fkMaquinaComponente
-  );
-
-  var instrucaoSql = `
-        UPDATE Parametro SET 
-          limite = ${limite}, 
-          fkEmpresa = ${fkEmpresa}
-        WHERE fkMaquinaComponente = ${fkMaquinaComponente};
-    `;
-  console.log("Executando a instrução SQL: \n" + instrucaoSql);
-  return database.executar(instrucaoSql);
-}
-
-function atualizarAlerta(horarioFinal, fkAlerta) {
-  console.log("[MODEL] - function atualizarAlerta():", horarioFinal, fkAlerta);
-
-  var instrucaoSql = `
-        UPDATE Alerta SET horarioFinal = '${horarioFinal}'
-        WHERE idAlerta = ${fkAlerta};
     `;
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
@@ -285,9 +245,12 @@ function contarMaquinasPorEmpresa(fkEmpresa, condicao, termoDePesquisa) {
   return database.executar(instrucaoCountSql);
 }
 function buscarMaquinaPorId(idMaquina) {
-    console.log("[MODEL] - Buscando dados de identificação da máquina:", idMaquina);
+  console.log(
+    "[MODEL] - Buscando dados de identificação da máquina:",
+    idMaquina
+  );
 
-    var instrucaoSql = `
+  var instrucaoSql = `
         SELECT
             idMaquina,
             nome,
@@ -297,22 +260,24 @@ function buscarMaquinaPorId(idMaquina) {
         WHERE idMaquina = ${idMaquina};
     `;
 
-    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
 
-    return database.executar(instrucaoSql);
+  return database.executar(instrucaoSql);
 }
 
 function buscarComponentesComParametros(idMaquina) {
-    console.log("[MODEL] - Buscando componentes e parâmetros da máquina:", idMaquina);
+  console.log(
+    "[MODEL] - Buscando componentes e parâmetros da máquina:",
+    idMaquina
+  );
 
-    var instrucaoSql = `
+  var instrucaoSql = `
         SELECT
             MC.idMaquinaComponente,
             MC.origemParametro,
             C.tipoComponente,
             C.unidadeMedida,
             
-            -- Limite Específico: Retorna o número do limite (ou NULL, se não houver na ParametroEspecifico)
             PE.limite AS limiteNumerico
             
         FROM MaquinaComponente AS MC
@@ -323,8 +288,71 @@ function buscarComponentesComParametros(idMaquina) {
         WHERE MC.fkMaquina = ${idMaquina};
     `;
 
-    console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+
+function atualizarDadosMaquina(idMaquina, nome, macAddress) {
+  console.log(
+    "[MODEL] - function atualizarDadosMaquina():",
+    idMaquina,
+    nome,
+    macAddress
+  );
+
+  var instrucaoSql = `
+        UPDATE Maquina SET 
+          nome = '${nome}', 
+          macAddress = '${macAddress}'
+        WHERE idMaquina = ${idMaquina};
+    `;
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+
+function atualizarOrigemComponente(fkMaquinaComponente, novaOrigem) {
+  console.log(
+    "[MODEL] - function atualizarOrigemComponente():",
+    fkMaquinaComponente,
+    novaOrigem
+  );
+
+  var instrucaoSql = `
+        UPDATE MaquinaComponente SET 
+          origemParametro = '${novaOrigem}'
+        WHERE idMaquinaComponente = ${fkMaquinaComponente};
+    `;
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+
+function atualizarParametroEspecifico(limite, fkMaquinaComponente) {
+  console.log(
+    "[MODEL] - function atualizarParametroEspecifico(): (UPSERT)",
+    limite,
+    fkMaquinaComponente
+  );
+
+  var instrucaoSql = `
+        REPLACE INTO ParametroEspecifico (fkMaquinaComponente, limite) VALUES 
+        (${fkMaquinaComponente}, ${limite})
+    `;
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+
+function removerParametroEspecifico(fkMaquinaComponente) {
+  console.log(
+    "[MODEL] - function removerParametroEspecifico():",
+    fkMaquinaComponente
+  );
+
+  var instrucaoSql = `
+        DELETE FROM ParametroEspecifico 
+        WHERE fkMaquinaComponente = ${fkMaquinaComponente};
+    `;
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
 }
 
 module.exports = {
@@ -339,10 +367,12 @@ module.exports = {
   getSenha,
   getParametrosPadrao,
   getParametrosEspecificos,
+  getComponentesPorMaquina,
 
-  atualizarMaquina,
-  atualizarParametro,
-  atualizarAlerta,
+  atualizarDadosMaquina,
+  atualizarOrigemComponente,
+  atualizarParametroEspecifico,
+  removerParametroEspecifico,
 
   eliminarMaquina,
   eliminarMaquinaComponente,

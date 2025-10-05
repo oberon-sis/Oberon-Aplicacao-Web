@@ -521,9 +521,79 @@ function preencherDadosAlertas(componentes) {
   );
 }
 
+function atualizarMaquinaSubmit(event) {
+    event.preventDefault(); 
+    atualizarMaquina();
+}
 async function atualizarMaquina() {
+    const nome = document.getElementById('ipt_nome_upd').value;
+    const mac = document.getElementById('ipt_mac_upd').value;
+    
+    const cpu = document.getElementById('ipt_cpu_upd').value;
+    const ram = document.getElementById('ipt_ram_upd').value;
+    const disco = document.getElementById('ipt_disco_upd').value;
+    const rede = document.getElementById('ipt_rede_upd').value;
+    
+    const checkboxEmpresaUpd = document.getElementById("alertaEmpresaUpd");
+    const checkboxOberonUpd = document.getElementById("alertaOberonUpd");
+    const origemParametro = getOrigemLimite(checkboxEmpresaUpd, checkboxOberonUpd);
 
-  
+    if (!nome || !mac) {
+        exibirErro("Campos Obrigatórios", "Por favor, preencha o nome e o Mac Address da máquina.");
+        return;
+    }
+
+    if (origemParametro === "ESPECIFICO") {
+        if (!cpu || !ram || !disco || !rede) {
+            exibirErro("Limites Faltando", "Por favor, defina todos os limites de alerta individualmente.");
+            return;
+        }
+    }
+
+    const limitesParaEnvio = origemParametro === "ESPECIFICO"
+        ? [
+            { tipo: "CPU", limite: parseFloat(cpu) },
+            { tipo: "RAM", limite: parseFloat(ram) },
+            { tipo: "DISCO", limite: parseFloat(disco) },
+            { tipo: "REDE", limite: parseFloat(rede) },
+          ]
+        : [];
+
+    const dadosParaAtualizar = {
+        nome: nome,
+        macAddress: mac,
+        origemParametro: origemParametro,
+        limites: limitesParaEnvio,
+    };
+    
+    const idMaquina = idMaquinaEmEdicao; 
+    console.log(idMaquina)
+    console.log(dadosParaAtualizar)
+
+    try {
+        const response = await fetch(`/maquinas/atualizarMaquina/${idMaquina}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dadosParaAtualizar)
+        });
+
+        if (response.ok) {
+            const modalElement = document.getElementById('modalAtualizarMaquina');
+            if (modalElement) {
+                bootstrap.Modal.getInstance(modalElement).hide();
+            }
+            exibirSucesso('Atualização Concluída', `A máquina ${nome} foi atualizada com sucesso!`);
+            carregarMaquinas(paginaAtual, valor_parametro, termo);
+        } else {
+            const errorText = await response.text();
+            exibirErro('Erro na Atualização', errorText || `Erro desconhecido ao atualizar.`);
+        }
+    } catch (error) {
+        console.error('Erro na requisição:', error);
+        exibirErro('Erro de Rede', 'Falha na comunicação com o servidor ao tentar atualizar.');
+    }
 }
 
 function renderizarPaginacao(totalPaginas, paginaAtual) {
@@ -586,7 +656,6 @@ function getOrigemLimite(checkboxEmpresa, checkboxOberon) {
   }
   return "ESPECIFICO";
 }
-async function atualizarMaquina() {}
 
 async function cadastrarMaquina() {
   const nome = ipt_nome_cad ? ipt_nome_cad.value : "";
@@ -915,7 +984,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   if (btnAtualizar) {
-    btnAtualizar.addEventListener("click", atualizarMaquina);
+    btnAtualizar.addEventListener("click", atualizarMaquinaSubmit); 
   }
 
   if (formConfig && modalElementConfig) {

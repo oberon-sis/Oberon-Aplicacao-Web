@@ -332,33 +332,131 @@ async function listarMaquinas(req, res) {
   }
 }
 
-
 async function buscarDadosParaEdicao(req, res) {
-    const idMaquina = req.params.idMaquina;
+  const idMaquina = req.params.idMaquina;
 
-    if (!idMaquina) {
-        return res.status(400).send("ID da máquina não fornecido.");
+  if (!idMaquina) {
+    return res.status(400).send("ID da máquina não fornecido.");
+  }
+
+  try {
+    const maquina = await maquinasModel.buscarMaquinaPorId(idMaquina);
+    const componentes =
+      await maquinasModel.buscarComponentesComParametros(idMaquina);
+
+    if (maquina.length === 0) {
+      return res.status(404).send("Máquina não encontrada.");
     }
 
-    try {
-        const maquina = await maquinasModel.buscarMaquinaPorId(idMaquina);
-        const componentes = await maquinasModel.buscarComponentesComParametros(idMaquina);
+    res.status(200).json({
+      maquina: maquina[0],
+      componentes: componentes,
+    });
+  } catch (erro) {
+    console.error(`Erro ao buscar dados para edição: ${erro.message}`);
+    res.status(500).json({
+      mensagem: "Erro interno ao buscar dados da máquina.",
+      detalhe: erro.message,
+    });
+  }
+}
 
-        if (maquina.length === 0) {
-            return res.status(404).send("Máquina não encontrada.");
+async function atualizarMaquina(req, res) {
+  const idMaquina = req.params.idMaquina; 
+  const {
+    nome,
+    macAddress,
+    origemParametro,
+    limites, 
+  } = req.body;
+  console.log(idMaquina)
+  console.log(nome)
+  console.log(macAddress)
+  console.log(origemParametro)
+  console.log(limites)
+  if (!nome || !macAddress || !idMaquina) {
+    return res
+      .status(400)
+      .send("Nome, Mac Address e ID da Máquina são obrigatórios.");
+  }
+
+  if (origemParametro === "ESPECIFICO" && (!limites || limites.length !== 4)) {
+    return res
+      .status(400)
+      .send(
+        "Ao usar limites específicos, todos os 4 tipos de limites devem ser fornecidos."
+      );
+  }
+
+  try {
+    const maquinaAtualizada = await maquinasModel.atualizarDadosMaquina(
+      idMaquina,
+      nome,
+      macAddress
+    );
+
+    if (!maquinaAtualizada) {
+      return res
+        .status(404)
+        .send("Máquina não encontrada ou nenhuma alteração na identificação.");
+    }
+
+    const COMPONENTES_MAP = {
+      CPU: 1,
+      RAM: 2,
+      DISCO: 3,
+      REDE: 4,
+    };
+
+    const componentesMaquina =
+      await maquinasModel.getComponentesPorMaquina(idMaquina);
+
+    const promisesAtualizacao = [];
+
+    for (const item of componentesMaquina) {
+      const fkMaquinaComponente = item.idMaquinaComponente;
+      const tipoComponente = item.tipoComponente; 
+
+      promisesAtualizacao.push(
+        maquinasModel.atualizarOrigemComponente(
+          fkMaquinaComponente,
+          origemParametro
+        )
+      );
+
+      if (origemParametro === "ESPECIFICO") {
+        const limiteFront = limites.find((l) => l.tipo === tipoComponente);
+
+        if (limiteFront) {
+          promisesAtualizacao.push(
+            maquinasModel.atualizarParametroEspecifico(
+              limiteFront.limite,
+              fkMaquinaComponente
+            )
+          );
         }
-
-        res.status(200).json({
-            maquina: maquina[0],
-            componentes: componentes
-        });
-    } catch (erro) {
-        console.error(`Erro ao buscar dados para edição: ${erro.message}`);
-        res.status(500).json({
-            mensagem: "Erro interno ao buscar dados da máquina.",
-            detalhe: erro.message
-        });
+      } else {
+        promisesAtualizacao.push(
+          maquinasModel.removerParametroEspecifico(fkMaquinaComponente)
+        );
+      }
     }
+
+    await Promise.all(promisesAtualizacao);
+
+    res.status(200).json({
+      mensagem: "Máquina e parâmetros de alerta atualizados com sucesso!",
+      idMaquina: idMaquina,
+    });
+  } catch (erro) {
+    console.error(
+      `\nHouve um erro ao realizar a atualização da máquina ${idMaquina}. Erro: ${erro.sqlMessage || erro.message}`
+    );
+    res.status(500).json({
+      mensagem: "Erro interno no servidor ao atualizar a máquina.",
+      detalhe: erro.sqlMessage || erro.message,
+    });
+  }
 }
 
 module.exports = {
@@ -368,4 +466,5 @@ module.exports = {
   listarMaquinas,
   salvarPadrao,
   buscarDadosParaEdicao,
+  atualizarMaquina
 };
