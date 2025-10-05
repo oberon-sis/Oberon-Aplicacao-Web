@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>OBERON - Redefinir Senha</title>
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+
+<body>
+    <div class="full-screen">
+        <div class="login-container">
+            <h1 class="login-title">REDEFINIR SENHA</h1>
+            <p id="status-mensagem" style="text-align:center; margin-bottom: 20px; color:#cbd5e1; font-size:14px;">
+                Defina e confirme sua nova senha abaixo.
+            </p>
+
+            <form id="resetForm">
+                <div class="form-grupo">
+                    <label for="nova-senha">Nova Senha</label>
+                    <input type="password" id="nova-senha" placeholder="Digite a nova senha" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="confirma-senha">Confirmar Nova Senha</label>
+                    <input type="password" id="confirma-senha" placeholder="Confirme a nova senha" required>
+                </div>
+
+                <button type="submit" class="login-btn">REDEFINIR</button>
+            </form>
+
+            <div class="redirecionamento">
+                <a href="./login.html">Voltar ao login</a>
+            </div>
+        </div>
+
+        <div class="frase-impacto">
+            <div class="text">
+                <div class="title">Segurança que move seu negócio.</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    // Função utilitária para extrair parâmetros (token, email) da URL
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    };
+
+    // 1. LER DADOS DA URL
+    const token = getUrlParameter('token');
+    const email = getUrlParameter('email');
+    const statusElement = document.getElementById('status-mensagem');
+    const formElement = document.getElementById('resetForm');
+
+
+    // 2. VALIDAÇÃO INICIAL DO LINK
+    if (!token || !email) {
+        statusElement.innerHTML = '❌ Link inválido ou expirado. Por favor, solicite uma nova recuperação de senha.';
+        formElement.style.display = 'none'; // Esconde o formulário de senha
+    }
+
+
+    document.getElementById("resetForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const novaSenha = document.getElementById("nova-senha").value;
+        const confirmaSenha = document.getElementById("confirma-senha").value;
+
+        // Validação básica de senhas
+        if (novaSenha !== confirmaSenha) {
+            alert("As senhas digitadas não coincidem!");
+            return;
+        }
+
+        if (novaSenha.length < 6) {
+            alert("A senha deve ter pelo menos 6 caracteres.");
+            return;
+        }
+
+        try {
+            // Chama a rota do back-end para validar o token e atualizar a senha
+            const resp = await fetch("http://localhost:3333/auth/redefinir-senha", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, token, novaSenha }) // Envia os 3 dados
+            });
+
+            // 💥 Tratamento de erro robusto
+            if (!resp.ok) {
+                const errorData = await resp.json().catch(() => ({ msg: 'Erro de comunicação.' }));
+                alert("⚠️ Erro ao redefinir a senha: " + (errorData.msg || 'Token inválido ou expirado.'));
+                statusElement.innerHTML = '⚠️ Erro ao redefinir. Tente novamente.';
+                return;
+            }
+
+            // Sucesso (código 200)
+            const data = await resp.json();
+            alert("✅ Senha redefinida com sucesso! Redirecionando para a tela de login.");
+            window.location.href = './login.html';
+
+        } catch (err) {
+            alert("❌ Erro ao conectar com o servidor.");
+            console.error(err);
+        }
+    });
+</script>
+
+</html>
