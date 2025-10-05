@@ -332,10 +332,40 @@ async function listarMaquinas(req, res) {
   }
 }
 
+
+async function buscarDadosParaEdicao(req, res) {
+    const idMaquina = req.params.idMaquina;
+
+    if (!idMaquina) {
+        return res.status(400).send("ID da máquina não fornecido.");
+    }
+
+    try {
+        const maquina = await maquinasModel.buscarMaquinaPorId(idMaquina);
+        const componentes = await maquinasModel.buscarComponentesComParametros(idMaquina);
+
+        if (maquina.length === 0) {
+            return res.status(404).send("Máquina não encontrada.");
+        }
+
+        res.status(200).json({
+            maquina: maquina[0],
+            componentes: componentes
+        });
+    } catch (erro) {
+        console.error(`Erro ao buscar dados para edição: ${erro.message}`);
+        res.status(500).json({
+            mensagem: "Erro interno ao buscar dados da máquina.",
+            detalhe: erro.message
+        });
+    }
+}
+
 module.exports = {
   getParametrosPadrao,
   cadastrarMaquina,
   excluirMaquina,
   listarMaquinas,
   salvarPadrao,
+  buscarDadosParaEdicao,
 };

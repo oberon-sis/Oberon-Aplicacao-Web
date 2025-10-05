@@ -9,6 +9,9 @@ router.post("/cadastrarMaquina", function (req, res) {
 router.get("/getParametrosPadrao/:idFuncionario", function (req, res) {
   maquinasController.getParametrosPadrao(req, res);
 });
+router.get("/buscarDadosParaEdicao/:idMaquina", function (req, res) {
+  maquinasController.buscarDadosParaEdicao(req, res);
+});
 router.post("/salvarPadrao", function (req, res) {
   maquinasController.salvarPadrao(req, res);
 });

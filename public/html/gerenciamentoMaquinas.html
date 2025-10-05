@@ -34,7 +34,7 @@
             <div class="d-flex flex-column flex-md-row align-items-md-center mb-4 gap-2 div_pesquisa">
 
                 <div style="max-width: 450px;" class="input-group flex-grow-1 div_justify">
-                    <input required="required" type="text"
+                    <input required  type="text"
                         class="form-control border-start-0 shadow-none input_pesquisa"
                         placeholder="Buscar por hostname ou macaddress" id="ipt_pesquisa">
 
@@ -275,11 +275,11 @@
 
                             <div class="mb-3">
                                 <label for="hostname" class="form-label text-muted">Nome</label>
-                                <input required="required" type="text" class="form-control shadow-none input_pesquisa"
+                                <input required  type="text" class="form-control shadow-none input_pesquisa"
                                     id="ipt_nome_cad" placeholder="Insira o nome de identificação da máquina">
                             </div>
 
-                            <div class="mb-3">
+                            <div class="mb-3" style="display: none;">
                                 <label for="modelo" class="form-label text-muted">Modelo (opcional)</label>
                                 <input type="text" class="form-control shadow-none input_pesquisa" id="ipt_modelo_cad"
                                     placeholder="Insira o modelo do equipamento">
@@ -294,7 +294,7 @@
                                     </button>
                                 </label>
 
-                                <input required="required" type="text" class="form-control shadow-none input_pesquisa"
+                                <input required  type="text" class="form-control shadow-none input_pesquisa"
                                     id="ipt_mac_cad" placeholder="Ex: 00:1A:2B:3C:4D:5E"
                                     pattern="^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$"
                                     title="Formato: XX:XX:XX:XX:XX:XX ou XX-XX-XX-XX-XX-XX">
@@ -307,25 +307,25 @@
                             <div id="parametrizacaoIndividual">
                                 <div class="mb-3">
                                     <label for="cpu" class="form-label small">CPU - Porcentagem de uso </label>
-                                    <input required="required" type="text"
+                                    <input required  type="text"
                                         class="form-control shadow-none input_pesquisa" id="ipt_cpu_cad"
                                         placeholder="Insira o valor limite">
                                 </div>
                                 <div class="mb-3">
                                     <label for="ram" class="form-label small">Memória RAM - Porcentagem de uso</label>
-                                    <input required="required" type="text"
+                                    <input required  type="text"
                                         class="form-control shadow-none input_pesquisa" id="ipt_ram_cad"
                                         placeholder="Insira o valor limite">
                                 </div>
                                 <div class="mb-3">
                                     <label for="disco" class="form-label small">Disco Duro - Porcentagem de uso</label>
-                                    <input required="required" type="text"
+                                    <input required  type="text"
                                         class="form-control shadow-none input_pesquisa" id="ipt_disco_cad"
                                         placeholder="Insira o valor limite">
                                 </div>
                                 <div class="mb-4">
                                     <label for="rede" class="form-label small">Rede - Taxa de transferência </label>
-                                    <input required="required" type="text"
+                                    <input required  type="text"
                                         class="form-control shadow-none input_pesquisa" id="ipt_rede_cad"
                                         placeholder="Insira o valor limite">
                                 </div>
@@ -436,37 +436,37 @@
                                 <div id="dadosAtuaisIdentificacao">
                                     <div class="mb-3">
                                         <label class="form-label text-muted small mb-0">Nome</label>
-                                        <p class="fw-bold">Máquina-094</p>
+                                        <p class="fw-bold" id="txt_nome">Máquina-094</p>
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" style="display: none;">
                                         <label class="form-label text-muted small mb-0">Modelo</label>
-                                        <p class="fw-bold">Dell 05049-</p>
+                                        <p class="fw-bold" id="txt_modelo">Dell 05049-</p>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label text-muted small mb-0">Mac Adress</label>
-                                        <p class="fw-bold">00:1A:2B:3C:4D:5E</p>
+                                        <p class="fw-bold" id="txt_mac">00:1A:2B:3C:4D:5E</p>
                                     </div>
                                 </div>
 
                                 <div id="dadosAtuaisAlertas" style="display: none;">
                                     <div class="mb-3">
                                         <label class="form-label text-muted small mb-0">CPU - Porcentagem de uso</label>
-                                        <p class="fw-bold">80 %</p>
+                                        <p class="fw-bold" id="txt_cpu">80 %</p>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label text-muted small mb-0">Memória RAM - Porcentagem de
                                             uso</label>
-                                        <p class="fw-bold">80 %</p>
+                                        <p class="fw-bold" id="txt_ram">80 %</p>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label text-muted small mb-0">Disco Duro - Porcentagem de
                                             uso</label>
-                                        <p class="fw-bold">80 %</p>
+                                        <p class="fw-bold" id="txt_disco">80 %</p>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label text-muted small mb-0">Taxa de transferência de
                                             rede</label>
-                                        <p class="fw-bold">80 mbps</p>
+                                        <p class="fw-bold" id="txt_rede">80 mbps</p>
                                     </div>
                                 </div>
                             </div>
@@ -476,21 +476,21 @@
                                     <h6 class="fs-5 fw-bold mb-3">Identificação do Equipamento</h6>
                                     <div class="mb-3">
                                         <label for="nome_upd" class="form-label text-muted">Nome</label>
-                                        <input required="required" type="text"
-                                            class="form-control shadow-none input_pesquisa" id="nome_upd"
+                                        <input required  type="text"
+                                            class="form-control shadow-none input_pesquisa" id="ipt_nome_upd"
                                             placeholder="Insira o nome de identificação da máquina">
                                     </div>
 
-                                    <div class="mb-3">
-                                        <label for="modelo_upd" class="form-label text-muted">Modelo</label>
-                                        <input required="required" type="text"
-                                            class="form-control shadow-none input_pesquisa" id="modelo_upd"
+                                    <div class="mb-3" style="display: none;">
+                                        <label for="modelo_upd" class="form-label text-muted" >Modelo</label>
+                                        <input required  type="text"
+                                            class="form-control shadow-none input_pesquisa" id="ipt_modelo_upd"
                                             placeholder="Insira o modelo do equipamento">
                                     </div>
                                     <div class="mb-3">
                                         <label for="mac_upd" class="form-label text-muted">Mac Adress</label>
-                                        <input required="required" type="text"
-                                            class="form-control shadow-none input_pesquisa" id="mac_upd"
+                                        <input required  type="text"
+                                            class="form-control shadow-none input_pesquisa" id="ipt_mac_upd"
                                             placeholder="Ex: 00:1A:2B:3C:4D:5E">
                                     </div>
                                 </div>
@@ -502,29 +502,29 @@
                                         <div class="mb-3">
                                             <label for="cpu_upd" class="form-label small">CPU - Porcentagem de
                                                 uso</label>
-                                            <input required="required" type="text"
-                                                class="form-control shadow-none input_pesquisa" id="cpu_upd"
+                                            <input required  type="text"
+                                                class="form-control shadow-none input_pesquisa" id="ipt_cpu_upd"
                                                 placeholder="Insira o valor limite">
                                         </div>
                                         <div class="mb-3">
                                             <label for="ram_upd" class="form-label small">Memória RAM - Porcentagem de
                                                 uso</label>
-                                            <input required="required" type="text"
-                                                class="form-control shadow-none input_pesquisa" id="ram_upd"
+                                            <input required  type="text"
+                                                class="form-control shadow-none input_pesquisa" id="ipt_ram_upd"
                                                 placeholder="Insira o valor limite">
                                         </div>
                                         <div class="mb-3">
                                             <label for="disco_upd" class="form-label small">Disco Duro - Porcentagem de
                                                 uso</label>
-                                            <input required="required" type="text"
-                                                class="form-control shadow-none input_pesquisa" id="disco_upd"
+                                            <input required  type="text"
+                                                class="form-control shadow-none input_pesquisa" id="ipt_disco_upd"
                                                 placeholder="Insira o valor limite">
                                         </div>
                                         <div class="mb-3">
                                             <label for="rede_upd" class="form-label small">Taxa de transferência de
                                                 rede</label>
-                                            <input required="required" type="text"
-                                                class="form-control shadow-none input_pesquisa" id="rede_upd"
+                                            <input required  type="text"
+                                                class="form-control shadow-none input_pesquisa" id="ipt_rede_upd"
                                                 placeholder="Insira o valor limite">
                                         </div>
                                     </div>
@@ -626,28 +626,28 @@
 
                                 <div class="mb-3">
                                     <label for="cpu_config" class="form-label small">CPU - Porcentagem de uso</label>
-                                    <input required="required" type="text"
+                                    <input required  type="text"
                                         class="form-control shadow-none input_pesquisa" id="cpu_config"
                                         placeholder="Insira o valor limite">
                                 </div>
                                 <div class="mb-3">
                                     <label for="ram_config" class="form-label small">Memória RAM - Porcentagem de
                                         uso</label>
-                                    <input required="required" type="text"
+                                    <input required  type="text"
                                         class="form-control shadow-none input_pesquisa" id="ram_config"
                                         placeholder="Insira o valor limite">
                                 </div>
                                 <div class="mb-3">
                                     <label for="disco_config" class="form-label small">Disco Duro - Porcentagem de
                                         uso</label>
-                                    <input required="required" type="text"
+                                    <input required  type="text"
                                         class="form-control shadow-none input_pesquisa" id="disco_config"
                                         placeholder="Insira o valor limite">
                                 </div>
                                 <div class="mb-3">
                                     <label for="rede_config" class="form-label small">Taxa de transferência de
                                         rede</label>
-                                    <input required="required" type="text"
+                                    <input required  type="text"
                                         class="form-control shadow-none input_pesquisa" id="rede_config"
                                         placeholder="Insira o valor limite">
                                 </div>

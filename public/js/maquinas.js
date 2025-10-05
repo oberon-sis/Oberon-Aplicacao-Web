@@ -7,16 +7,16 @@ let valor_parametro = "nome";
 let termo = "";
 
 const parametroOberon = {
-  cpu: 80,
-  ram: 10,
-  disco: 20,
-  rede: 30,
+  CPU: 80,
+  RAM: 10,
+  DISCO: 20,
+  REDE: 30,
 };
 const parametroEmpresa = {
-  cpu: 90,
-  ram: 5,
-  disco: 10,
-  rede: 15,
+  CPU: 90,
+  RAM: 5,
+  DISCO: 10,
+  REDE: 15,
 };
 
 let ipt_nome_cad, ipt_modelo_cad, ipt_mac_cad;
@@ -175,10 +175,10 @@ function toggleParametros(
     let valor = "";
 
     if (dataSource) {
-      if (inputId.includes("cpu")) valor = dataSource.cpu;
-      else if (inputId.includes("ram")) valor = dataSource.ram;
-      else if (inputId.includes("disco")) valor = dataSource.disco;
-      else if (inputId.includes("rede")) valor = dataSource.rede;
+      if (inputId.includes("cpu")) valor = dataSource.CPU;
+      else if (inputId.includes("ram")) valor = dataSource.RAM;
+      else if (inputId.includes("disco")) valor = dataSource.DISCO;
+      else if (inputId.includes("rede")) valor = dataSource.REDE;
     }
 
     input.value = valor !== undefined ? valor : "";
@@ -426,7 +426,103 @@ function renderizarTabela(maquinas) {
   elementoTabela.style.display = "";
 }
 
-function getDadosById(idMaquina) {
+let idMaquinaEmEdicao = null;
+
+async function getDadosById(idMaquina) {
+  if (!idMaquina)
+    return console.error("ID da Máquina não fornecido para edição.");
+  idMaquinaEmEdicao = idMaquina;
+
+  try {
+    const response = await fetch(
+      `/maquinas/buscarDadosParaEdicao/${idMaquina}`,
+      { method: "GET" }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Erro ao buscar dados: ${await response.text()}`);
+    }
+
+    const dados = await response.json();
+
+    document.getElementById("ipt_nome_upd").value = dados.maquina.nome || "";
+    document.getElementById("ipt_modelo_upd").value =
+      dados.maquina.modelo || "";
+    document.getElementById("ipt_mac_upd").value =
+      dados.maquina.macAddress || "";
+
+    document.getElementById("txt_nome").innerHTML = dados.maquina.nome;
+    document.getElementById("txt_modelo").innerHTML = dados.maquina.modelo;
+    document.getElementById("txt_mac").innerHTML = dados.maquina.macAddress;
+
+    preencherDadosAlertas(dados.componentes);
+  } catch (error) {
+    console.error("Falha ao carregar dados da máquina:", error);
+    exibirErro(
+      "Erro ao Carregar",
+      "Não foi possível carregar os dados da máquina para edição."
+    );
+  }
+}
+
+function preencherDadosAlertas(componentes) {
+  const inputs = {
+    CPU: document.getElementById("ipt_cpu_upd"),
+    RAM: document.getElementById("ipt_ram_upd"),
+    DISCO: document.getElementById("ipt_disco_upd"),
+    REDE: document.getElementById("ipt_rede_upd"),
+  };
+  const textos = {
+    CPU: document.getElementById("txt_cpu"),
+    RAM: document.getElementById("txt_ram"),
+    DISCO: document.getElementById("txt_disco"),
+    REDE: document.getElementById("txt_rede"),
+  };
+
+  let origemAtual = "ESPECIFICO";
+
+  componentes.forEach((c) => {
+    const tipo = c.tipoComponente;
+    const input = inputs[tipo];
+    const texto = textos[tipo];
+    origemAtual = c.origemParametro;
+
+    if (input) {
+      if (origemAtual === "ESPECIFICO") {
+        input.value = c.limiteNumerico !== null ? c.limiteNumerico : "";
+        texto.innerHTML = c.limiteNumerico !== null ? c.limiteNumerico : "";
+      } else if (origemAtual === "EMPRESA") {
+        input.value = parametroEmpresa[tipo] || "";
+        texto.innerHTML = parametroEmpresa[tipo] || "";
+      } else if (origemAtual === "OBERON") {
+        input.value = parametroOberon[tipo] || "";
+        texto.innerHTML = parametroOberon[tipo] || "";
+      }
+    }
+  });
+
+  const checkboxEmpresaUpd = document.getElementById("alertaEmpresaUpd");
+  const checkboxOberonUpd = document.getElementById("alertaOberonUpd");
+
+  checkboxEmpresaUpd.checked = origemAtual === "EMPRESA";
+  checkboxOberonUpd.checked = origemAtual === "OBERON";
+
+  const paramsContainerUpd = document.getElementById(
+    "parametrizacaoIndividualUpd"
+  );
+  const paramInputsUpd = paramsContainerUpd
+    ? paramsContainerUpd.querySelectorAll("input")
+    : [];
+  toggleParametros(
+    checkboxEmpresaUpd,
+    checkboxOberonUpd,
+    paramsContainerUpd,
+    paramInputsUpd
+  );
+}
+
+async function atualizarMaquina() {
+
   
 }
 
@@ -599,18 +695,23 @@ async function carregarParametrosAtuais() {
     document.getElementById("atual_ram").textContent =
       mapaDados["RAM"] || "Não Configurado";
     document.getElementById("atual_disco").textContent =
-      mapaDados["Disco Duro"] || "Não Configurado";
+      mapaDados["DISCO"] || "Não Configurado";
     document.getElementById("atual_rede").textContent =
-      mapaDados["PlacaRede"] || "Não Configurado";
+      mapaDados["REDE"] || "Não Configurado";
+
+    parametroEmpresa["CPU"] = mapaDados["CPU"];
+    parametroEmpresa["RAM"] = mapaDados["RAM"];
+    parametroEmpresa["DISCO"] = mapaDados["DISCO"];
+    parametroEmpresa["REDE"] = mapaDados["REDE"];
 
     document.getElementById("oberon_cpu").textContent =
-      `${parametroOberon.cpu} %`;
+      `${parametroOberon.CPU} %`;
     document.getElementById("oberon_ram").textContent =
-      `${parametroOberon.ram} %`;
+      `${parametroOberon.RAM} %`;
     document.getElementById("oberon_disco").textContent =
-      `${parametroOberon.disco} %`;
+      `${parametroOberon.DISCO} %`;
     document.getElementById("oberon_rede").textContent =
-      `${parametroOberon.rede} Mbps`;
+      `${parametroOberon.REDE} Mbps`;
   } catch (error) {
     console.error("Falha ao carregar dados atuais:", error);
   }

@@ -284,6 +284,48 @@ function contarMaquinasPorEmpresa(fkEmpresa, condicao, termoDePesquisa) {
 
   return database.executar(instrucaoCountSql);
 }
+function buscarMaquinaPorId(idMaquina) {
+    console.log("[MODEL] - Buscando dados de identificação da máquina:", idMaquina);
+
+    var instrucaoSql = `
+        SELECT
+            idMaquina,
+            nome,
+            IFNULL(modelo, 'Não Especificado') AS modelo,
+            IFNULL(macAddress, 'MAC Ausente') AS macAddress
+        FROM Maquina
+        WHERE idMaquina = ${idMaquina};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+
+    return database.executar(instrucaoSql);
+}
+
+function buscarComponentesComParametros(idMaquina) {
+    console.log("[MODEL] - Buscando componentes e parâmetros da máquina:", idMaquina);
+
+    var instrucaoSql = `
+        SELECT
+            MC.idMaquinaComponente,
+            MC.origemParametro,
+            C.tipoComponente,
+            C.unidadeMedida,
+            
+            -- Limite Específico: Retorna o número do limite (ou NULL, se não houver na ParametroEspecifico)
+            PE.limite AS limiteNumerico
+            
+        FROM MaquinaComponente AS MC
+        JOIN Componente AS C 
+            ON MC.fkComponente = C.idComponente
+        LEFT JOIN ParametroEspecifico AS PE 
+            ON MC.idMaquinaComponente = PE.fkMaquinaComponente
+        WHERE MC.fkMaquina = ${idMaquina};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
 
 module.exports = {
   cadastrarMaquina,
@@ -310,4 +352,7 @@ module.exports = {
 
   listarMaquinasPorEmpresa,
   contarMaquinasPorEmpresa,
+
+  buscarMaquinaPorId,
+  buscarComponentesComParametros,
 };
