@@ -191,20 +191,66 @@ function toggleParametros(
     paramsContainer.classList.toggle("text-muted", isDisabled);
 }
 
-function salvarParametrosEmpresa(event, configModal) {
+async function salvarParametrosEmpresa(event, configModal) {
   event.preventDefault();
 
-  // const cpuLimite = document.getElementById('ipt_cpu_config').value;
-  // const ramLimite = document.getElementById('ipt_ram_config').value;
+  const cpuLimite = document.getElementById("cpu_config").value;
+  const ramLimite = document.getElementById("ram_config").value;
+  const discoLimite = document.getElementById("disco_config").value;
+  const redeLimite = document.getElementById("rede_config").value;
+
+  if (!cpuLimite || !ramLimite || !discoLimite || !redeLimite) {
+    configModal.hide();
+    exibirErro(
+      "Campos Obrigatórios",
+      "Por favor, preencha todos os limites de alerta."
+    );
+    return;
+  }
+
+  const limitesParaEnvio = [
+    { tipo: "CPU", limite: parseFloat(cpuLimite) },
+    { tipo: "RAM", limite: parseFloat(ramLimite) },
+    { tipo: "Disco Duro", limite: parseFloat(discoLimite) },
+    { tipo: "PlacaRede", limite: parseFloat(redeLimite) },
+  ];
+
+  const dadosConfiguracao = {
+    fkFuncionario: ID_GERENTE,
+    limites: limitesParaEnvio,
+  };
 
   configModal.hide();
-  Swal.fire({
-    title: "Configuração Salva!",
-    text: "Os Parâmetros Padrão da Empresa foram atualizados com sucesso.",
-    icon: "success",
-    confirmButtonColor: "#0C8186",
-    confirmButtonText: "OK",
-  }).then((result) => {});
+
+  try {
+    const response = await fetch("/maquinas/salvarPadrao", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dadosConfiguracao),
+    });
+
+    if (response.ok) {
+      carregarParametrosAtuais();
+      exibirSucesso(
+        "Configuração Salva!",
+        "Os Parâmetros Padrão da Empresa foram atualizados com sucesso."
+      );
+    } else {
+      const erro = await response.text();
+      exibirErro(
+        "Erro na Configuração",
+        erro || "Erro desconhecido ao salvar os parâmetros."
+      );
+    }
+  } catch (error) {
+    console.error("Erro de rede ao salvar parâmetros:", error);
+    exibirErro(
+      "Erro de Rede",
+      "Não foi possível conectar ao servidor para salvar a configuração."
+    );
+  }
 }
 
 function excluir_maquina(idMaquina) {
@@ -381,7 +427,7 @@ function renderizarTabela(maquinas) {
 }
 
 function getDadosById(idMaquina) {
-  alert(idMaquina);
+  
 }
 
 function renderizarPaginacao(totalPaginas, paginaAtual) {
@@ -528,6 +574,48 @@ async function cadastrarMaquina() {
   }
 }
 
+async function carregarParametrosAtuais() {
+  if (!ID_GERENTE) return console.error("ID do Gerente não definido.");
+
+  try {
+    const response = await fetch(
+      `/maquinas/getParametrosPadrao/${ID_GERENTE}`,
+      { method: "GET" }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Erro ao buscar parâmetros: ${await response.text()}`);
+    }
+
+    const dados = await response.json();
+
+    const mapaDados = dados.reduce((map, item) => {
+      map[item.tipoComponente] = item.valorFormatado;
+      return map;
+    }, {});
+
+    document.getElementById("atual_cpu").textContent =
+      mapaDados["CPU"] || "Não Configurado";
+    document.getElementById("atual_ram").textContent =
+      mapaDados["RAM"] || "Não Configurado";
+    document.getElementById("atual_disco").textContent =
+      mapaDados["Disco Duro"] || "Não Configurado";
+    document.getElementById("atual_rede").textContent =
+      mapaDados["PlacaRede"] || "Não Configurado";
+
+    document.getElementById("oberon_cpu").textContent =
+      `${parametroOberon.cpu} %`;
+    document.getElementById("oberon_ram").textContent =
+      `${parametroOberon.ram} %`;
+    document.getElementById("oberon_disco").textContent =
+      `${parametroOberon.disco} %`;
+    document.getElementById("oberon_rede").textContent =
+      `${parametroOberon.rede} Mbps`;
+  } catch (error) {
+    console.error("Falha ao carregar dados atuais:", error);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   ipt_pesquisa = document.getElementById("ipt_pesquisa");
 
@@ -585,6 +673,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (ID_GERENTE) {
     carregarMaquinas(1, "nome", "");
+    carregarParametrosAtuais();
   } else {
     alert("Sessão inválida. Por favor, faça login.");
   }

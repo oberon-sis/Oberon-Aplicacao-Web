@@ -6,33 +6,85 @@ const ID_DISCO = 3;
 const ID_REDE = 4;
 
 async function getParametrosPadrao(req, res) {
-  const idFuncionarioServer = req.params.idFuncionario;
-  if (!idFuncionarioServer) {
+  const idFuncionario = req.params.idFuncionario;
+
+  if (!idFuncionario) {
     return res
       .status(400)
-      .send("O ID do funcionario (idFuncionarioServer) é obrigatório!");
+      .send("ID do funcionário é obrigatório para buscar os parâmetros.");
   }
+
   try {
     const resultadoBusca = await maquinasModel.getFkEmpresa(idFuncionario);
     if (resultadoBusca.length === 0) {
-      return res.status(404).send("Empresa não encontrada.");
+      return res.status(404).send("Empresa não encontrada para o funcionário.");
     }
     const fkEmpresa = resultadoBusca[0].fkEmpresa;
 
-    const resultado = await maquinasModel.getParametrosPadrao(fkEmpresa);
+    const resultadosParametros =
+      await maquinasModel.getParametrosPadrao(fkEmpresa);
 
-    if (resultado.length === 0) {
-      return res
-        .status(204)
-        .send("Nenhum parâmetro padrão encontrado para esta empresa.");
-    }
-    res.status(200).json(resultado);
+    res.status(200).json(resultadosParametros);
   } catch (erro) {
     console.error(
-      `\nHouve um erro ao buscar os parâmetros padrão. Erro: ${erro.sqlMessage || erro.message}`
+      `Houve um erro ao buscar os parâmetros padrão. Erro: ${erro.message}`
     );
     res.status(500).json({
-      mensagem: "Erro interno no servidor ao buscar parâmetros.",
+      mensagem: "Erro interno ao buscar os parâmetros da empresa.",
+      detalhe: erro.message,
+    });
+  }
+}
+
+async function salvarPadrao(req, res) {
+  const { fkFuncionario, limites } = req.body;
+
+  if (!fkFuncionario || !limites || limites.length === 0) {
+    return res
+      .status(400)
+      .send("Dados de configuração inválidos ou incompletos.");
+  }
+
+  try {
+    const resultadoBusca = await maquinasModel.getFkEmpresa(fkFuncionario);
+    if (resultadoBusca.length === 0) {
+      return res.status(404).send("Empresa não encontrada para o funcionário.");
+    }
+    const fkEmpresa = resultadoBusca[0].fkEmpresa;
+
+    const COMPONENTES_MAP = {
+      CPU: 1,
+      RAM: 2,
+      "Disco Duro": 3,
+      PlacaRede: 4,
+    };
+
+    const promises = limites.map((limite) => {
+      const fkComponente = COMPONENTES_MAP[limite.tipo];
+
+      if (!fkComponente) {
+        console.warn(`Tipo de componente não mapeado: ${limite.tipo}`);
+        return Promise.resolve();
+      }
+
+      return maquinasModel.cadastrarParametroPadrao(
+        limite.limite,
+        fkEmpresa,
+        fkComponente
+      );
+    });
+
+    await Promise.all(promises);
+
+    res.status(200).json({
+      mensagem: "Parâmetros padrão da empresa atualizados com sucesso.",
+    });
+  } catch (erro) {
+    console.error(
+      `\nHouve um erro ao salvar os parâmetros padrão. Erro: ${erro.sqlMessage || erro.message}`
+    );
+    res.status(500).json({
+      mensagem: "Erro interno no servidor ao salvar a configuração.",
       detalhe: erro.sqlMessage || erro.message,
     });
   }
@@ -44,12 +96,11 @@ async function cadastrarMaquina(req, res) {
     nome: nome,
     modelo: modelo,
     macAddress: macAddress,
-    origemParametro: origemParametro, // 'EMPRESA', 'OBERON', ou 'ESPECIFICO'
-    limites: limites, // Array de { tipo, limite } se for ESPECIFICO
+    origemParametro: origemParametro,
+    limites: limites,
   } = req.body;
 
   try {
-    // 1. OBTÉM fkEmpresa
     const resultadoBusca = await maquinasModel.getFkEmpresa(idFuncionario);
     if (resultadoBusca.length === 0) {
       return res
@@ -58,7 +109,6 @@ async function cadastrarMaquina(req, res) {
     }
     const fkEmpresa = resultadoBusca[0].fkEmpresa;
 
-    // 2. CADASTRA A MÁQUINA
     const resultadoMaquina = await maquinasModel.cadastrarMaquina(
       nome,
       modelo,
@@ -67,19 +117,14 @@ async function cadastrarMaquina(req, res) {
     );
     const fkMaquina = resultadoMaquina.insertId;
 
-    // IDs dos componentes (A tabela Componente precisa ter IDs fixos)
-    // Você deve garantir que estes IDs são mapeados corretamente no seu DDL/seed.
-    // Exemplo: 1=CPU, 2=RAM, 3=DISCO, 4=REDE
     const COMPONENTES_MAP = {
       CPU: 1,
       RAM: 2,
       "Disco Duro": 3,
       PlacaRede: 4,
     };
-    const componentesDoFront = limites.map((l) => l.tipo); // Tipos que o front enviou, se houver.
+    const componentesDoFront = limites.map((l) => l.tipo);
 
-    // 3. CADASTRA MaquinaComponente
-    // Cria um array de objetos para rastrear {fkComponente, insertId}
     const componentesParaCadastro = [
       COMPONENTES_MAP["CPU"],
       COMPONENTES_MAP["RAM"],
@@ -89,12 +134,11 @@ async function cadastrarMaquina(req, res) {
 
     let componentesCadastrados = [];
 
-    // Cadastra cada componente e armazena o novo ID
     for (const fkComponente of componentesParaCadastro) {
       const resultadoMC = await maquinasModel.cadastrarMaquinaComponente(
         fkMaquina,
         fkComponente,
-        origemParametro // PASSA A ORIGEM AQUI
+        origemParametro
       );
       componentesCadastrados.push({
         fkComponente: fkComponente,
@@ -102,10 +146,8 @@ async function cadastrarMaquina(req, res) {
       });
     }
 
-    // 4. CADASTRA PARÂMETROS ESPECÍFICOS (SE NECESSÁRIO)
     if (origemParametro === "ESPECIFICO" && limites.length > 0) {
       const promisesLimites = limites.map((limiteFront) => {
-        // Encontra o fkMaquinaComponente correspondente ao tipo de componente
         const fkComponenteId = COMPONENTES_MAP[limiteFront.tipo];
         const componenteCadastrado = componentesCadastrados.find(
           (c) => c.fkComponente === fkComponenteId
@@ -117,7 +159,7 @@ async function cadastrarMaquina(req, res) {
             componenteCadastrado.fkMaquinaComponente
           );
         }
-        return Promise.resolve(); 
+        return Promise.resolve();
       });
       await Promise.all(promisesLimites);
     }
@@ -295,4 +337,5 @@ module.exports = {
   cadastrarMaquina,
   excluirMaquina,
   listarMaquinas,
+  salvarPadrao,
 };

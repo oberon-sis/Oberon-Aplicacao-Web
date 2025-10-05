@@ -45,17 +45,17 @@ function cadastrarParametroEspecifico(limite, fkMaquinaComponente) {
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
 }
-function cadastrarParametro(limite, fkEmpresa, fkMaquinaComponente) {
+function cadastrarParametroPadrao(limite, fkEmpresa, fkComponente) {
   console.log(
     "[MODEL] - function cadastrarParametro():",
     limite,
     fkEmpresa,
-    fkMaquinaComponente
+    fkComponente
   );
 
   var instrucaoSql = `
-        INSERT INTO Parametro (limite, fkEmpresa, fkMaquinaComponente) VALUES 
-        (${limite}, ${fkEmpresa}, ${fkMaquinaComponente})
+        REPLACE INTO ParametroPadrao (limite, fkEmpresa, fkComponente)
+         VALUES (${limite}, ${fkEmpresa}, ${fkComponente})
     `;
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
@@ -110,11 +110,24 @@ function getSenha(idFuncionario) {
   return database.executar(instrucaoSql);
 }
 function getParametrosPadrao(fkEmpresa) {
-  console.log("[MODEL] - function getParametrosPadrao():", fkEmpresa);
+  console.log(
+    "[MODEL] - function getParametrosPadrao():",
+    fkEmpresa
+  );
+
   var instrucaoSql = `
-        SELECT limite from Parametro where fkEmpresa = ${fkEmpresa};
+        SELECT
+            C.tipoComponente,
+            CONCAT(COALESCE(PP.limite, 0), ' ', C.unidadeMedida) AS valorFormatado
+        FROM Componente AS C
+        LEFT JOIN ParametroPadrao AS PP 
+            ON C.idComponente = PP.fkComponente AND PP.fkEmpresa = ${fkEmpresa};
     `;
-  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+
+  console.log(
+    "Executando a instrução SQL de busca de Parâmetros Padrão: \n" +
+      instrucaoSql
+  );
   return database.executar(instrucaoSql);
 }
 
@@ -274,7 +287,7 @@ function contarMaquinasPorEmpresa(fkEmpresa, condicao, termoDePesquisa) {
 
 module.exports = {
   cadastrarMaquina,
-  cadastrarParametro,
+  cadastrarParametroPadrao,
   cadastrarMaquinaComponente,
   cadastrarParametroEspecifico,
 
