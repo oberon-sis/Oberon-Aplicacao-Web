@@ -20,11 +20,13 @@ var usuarioRouter = require("./src/routes/usuarios");
 var gerenciamentoUsuarioRouter = require("./src/routes/gerenciamentoUsuario");
 var empresaRouter = require("./src/routes/empresas");
 var gerenciamentoMaquinasRouter = require("./src/routes/maquinas");
+var authRouter = require("./src/routes/email"); 
 
 // --- CONFIGURAÇÃO DOS MIDDLEWARES ---
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public", "html")));
 app.use(cors());
 
 // --- REGISTRO DAS ROTAS ---
@@ -35,7 +37,7 @@ app.use("/gerenciamentoUsuario", gerenciamentoUsuarioRouter);
 // CORRIGIDO: O prefixo agora está no plural para corresponder ao front-end
 app.use("/empresas", empresaRouter); 
 app.use("/gerenciamentoMaquinas", gerenciamentoMaquinasRouter);
-
+app.use("/auth", authRouter); 
 
 app.listen(PORTA_APP, function () {
   console.log(`
