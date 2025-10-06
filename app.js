@@ -21,6 +21,7 @@ var gerenciamentoUsuarioRouter = require("./src/routes/gerenciamentoUsuario");
 var empresaRouter = require("./src/routes/empresas");
 var gerenciamentoMaquinasRouter = require("./src/routes/maquinas");
 var authRouter = require("./src/routes/email"); 
+var alertasRouter = require("./src/routes/alertas"); 
 
 // --- CONFIGURAÇÃO DOS MIDDLEWARES ---
 app.use(express.json());
@@ -38,6 +39,8 @@ app.use("/gerenciamentoUsuario", gerenciamentoUsuarioRouter);
 app.use("/empresas", empresaRouter); 
 app.use("/gerenciamentoMaquinas", gerenciamentoMaquinasRouter);
 app.use("/auth", authRouter); 
+app.use("/alertas", alertasRouter); 
+
 
 app.listen(PORTA_APP, function () {
   console.log(`
