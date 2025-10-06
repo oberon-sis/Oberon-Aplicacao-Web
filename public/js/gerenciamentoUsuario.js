@@ -37,17 +37,29 @@ function buscarUsuarios(pagina = 1) {
                 return;
             }
 
+        
             tabela.innerHTML = "";
             dados.forEach(u => {
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
-                    <td>${u.id}</td>
-                    <td>${u.nome}</td>
-                    <td>${u.cpf}</td>
-                    <td>${u.email}</td>
-                    <td>${u.funcao}</td>
-                    <td><a href="#" class="text-primary">Atualizar</a></td>
-                    <td><a href="#" class="text-danger">Excluir</a></td>
+                       <td>${u.id}</td>
+                     <td>${u.nome}</td>
+                     <td>${u.cpf}</td>
+                     <td>${u.email}</td>
+                     <td>${u.funcao}</td>
+            <td>
+                <span class="opcao_crud text-primary" data-bs-toggle="modal" onclick="getUsuariobyID(${u.id})"
+                    data-bs-target="#modalAtualizarMaquina">
+                    <img src="../assets/svg/atualizar_blue.svg" alt="">
+                    Atualizar<i class="bi bi-arrow-clockwise"></i>
+                </span>
+            </td>
+            <td>
+                <span class="opcao_crud text-danger" onclick="ExcluirUsuario(${u.id})"> 
+                <img src="../assets/svg/excluir_red.svg" alt="">
+                Excluir<i class="bi bi-trash"></i>
+                </span>
+            </td>
                 `;
                 tabela.appendChild(tr);
             });
