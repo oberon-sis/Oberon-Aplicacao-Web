@@ -243,31 +243,44 @@
                             <div class="mb-3">
                                 <label for="hostname" class="form-label text-muted">Nome</label>
                                 <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                    id="hostname" placeholder="Insira o nome de identificação da máquina">
+                                    id="nome_input" placeholder="Insira o nome completo">
                             </div>
 
                             <div class="mb-3">
-                                <label for="modelo" class="form-label text-muted">Modelo</label>
+                                <label for="modelo" class="form-label text-muted">CPF</label>
                                 <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                    id="modelo" placeholder="Insira o modelo do equipamento">
+                                    id="cpf_input" placeholder="Insira CPF(Cadastro de Pessoa Fisica)">
                             </div>
 
                             <div class="mb-3">
-                                <label for="mac" class="form-label text-muted">Mac Adress</label>
+                                <label for="modelo" class="form-label text-muted">E-mail</label>
                                 <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                    id="mac" placeholder="Ex: 00:1A:2B:3C:4D:5E">
+                                    id="email_input" placeholder="Insira o email de acesso">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="mac" class="form-label text-muted">Senha</label>
+                                <input required="required" type="text" class="form-control shadow-none input_pesquisa"
+                                    id="senha_input" placeholder="Insira a senha">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="tipo_usuario_select">Tipo de usuário</label>
+                                <select id="tipo_usuario_select" required>
+                                    <option value="" disabled selected>Carregando tipos...</option>
+                                </select>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0 p-4">
-                    <button type="button" id="btnAvancar"
-                        class="btn fw-bold px-5 verde_claro botao_configuracao">Avançar</button>
-                    <button type="button" id="btnVoltar" class="btn  fw-bold px-5 botao_branco botao_configuracao"
+                    <button type="button" id="btn_cadastrar"
+                        class="btn fw-bold px-5 verde_claro botao_configuracao" onclick="cadastrar()">Cadastrar</button>
+                    <!-- <button type="button" id="btnVoltar" class="btn  fw-bold px-5 botao_branco botao_configuracao"
                         style="display: none;">Voltar Atrás</button>
                     <button type="submit" form="formCadastrarMaquina" id="btnCadastrar"
                         class="btn fw-bold px-5 verde_claro botao_configuracao"
-                        style="display: none;">Cadastrar</button>
+                        style="display: none;">Cadastrar</button> -->
                 </div>
             </div>
         </div>

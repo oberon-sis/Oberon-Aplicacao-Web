@@ -130,7 +130,7 @@ function getTipoUsuario(req, res) {
 
 function listarFuncionarios(req, res) {
     var pagina = parseInt(req.query.page) || 1;
-    var limite = 12;
+    var limite = 20;
     var offset = (pagina - 1) * limite;
 
     console.log(`📘 Requisição recebida: página ${pagina}, limite ${limite}, offset ${offset}`);
