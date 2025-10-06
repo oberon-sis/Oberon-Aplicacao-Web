@@ -1,5 +1,7 @@
 var database = require("../database/config");
 
+
+
 function autenticar(email, senha) {
   console.log(
     "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
@@ -13,8 +15,9 @@ function autenticar(email, senha) {
   return database.executar(instrucaoSql);
 }
 
+
 // CADASTRO DE USÚARIO
- 
+
 function cadastrar(nome, cpf, email, fkEmpresa, fkTipoUsuario, senha) {
   console.log(
     "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():",
@@ -95,7 +98,7 @@ function getTipoUsuario() {
 function ExcluirUsuario(idFuncionario) {
   console.log(
     "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
-  idFuncionario,
+    idFuncionario,
   );
   var instrucaoSql = `
          DELETE FROM funcionario 
@@ -108,7 +111,7 @@ function ExcluirUsuario(idFuncionario) {
 
 
 
-function salvarEdicao(nome,email,fkTipoUsuario,senha,idFuncionario) {
+function salvarEdicao(nome, email, fkTipoUsuario, senha, idFuncionario) {
   console.log(
     "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
     nome,
@@ -128,7 +131,49 @@ function salvarEdicao(nome,email,fkTipoUsuario,senha,idFuncionario) {
 }
 
 
+// LISTAGEM USÚARIOS
+//----------------------------
 
+
+function contarTotalUsuarios() {
+  console.log(
+    "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
+    
+  );
+  var instrucaoSql = `
+        SELECT COUNT(idFuncionario) AS totalItems 
+        FROM Funcionario;
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql)
+}
+
+
+
+function listarFuncionarios(limit, offset) {
+    console.log(`Executando listarFuncionarios(limit=${limit}, offset=${offset})`);
+
+    var instrucao = `
+        SELECT 
+            f.idFuncionario AS id, 
+            f.nome, 
+            f.cpf, 
+            f.email, 
+            t.tipoUsuario AS funcao
+        FROM Funcionario AS f
+        JOIN tipoUsuario AS t ON f.fkTipoUsuario = t.idTipoUsuario
+        ORDER BY f.nome ASC
+        LIMIT ${limit} OFFSET ${offset};
+    `;
+
+    console.log("🧠 SQL executado:\n" + instrucao);
+    return database.executar(instrucao);
+}
+
+
+
+
+//-----------------------------
 module.exports = {
   autenticar,
   cadastrar,
@@ -137,4 +182,6 @@ module.exports = {
   getTipoUsuario,
   salvarEdicao,
   ExcluirUsuario,
+  listarFuncionarios,
+  contarTotalUsuarios
 };

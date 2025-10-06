@@ -79,11 +79,11 @@
                 </thead>
                 <tbody id="Conteudo_real">
                     <tr>
-                        <td>001</td>
-                        <td><i class="bi bi-person-circle me-2"></i>Exemplo</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
+                        <td></td>
+                        <td><i class="bi bi-person-circle me-2"></i></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                         <td><span class="opcao_crud text-primary" data-bs-toggle="modal" onclick="getUsuariobyID(1)"
                                 data-bs-target="#modalAtualizarMaquina">
                                 <img src="../assets/svg/atualizar_blue.svg" alt="">
@@ -99,11 +99,11 @@
                         </td> -->
                     </tr>
                     <tr>
-                        <td>002</td>
-                        <td><i class="bi bi-person-circle me-2"></i>Exemplo</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
+                        <td></td>
+                        <td><i class="bi bi-person-circle me-2"></i></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                         <td><span class="opcao_crud text-primary" data-bs-toggle="modal" onclick="getUsuariobyID(2)"
                                 data-bs-target="#modalAtualizarMaquina">
                                 <img src="../assets/svg/atualizar_blue.svg" alt="">
@@ -218,13 +218,6 @@
 
         <nav class="d-flex justify-content-center mt-3 div_paginas">
             <ul class="pagination pagination-sm">
-                <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
-                <li class="page-item active_pagina"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item disabled"><span class="page-link">...</span></li>
-                <li class="page-item"><a class="page-link" href="#">11</a></li>
-                <li class="page-item"><a class="page-link" href="#">Seguinte</a></li>
             </ul>
         </nav>
 
@@ -265,51 +258,6 @@
                                     id="mac" placeholder="Ex: 00:1A:2B:3C:4D:5E">
                             </div>
                         </div>
-
-                        <!-- <div id="step-2" style="display: none;">
-                            <h6 class="fs-5 fw-bold mb-4">Definir Limites de Alerta</h6>
-
-                            <div id="parametrizacaoIndividual">
-                                <div class="mb-3">
-                                    <label for="cpu" class="form-label small">CPU - Porcentagem de uso </label>
-                                    <input required="required" type="text"
-                                        class="form-control shadow-none input_pesquisa" id="cpu"
-                                        placeholder="Insira o valor limite">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="ram" class="form-label small">Memória RAM - Porcentagem de uso</label>
-                                    <input required="required" type="text"
-                                        class="form-control shadow-none input_pesquisa" id="ram"
-                                        placeholder="Insira o valor limite">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="disco" class="form-label small">Disco Duro - Porcentagem de uso</label>
-                                    <input required="required" type="text"
-                                        class="form-control shadow-none input_pesquisa" id="disco"
-                                        placeholder="Insira o valor limite">
-                                </div>
-                                <div class="mb-4">
-                                    <label for="rede" class="form-label small">Rede - Taxa de transferência </label>
-                                    <input required="required" type="text"
-                                        class="form-control shadow-none input_pesquisa" id="rede"
-                                        placeholder="Insira o valor limite">
-                                </div>
-                            </div>
-
-                            <div class="form-check mb-2">
-                                <input required="required" class="form-check-input" type="checkbox" value=""
-                                    id="alertaEmpresa">
-                                <label class="form-check-label" for="alertaEmpresa">Usar Limite de Alertas Padrão da
-                                    Empresa</label>
-                            </div>
-                            <div class="form-check mb-4">
-                                <input required="required" class="form-check-input" type="checkbox" value=""
-                                    id="alertaOberon" checked>
-                                <label class="form-check-label" for="alertaOberon">Usar Limite de Alertas Padrão da
-                                    Oberon</label>
-                            </div>
-
-                        </div> -->
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0 p-4">
@@ -386,49 +334,6 @@
                                         </select>
                                     </div>
                                 </div>
-
-                                <!-- <div id="step-update-2" style="display: none;">
-                                    <h6 class="fs-5 fw-bold mb-3">Definir Limites de Alerta</h6>
-
-                                    <div id="parametrizacaoIndividualUpd">
-                                        <div class="mb-3">
-                                            <label for="cpu_upd" class="form-label small">CPU - Porcentagem de
-                                                uso</label>
-                                            <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                                id="cpu_upd" placeholder="Insira o valor limite">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="ram_upd" class="form-label small">Memória RAM - Porcentagem de
-                                                uso</label>
-                                            <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                                id="ram_upd" placeholder="Insira o valor limite">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="disco_upd" class="form-label small">Disco Duro - Porcentagem de
-                                                uso</label>
-                                            <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                                id="disco_upd" placeholder="Insira o valor limite">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="rede_upd" class="form-label small">Taxa de transferência de
-                                                rede</label>
-                                            <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                                id="rede_upd" placeholder="Insira o valor limite">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-check mb-2">
-                                        <input required="required" class="form-check-input" type="checkbox" value="" id="alertaEmpresaUpd">
-                                        <label class="form-check-label" for="alertaEmpresaUpd">Usar Limite de Alertas
-                                            Padrão da Empresa</label>
-                                    </div>
-                                    <div class="form-check mb-4">
-                                        <input required="required" class="form-check-input" type="checkbox" value="" id="alertaOberonUpd"
-                                            checked>
-                                        <label class="form-check-label" for="alertaOberonUpd">Usar Limite de Alertas
-                                            Padrão da Oberon</label>
-                                    </div>
-                                </div> -->
                             </div>
                         </div>
                     </form>
@@ -439,9 +344,7 @@
                         style="display: none;">Voltar Atrás</button>
                     <button type="button" id="btnAvancarUpd" class="btn fw-bold px-5 verde_claro botao_configuracao"
                         onclick="salvarEdicao(1)">Finalizar</button>
-                    <!-- <button type="submit" form="formAtualizarMaquina" id="btnCadastrarUpd"
-                        class="btn fw-bold px-5 verde_claro botao_configuracao"
-                        style="display: none;" onclick="salvarEdicao(1)">Cadastrar</button> -->
+
                 </div>
             </div>
         </div>

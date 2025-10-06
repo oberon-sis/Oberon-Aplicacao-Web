@@ -1,3 +1,76 @@
+// const URL_BASE = "http://localhost:3333"; // endereço do backend
+// const tbody = document.getElementById("Conteudo_real");
+// const pagination = document.querySelector(".pagination");
+// const skeleton = document.getElementById("Estrutura_esqueleto_carregamento");
+
+// let paginaAtual = 1;
+
+document.addEventListener("DOMContentLoaded", function () {
+    buscarUsuarios(1);
+});
+
+function buscarUsuarios(pagina = 1) {
+    const tabela = document.getElementById("Conteudo_real");
+    const paginacao = document.querySelector(".pagination");
+
+    tabela.innerHTML = `
+        ${Array.from({ length: 5 }).map(() => `
+            <tr>
+                <td colspan="6">
+                    <div class="placeholder-glow">
+                        <span class="placeholder col-12"></span>
+                    </div>
+                </td>
+            </tr>
+        `).join("")}
+    `;
+
+    fetch(`/gerenciamentoUsuario/listarFuncionarios?page=${pagina}`)
+        .then(res => {
+            if (!res.ok) throw new Error(`Status ${res.status}`);
+            return res.json();
+        })
+        .then(dados => {
+            if (!dados || dados.length === 0) {
+                tabela.innerHTML = `<tr><td colspan="6" class="text-center">Nenhum usuário encontrado.</td></tr>`;
+                paginacao.innerHTML = "";
+                return;
+            }
+
+            tabela.innerHTML = "";
+            dados.forEach(u => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${u.id}</td>
+                    <td>${u.nome}</td>
+                    <td>${u.cpf}</td>
+                    <td>${u.email}</td>
+                    <td>${u.funcao}</td>
+                    <td><a href="#" class="text-primary">Atualizar</a></td>
+                    <td><a href="#" class="text-danger">Excluir</a></td>
+                `;
+                tabela.appendChild(tr);
+            });
+
+            paginacao.innerHTML = `
+                <li class="page-item ${pagina === 1 ? "disabled" : ""}">
+                    <a class="page-link" href="#" onclick="buscarUsuarios(${pagina - 1})">Anterior</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">${pagina}</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" onclick="buscarUsuarios(${pagina + 1})">Próxima</a>
+                </li>
+            `;
+        })
+        .catch(err => {
+            console.error("Erro ao carregar usuários:", err);
+            tabela.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Erro ao carregar usuários (${err.message})</td></tr>`;
+        });
+}
+
+
+
+
 
 function cadastrar() {
     var nome = document.getElementById('nome_input').value;
