@@ -18,7 +18,7 @@
 
 </head>
 
-<body class="d-flex w-100 h-100">
+<body class="d-flex w-100 h-100" onload="getDadosEmpresaBd()">
 
   <div id="menu-container"></div>
 
@@ -36,9 +36,11 @@
 
     <div class="cont-usuario">
       <div id="txt-tudo">
-      <h2>Olá Fernanda Caramico - Gerente de Operações</h2>
-      <h3>Upfinity Banco</h3>
-      <p>Dados organizados, resultados otimizados. Gerencie as informações<br>da sua empresa com facilidade.</p>
+       <h2>
+            Olá <span id="nome_funcionario_logado"></span> - <span id="cargo_funcionario_logado"></span>
+        </h2>
+       <h3><span id="nome_banco">Upfinity Banco</span></h3>
+        <p>Dados organizados, resultados otimizados. Gerencie as informações<br>da sua empresa com facilidade.</p>
     </div>
     </div>
 
@@ -49,27 +51,32 @@
 
         <h3 class="txt-dados">Dados Atuais</h3>
         <div class="dadosAtuais">
+          
           <br>
-          <label for="name">Razão Social</label>
-
-          <p id="razao" name="razao">Upfinity Banco</p>
-
+           <label for="name">Razão Social</label>
+                  <br>  <br>
+                <p id="razao_social_atual">Carregando...</p>
+          
         </div>
 
         <br>
-        
+      
         <div class="form-grupo">
-          <label for="id">CNPJ</label>
-          <div class="input-container">
+         <label for="id">CNPJ</label>
+           
+                <div class="input-container">
+                    <br>
+                    <p id="cnpj_atual">Carregando...</p>
+                    <p id="linha"></p>
+                </div>
 
-            <p id="CNPJ" name="CNPJ">42.591.651/0001-43 </p>
 
-          </div>
+         
         </div>
 
 
 
-        <button type="button" class="excluir-btn" onclick="ExcluirUsuario(10)">Excluir Empresa</button>
+        <button type="button" class="excluir-btn" >Excluir Empresa</button>
       </div>
       <!-- Editar empresa -->
 
@@ -79,21 +86,20 @@
         <h3 class="txt-dados">Novos dados</h3>
         <form id="editarEmpresa">
           <div class="form-empresa">
-            <label class="label-esp" for="name">Razão Social</label>
-            <br>
+              <br>  
+            <label class="label-esp" for="ipt_razao_social">Razão Social</label>
+                <br><br>
+                <input type="text" class="ipt" id="ipt_razao_social" name="razao" placeholder="Digite a Razão Social de sua empresa" required>
+            </div>
 
-            <input type="text" class="ipt" name="razao" placeholder="Digite a Razão Social de sua empresa" required>
-          </div>
          
 
           <br>
-          <div class="form-empresa">
-            <label class="label-esp" for="id">CNPJ</label>
-            
-            
-            <input type="text" class="ipt" name="CNPJ" placeholder="Digite seu CNPJ" required>
-
-          </div>
+        <div class="form-empresa">
+                <label class="label-esp" for="ipt_cnpj">CNPJ</label>
+                <br><br>
+                <input type="text" class="ipt" id="ipt_cnpj" name="CNPJ" placeholder="Digite seu CNPJ" required>
+            </div>
 
           <br>
 
@@ -104,12 +110,13 @@
       </div>
     </div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/edicaoDadosEmpresa.js"></script>
+<script src="../component/menu/Menu.js"></script>
 
   </main>
-<script src="../component/menu/Menu.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../js/edicaoDadosEmpresa.js"></script>
+
+
 
 </body>
 

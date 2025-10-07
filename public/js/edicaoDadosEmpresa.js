@@ -159,16 +159,11 @@ function AtualizarUsuario(idFuncionario) {
                 const senhaGerente = resultadoSwal.value.senha; // Pega a senha digitada
 
                 // CHAMADA FETCH
-               return fetch(`/gerenciamentoUsuario/ExcluirUsuario/${idFuncionario}`, {
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        idGerente: idFuncionarioGerente,
-                        senha: senhaGerente
-                    })
-                })
+               return fetch(`/edicaoEmpresa/atualizar/`, { // Caminho Relativo
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                  
+                })  
                     // Segundo .then: Lida com a RESPOSTA do servidor (res)
                     .then(res => {
                         console.log("=====================")
@@ -202,3 +197,118 @@ function AtualizarUsuario(idFuncionario) {
 }
 
 function exibirSucesso(titulo, texto) { Swal.fire({ title: titulo, text: texto, icon: 'success', confirmButtonColor: '#0C8186', confirmButtonText: 'OK' }); } function exibirErro(titulo, texto) { Swal.fire({ title: titulo, text: texto, icon: 'error', confirmButtonColor: '#0C8186', confirmButtonText: 'OK' }); }
+
+
+
+function getDadosEmpresaBd() {
+  fetch(`/edicaoEmpresa/getDadosEmpresaBd/4`) // ID mocado apenas para teste
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro ao buscar dados do usuário");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.length > 0) {
+        const usuario = data[0];
+
+        var cargo = "";
+        if (usuario.fkTipoUsuario == 1000) {
+            cargo = "Colaborador"
+            
+        }else if (usuario.fkTipoUsuario == 1001) {
+            cargo = "Administrador"
+            
+        }else if (usuario.fkTipoUsuario == 1002) {
+            cargo = "Gestor"
+            
+        }else{
+            cargo = "Cargo não identificado!"
+        }
+
+        // Exibir no HTML
+        document.getElementById("nome_funcionario_logado").textContent = usuario.nome;
+        document.getElementById("razao_social_atual").textContent = usuario.razaosocial;
+        document.getElementById("cnpj_atual").textContent = usuario.cnpj;
+        document.getElementById("nome_banco").textContent = usuario.razaosocial;
+        document.getElementById("cargo_funcionario_logado").textContent = cargo;
+// opcional, se quiser que o título atualize também
+      } else {
+        alert("Nenhum dado encontrado para este funcionário.");
+      }
+    })
+    .catch((erro) => {
+      console.error("Erro ao carregar dados:", erro);
+    });
+}
+
+// function getDadosEmpresaBd() {
+//   // Pega o ID do funcionário do sessionStorage
+//   // (para teste, usa 10 caso não exista)
+//   const idFuncionario = sessionStorage.getItem("ID_USUARIO") || 10;
+
+//   // Faz a requisição ao backend
+//   fetch(`/getDadosEmpresaBd/${idFuncionario}`)
+//     .then(res => {
+//       if (!res.ok) throw new Error("Erro ao buscar dados da empresa");
+//       return res.json();
+//     })
+//     .then(data => {
+//       if (data.length > 0) {
+//         const empresa = data[0];
+
+//         // Atualiza os campos de exibição
+//         document.getElementById("razao_social_atual").innerText = empresa.razaoSocial;
+//         document.getElementById("cnpj_atual").innerText = empresa.cnpj;
+
+//         // Preenche os campos de edição com os dados atuais
+//         document.getElementById("ipt_razao_social").value = empresa.razaoSocial;
+//         document.getElementById("ipt_cnpj").value = empresa.cnpj;
+
+//         // (Opcional) Atualiza o nome do banco se o backend retornar esse dado
+//         if (empresa.nomeBanco) {
+//           document.getElementById("nome_banco").innerText = empresa.nomeBanco;
+//         }
+
+//       } else {
+//         console.warn("Nenhum dado encontrado para esse funcionário");
+//         document.getElementById("razao_social_atual").innerText = "Não encontrado";
+//         document.getElementById("cnpj_atual").innerText = "Não encontrado";
+//       }
+//     })
+//     .catch(err => {
+//       console.error("Erro ao carregar dados da empresa:", err);
+//       document.getElementById("razao_social_atual").innerText = "Erro ao carregar";
+//       document.getElementById("cnpj_atual").innerText = "Erro ao carregar";
+//     });
+// }
+
+
+
+
+// function AtualizarEmpresa() {
+    
+//     if (!confirm('Tem certeza que deseja atualizar os dados da empresa?')) return;
+
+//     fetch(`/edicaoEmpresa/atualizar/`, { // Caminho Relativo
+//         method: 'PUT',
+//         headers: { 'Content-Type': 'application/json' },
+//         body:{
+//                         idFuncionarioServer:idFuncionario,
+//                         rezaoSocialserver: razaoSocial,
+//                         cnpjServer: cnpj
+//                     }
+//     } )
+//     .then(response => {
+//         if (response.ok) {
+//             atualizou(); // Recarrega a lista
+//         } else {
+//             return response.text().then(text => { throw new Error(text) });
+//         }
+//     })
+//     .catch(error => {
+//         alert(`Erro ao marcar tarefa: ${error.message}`);
+//         console.error('Erro ao atualizar:', error);
+//     });
+// }
+
