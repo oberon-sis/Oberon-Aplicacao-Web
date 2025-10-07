@@ -19,20 +19,28 @@ var menuRouter = require("./src/routes/menu");
 var usuarioRouter = require("./src/routes/usuarios");
 var empresaRouter = require("./src/routes/empresas"); // Corrigido o nome do arquivo para 'empresas'
 var maquinasRouter = require("./src/routes/maquinas");
+var gerenciamentoUsuarioRouter = require("./src/routes/gerenciamentoUsuario");
+var empresaRouter = require("./src/routes/empresas");
+var authRouter = require("./src/routes/email"); 
+var alertasRouter = require("./src/routes/alertas"); 
 
 // --- CONFIGURAÇÃO DOS MIDDLEWARES ---
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public", "html")));
 app.use(cors());
 
 // --- REGISTRO DAS ROTAS ---
 app.use("/", indexRouter);
 app.use("/menu", menuRouter);
 app.use("/usuarios", usuarioRouter);
+app.use("/gerenciamentoUsuario", gerenciamentoUsuarioRouter);
 // CORRIGIDO: O prefixo agora está no plural para corresponder ao front-end
 app.use("/empresas", empresaRouter); 
 app.use("/maquinas", maquinasRouter);
+app.use("/auth", authRouter); 
+app.use("/alertas", alertasRouter); 
 
 
 app.listen(PORTA_APP, function () {

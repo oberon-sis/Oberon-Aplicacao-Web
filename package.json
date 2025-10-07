@@ -12,15 +12,12 @@
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^3.0.2",
-    "bootstrap": "^5.3.8",
-    "chart.js": "^4.5.0",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.17.1",
     "mysql2": "^3.9.4",
     "nodemon": "^2.0.7",
-    "path": "^0.12.7",
-    "sweetalert2": "^11.22.3"
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "eslint": "^9.33.0",

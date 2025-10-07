@@ -48,26 +48,44 @@
 <script>
   document.getElementById("recoverForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-
     const email = document.getElementById("email").value;
+    const btn = document.querySelector('.login-btn');
+    const status = document.getElementById('status-message');
+
+    // Feedback visual imediato
+    btn.disabled = true;
+    status.style.color = '#fff';
+    status.innerHTML = 'Enviando link...';
 
     try {
-      const resp = await fetch("http://localhost:3000/auth/esqueci-senha", {
+      // Chama a rota do back-end para gerar e enviar o token
+      const resp = await fetch("http://localhost:3333/auth/esqueci-senha", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email })
       });
 
-      const data = await resp.json();
-
-      if (resp.ok) {
-        alert("✅ " + data.msg); // mensagem sucesso
-      } else {
-        alert("⚠️ " + data.msg); // mensagem erro
+      // 💥 Tratamento de erro robusto antes de ler o JSON
+      if (!resp.ok) {
+        // Tenta ler o JSON de erro (ex: 500), mas falha se for HTML
+        const errorData = await resp.json().catch(() => ({ msg: 'Erro interno do servidor. Verifique o console.' }));
+        status.style.color = '#F44336';
+        status.innerHTML = "⚠️ " + errorData.msg;
+        return;
       }
+
+      // Sucesso (código 200, mesmo que o e-mail não exista)
+      const data = await resp.json();
+      status.style.color = '#4CAF50';
+      status.innerHTML = "✅ " + data.msg;
+
     } catch (err) {
-      alert("❌ Erro ao conectar com o servidor");
+      // Erro de conexão (servidor fora do ar)
+      status.style.color = '#F44336';
+      status.innerHTML = "❌ Erro ao conectar com o servidor. Tente novamente.";
       console.error(err);
+    } finally {
+      btn.disabled = false;
     }
   });
 </script>
