@@ -34,17 +34,20 @@
             <div class="d-flex flex-column flex-md-row align-items-md-center mb-4 gap-2 div_pesquisa">
 
                 <div style="max-width: 450px;" class="input-group flex-grow-1 div_justify">
-                    <input required="required" type="text" class="form-control border-start-0  shadow-none input_pesquisa"
-                        placeholder="Buscar por hostname ou macaddress">
+                    <input required  type="text"
+                        class="form-control border-start-0 shadow-none input_pesquisa"
+                        placeholder="Buscar por hostname ou macaddress" id="ipt_pesquisa" maxlength="30">
 
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        Nome
+                        <span id="valor_pesquisa">Nome</span>
+
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end hover_verde">
-                        <li><a class="dropdown-item" href="#">Nome</a></li>
-                        <li><a class="dropdown-item" href="#">Hostname</a></li>
-                        <li><a class="dropdown-item" href="#">Mac Address</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_parametro_lista(1)">Nome</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_parametro_lista(2)">Hostname</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_parametro_lista(3)">Mac Address</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_parametro_lista(4)">IP</a></li>
                     </ul>
                 </div>
 
@@ -71,61 +74,25 @@
 
         </div>
         <div class="table-responsive shadow-sm border rounded div_tabela">
-            <table class="table table-hover mb-0">
-                <thead>
-                    <tr class="table-success" style="--bs-table-bg-type: none; background-color: #BADCDA;">
-                        <th scope="col" class="py-3">ID</th>
-                        <th scope="col" class="py-3">Nome <i class="bi bi-arrow-down-up ms-1"></i>
-                        </th>
-                        <th scope="col" class="py-3">Hostname</th>
-                        <th scope="col" class="py-3">Modelo</th>
-                        <th scope="col" class="py-3">Status</th>
-                        <th scope="col" class="py-3">SO</th>
-                        <th scope="col" class="py-3">Mac Adress</th>
-                        <th scope="col" class="py-3">IP</th>
-                        <th scope="col" class="py-3">Atualizar</th>
-                        <th scope="col" class="py-3">Excluir</th>
-                        </tr>
+            <table class="table table-hover mb-0" <thead>
+                <tr class="table-success" style="--bs-table-bg-type: none; background-color: #BADCDA;">
+                    <th scope="col" class="py-3">ID</th>
+                    <th scope="col" class="py-3">Nome <i class="bi bi-arrow-down-up ms-1"></i>
+                    </th>
+                    <th scope="col" class="py-3">Hostname</th>
+                    <th scope="col" class="py-3">Modelo</th>
+                    <th scope="col" class="py-3">Status</th>
+                    <th scope="col" class="py-3">SO</th>
+                    <th scope="col" class="py-3">Parâmetros</th>
+                    <th scope="col" class="py-3">Mac Adress</th>
+                    <th scope="col" class="py-3">IP</th>
+                    <th scope="col" class="py-3">Atualizar</th>
+                    <th scope="col" class="py-3">Excluir</th>
+                    <!-- <th scope="col" class="py-3">Ver Mais</th> -->
+                </tr>
                 </thead>
                 <tbody id="Conteudo_real">
-                    <tr>
-                        <td>001</td>
-                        <td><i class="bi bi-person-circle me-2"></i>Exemplo</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td><span class="opcao_crud text-primary" data-bs-toggle="modal"
-                                data-bs-target="#modalAtualizarMaquina">
-                                <img src="../assets/svg/atualizar_blue.svg" alt="">
-                                Atualizar<i class="bi bi-arrow-clockwise"></i></span>
-                        </td>
-                        <td><span class="opcao_crud text-danger" onclick="excluir_maquina()">
-                                <img src="../assets/svg/excluir_red.svg" alt="">
-                                Excluir<i class="bi bi-trash"></i></span>
-                        </td>
-                        </tr>
-                    <tr>
-                        <td>002</td>
-                        <td><i class="bi bi-person-circle me-2"></i>Exemplo</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td>Exemplo Text</td>
-                        <td><span class="opcao_crud text-primary" data-bs-toggle="modal"
-                                data-bs-target="#modalAtualizarMaquina">
-                                <img src="../assets/svg/atualizar_blue.svg" alt="">
-                                Atualizar<i class="bi bi-arrow-clockwise"></i></span>
-                        </td>
-                        <td><span class="opcao_crud text-danger" onclick="excluir_maquina()">
-                                <img src="../assets/svg/excluir_red.svg" alt="">
-                                Excluir<i class="bi bi-trash"></i></span>
-                        </td>
-                        </tr>
+
                 </tbody>
                 <tbody id="Estrutura_esqueleto_carregamento">
                     <tr class="skeleton-row">
@@ -137,17 +104,6 @@
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-                        </tr>
-                    <tr class="skeleton-row">
-                        <td><span class="skeleton-text short"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
@@ -155,17 +111,6 @@
                     <tr class="skeleton-row">
                         <td><span class="skeleton-text short"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-                        </tr>
-                    <tr class="skeleton-row">
-                        <td><span class="skeleton-text short"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
@@ -185,17 +130,6 @@
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-                        </tr>
-                    <tr class="skeleton-row">
-                        <td><span class="skeleton-text short"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
-                        <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
@@ -209,6 +143,20 @@
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
                         </tr>
@@ -221,11 +169,67 @@
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
                         </tr>
                     <tr class="skeleton-row">
                         <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
                         <td><span class="skeleton-text medium"></span></td>
@@ -240,7 +244,7 @@
             </table>
         </div>
 
-        <nav class="d-flex justify-content-center mt-3 div_paginas">
+        <nav class="d-flex justify-content-center mt-3 div_paginas" id="paginazacao">
             <ul class="pagination pagination-sm">
                 <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
                 <li class="page-item active_pagina"><a class="page-link" href="#">1</a></li>
@@ -266,25 +270,34 @@
                     <form id="formCadastrarMaquina">
 
                         <div id="step-1">
-
                             <h6 class="fs-5 fw-bold mb-4">Identificação do Equipamento</h6>
 
                             <div class="mb-3">
                                 <label for="hostname" class="form-label text-muted">Nome</label>
-                                <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="hostname"
-                                    placeholder="Insira o nome de identificação da máquina">
+                                <input required  type="text" class="form-control shadow-none input_pesquisa"
+                                    id="ipt_nome_cad" placeholder="Insira o nome de identificação da máquina" maxlength="30">
                             </div>
 
-                            <div class="mb-3">
-                                <label for="modelo" class="form-label text-muted">Modelo</label>
-                                <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="modelo"
+                            <div class="mb-3" style="display: none;">
+                                <label for="modelo" class="form-label text-muted">Modelo (opcional)</label>
+                                <input type="text" class="form-control shadow-none input_pesquisa" id="ipt_modelo_cad"
                                     placeholder="Insira o modelo do equipamento">
                             </div>
 
                             <div class="mb-3">
-                                <label for="mac" class="form-label text-muted">Mac Adress</label>
-                                <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="mac"
-                                    placeholder="Ex: 00:1A:2B:3C:4D:5E">
+                                <label for="mac" class="form-label text-muted d-block">
+                                    Mac Adress
+                                    <button type="button" class="btn btn-sm btn-link p-0 ms-2 text-decoration-underline"
+                                        id="btnOpenMacHelp">
+                                        Como eu acho meu Mac Address?
+                                    </button>
+                                </label>
+
+                                <input required  type="text" class="form-control shadow-none input_pesquisa"
+                                    id="ipt_mac_cad" placeholder="Ex: 00:1A:2B:3C:4D:5E"
+                                    pattern="^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$"
+                                    title="Formato: XX:XX:XX:XX:XX:XX ou XX-XX-XX-XX-XX-XX" maxlength="17" 
+                                    oninput="aplicarMascaraMacAddress(this, ':')">
                             </div>
                         </div>
 
@@ -294,33 +307,43 @@
                             <div id="parametrizacaoIndividual">
                                 <div class="mb-3">
                                     <label for="cpu" class="form-label small">CPU - Porcentagem de uso </label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="cpu"
-                                        placeholder="Insira o valor limite">
+                                    <input required  type="text"
+                                        class="form-control shadow-none input_pesquisa" id="ipt_cpu_cad"
+                                        placeholder="Insira o valor limite"
+                                        oninput="aplicarMascaraPorcentagem(this)">
                                 </div>
                                 <div class="mb-3">
                                     <label for="ram" class="form-label small">Memória RAM - Porcentagem de uso</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="ram"
-                                        placeholder="Insira o valor limite">
+                                    <input required  type="text"
+                                        class="form-control shadow-none input_pesquisa" id="ipt_ram_cad"
+                                        placeholder="Insira o valor limite"
+                                        oninput="aplicarMascaraPorcentagem(this)">
                                 </div>
                                 <div class="mb-3">
                                     <label for="disco" class="form-label small">Disco Duro - Porcentagem de uso</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="disco"
-                                        placeholder="Insira o valor limite">
+                                    <input required  type="text"
+                                        class="form-control shadow-none input_pesquisa" id="ipt_disco_cad"
+                                        placeholder="Insira o valor limite"
+                                        oninput="aplicarMascaraPorcentagem(this)">
                                 </div>
                                 <div class="mb-4">
                                     <label for="rede" class="form-label small">Rede - Taxa de transferência </label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="rede"
-                                        placeholder="Insira o valor limite">
+                                    <input required  type="text"
+                                        class="form-control shadow-none input_pesquisa" id="ipt_rede_cad"
+                                        placeholder="Insira o valor limite" maxlength="8"
+                                        oninput="aplicarMascaraMbps(this)">
                                 </div>
                             </div>
 
                             <div class="form-check mb-2">
-                                <input required="required" class="form-check-input" type="checkbox" value="" id="alertaEmpresa">
+                                <input class="form-check-input" type="checkbox" value="empresa"
+                                    id="alertaEmpresa">
                                 <label class="form-check-label" for="alertaEmpresa">Usar Limite de Alertas Padrão da
                                     Empresa</label>
                             </div>
                             <div class="form-check mb-4">
-                                <input required="required" class="form-check-input" type="checkbox" value="" id="alertaOberon" checked>
+                                <input class="form-check-input" type="checkbox" value="oberon"
+                                    id="alertaOberon" checked>
                                 <label class="form-check-label" for="alertaOberon">Usar Limite de Alertas Padrão da
                                     Oberon</label>
                             </div>
@@ -331,7 +354,7 @@
                 <div class="modal-footer justify-content-center border-0 p-4">
                     <button type="button" id="btnAvancar"
                         class="btn fw-bold px-5 verde_claro botao_configuracao">Avançar</button>
-                    <button type="button" id="btnVoltar" class="btn  fw-bold px-5 botao_branco botao_configuracao"
+                    <button type="button" id="btnVoltar" class="btn fw-bold px-5 botao_branco botao_configuracao"
                         style="display: none;">Voltar Atrás</button>
                     <button type="submit" form="formCadastrarMaquina" id="btnCadastrar"
                         class="btn fw-bold px-5 verde_claro botao_configuracao"
@@ -340,8 +363,65 @@
             </div>
         </div>
     </div>
+    <div id="modalMacHelp" class="modalHelpBackground">
+        <div class="modal-dialog modal-dialog-centered modalHelp">
+            <div class="modal-content">
+                <div class="modal-header p-3 border-0">
+                    <h5 class="modal-title fs-6 fw-bold">Passo a Passo: Encontrar MAC Address</h5>
+                    <button type="button" class="btn-close" id="btnCloseMacHelp" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3 pt-0">
 
+                    <ul class="nav nav-tabs mb-3" id="macTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active small" id="win-tab-2" data-bs-toggle="tab"
+                                data-bs-target="#win-content-2" type="button" role="tab" aria-controls="win-content-2"
+                                aria-selected="true"><span class="text-success">Windows</span></button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link small" id="linux-tab-2" data-bs-toggle="tab"
+                                data-bs-target="#linux-content-2" type="button" role="tab"
+                                aria-controls="linux-content-2" aria-selected="false"><span
+                                    class="text-success">Linux</span></button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link small" id="mac-tab-2" data-bs-toggle="tab"
+                                data-bs-target="#mac-content-2" type="button" role="tab" aria-controls="mac-content-2"
+                                aria-selected="false"><span class="text-success">macOS</span></button>
+                        </li>
+                    </ul>
 
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="win-content-2" role="tabpanel"
+                            aria-labelledby="win-tab-2">
+                            <small>
+                                1. Abra o CMD (Prompt de Comando) e digite:<br>
+                                <code class="text-danger fw-bold">ipconfig /all</code><br>
+                                2. Procure pela linha "Endereço Físico".
+                            </small>
+                        </div>
+                        <div class="tab-pane fade" id="linux-content-2" role="tabpanel" aria-labelledby="linux-tab-2">
+                            <small>
+                                1. Abra o Terminal e digite:<br>
+                                <code class="text-success fw-bold">ip a</code> (ou `ifconfig`)<br>
+                                2. Procure pelo valor ao lado de "link/ether" na interface ativa.
+                            </small>
+                        </div>
+                        <div class="tab-pane fade" id="mac-content-2" role="tabpanel" aria-labelledby="mac-tab-2">
+                            <small>
+                                1. Clique em <b>Menu Apple</b> > <b>Ajustes do Sistema</b>.<br>
+                                2. Vá em <b>Rede</b> > <b>Avançado</b> > <b>Hardware</b>.
+                            </small>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer p-2 border-0">
+                    <button type="button" class="btn btn-secondary btn-sm" id="btnFecharMacHelp">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="modalAtualizarMaquina" tabindex="-1" aria-labelledby="modalAtualizarMaquinaLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-xl">
@@ -360,37 +440,37 @@
                                 <div id="dadosAtuaisIdentificacao">
                                     <div class="mb-3">
                                         <label class="form-label text-muted small mb-0">Nome</label>
-                                        <p class="fw-bold">Máquina-094</p>
+                                        <p class="fw-bold" id="txt_nome">Máquina-094</p>
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3" style="display: none;">
                                         <label class="form-label text-muted small mb-0">Modelo</label>
-                                        <p class="fw-bold">Dell 05049-</p>
+                                        <p class="fw-bold" id="txt_modelo">Dell 05049-</p>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label text-muted small mb-0">Mac Adress</label>
-                                        <p class="fw-bold">00:1A:2B:3C:4D:5E</p>
+                                        <p class="fw-bold" id="txt_mac">00:1A:2B:3C:4D:5E</p>
                                     </div>
                                 </div>
 
                                 <div id="dadosAtuaisAlertas" style="display: none;">
                                     <div class="mb-3">
                                         <label class="form-label text-muted small mb-0">CPU - Porcentagem de uso</label>
-                                        <p class="fw-bold">80 %</p>
+                                        <p class="fw-bold" id="txt_cpu">80 %</p>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label text-muted small mb-0">Memória RAM - Porcentagem de
                                             uso</label>
-                                        <p class="fw-bold">80 %</p>
+                                        <p class="fw-bold" id="txt_ram">80 %</p>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label text-muted small mb-0">Disco Duro - Porcentagem de
                                             uso</label>
-                                        <p class="fw-bold">80 %</p>
+                                        <p class="fw-bold" id="txt_disco">80 %</p>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label text-muted small mb-0">Taxa de transferência de
                                             rede</label>
-                                        <p class="fw-bold">80 mbps</p>
+                                        <p class="fw-bold" id="txt_rede">80 mbps</p>
                                     </div>
                                 </div>
                             </div>
@@ -400,19 +480,23 @@
                                     <h6 class="fs-5 fw-bold mb-3">Identificação do Equipamento</h6>
                                     <div class="mb-3">
                                         <label for="nome_upd" class="form-label text-muted">Nome</label>
-                                        <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="nome_upd"
-                                            placeholder="Insira o nome de identificação da máquina">
+                                        <input required  type="text"
+                                            class="form-control shadow-none input_pesquisa" id="ipt_nome_upd"
+                                            placeholder="Insira o nome de identificação da máquina" maxlength="30">
                                     </div>
 
-                                    <div class="mb-3">
-                                        <label for="modelo_upd" class="form-label text-muted">Modelo</label>
-                                        <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                            id="modelo_upd" placeholder="Insira o modelo do equipamento">
+                                    <div class="mb-3" style="display: none;">
+                                        <label for="modelo_upd" class="form-label text-muted" >Modelo</label>
+                                        <input required  type="text"
+                                            class="form-control shadow-none input_pesquisa" id="ipt_modelo_upd"
+                                            placeholder="Insira o modelo do equipamento">
                                     </div>
                                     <div class="mb-3">
                                         <label for="mac_upd" class="form-label text-muted">Mac Adress</label>
-                                        <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="mac_upd"
-                                            placeholder="Ex: 00:1A:2B:3C:4D:5E">
+                                        <input required  type="text"
+                                            class="form-control shadow-none input_pesquisa" id="ipt_mac_upd"
+                                            placeholder="Ex: 00:1A:2B:3C:4D:5E" maxlength="17"
+                                            oninput="aplicarMascaraMacAddress(this, ':')">
                                     </div>
                                 </div>
 
@@ -423,37 +507,46 @@
                                         <div class="mb-3">
                                             <label for="cpu_upd" class="form-label small">CPU - Porcentagem de
                                                 uso</label>
-                                            <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                                id="cpu_upd" placeholder="Insira o valor limite">
+                                            <input required  type="text"
+                                                class="form-control shadow-none input_pesquisa" id="ipt_cpu_upd"
+                                                placeholder="Insira o valor limite"
+                                                oninput="aplicarMascaraPorcentagem(this)">
                                         </div>
                                         <div class="mb-3">
                                             <label for="ram_upd" class="form-label small">Memória RAM - Porcentagem de
                                                 uso</label>
-                                            <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                                id="ram_upd" placeholder="Insira o valor limite">
+                                            <input required  type="text"
+                                                class="form-control shadow-none input_pesquisa" id="ipt_ram_upd"
+                                                placeholder="Insira o valor limite"
+                                                oninput="aplicarMascaraPorcentagem(this)">
                                         </div>
                                         <div class="mb-3">
                                             <label for="disco_upd" class="form-label small">Disco Duro - Porcentagem de
                                                 uso</label>
-                                            <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                                id="disco_upd" placeholder="Insira o valor limite">
+                                            <input required  type="text"
+                                                class="form-control shadow-none input_pesquisa" id="ipt_disco_upd"
+                                                placeholder="Insira o valor limite"
+                                                oninput="aplicarMascaraPorcentagem(this)">
                                         </div>
                                         <div class="mb-3">
                                             <label for="rede_upd" class="form-label small">Taxa de transferência de
                                                 rede</label>
-                                            <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                                                id="rede_upd" placeholder="Insira o valor limite">
+                                            <input required  type="text"
+                                                class="form-control shadow-none input_pesquisa" id="ipt_rede_upd"
+                                                placeholder="Insira o valor limite" maxlength="8"
+                                                oninput="aplicarMascaraMbps(this)">
                                         </div>
                                     </div>
 
                                     <div class="form-check mb-2">
-                                        <input required="required" class="form-check-input" type="checkbox" value="" id="alertaEmpresaUpd">
+                                        <input class="form-check-input" type="checkbox" value=""
+                                            id="alertaEmpresaUpd">
                                         <label class="form-check-label" for="alertaEmpresaUpd">Usar Limite de Alertas
                                             Padrão da Empresa</label>
                                     </div>
                                     <div class="form-check mb-4">
-                                        <input required="required" class="form-check-input" type="checkbox" value="" id="alertaOberonUpd"
-                                            checked>
+                                        <input class="form-check-input" type="checkbox" value=""
+                                            id="alertaOberonUpd" checked>
                                         <label class="form-check-label" for="alertaOberonUpd">Usar Limite de Alertas
                                             Padrão da Oberon</label>
                                     </div>
@@ -468,9 +561,9 @@
                         style="display: none;">Voltar Atrás</button>
                     <button type="button" id="btnAvancarUpd"
                         class="btn fw-bold px-5 verde_claro botao_configuracao">Avançar</button>
-                    <button type="submit" form="formAtualizarMaquina" id="btnCadastrarUpd"
+                    <button type="button" form="formAtualizarMaquina" id="btnCadastrarUpd"
                         class="btn fw-bold px-5 verde_claro botao_configuracao"
-                        style="display: none;">Cadastrar</button>
+                        style="display: none;">Atualizar</button>
                 </div>
             </div>
         </div>
@@ -489,69 +582,100 @@
                     <form id="formConfigParametros">
 
                         <div class="row">
-                            <div class="col-md-6 border-end">
-                                <h6 class="fs-5 fw-bold mb-3">Dados Atuais</h6>
+                            <div class="col-md-4 border-end">
+                                <h6 class="fs-5 fw-bold mb-3">Dados Atuais (Empresa)</h6>
 
                                 <div class="mb-4">
                                     <label class="form-label text-muted small mb-0">CPU - Porcentagem de uso</label>
-                                    <p class="fw-bold">80 %</p>
+                                    <p id="atual_cpu" class="fw-bold">80 %</p>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label text-muted small mb-0">Memória RAM - Porcentagem de
                                         uso</label>
-                                    <p class="fw-bold">80 %</p>
+                                    <p id="atual_ram" class="fw-bold">80 %</p>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label text-muted small mb-0">Disco Duro - Porcentagem de
                                         uso</label>
-                                    <p class="fw-bold">80 %</p>
+                                    <p id="atual_disco" class="fw-bold">80 %</p>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label text-muted small mb-0">Taxa de transferência de
                                         rede</label>
-                                    <p class="fw-bold">80 mbps</p>
+                                    <p id="atual_rede" class="fw-bold">80 mbps</p>
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <h6 class="fs-5 fw-bold mb-3">Definir Limites de Alerta</h6>
+                            <div class="col-md-4 border-end">
+                                <h6 class="fs-5 fw-bold mb-3 text-secondary">Padrão de Referência (Oberon)</h6>
+
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small mb-0">CPU - Porcentagem de uso</label>
+                                    <p id="oberon_cpu" class="fw-bold text-secondary">90 %</p>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small mb-0">Memória RAM - Porcentagem de
+                                        uso</label>
+                                    <p id="oberon_ram" class="fw-bold text-secondary">95 %</p>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small mb-0">Disco Duro - Porcentagem de
+                                        uso</label>
+                                    <p id="oberon_disco" class="fw-bold text-secondary">75 %</p>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small mb-0">Taxa de transferência de
+                                        rede</label>
+                                    <p id="oberon_rede" class="fw-bold text-secondary">500 mbps</p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <h6 class="fs-5 fw-bold mb-3">Definir Novos Limites</h6>
 
                                 <div class="mb-3">
                                     <label for="cpu_config" class="form-label small">CPU - Porcentagem de uso</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="cpu_config"
-                                        placeholder="Insira o valor limite">
+                                    <input required  type="text"
+                                        class="form-control shadow-none input_pesquisa" id="cpu_config"
+                                        placeholder="Insira o valor limite"
+                                        oninput="aplicarMascaraPorcentagem(this)">
                                 </div>
                                 <div class="mb-3">
                                     <label for="ram_config" class="form-label small">Memória RAM - Porcentagem de
                                         uso</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="ram_config"
-                                        placeholder="Insira o valor limite">
+                                    <input required  type="text"
+                                        class="form-control shadow-none input_pesquisa" id="ram_config"
+                                        placeholder="Insira o valor limite"
+                                        oninput="aplicarMascaraPorcentagem(this)">
                                 </div>
                                 <div class="mb-3">
                                     <label for="disco_config" class="form-label small">Disco Duro - Porcentagem de
                                         uso</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="disco_config"
-                                        placeholder="Insira o valor limite">
+                                    <input required  type="text"
+                                        class="form-control shadow-none input_pesquisa" id="disco_config"
+                                        placeholder="Insira o valor limite"
+                                        oninput="aplicarMascaraPorcentagem(this)">
                                 </div>
                                 <div class="mb-3">
                                     <label for="rede_config" class="form-label small">Taxa de transferência de
                                         rede</label>
-                                    <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="rede_config"
-                                        placeholder="Insira o valor limite">
+                                    <input required  type="text"
+                                        class="form-control shadow-none input_pesquisa" id="rede_config"
+                                        placeholder="Insira o valor limite" maxlength="8"
+                                        oninput="aplicarMascaraMbps(this)">
                                 </div>
                             </div>
                         </div>
                     </form>
                 </div>
 
-                <div class="modal-footer justify-content-center border-0 p-4" >
+                <div class="modal-footer justify-content-center border-0 p-4">
                     <button type="submit" form="formConfigParametros"
                         class="btn fw-semibold border flex-fill flex-md-grow-0 verde_claro px-4">Definir</button>
                 </div>
             </div>
         </div>
     </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -560,3 +684,4 @@
 </html>
 <script src="../component/menu/Menu.js"></script>
 <script src="../js/maquinas.js"></script>
+<script src="../js/mascaras.js"></script>

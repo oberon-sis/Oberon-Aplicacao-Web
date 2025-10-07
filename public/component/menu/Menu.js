@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const idUsuario = 5;// mocado 
-    // const idUsuario = sessionStorage.ID_USUARIO
+    const idUsuario = sessionStorage.ID_USUARIO? sessionStorage.ID_USUARIO: 5;
 
     fetch('/component/menu/Menu.html')
         .then(response => {
@@ -21,8 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return response.json();
         })
         .then(data => {
-            console.log(data.painelPC)
-            console.log(document.getElementById('painelPC'))
             document.getElementById('painelPC').innerHTML += data.painelPC;
             document.getElementById('alertaSuportePC').innerHTML += data.alertaSuportePC;
             document.getElementById('gestaoAreaPC').innerHTML += data.gestaoAreaPC;

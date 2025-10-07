@@ -6,7 +6,8 @@ function getMenu(idUsuario) {
   );
   var instrucaoSql = `
         SELECT tu.tipoUsuario, tu.permissoes
-          FROM Funcionario AS u JOIN TipoUsuario AS tu ON u.fkTipoUsuario = tu.idTipoUsuario WHERE u.idFuncionario = '${idUsuario}';
+          FROM Funcionario AS u JOIN TipoUsuario AS tu ON u.fkTipoUsuario =
+           tu.idTipoUsuario WHERE u.idFuncionario = '${idUsuario}';
     `;
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
