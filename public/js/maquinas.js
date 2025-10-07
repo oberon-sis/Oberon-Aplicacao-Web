@@ -1,10 +1,5 @@
-const ID_GERENTE = 5;
-const ID_FUNCIONARIO_GERENTE_MOCK = 6;
+const ID_GERENTE = sessionStorage.ID_USUARIO ? sessionStorage.ID_USUARIO : 6;
 const limitePorPagina = 14;
-
-let paginaAtual = 1;
-let valor_parametro = "nome";
-let termo = "";
 
 const parametroOberon = {
   CPU: 80,
@@ -13,15 +8,29 @@ const parametroOberon = {
   REDE: 30,
 };
 const parametroEmpresa = {
-  CPU: 90,
-  RAM: 5,
-  DISCO: 10,
-  REDE: 15,
+  CPU: 0,
+  RAM: 0,
+  DISCO: 0,
+  REDE: 0,
 };
+
+let paginaAtual = 1;
+let valor_parametro = "nome";
+let termo = "";
 
 let ipt_nome_cad, ipt_modelo_cad, ipt_mac_cad;
 let ipt_cpu_cad, ipt_ram_cad, ipt_disco_cad, ipt_rede_cad;
 let ipt_pesquisa;
+
+function limparEConverterLimite(valorBruto) {
+  if (!valorBruto) return null;
+  let valorLimpo = String(valorBruto)
+    .replace(/ %|%| Mbps|Mbps/g, "")
+    .trim();
+  valorLimpo = valorLimpo.replace(/,/g, ".");
+  const valorNumerico = parseFloat(valorLimpo);
+  return isNaN(valorNumerico) ? null : valorNumerico;
+}
 
 function mudar_icone_on(id_da_img) {
   const icone = document.getElementById(id_da_img);
@@ -71,6 +80,9 @@ function debounce(func, delay = 250) {
 }
 
 function buscarEFiltrar(termoDeBusca) {
+  if (valor_parametro == '') {
+    valor_parametro = "nome"
+  } 
   const termoFiltrado = termoDeBusca.trim();
   carregarMaquinas(paginaAtual, valor_parametro, termoFiltrado);
 }
@@ -194,10 +206,15 @@ function toggleParametros(
 async function salvarParametrosEmpresa(event, configModal) {
   event.preventDefault();
 
-  const cpuLimite = document.getElementById("cpu_config").value;
-  const ramLimite = document.getElementById("ram_config").value;
-  const discoLimite = document.getElementById("disco_config").value;
-  const redeLimite = document.getElementById("rede_config").value;
+  let cpuLimite = document.getElementById("cpu_config").value;
+  let ramLimite = document.getElementById("ram_config").value;
+  let discoLimite = document.getElementById("disco_config").value;
+  let redeLimite = document.getElementById("rede_config").value;
+
+  cpuLimite = limparEConverterLimite(cpuLimite);
+  ramLimite = limparEConverterLimite(ramLimite);
+  discoLimite = limparEConverterLimite(discoLimite);
+  redeLimite = limparEConverterLimite(redeLimite);
 
   if (!cpuLimite || !ramLimite || !discoLimite || !redeLimite) {
     configModal.hide();
@@ -299,9 +316,8 @@ function excluir_maquina(idMaquina) {
     },
   }).then((resultadoSwal) => {
     if (resultadoSwal.isConfirmed) {
-      const idFuncionarioGerente = ID_FUNCIONARIO_GERENTE_MOCK;
+      const idFuncionarioGerente = ID_GERENTE;
       const senhaGerente = resultadoSwal.value.senha;
-      console.log(senhaGerente);
       return fetch(`/maquinas/excluirMaquina/${idMaquina}`, {
         method: "DELETE",
         headers: {
@@ -350,7 +366,10 @@ async function carregarMaquinas(pagina, valor_parametro, termoDePesquisa) {
     "1";
   let pesquisa = termoDePesquisa;
   if (!ID_GERENTE) {
-    alert("Erro: ID do gerente não encontrado. Faça login novamente.");
+    exibirErro(
+      "ID do gerente não encontrado",
+      "ID do gerente não encontrado. Faça login novamente."
+    );
     return;
   }
   paginaAtual = pagina;
@@ -372,7 +391,7 @@ async function carregarMaquinas(pagina, valor_parametro, termoDePesquisa) {
     renderizarTabela(data.dados);
     renderizarPaginacao(data.totalPaginas, data.paginaAtual);
   } catch (error) {
-    console.error("Falha ao carregar máquinas:", error); // Assumindo que Conteudo_real é definido
+    console.error("Falha ao carregar máquinas:", error);
     const elementoTabela = document.getElementById("Conteudo_real");
     const elementoPaginacao = document.getElementById("paginazacao");
     elementoTabela.innerHTML = `<tr><td colspan="9" style="text-align:center;">Erro ao carregar dados: ${error.message}</td></tr>`;
@@ -386,9 +405,13 @@ function renderizarTabela(maquinas) {
 
   if (maquinas.length === 0) {
     html =
-      '<tr><td colspan="9" style="text-align:center;">Nenhuma máquina encontrada.</td></tr>';
+      '<tr><td colspan="10" style="text-align:center;">Nenhuma máquina encontrada.</td></tr>';
   } else {
     maquinas.forEach((m) => {
+      const origemBruta = m.origemParametro || "N/A";
+      const origemFormatada =
+        origemBruta.charAt(0) + origemBruta.slice(1).toLowerCase();
+
       html += `
                 <tr data-id-maquina="${m.idMaquina}">
                     <td>${m.idMaquina}</td>
@@ -397,32 +420,38 @@ function renderizarTabela(maquinas) {
                     <td>${m.modelo}</td>
                     <td>${m.status}</td>
                     <td>${m.sistemaOperacional}</td>
+                    
+                    <td>${origemFormatada}</td>
+                    
                     <td>${m.macAddress}</td>
                     <td>${m.ip}</td>
-                    <td><span class="opcao_crud text-primary" data-bs-toggle="modal"
-                                data-bs-target="#modalAtualizarMaquina"
-                                onClick="getDadosById(${m.idMaquina})"
-                                >
-                                <img src="../assets/svg/atualizar_blue.svg" alt="">
-                                Atualizar
-                                
-                                <i class="bi bi-arrow-clockwise"></i>
+                    <td>
+                        <span class="opcao_crud text-primary" data-bs-toggle="modal"
+                            data-bs-target="#modalAtualizarMaquina"
+                            onClick="getDadosById(${m.idMaquina})"
+                        >
+                            <img src="../assets/svg/atualizar_blue.svg" alt="">
+                            Atualizar
+                            <i class="bi bi-arrow-clockwise"></i>
                         </span>
                     </td>
-                    <td><span class="opcao_crud text-danger" onclick="excluir_maquina(${m.idMaquina})">
-                                <img src="../assets/svg/excluir_red.svg" alt="">
-                                Excluir
-                                <i class="bi bi-trash"></i></span>
+                    <td>
+                        <span class="opcao_crud text-danger" onclick="excluir_maquina(${m.idMaquina})">
+                            <img src="../assets/svg/excluir_red.svg" alt="">
+                            Excluir
+                            <i class="bi bi-trash"></i>
+                        </span>
                     </td>
                 </tr>
             `;
     });
   }
+
   setTimeout(() => {
     document.getElementById("Estrutura_esqueleto_carregamento").style.display =
       "none";
     elementoTabela.innerHTML = html;
-  }, 500);
+  }, 250);
   elementoTabela.style.display = "";
 }
 
@@ -522,78 +551,100 @@ function preencherDadosAlertas(componentes) {
 }
 
 function atualizarMaquinaSubmit(event) {
-    event.preventDefault(); 
-    atualizarMaquina();
+  event.preventDefault();
+  atualizarMaquina();
 }
 async function atualizarMaquina() {
-    const nome = document.getElementById('ipt_nome_upd').value;
-    const mac = document.getElementById('ipt_mac_upd').value;
-    
-    const cpu = document.getElementById('ipt_cpu_upd').value;
-    const ram = document.getElementById('ipt_ram_upd').value;
-    const disco = document.getElementById('ipt_disco_upd').value;
-    const rede = document.getElementById('ipt_rede_upd').value;
-    
-    const checkboxEmpresaUpd = document.getElementById("alertaEmpresaUpd");
-    const checkboxOberonUpd = document.getElementById("alertaOberonUpd");
-    const origemParametro = getOrigemLimite(checkboxEmpresaUpd, checkboxOberonUpd);
+  const nome = document.getElementById("ipt_nome_upd").value;
+  const mac = document.getElementById("ipt_mac_upd").value;
 
-    if (!nome || !mac) {
-        exibirErro("Campos Obrigatórios", "Por favor, preencha o nome e o Mac Address da máquina.");
-        return;
+  let cpuBruto = document.getElementById("ipt_cpu_upd").value;
+  let ramBruto = document.getElementById("ipt_ram_upd").value;
+  let discoBruto = document.getElementById("ipt_disco_upd").value;
+  let redeBruto = document.getElementById("ipt_rede_upd").value;
+
+  let cpu = limparEConverterLimite(cpuBruto);
+  let ram = limparEConverterLimite(ramBruto);
+  let disco = limparEConverterLimite(discoBruto);
+  let rede = limparEConverterLimite(redeBruto);
+
+  const checkboxEmpresaUpd = document.getElementById("alertaEmpresaUpd");
+  const checkboxOberonUpd = document.getElementById("alertaOberonUpd");
+  const origemParametro = getOrigemLimite(
+    checkboxEmpresaUpd,
+    checkboxOberonUpd
+  );
+
+  if (!nome || !mac) {
+    exibirErro(
+      "Campos Obrigatórios",
+      "Por favor, preencha o nome e o Mac Address da máquina."
+    );
+    return;
+  }
+
+  if (origemParametro === "ESPECIFICO") {
+    if (!cpu || !ram || !disco || !rede) {
+      exibirErro(
+        "Limites Faltando",
+        "Por favor, defina todos os limites de alerta individualmente."
+      );
+      return;
     }
+  }
 
-    if (origemParametro === "ESPECIFICO") {
-        if (!cpu || !ram || !disco || !rede) {
-            exibirErro("Limites Faltando", "Por favor, defina todos os limites de alerta individualmente.");
-            return;
-        }
+  const limitesParaEnvio =
+    origemParametro === "ESPECIFICO"
+      ? [
+          { tipo: "CPU", limite: parseFloat(cpu) },
+          { tipo: "RAM", limite: parseFloat(ram) },
+          { tipo: "DISCO", limite: parseFloat(disco) },
+          { tipo: "REDE", limite: parseFloat(rede) },
+        ]
+      : [];
+
+  const dadosParaAtualizar = {
+    nome: nome,
+    macAddress: mac,
+    origemParametro: origemParametro,
+    limites: limitesParaEnvio,
+  };
+
+  const idMaquina = idMaquinaEmEdicao;
+
+  try {
+    const response = await fetch(`/maquinas/atualizarMaquina/${idMaquina}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dadosParaAtualizar),
+    });
+
+    if (response.ok) {
+      const modalElement = document.getElementById("modalAtualizarMaquina");
+      if (modalElement) {
+        bootstrap.Modal.getInstance(modalElement).hide();
+      }
+      exibirSucesso(
+        "Atualização Concluída",
+        `A máquina ${nome} foi atualizada com sucesso!`
+      );
+      carregarMaquinas(paginaAtual, valor_parametro, termo);
+    } else {
+      const errorText = await response.text();
+      exibirErro(
+        "Erro na Atualização",
+        errorText || `Erro desconhecido ao atualizar.`
+      );
     }
-
-    const limitesParaEnvio = origemParametro === "ESPECIFICO"
-        ? [
-            { tipo: "CPU", limite: parseFloat(cpu) },
-            { tipo: "RAM", limite: parseFloat(ram) },
-            { tipo: "DISCO", limite: parseFloat(disco) },
-            { tipo: "REDE", limite: parseFloat(rede) },
-          ]
-        : [];
-
-    const dadosParaAtualizar = {
-        nome: nome,
-        macAddress: mac,
-        origemParametro: origemParametro,
-        limites: limitesParaEnvio,
-    };
-    
-    const idMaquina = idMaquinaEmEdicao; 
-    console.log(idMaquina)
-    console.log(dadosParaAtualizar)
-
-    try {
-        const response = await fetch(`/maquinas/atualizarMaquina/${idMaquina}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(dadosParaAtualizar)
-        });
-
-        if (response.ok) {
-            const modalElement = document.getElementById('modalAtualizarMaquina');
-            if (modalElement) {
-                bootstrap.Modal.getInstance(modalElement).hide();
-            }
-            exibirSucesso('Atualização Concluída', `A máquina ${nome} foi atualizada com sucesso!`);
-            carregarMaquinas(paginaAtual, valor_parametro, termo);
-        } else {
-            const errorText = await response.text();
-            exibirErro('Erro na Atualização', errorText || `Erro desconhecido ao atualizar.`);
-        }
-    } catch (error) {
-        console.error('Erro na requisição:', error);
-        exibirErro('Erro de Rede', 'Falha na comunicação com o servidor ao tentar atualizar.');
-    }
+  } catch (error) {
+    console.error("Erro na requisição:", error);
+    exibirErro(
+      "Erro de Rede",
+      "Falha na comunicação com o servidor ao tentar atualizar."
+    );
+  }
 }
 
 function renderizarPaginacao(totalPaginas, paginaAtual) {
@@ -657,7 +708,8 @@ function getOrigemLimite(checkboxEmpresa, checkboxOberon) {
   return "ESPECIFICO";
 }
 
-async function cadastrarMaquina() {
+async function cadastrarMaquina(event) {
+  if (event) event.preventDefault();
   const nome = ipt_nome_cad ? ipt_nome_cad.value : "";
   const modelo = ipt_modelo_cad ? ipt_modelo_cad.value : "";
   const macAddress = ipt_mac_cad ? ipt_mac_cad.value : "";
@@ -665,10 +717,15 @@ async function cadastrarMaquina() {
   const checkboxEmpresa = document.getElementById("alertaEmpresa");
   const checkboxOberon = document.getElementById("alertaOberon");
 
-  const cpuLimite = ipt_cpu_cad ? ipt_cpu_cad.value : "";
-  const ramLimite = ipt_ram_cad ? ipt_ram_cad.value : "";
-  const discoLimite = ipt_disco_cad ? ipt_disco_cad.value : "";
-  const redeLimite = ipt_rede_cad ? ipt_rede_cad.value : "";
+  let cpuLimite = ipt_cpu_cad ? ipt_cpu_cad.value : "";
+  let ramLimite = ipt_ram_cad ? ipt_ram_cad.value : "";
+  let discoLimite = ipt_disco_cad ? ipt_disco_cad.value : "";
+  let redeLimite = ipt_rede_cad ? ipt_rede_cad.value : "";
+
+  cpuLimite = limparEConverterLimite(cpuLimite);
+  ramLimite = limparEConverterLimite(ramLimite);
+  discoLimite = limparEConverterLimite(discoLimite);
+  redeLimite = limparEConverterLimite(redeLimite);
 
   if (!nome || !macAddress) {
     exibirErro(
@@ -681,10 +738,15 @@ async function cadastrarMaquina() {
   const origemParametro = getOrigemLimite(checkboxEmpresa, checkboxOberon);
 
   if (origemParametro === "ESPECIFICO") {
-    if (!cpuLimite || !ramLimite || !discoLimite || !redeLimite) {
+    if (
+      cpuLimite === null ||
+      ramLimite === null ||
+      discoLimite === null ||
+      redeLimite === null
+    ) {
       exibirErro(
         "Limites Faltando",
-        "Por favor, defina todos os limites de alerta individualmente."
+        "Por favor, defina todos os limites de alerta individualmente (somente números)."
       );
       return;
     }
@@ -700,10 +762,10 @@ async function cadastrarMaquina() {
     limites:
       origemParametro === "ESPECIFICO"
         ? [
-            { tipo: "CPU", limite: parseFloat(cpuLimite) },
-            { tipo: "RAM", limite: parseFloat(ramLimite) },
-            { tipo: "Disco Duro", limite: parseFloat(discoLimite) },
-            { tipo: "PlacaRede", limite: parseFloat(redeLimite) },
+            { tipo: "CPU", limite: cpuLimite },
+            { tipo: "RAM", limite: ramLimite },
+            { tipo: "Disco Duro", limite: discoLimite },
+            { tipo: "PlacaRede", limite: redeLimite },
           ]
         : [],
   };
@@ -718,6 +780,11 @@ async function cadastrarMaquina() {
     });
 
     if (response.ok) {
+      const modalElement = document.getElementById("modalCadastrarMaquina"); 
+      if (modalElement) {
+        bootstrap.Modal.getInstance(modalElement)?.hide();
+      }
+
       exibirSucesso(
         "Cadastro Concluído",
         `A máquina ${nome} foi cadastrada com sucesso!`
@@ -740,6 +807,8 @@ async function cadastrarMaquina() {
 }
 
 async function carregarParametrosAtuais() {
+  const checkboxEmpresa = document.getElementById("alertaEmpresa");
+  const checkboxEmpresaAtualizar = document.getElementById("alertaEmpresaUpd");
   if (!ID_GERENTE) return console.error("ID do Gerente não definido.");
 
   try {
@@ -781,6 +850,57 @@ async function carregarParametrosAtuais() {
       `${parametroOberon.DISCO} %`;
     document.getElementById("oberon_rede").textContent =
       `${parametroOberon.REDE} Mbps`;
+
+    const isParametroEmpresaZerado =
+      parseFloat(parametroEmpresa["CPU"]) === 0 &&
+      parseFloat(parametroEmpresa["RAM"]) === 0 &&
+      parseFloat(parametroEmpresa["DISCO"]) === 0 &&
+      parseFloat(parametroEmpresa["REDE"]) === 0;
+
+    if (isParametroEmpresaZerado) {
+      checkboxEmpresa.disabled = true;
+      checkboxEmpresa.checked = false;
+
+      checkboxEmpresaAtualizar.disabled = true;
+      checkboxEmpresaAtualizar.checked = false;
+      const label = document.querySelector(
+        `label[for="${checkboxEmpresa.id}"]`
+      );
+      const labelAtulizar = document.querySelector(
+        `label[for="${checkboxEmpresaAtualizar.id}"]`
+      );
+      if (label) {
+        label.title =
+          "Configure os Limites Padrão da Empresa para habilitar esta opção.";
+        label.style.cursor = "not-allowed";
+        label.classList.add("text-muted");
+      }
+      if (labelAtulizar) {
+        labelAtulizar.title =
+          "Configure os Limites Padrão da Empresa para habilitar esta opção.";
+        labelAtulizar.style.cursor = "not-allowed";
+        labelAtulizar.classList.add("text-muted");
+      }
+    } else {
+      checkboxEmpresa.disabled = false;
+      checkboxEmpresaAtualizar.disabled = false;
+      const label = document.querySelector(
+        `label[for="${checkboxEmpresa.id}"]`
+      );
+      const labelAtulizar = document.querySelector(
+        `label[for="${checkboxEmpresaAtualizar.id}"]`
+      );
+      if (labelAtulizar) {
+        labelAtulizar.title = "";
+        labelAtulizar.style.cursor = "";
+        labelAtulizar.classList.remove("text-muted");
+      }
+      if (label) {
+        label.title = "";
+        label.style.cursor = "";
+        label.classList.remove("text-muted");
+      }
+    }
   } catch (error) {
     console.error("Falha ao carregar dados atuais:", error);
   }
@@ -845,7 +965,7 @@ document.addEventListener("DOMContentLoaded", function () {
     carregarMaquinas(1, "nome", "");
     carregarParametrosAtuais();
   } else {
-    alert("Sessão inválida. Por favor, faça login.");
+    exibirErro("Sessão inválida", "Por favor, faça login.");
   }
 
   if (btnAbrir)
@@ -906,7 +1026,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
   if (btnCadastrar) {
-    btnCadastrar.addEventListener("click", cadastrarMaquina);
+    btnCadastrar.addEventListener("click", (event) => cadastrarMaquina(event));
   }
 
   if (checkboxEmpresaUpd && checkboxOberonUpd) {
@@ -984,7 +1104,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   if (btnAtualizar) {
-    btnAtualizar.addEventListener("click", atualizarMaquinaSubmit); 
+    btnAtualizar.addEventListener("click", atualizarMaquinaSubmit);
   }
 
   if (formConfig && modalElementConfig) {
@@ -999,6 +1119,9 @@ document.addEventListener("DOMContentLoaded", function () {
       if (event.target.value == "") {
         valor_parametro = "nome";
         termo = "";
+      }
+      if ((valor_parametro = "")) {
+        valor_parametro = "nome";
       }
       buscarDebounced(event.target.value);
     });

@@ -61,16 +61,6 @@ function cadastrarParametroPadrao(limite, fkEmpresa, fkComponente) {
   return database.executar(instrucaoSql);
 }
 
-function getFkAlerta(fkMaquina) {
-  console.log("[MODEL] - function getFkAlerta():", fkMaquina);
-
-  var instrucaoSql = `
-        SELECT idAlerta from Alerta WHERE fkMaquina = ${fkMaquina};
-    `;
-  console.log("Executando a instrução SQL: \n" + instrucaoSql);
-  return database.executar(instrucaoSql);
-}
-
 function getFkMaquinaComponente(fkMaquina) {
   console.log("[MODEL] - function getFkMaquinaComponente():", fkMaquina);
   var instrucaoSql = `
@@ -91,18 +81,6 @@ function getComponentesPorMaquina(idMaquina) {
         WHERE MC.fkMaquina = ${idMaquina};
     `;
 
-  console.log("Executando a instrução SQL: \n" + instrucaoSql);
-  return database.executar(instrucaoSql);
-}
-
-function getParametrosEspecificos(fkMaquinaComponente) {
-  console.log(
-    "[MODEL] - function getParametrosEspecificos():",
-    fkMaquinaComponente
-  );
-  var instrucaoSql = `
-        SELECT idParametro from Parametro where fkMaquinaComponente = ${fkMaquinaComponente};
-    `;
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
 }
@@ -162,16 +140,6 @@ function eliminarMaquina(idMaquina) {
   return database.executar(instrucaoSql);
 }
 
-function eliminarMaquinaComponente(idMaquina) {
-  console.log("[MODEL] - function eliminarMaquinaComponente():", idMaquina);
-
-  var instrucaoSql = `
-        Delete from Parametro where fkMaquina = ${idMaquina};
-    `;
-  console.log("Executando a instrução SQL: \n" + instrucaoSql);
-  return database.executar(instrucaoSql);
-}
-
 function eliminarRegistros(fkMaquinaComponente) {
   console.log("[MODEL] - function eliminarRegistros():", fkMaquinaComponente);
 
@@ -205,22 +173,25 @@ function listarMaquinasPorEmpresa(
   );
 
   var instrucaoDadosSql = `
-        SELECT 
-            idMaquina, 
-            nome, 
-            IFNULL(hostname, 'Aguardando Captura') AS hostname, 
-            IFNULL(modelo, 'Não Especificado') AS modelo, 
-            IFNULL(status, 'Aguardando') AS status, 
-            IFNULL(sistemaOperacional, 'Capturando SO') AS sistemaOperacional, 
-            IFNULL(macAddress, 'MAC Ausente') AS macAddress, 
-            IFNULL(ip, 'Aguardando IP') AS ip
-        FROM Maquina 
-        WHERE fkEmpresa = ${fkEmpresa}
-          AND (${condicao} LIKE '%${termoDePesquisa}%' OR ${condicao} = '${termoDePesquisa}')
-        ORDER BY idMaquina ASC
-        LIMIT ${limite}
-        OFFSET ${offset}
-    `;
+    SELECT 
+        M.idMaquina, 
+        M.nome, 
+        IFNULL(M.hostname, 'Aguardando Captura') AS hostname, 
+        IFNULL(M.modelo, 'Não Especificado') AS modelo, 
+        IFNULL(M.status, 'Aguardando') AS status, 
+        IFNULL(M.sistemaOperacional, 'Capturando SO') AS sistemaOperacional, 
+        IFNULL(M.macAddress, 'MAC Ausente') AS macAddress, 
+        IFNULL(M.ip, 'Aguardando IP') AS ip,
+        MAX(MC.origemParametro) AS origemParametro 
+    FROM Maquina AS M
+    LEFT JOIN MaquinaComponente AS MC ON M.idMaquina = MC.fkMaquina
+    WHERE M.fkEmpresa = ${fkEmpresa}
+      AND (M.${condicao} LIKE '%${termoDePesquisa}%' OR M.${condicao} = '${termoDePesquisa}')
+    GROUP BY M.idMaquina
+    ORDER BY M.idMaquina ASC
+    LIMIT ${limite}
+    OFFSET ${offset}
+`;
 
   console.log("Executando a instrução SQL de DADOS: \n" + instrucaoDadosSql);
 
@@ -277,9 +248,7 @@ function buscarComponentesComParametros(idMaquina) {
             MC.origemParametro,
             C.tipoComponente,
             C.unidadeMedida,
-            
             PE.limite AS limiteNumerico
-            
         FROM MaquinaComponente AS MC
         JOIN Componente AS C 
             ON MC.fkComponente = C.idComponente
@@ -361,28 +330,23 @@ module.exports = {
   cadastrarMaquinaComponente,
   cadastrarParametroEspecifico,
 
-  getFkAlerta,
   getFkMaquinaComponente,
   getFkEmpresa,
   getSenha,
   getParametrosPadrao,
-  getParametrosEspecificos,
   getComponentesPorMaquina,
+  listarMaquinasPorEmpresa,
+  contarMaquinasPorEmpresa,
+  buscarMaquinaPorId,
+  buscarComponentesComParametros,
 
   atualizarDadosMaquina,
   atualizarOrigemComponente,
   atualizarParametroEspecifico,
-  removerParametroEspecifico,
 
+  removerParametroEspecifico,
   eliminarMaquina,
-  eliminarMaquinaComponente,
   eliminarRegistros,
   eliminarAlertas,
   excluirParametroEspecifico,
-
-  listarMaquinasPorEmpresa,
-  contarMaquinasPorEmpresa,
-
-  buscarMaquinaPorId,
-  buscarComponentesComParametros,
 };

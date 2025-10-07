@@ -1,10 +1,5 @@
 const maquinasModel = require("../models/maquinasModel");
 
-const ID_CPU = 1;
-const ID_MEMORIA = 2;
-const ID_DISCO = 3;
-const ID_REDE = 4;
-
 async function getParametrosPadrao(req, res) {
   const idFuncionario = req.params.idFuncionario;
 
@@ -362,18 +357,8 @@ async function buscarDadosParaEdicao(req, res) {
 }
 
 async function atualizarMaquina(req, res) {
-  const idMaquina = req.params.idMaquina; 
-  const {
-    nome,
-    macAddress,
-    origemParametro,
-    limites, 
-  } = req.body;
-  console.log(idMaquina)
-  console.log(nome)
-  console.log(macAddress)
-  console.log(origemParametro)
-  console.log(limites)
+  const idMaquina = req.params.idMaquina;
+  const { nome, macAddress, origemParametro, limites } = req.body;
   if (!nome || !macAddress || !idMaquina) {
     return res
       .status(400)
@@ -415,7 +400,7 @@ async function atualizarMaquina(req, res) {
 
     for (const item of componentesMaquina) {
       const fkMaquinaComponente = item.idMaquinaComponente;
-      const tipoComponente = item.tipoComponente; 
+      const tipoComponente = item.tipoComponente;
 
       promisesAtualizacao.push(
         maquinasModel.atualizarOrigemComponente(
@@ -460,11 +445,14 @@ async function atualizarMaquina(req, res) {
 }
 
 module.exports = {
-  getParametrosPadrao,
   cadastrarMaquina,
-  excluirMaquina,
+
   listarMaquinas,
-  salvarPadrao,
+  getParametrosPadrao,
   buscarDadosParaEdicao,
-  atualizarMaquina
+
+  salvarPadrao,
+  atualizarMaquina,
+
+  excluirMaquina,
 };
