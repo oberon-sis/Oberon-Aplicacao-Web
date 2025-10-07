@@ -323,6 +323,28 @@ function removerParametroEspecifico(fkMaquinaComponente) {
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
 }
+function getParametrosEspecificos(fkMaquinaComponente) {
+  console.log(
+    "[MODEL] - function getParametrosEspecificos():",
+    fkMaquinaComponente
+  );
+  var instrucaoSql = `
+        SELECT idParametro from ParametroEspecifico where fkMaquinaComponente = ${fkMaquinaComponente};
+    `;
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+function eliminarMaquinaComponente(idMaquina) {
+  console.log(
+    "[MODEL] - function eliminarMaquinaComponente():",
+    idMaquina
+  );
+  var instrucaoSql = `
+       DELETE FROM MaquinaComponente where fkMaquina  = ${idMaquina};
+    `;
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
 
 module.exports = {
   cadastrarMaquina,
@@ -339,6 +361,7 @@ module.exports = {
   contarMaquinasPorEmpresa,
   buscarMaquinaPorId,
   buscarComponentesComParametros,
+  getParametrosEspecificos,
 
   atualizarDadosMaquina,
   atualizarOrigemComponente,
@@ -349,4 +372,5 @@ module.exports = {
   eliminarRegistros,
   eliminarAlertas,
   excluirParametroEspecifico,
+  eliminarMaquinaComponente,
 };

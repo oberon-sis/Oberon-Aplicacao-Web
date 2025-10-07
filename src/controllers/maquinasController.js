@@ -1,4 +1,5 @@
 const maquinasModel = require("../models/maquinasModel");
+const bcrypt = require("bcryptjs");
 
 async function getParametrosPadrao(req, res) {
   const idFuncionario = req.params.idFuncionario;
@@ -203,13 +204,13 @@ async function excluirMaquina(req, res) {
     const senhaBanco = await maquinasModel.getSenha(idGerenteServer);
 
     if (!senhaBanco || senhaBanco.length === 0) {
-      return res.status(404).send("Dados do gerente inválidos ou incompletos.");
+      return res.status(401).send("Credenciais inválidas.");
     }
 
-    const senhaBancoHash = senhaBanco[0].senha;
+    const senhaCorreta = await bcrypt.compare(senhaServer, senhaBanco[0].senha);
 
-    if (senhaBancoHash !== senhaServer) {
-      return res.status(401).send("Credenciais inválidas. Senha não confere.");
+    if (!senhaCorreta) {
+      return res.status(401).send("Credenciais inválidas.");
     }
 
     const maquinasComponentes =
@@ -239,6 +240,7 @@ async function excluirMaquina(req, res) {
     await Promise.all(promisesBuscaParametros);
 
     await Promise.all(promisesExclusao);
+    const resultadoExclusaoComponentes = await maquinasModel.eliminarMaquinaComponente(idMaquinaServer)
 
     const resultadoExclusao =
       await maquinasModel.eliminarMaquina(idMaquinaServer);
