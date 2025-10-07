@@ -2,13 +2,9 @@ var database = require("../database/config");
 
 const limitePagina = 15; 
 
-// Função auxiliar para construir a cláusula WHERE de pesquisa E data
 function construirClausulaWhere(tipoFiltro, termoPesquisa, dataInicio, dataFim) {
     let clausulaWhere = '';
-    
-    // 1. Filtro por Pesquisa de Texto
     if (termoPesquisa) {
-        // Sanitize o termo de pesquisa (substitui ' por '')
         const termoSql = termoPesquisa.replace(/'/g, "''");
         const termoLike = `'%${termoSql}%'`;
 
@@ -25,16 +21,10 @@ function construirClausulaWhere(tipoFiltro, termoPesquisa, dataInicio, dataFim) 
                 break;
         }
     }
-    
-    // 2. Filtro por Data Inicial (horarioInicio)
     if (dataInicio) {
-        // O valor do input date vem como 'YYYY-MM-DD'
         clausulaWhere += `AND A.horarioInicio >= '${dataInicio}' `;
     }
-
-    // 3. Filtro por Data Final (horarioInicio)
     if (dataFim) {
-        // O controller já adiciona ' 23:59:59' em dataFim para pegar o dia inteiro
         clausulaWhere += `AND A.horarioInicio <= '${dataFim}' `;
     }
 
@@ -49,7 +39,6 @@ function getFkEmpresa(idFuncionario) {
     return database.executar(instrucaoSql);
 }
 
-// Atualizado para incluir filtros de texto e data
 function verAlertas(fkEmpresa, pagina, tipoFiltro, termoPesquisa, dataInicio, dataFim) {
     const limite = limitePagina;
     const offset = (pagina - 1) * limite;
@@ -82,7 +71,6 @@ function verAlertas(fkEmpresa, pagina, tipoFiltro, termoPesquisa, dataInicio, da
     return database.executar(instrucaoSql);
 }
 
-// Atualizado para incluir filtros de texto e data
 function contarTotalAlertas(fkEmpresa, tipoFiltro, termoPesquisa, dataInicio, dataFim) {
     const clausulaWhere = construirClausulaWhere(tipoFiltro, termoPesquisa, dataInicio, dataFim);
     
@@ -103,7 +91,6 @@ function contarTotalAlertas(fkEmpresa, tipoFiltro, termoPesquisa, dataInicio, da
     return database.executar(instrucaoSql);
 }
 
-// NOVA FUNÇÃO: Obter todos os alertas para exportação (sem LIMIT/OFFSET)
 function obterTodosAlertasParaExportacao(fkEmpresa, tipoFiltro, termoPesquisa, dataInicio, dataFim) {
     const clausulaWhere = construirClausulaWhere(tipoFiltro, termoPesquisa, dataInicio, dataFim);
     
@@ -138,6 +125,6 @@ module.exports = {
     getFkEmpresa,
     verAlertas,
     contarTotalAlertas,
-    obterTodosAlertasParaExportacao, // Exporta a nova função
+    obterTodosAlertasParaExportacao,
     limitePagina
 };

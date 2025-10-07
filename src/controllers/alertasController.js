@@ -1,35 +1,25 @@
-var alertasModel = require("../models/alertasModel"); 
-// Biblioteca para conversão de JSON para CSV
+var alertasModel = require("../models/alertasModel");
 const { parse } = require('json2csv'); 
-
 const limitePagina = alertasModel.limitePagina;
 
 function processarFiltros(req) {
-    // 1. Parâmetros de Filtro de Listagem (Baseado na URL)
     const idUsuario = req.params.idUsuario;
     const pagina = parseInt(req.params.pagina) || 1; 
-
-    // 2. Parâmetros de Filtro de Pesquisa e Data
     let tipoFiltro = req.params.tipoFiltro || 'descricao'; 
     let termoPesquisaParam = req.params.termoPesquisa || 'vazio';
     let termoPesquisaDecoded = decodeURIComponent(termoPesquisaParam);
     let termoPesquisa = termoPesquisaDecoded === 'vazio' ? '' : termoPesquisaDecoded;
     let dataInicio = req.params.dataInicio === 'vazio' ? null : req.params.dataInicio;
     let dataFim = req.params.dataFim === 'vazio' ? null : req.params.dataFim;
-
-    // 3. Validações e Ajustes
     if (isNaN(idUsuario) || idUsuario <= 0) {
         throw new Error("ID do usuário inválido ou ausente.");
     }
     if (!['descricao', 'maquina', 'componente'].includes(tipoFiltro)) {
          tipoFiltro = 'descricao'; 
     }
-    
-    // Adiciona 23:59:59 ao dataFim para incluir todo o último dia
     if (dataFim) {
         dataFim = dataFim + ' 23:59:59';
     }
-
     return { idUsuario, pagina, tipoFiltro, termoPesquisa, dataInicio, dataFim };
 }
 
@@ -81,25 +71,19 @@ function listarAlertas(req, res) {
 
 function exportarAlertas(req, res) {
     try {
-        // Usa a mesma função de processamento, ignorando a página
         const { idUsuario, tipoFiltro, termoPesquisa, dataInicio, dataFim } = processarFiltros(req);
-
         alertasModel.getFkEmpresa(idUsuario)
             .then(function (resultadoEmpresa) {
                 if (resultadoEmpresa.length === 0 || !resultadoEmpresa[0].fkEmpresa) {
                     return res.status(404).send("Empresa do usuário não encontrada.");
                 }
                 const fkEmpresa = resultadoEmpresa[0].fkEmpresa;
-
-                // Chama uma função no Model para retornar TODOS os alertas, sem paginação
                 return alertasModel.obterTodosAlertasParaExportacao(fkEmpresa, tipoFiltro, termoPesquisa, dataInicio, dataFim);
             })
             .then(function (alertas) {
                 if (alertas.length === 0) {
                     return res.status(204).send("Nenhum alerta encontrado para exportação com os filtros aplicados.");
                 }
-
-                // 1. Define os campos do CSV
                 const fields = [
                     { label: 'ID Alerta', value: 'idAlerta' },
                     { label: 'Máquina', value: 'nomeMaquina' },
@@ -111,15 +95,10 @@ function exportarAlertas(req, res) {
                     { label: 'Final', value: 'horarioFinal' },
                     { label: 'Duração (Segundos)', value: 'duracaoSegundos' },
                 ];
-                
-                // 2. Converte o JSON em CSV
                 const csv = parse(alertas, { fields });
-
-                // 3. Envia a resposta como arquivo CSV
                 res.header('Content-Type', 'text/csv');
                 res.attachment(`relatorio_alertas_${new Date().toISOString().slice(0, 10)}.csv`);
                 res.status(200).send(csv);
-
             })
             .catch(function (erro) {
                 console.error("\nHouve um erro ao exportar os alertas! Erro: ", erro.sqlMessage || erro.message);
@@ -133,5 +112,5 @@ function exportarAlertas(req, res) {
 
 module.exports = {
     listarAlertas,
-    exportarAlertas // Exporta a nova função
+    exportarAlertas
 };
