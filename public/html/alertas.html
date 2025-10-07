@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../css/body.css">
     <link rel="stylesheet" href="../component/menu/Menu.css">
     <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
-    <link rel="stylesheet" href="../css/maquinas.css"> 
+    <link rel="stylesheet" href="../css/maquinas.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
@@ -35,29 +35,35 @@
 
                 <div style="max-width: 250px;" class="input-group flex-grow-1 div_justify">
                     <input required="required" type="text" class="form-control shadow-none input_pesquisa"
-                        placeholder="Buscar por criticidade">
+                        placeholder="Buscar por Descrição" id="input_pesquisa_alerta" onkeyup="carregarAlertas(1)">
                 </div>
 
                 <div style="max-width: 150px;">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false" style="width: 100%;">
-                        Filtrar por...
+                        aria-expanded="false" style="width: 100%;" id="btn_filtro_texto">
+                        Filtrar por:
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end hover_verde">
-                        <li><a class="dropdown-item" href="#">Máquina</a></li>
-                        <li><a class="dropdown-item" href="#">Componente</a></li>
-                        <li><a class="dropdown-item" href="#">Tipo</a></li>
+                        <li><a class="dropdown-item" href="#"
+                                onclick="mudarTipoFiltro('descricao', 'Descrição')">Descrição</a></li>
+                        <li><a class="dropdown-item" href="#"
+                                onclick="mudarTipoFiltro('maquina', 'Máquina')">Máquina</a></li>
+                        <li><a class="dropdown-item" href="#"
+                                onclick="mudarTipoFiltro('componente', 'Componente')">Componente</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="d-flex align-items-center gap-1">
-                    <input type="date" class="form-control shadow-none input_pesquisa" placeholder="Início">
+                    <input type="date" class="form-control shadow-none input_pesquisa" placeholder="Início"
+                        id="input_data_inicio" onchange="carregarAlertas(1)">
                     <span class="text-muted mx-1">➜</span>
-                    <input type="date" class="form-control shadow-none input_pesquisa" placeholder="Final">
+                    <input type="date" class="form-control shadow-none input_pesquisa" placeholder="Final"
+                        id="input_data_fim" onchange="carregarAlertas(1)">
                 </div>
 
                 <div class="d-flex gap-2 flex-grow-1 justify-content-end div_pesquisa div_botoes">
-                     <button onmouseenter="mudar_icone_on('icone_exp')" onmouseleave="mudar_icone_lv('icone_exp')"
+                    <button onclick="exportarRelatorio()" onmouseenter="mudar_icone_on('icone_exp')"
+                        onmouseleave="mudar_icone_lv('icone_exp')"
                         class="btn fw-semibold border flex-fill flex-md-grow-0 verde_claro botao_configuracao"
                         style=" white-space: nowrap;">
                         <img src="../assets/svg/plus_preto.svg" data-hover-src="../assets/svg/plus_white.svg" alt=""
@@ -69,12 +75,13 @@
             </div>
 
         </div>
-        
+
         <div class="table-responsive shadow-sm border rounded div_tabela">
             <table class="table table-hover mb-0">
                 <thead>
                     <tr class="table-success" style="--bs-table-bg-type: none; background-color: #BADCDA;">
-                        <th scope="col" class="py-3" style="width: 15%;">Descrição <i class="bi bi-arrow-down-up ms-1"></i></th>
+                        <th scope="col" class="py-3" style="width: 15%;">Descrição <i
+                                class="bi bi-arrow-down-up ms-1"></i></th>
                         <th scope="col" class="py-3" style="width: 10%;">Tipo</th>
                         <th scope="col" class="py-3" style="width: 10%;">Início</th>
                         <th scope="col" class="py-3" style="width: 10%;">Final</th>
@@ -161,5 +168,4 @@
 
 </html>
 <script src="../component/menu/Menu.js"></script>
-<script src="../js/maquinas.js"></script>
 <script src="../js/alertas.js"></script>

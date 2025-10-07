@@ -1,5 +1,13 @@
 let ID_USUARIO = 5;
 let paginaAtual = 1;
+let tipoFiltro = 'descricao';
+
+function mudarTipoFiltro(novoTipo, textoBotao) {
+    tipoFiltro = novoTipo;
+    document.getElementById('btn_filtro_texto').innerText = `${textoBotao}`;
+    document.getElementById('input_pesquisa_alerta').placeholder = `Buscar por ${textoBotao}`;
+    carregarAlertas(1);
+}
 
 function formatarDuracao(segundos) {
     if (segundos === null || isNaN(segundos)) return 'Ativo';
@@ -24,9 +32,26 @@ function renderizarTabela(alertas) {
         const dataInicio = alerta.horarioInicio ? alerta.horarioInicio.replace(' ', ' às ') : 'N/A';
         const dataFinal = alerta.horarioFinal ? alerta.horarioFinal.replace(' ', ' às ') : 'Ativo';
         const duracaoFormatada = formatarDuracao(alerta.duracaoSegundos);
-        const criticidadeClass = alerta.nivel === 'CRITICO' ? 'text-danger fw-bold' :
-            alerta.nivel === 'ALERTA' ? 'text-warning fw-bold' :
-                'text-success';
+        let criticidadeClass = 'text-secondary';
+
+        switch (alerta.nivel.toUpperCase()) {
+            case 'CRÍTICO':
+                criticidadeClass = 'text-danger fw-bold';
+                break;
+            case 'ALTO':
+                criticidadeClass = 'text-danger';
+                break;
+            case 'ALERTA':
+            case 'MÉDIO':
+                criticidadeClass = 'text-warning fw-bold'; 
+                break;
+            case 'BAIXO':
+                criticidadeClass = 'text-success';
+                break;
+            default:
+                criticidadeClass = 'text-info';
+        }
+
         const row = `
             <tr>
                 <td>${alerta.descricao}</td>
@@ -47,7 +72,6 @@ function renderizarPaginacao(totalPaginas, paginaAtual) {
     const navPaginas = document.querySelector('.div_paginas');
     const ul = document.querySelector('.pagination-sm');
     ul.innerHTML = '';
-
     if (totalPaginas <= 1) {
         navPaginas.style.display = 'none';
         return;
@@ -84,10 +108,19 @@ function renderizarPaginacao(totalPaginas, paginaAtual) {
             <a class="page-link" href="#" onclick="carregarAlertas(${paginaAtual + 1})">Seguinte</a>
         </li>
     `;
-
     navPaginas.style.display = 'flex';
 }
 
+function montarUrlFiltros(idFuncionario, pagina) {
+    const termoPesquisa = document.getElementById('input_pesquisa_alerta').value || '';
+    const dataInicio = document.getElementById('input_data_inicio').value || 'vazio';
+    const dataFim = document.getElementById('input_data_fim').value || 'vazio';
+    const termoEncoded = encodeURIComponent(termoPesquisa === '' ? 'vazio' : termoPesquisa);
+    const tipoEncoded = encodeURIComponent(tipoFiltro);
+    const inicioEncoded = encodeURIComponent(dataInicio);
+    const fimEncoded = encodeURIComponent(dataFim);
+    return `/alertas/listar/${idFuncionario}/${pagina}/${tipoEncoded}/${termoEncoded}/${inicioEncoded}/${fimEncoded}`;
+}
 
 function carregarAlertas(pagina = 1) {
     paginaAtual = pagina;
@@ -106,7 +139,10 @@ function carregarAlertas(pagina = 1) {
         if (tbodyReal) tbodyReal.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-danger">ID de usuário ausente. Faça login novamente.</td></tr>';
         return;
     }
-    fetch(`/alertas/listar/${idFuncionario}/${paginaAtual}`)
+
+    const url = montarUrlFiltros(idFuncionario, paginaAtual);
+
+    fetch(url)
         .then(response => {
             if (response.status === 204) {
                 return { alertas: [], totalAlertas: 0, totalPaginas: 0, paginaAtual: 1 };
@@ -132,6 +168,52 @@ function carregarAlertas(pagina = 1) {
             if (tbodyReal) tbodyReal.style.display = 'contents';
         });
 }
+
+function exportarRelatorio() {
+    Swal.fire({
+        title: 'Gerando Relatório...',
+        text: 'Aguarde enquanto preparamos seu arquivo CSV.',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    const usuarioSessao = JSON.parse(sessionStorage.getItem('usuario') || '{}');
+    const idFuncionario = usuarioSessao.idFuncionario || ID_USUARIO;
+
+    if (!idFuncionario) {
+        Swal.fire('Erro!', 'ID de usuário ausente.', 'error');
+        return;
+    }
+    const url = montarUrlFiltros(idFuncionario, 1);
+    const urlExport = url.replace(`/listar/${idFuncionario}/1/`, `/exportar/${idFuncionario}/`);
+    fetch(urlExport)
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(error => {
+                    throw new Error(error.detalhes || `Erro HTTP: ${response.status}`);
+                });
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = `relatorio_alertas_${new Date().toISOString().slice(0, 10)}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            Swal.fire('Sucesso!', 'Relatório CSV gerado e baixado!', 'success');
+        })
+        .catch(error => {
+            console.error('Falha na exportação:', error);
+            Swal.fire('Erro!', `Falha ao gerar o relatório: ${error.message}`, 'error');
+        });
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
     carregarAlertas(1);
