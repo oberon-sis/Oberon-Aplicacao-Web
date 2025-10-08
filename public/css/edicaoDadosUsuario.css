@@ -32,7 +32,7 @@
     
 }
 
-#nome, #email, #tipo, #telefone {
+#email_funcionario_logado, #cargo_funcionario_cont, #nome_funcionario_logado_cont, #telefone_funcionario_logado{
     padding-left: 10px;
 }
 
@@ -120,10 +120,13 @@ input:focus {
     padding: 20px;
 }
 
-#tipo{
-    padding-bottom: 10px;
+
+#linha{
     border-bottom: 1px solid gray;
+    padding-bottom: 16px;
+    padding-top: 43px;
 }
+
 
 #titleh2{
     margin-left: 8px;

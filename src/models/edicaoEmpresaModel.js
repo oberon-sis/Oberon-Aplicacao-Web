@@ -15,56 +15,32 @@ function getDadosEmpresaBd(idFuncionario) {
 }
 
 
-// function getDadosEmpresaBd(idFuncionario) {
-//   console.log(`
-//     ACESSEI O EMPRESA MODEL 
-//     \n >> Se aqui der erro de 'Error: connect ECONNREFUSED',
-//     \n >> verifique suas credenciais de acesso ao banco
-//     \n >> e se o servidor do BD está rodando corretamente.
-//     \n\n Parâmetro recebido: ${idFuncionario}
-//   `);
-
-//   const instrucaoSql = `
-//     SELECT 
-//       empresa.razaoSocial, 
-//       empresa.cnpj, 
-//       funcionario.nome
-//     FROM empresa
-//     JOIN funcionario ON funcionario.fkEmpresa = empresa.idEmpresa
-//     WHERE funcionario.idFuncionario = ${idFuncionario};
-//   `;
-
-//   console.log("Executando a instrução SQL:\n" + instrucaoSql);
-
-//   return database.executar(instrucaoSql);
-// }
 
 
-
-
-
-// // function atualizarStatus(fkEmpresa, razaoSocial, cnpj) {
-// //   console.log(
-// //     "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
-// //     fkEmpresa,
-// //     razaoSocial,
-// //     cnpj,
-// //   );    
+// function atualizarEmpresa(fkEmpresa, razaoSocial, cnpj) {
 //   var instrucaoSql = `
-//         UPDATE empresa SET 
-//         razaoSocial = '${razaoSocial}',
-//         cnpj = '${cnpj}'
-//         WHERE = ${fkEmpresa}
-//          ;
-//     `;
-//   console.log("Executando a instrução SQL: \n" + instrucaoSql);
+//     UPDATE empresa
+//     SET razaoSocial = '${razaoSocial}', cnpj = '${cnpj}'
+//     WHERE idEmpresa = ${fkEmpresa};
+//   `;
+//   console.log("Atualizando empresa:", instrucaoSql);
+//   return database.executar(instrucaoSql);
+// }
+
+// function getFkEmpresa(idFuncionario) {
+//   var instrucaoSql = `
+//     SELECT fkEmpresa FROM funcionario WHERE idFuncionario = ${idFuncionario};
+//   `;
+//   console.log("Buscando fkEmpresa:", instrucaoSql);
 //   return database.executar(instrucaoSql);
 // }
 
 
 
-module.exports = {
-    // Exportamos a função com o nome que o controller está chamando
+
+  module.exports = {
+    //     // Exportamos a função com o nome que o controller está chamando
     getDadosEmpresaBd
-    // atualizarStatus
-};
+    // atualizarEmpresa,
+    // getFkEmpresa
+  };

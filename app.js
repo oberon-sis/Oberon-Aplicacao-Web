@@ -19,7 +19,8 @@ var menuRouter = require("./src/routes/menu");
 var usuarioRouter = require("./src/routes/usuarios");
 var empresaRouter = require("./src/routes/empresas"); // Corrigido o nome do arquivo para 'empresas'
 var gerenciamentoMaquinasRouter = require("./src/routes/maquinas");
-var edicaoEmpresaRouter = require("./src/routes/edicaoEmpresa")
+var edicaoEmpresaRouter = require("./src/routes/edicaoEmpresa");
+var edicaoUsuarioRouter = require("./src/routes/edicaoUsuario");
 
 // --- CONFIGURAÇÃO DOS MIDDLEWARES ---
 app.use(express.json());
@@ -35,6 +36,7 @@ app.use("/usuarios", usuarioRouter);
 app.use("/empresas", empresaRouter); 
 app.use("/gerenciamentoMaquinas", gerenciamentoMaquinasRouter);
 app.use("/edicaoEmpresa", edicaoEmpresaRouter)
+app.use("/edicaoUsuario", edicaoUsuarioRouter)
 
   
 app.listen(PORTA_APP, function () {

@@ -98,3 +98,49 @@ function AtualizarUsuario(idFuncionario) {
 }
 
 function exibirSucesso(titulo, texto) { Swal.fire({ title: titulo, text: texto, icon: 'success', confirmButtonColor: '#0C8186', confirmButtonText: 'OK' }); } function exibirErro(titulo, texto) { Swal.fire({ title: titulo, text: texto, icon: 'error', confirmButtonColor: '#0C8186', confirmButtonText: 'OK' }); }
+
+
+function getDadosEmpresaBd() {
+  fetch(`/edicaoUsuario/getDadosEmpresaBd/4`) // ID mocado apenas para teste
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro ao buscar dados do usuário");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.length > 0) {
+        const usuario = data[0];
+
+        var cargo = "";
+        if (usuario.fkTipoUsuario == 1000) {
+            cargo = "Colaborador"
+            
+        }else if (usuario.fkTipoUsuario == 1001) {
+            cargo = "Administrador"
+            
+        }else if (usuario.fkTipoUsuario == 1002) {
+            cargo = "Gestor"
+            
+        }else{
+            cargo = "Cargo não identificado!"
+        }
+
+        // Exibir no HTML
+        document.getElementById("nome_funcionario_logado").textContent = usuario.nome;
+        document.getElementById("cargo_funcionario_logado").textContent = cargo;
+        document.getElementById("cargo_funcionario_cont").textContent = cargo;
+        document.getElementById("email_funcionario_logado").textContent = usuario.email;
+        document.getElementById("nome_banco").textContent = usuario.razaoSocial;
+        document.getElementById("nome_funcionario_logado_cont").textContent = usuario.nome;
+
+       
+// opcional, se quiser que o título atualize também
+      } else {
+        alert("Nenhum dado encontrado para este funcionário.");
+      }
+    })
+    .catch((erro) => {
+      console.error("Erro ao carregar dados:", erro);
+    });
+}
