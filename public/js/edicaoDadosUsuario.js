@@ -133,6 +133,7 @@ function getDadosEmpresaBd() {
         document.getElementById("email_funcionario_logado").textContent = usuario.email;
         document.getElementById("nome_banco").textContent = usuario.razaoSocial;
         document.getElementById("nome_funcionario_logado_cont").textContent = usuario.nome;
+        document.getElementById("cpf_logado_cont").textContent = usuario.cpf;
 
        
 // opcional, se quiser que o título atualize também

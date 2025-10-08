@@ -6,7 +6,7 @@ function getDadosEmpresaBd(idFuncionario) {
     idFuncionario,
   );
   var instrucaoSql = `
-    select empresa.razaoSocial,funcionario.nome, funcionario.email, funcionario.fkTipoUsuario
+    select empresa.razaoSocial,funcionario.nome, funcionario.email, funcionario.fkTipoUsuario, funcionario.cpf
         from  empresa join funcionario 
         on funcionario.fkEmpresa = empresa.idEmpresa
         where idFuncionario = ${idFuncionario};`;
