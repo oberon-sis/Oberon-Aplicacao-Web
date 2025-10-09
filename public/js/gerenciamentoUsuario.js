@@ -1,22 +1,18 @@
-// const URL_BASE = "http://localhost:3333"; // endereço do backend
-// const tbody = document.getElementById("Conteudo_real");
-// const pagination = document.querySelector(".pagination");
-// const skeleton = document.getElementById("Estrutura_esqueleto_carregamento");
-
-// let paginaAtual = 1;
 
 document.addEventListener("DOMContentLoaded", function () {
     buscarUsuarios(1);
 });
 
-function buscarUsuarios(pagina = 1) {
-    const tabela = document.getElementById("Conteudo_real");
-    const paginacao = document.querySelector(".pagination");
+// LISTAGEM DOS USUARIOS COM PAGINAÇÃO 
+
+ function buscarUsuarios(pagina = 1) {
+    var tabela = document.getElementById("Conteudo_real");
+    var paginacao = document.querySelector(".pagination");
 
     tabela.innerHTML = `
         ${Array.from({ length: 5 }).map(() => `
             <tr>
-                <td colspan="6">
+                <td colspan="7">
                     <div class="placeholder-glow">
                         <span class="placeholder col-12"></span>
                     </div>
@@ -31,56 +27,93 @@ function buscarUsuarios(pagina = 1) {
             return res.json();
         })
         .then(dados => {
+            Estrutura_esqueleto_carregamento.style.display = "none";
+
             if (!dados || dados.length === 0) {
-                tabela.innerHTML = `<tr><td colspan="6" class="text-center">Nenhum usuário encontrado.</td></tr>`;
-                paginacao.innerHTML = "";
+                tabela.innerHTML = `<tr><td colspan="7" class="text-center">Nenhum usuário encontrado.</td></tr>`;
+                paginacao.innerHTML = `
+                    <li class="page-item ${pagina === 1 ? "disabled" : ""}">
+                        <a class="page-link" href="#" onclick="buscarUsuarios(${pagina - 1})">Anterior</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">${pagina}</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#">Próxima</a></li>
+                `;
                 return;
             }
 
-        
             tabela.innerHTML = "";
             dados.forEach(u => {
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
-                       <td>${u.id}</td>
-                     <td>${u.nome}</td>
-                     <td>${u.cpf}</td>
-                     <td>${u.email}</td>
-                     <td>${u.funcao}</td>
-            <td>
-                <span class="opcao_crud text-primary" data-bs-toggle="modal" onclick="getUsuariobyID(${u.id})"
-                    data-bs-target="#modalAtualizarMaquina">
-                    <img src="../assets/svg/atualizar_blue.svg" alt="">
-                    Atualizar<i class="bi bi-arrow-clockwise"></i>
-                </span>
-            </td>
-            <td>
-                <span class="opcao_crud text-danger" onclick="ExcluirUsuario(${u.id})"> 
-                <img src="../assets/svg/excluir_red.svg" alt="">
-                Excluir<i class="bi bi-trash"></i>
-                </span>
-            </td>
+                    <td>${u.id}</td>
+                    <td>${u.nome}</td>
+                    <td>${u.cpf}</td>
+                    <td>${u.email}</td>
+                    <td>${u.funcao}</td>
+                    <td>
+                        <span class="opcao_crud text-primary" data-bs-toggle="modal" onclick="getUsuariobyID(${u.id})"
+                            data-bs-target="#modalAtualizarMaquina">
+                            <img src="../assets/svg/atualizar_blue.svg" alt="">
+                            Atualizar
+                        </span>
+                    </td>
+                    <td>
+                        <span class="opcao_crud text-danger" onclick="ExcluirUsuario(${u.id})">
+                            <img src="../assets/svg/excluir_red.svg" alt="">
+                            Excluir
+                        </span>
+                    </td>
                 `;
                 tabela.appendChild(tr);
             });
+
+            return fetch(`/gerenciamentoUsuario/listarFuncionarios?page=${pagina + 1}`)
+                .then(nextRes => {
+                    if (!nextRes.ok) throw new Error();
+                    return nextRes.json();
+                })
+                .then(dadosProx => {
+                    var temProxima = dadosProx && dadosProx.length > 0;
+
+                    paginacao.innerHTML = `
+                        <li class="page-item ${pagina === 1 ? "disabled" : ""}">
+                            <a class="page-link" href="#" onclick="buscarUsuarios(${pagina - 1})">Anterior</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">${pagina}</a></li>
+                        <li class="page-item ${!temProxima ? "disabled" : ""}">
+                            <a class="page-link" href="#" onclick="buscarUsuarios(${pagina + 1})">Próxima</a>
+                        </li>
+                    `;
+                })
+                .catch(() => {
+                    paginacao.innerHTML = `
+                        <li class="page-item ${pagina === 1 ? "disabled" : ""}">
+                            <a class="page-link" href="#" onclick="buscarUsuarios(${pagina - 1})">Anterior</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">${pagina}</a></li>
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">Próxima</a>
+                        </li>
+                    `;
+                });
+        })
+        .catch(err => {
+            console.error("Erro ao carregar usuários:", err);
+            tabela.innerHTML = `
+                <tr><td colspan="7" class="text-center text-danger">
+                    Erro ao carregar usuários (${err.message})
+                </td></tr>
+            `;
 
             paginacao.innerHTML = `
                 <li class="page-item ${pagina === 1 ? "disabled" : ""}">
                     <a class="page-link" href="#" onclick="buscarUsuarios(${pagina - 1})">Anterior</a>
                 </li>
                 <li class="page-item active"><a class="page-link" href="#">${pagina}</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#" onclick="buscarUsuarios(${pagina + 1})">Próxima</a>
-                </li>
+                <li class="page-item disabled"><a class="page-link" href="#">Próxima</a></li>
             `;
-        })
-        .catch(err => {
-            console.error("Erro ao carregar usuários:", err);
-            tabela.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Erro ao carregar usuários (${err.message})</td></tr>`;
         });
 }
-
-
 
 
 
@@ -90,7 +123,6 @@ function cadastrar() {
     var cpf = document.getElementById('cpf_input').value;
     var senha = document.getElementById('senha_input').value;
     var fkTipoUsuario = document.getElementById('tipo_usuario_select').value;
-    var idFuncionario = 5; // administrador logado
 
     if (!nome || !email || !cpf || !senha || !fkTipoUsuario) {
         alert("Preencha todos os campos corretamente!");

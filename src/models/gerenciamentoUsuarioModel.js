@@ -166,7 +166,7 @@ function listarFuncionarios(limit, offset) {
         LIMIT ${limit} OFFSET ${offset};
     `;
 
-    console.log("🧠 SQL executado:\n" + instrucao);
+    console.log("SQL executado:\n" + instrucao);
     return database.executar(instrucao);
 }
 
