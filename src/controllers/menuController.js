@@ -46,7 +46,7 @@ function gerarLinkHTML(item) {
 
 function gerarDropdownHTML(item, isMobile) {
   const idDropdown = isMobile ? 'dropdownMenuLinkOffcanvas' : 'dropdownMenuLink';
-  const dropdownHtml = item.dropdownItens.map(dItem => `<li><a class="dropdown-item" href="#">${dItem}</a></li>`).join('');
+  const dropdownHtml = item.dropdownItens.map(dItem => `<li><a class="dropdown-item" href="${dItem.link}">${dItem.titulo}</a></li>`).join('');
   return `
         <div class="dropdown">
             <a class="nav-link rounded py-2 mb-1 d-flex align-items-center dropdown-toggle linha" href="#"

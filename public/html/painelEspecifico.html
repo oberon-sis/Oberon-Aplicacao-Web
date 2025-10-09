@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="../css/painelEspecifico.css" />
 
   <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
 </head>
 
 <body class="d-flex w-100 h-100">
@@ -119,11 +121,15 @@
 
     <section class="charts-container">
       <div class="chart-item chart-history">
+        <h3>
+          Histórico de Utilização de Recursos nas Últimas 24 Horas
+        </h3>
         <canvas id="utilizacaoChart"></canvas>
       </div>
 
       <div class="chart-item chart-comparative">
-        <canvas id="ocorrenciasChart"></canvas>
+        <h3>Comparativo de Ocorrências por Alerta (Semanal) </h3>
+        <canvas id="graficoBarrasComparativo"></canvas>
       </div>
     </section>
 
@@ -144,3 +150,4 @@
 
 </html>
 <script src="../component/menu/Menu.js"></script>
+<script src="../js/painelEspecifico.js"></script>
