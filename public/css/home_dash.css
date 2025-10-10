@@ -39,11 +39,30 @@
 .shadow_div div div{
     box-shadow: none;
 }
-@media (min-width: 770px) {
+@media (min-width: 770px) and (max-width: 800px){
+
+ .div_cards_geral{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+ }
+ .div_cards_geral div{
+    width: 100%;
+ }
+}
+
+@media (min-width: 800px) and (max-width: 1400px){
+
+    .div_cards_geral div{
+    height: auto;
+    min-height: 100%;
+    }
+    .div_etiquetas{
+        display: flex;
+    }
 .etiquetas{
     display: flex;
     flex-direction: column;
     text-align: center;
 }
 }
-
