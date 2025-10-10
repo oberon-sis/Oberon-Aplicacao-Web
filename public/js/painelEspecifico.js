@@ -8,10 +8,10 @@ const COLORS = {
 const dadosIniciais = {
     labels: ["21h", "23h", "01h", "03h", "05h", "07h", "09h", "11h", "13h"],
     datasets: [
-        { label: "Uso de CPU  ", data: [80, 75, 90, 85, 100, 95, 110, 105, 120], borderColor: COLORS.alpha.line, tension: 0.4, fill: true, order: 1, pointBackgroundColor: COLORS.alpha.point, pointBorderColor: "#fff", pointRadius: 5, pointHoverRadius: 8, },
-        { label: "Uso de RAM  ", data: [60, 65, 70, 75, 85, 80, 95, 90, 105], borderColor: COLORS.beta.line, tension: 0.4, fill: true, order: 2, pointBackgroundColor: COLORS.beta.point, pointBorderColor: "#fff", pointRadius: 5, pointHoverRadius: 8, },
-        { label: "Uso do Disco Duro  ", data: [70, 60, 55, 65, 70, 60, 75, 80, 90], borderColor: COLORS.gamma.line, tension: 0.4, fill: true, order: 3, pointBackgroundColor: COLORS.gamma.point, pointBorderColor: "#fff", pointRadius: 5, pointHoverRadius: 8, },
-        { label: "Taxa de utilização de rede  ", data: [50, 55, 50, 45, 60, 70, 65, 75, 85], borderColor: COLORS.delta.line, tension: 0.4, fill: true, order: 4, pointBackgroundColor: COLORS.delta.point, pointBorderColor: "#fff", pointRadius: 5, pointHoverRadius: 8, },
+        { label: "Uso de CPU  ", data: [80, 75, 90, 85, 100, 95, 110, 105, 120], borderColor: COLORS.alpha.line, tension: 0.4, fill: true, order: 4, pointBackgroundColor: COLORS.alpha.point, pointBorderColor: "#fff", pointRadius: 5, pointHoverRadius: 8, },
+        { label: "Uso de RAM  ", data: [60, 65, 70, 75, 85, 80, 95, 90, 105], borderColor: COLORS.beta.line, tension: 0.4, fill: true, order: 3, pointBackgroundColor: COLORS.beta.point, pointBorderColor: "#fff", pointRadius: 5, pointHoverRadius: 8, },
+        { label: "Uso do Disco Duro  ", data: [70, 60, 55, 65, 70, 60, 75, 80, 90], borderColor: COLORS.gamma.line, tension: 0.4, fill: true, order: 2, pointBackgroundColor: COLORS.gamma.point, pointBorderColor: "#fff", pointRadius: 5, pointHoverRadius: 8, },
+        { label: "Taxa de utilização de rede  ", data: [50, 55, 50, 45, 60, 70, 65, 75, 85], borderColor: COLORS.delta.line, tension: 0.4, fill: true, order: 1, pointBackgroundColor: COLORS.delta.point, pointBorderColor: "#fff", pointRadius: 5, pointHoverRadius: 8, },
     ]
 };
 
@@ -98,7 +98,7 @@ function applyGradients(chart) {
 function getNewValue(oldValue) {
     const randomChange = Math.random() * 2 - 1;
     let newValue = oldValue + randomChange;
-    return Math.max(50, Math.min(130, newValue));
+    return (Math.max(50, Math.min(130, newValue))).toFixed()
 }
 
 async function fetchData() {
@@ -106,7 +106,7 @@ async function fetchData() {
     await new Promise(resolve => setTimeout(resolve, 500));
 
     const newTime = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-
+    // const newTime = '15h'
     return {
         label: newTime,
         cpu: getNewValue(120),
@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     meuGrafico.options.onResize = () => applyGradients(meuGrafico);
     setInterval(() => {
         updateChartData(meuGrafico);
-    }, 3000);
+    }, 5000);
 });
 
 
@@ -161,20 +161,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 const CHART_ID = 'graficoBarrasComparativo';
 const UPDATE_INTERVAL_MS = 3000;
-const MAX_VALUE_X = 9.5;
+const MAX_VALUE_X = 9;
 
 const labels = [
     'Alerta de CPU',
     'Alerta de RAM',
-    'Alerta de DISCO DURO',
-    'Alerta de REDE',
+    'Alerta de Disco Duro',
+    'Alerta de Rede',
     'Alerta de OFF-LINE',
-    'Alerta de FALHA NA COLETA'
+    'Alerta de Falha na Coleta'
 ];
 
-const semanaPassadaTotalFixa = [9.0, 6.5, 8.5, 7.5, 7.0, 6.8];
+const semanaPassadaTotalFixa = [9, 6, 8, 7, 7, 6];
 
-let nestaSemanaData = [6.5, 4.2, 5.5, 5.0, 4.7, 4.5];
+let nestaSemanaData = [6, 4, 5, 5, 4, 4];
 
 function getNewRandomValue(currentValue) {
     const randomChange = Math.random() * 0.3;
@@ -235,7 +235,8 @@ const config = {
             x: {
                 stacked: true,
                 grid: { display: true, color: 'rgba(0, 0, 0, 0.08)' },
-                title: { display: true, text: 'Total de Ocorrências' },
+                ticks: { font: { family: "Segoe UI", size: 12 }, color: "#666", callback: (value) => ` ${value}` },
+               title: { display: true, text: "Total de Ocorrências", font: { family: "Segoe UI", size: 14, weight: "bold" }, color: "#555" },
                 max: MAX_VALUE_X,
                 min: 0,
             },

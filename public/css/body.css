@@ -73,7 +73,7 @@ a{
           max-width: calc(100% - 250px);
      }
 }
-@media (min-width: 1900px) {
+@media (min-width: 1800px) {
   main {
     max-width: 1600px; 
     margin: 0 auto;  

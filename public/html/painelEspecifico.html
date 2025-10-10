@@ -135,13 +135,180 @@
 
     <section class="details-container">
       <div class="usage-cards-grid">
-        <div class="usage-card"></div>
-        <div class="usage-card"></div>
-        <div class="usage-card"></div>
-        <div class="usage-card"></div>
+        <div class="usage-card">
+          <div class="par_topo">
+            <div class="mini_card">
+              <img src="../assets/svg/cpu_black.svg" alt="">
+            </div>
+            <p>Uso da CPU</p>
+          </div>
+          <div class="par_baixo">
+            <div>
+              <h4 class="valor_limite" id="limite_cpu">
+                >90%
+              </h4>
+              <p>Limite</p>
+            </div>
+            <div>
+              <h4 id="cpu_atual">
+                89%
+              </h4>
+              <p>Atual</p>
+            </div>
+          </div>
+        </div>
+        <div class="usage-card">
+          <div class="par_topo ">
+            <div class="mini_card fundo_preto">
+              <img src="../assets/svg/ram_white.svg" alt="">
+            </div>
+            <p>Uso da Memória RAM</p>
+          </div>
+          <div class="par_baixo">
+            <div>
+              <h4 class="valor_limite" id="limite_cpu">
+                >85%
+              </h4>
+              <p>Limite</p>
+            </div>
+            <div>
+
+              <h4 id="cpu_atual">
+                71%
+              </h4>
+              <p>Atual</p>
+            </div>
+          </div>
+        </div>
+        <div class="usage-card">
+          <div class="par_topo">
+            <div class="mini_card">
+              <img src="../assets/svg/wifi_black.svg" alt="">
+            </div>
+            <p>Taxa de Utilização da Rede</p>
+          </div>
+          <div class="par_baixo">
+            <div>
+              <h4 class="valor_limite" id="limite_cpu">
+                >90%
+              </h4>
+              <p>Limite</p>
+            </div>
+            <div>
+
+              <h4 id="cpu_atual">
+                70%
+              </h4>
+              <p>Atual</p>
+            </div>
+          </div>
+        </div>
+        <div class="usage-card">
+          <div class="par_topo ">
+            <div class="mini_card fundo_preto">
+              <img src="../assets/svg/disco_white.svg" alt="">
+            </div>
+            <p>Uso do Disco Duro</p>
+          </div>
+          <div class="par_baixo">
+            <div>
+              <h4 class="valor_limite" id="limite_cpu">
+                >80%
+              </h4>
+              <p>Limite</p>
+            </div>
+            <div>
+
+              <h4 id="cpu_atual">
+                79%
+              </h4>
+              <p>Atual</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="alerts-table-container">
+
+        <div class="alerta_topo">
+          <div class="mini_card  fundo_preto">
+            <img src="../assets/svg/doc_alerta_white.svg" alt="">
+          </div>
+          <p>Últimos Alertas</p>
+        </div>
+
+        <div class="alerta-lista-divs shadow-sm border rounded">
+
+          <div class="row text-secondary fw-bold border-bottom alerta-row-item tabela_titulo d-none d-md-flex">
+            <div class="col-md-3 ps-3">Título</div>
+            <div class="col-md-1">Valor</div>
+            <div class="col-md-1">Limite</div>
+            <div class="col-md-3">Horário</div>
+            <div class="col-md-2">Duração</div>
+            <div class="col-md-2 pe-3">Nível</div>
+          </div>
+
+          <div class="row alerta-row-item">
+            <div class="col-12 col-md-3 ps-3 fw-bold">Máquina off-line</div>
+
+            <div class="col-4 col-md-1">ND</div>
+            <div class="col-4 col-md-1">90%</div>
+
+            <div class="col-12 col-md-3">10:00 - 22/08/2025</div>
+
+            <div class="col-6 col-md-2">Em andamento</div>
+            <div class="col-6 col-md-2 pe-3">
+              <span class="badge rounded-pill bg-danger">Crítico</span>
+            </div>
+          </div>
+
+          <div class="row alerta-row-item">
+            <div class="col-12 col-md-3 ps-3 fw-bold">Máquina off-line</div>
+            <div class="col-4 col-md-1">ND</div>
+            <div class="col-4 col-md-1">90%</div>
+            <div class="col-12 col-md-3">10:00 - 22/08/2025</div>
+            <div class="col-6 col-md-2">Em andamento</div>
+            <div class="col-6 col-md-2 pe-3">
+              <span class="badge rounded-pill bg-danger">Crítico</span>
+            </div>
+          </div>
+
+          <div class="row alerta-row-item">
+            <div class="col-12 col-md-3 ps-3 fw-bold">Máquina off-line</div>
+            <div class="col-4 col-md-1">ND</div>
+            <div class="col-4 col-md-1">90%</div>
+            <div class="col-12 col-md-3">10:00 - 22/08/2025</div>
+            <div class="col-6 col-md-2">Em andamento</div>
+            <div class="col-6 col-md-2 pe-3">
+              <span class="badge rounded-pill bg-danger">Crítico</span>
+            </div>
+          </div>
+
+          <div class="row alerta-row-item">
+            <div class="col-12 col-md-3 ps-3 fw-bold">Máquina off-line</div>
+            <div class="col-4 col-md-1">ND</div>
+            <div class="col-4 col-md-1">90%</div>
+            <div class="col-12 col-md-3">10:00 - 22/08/2025</div>
+            <div class="col-6 col-md-2">Em andamento</div>
+            <div class="col-6 col-md-2 pe-3">
+              <span class="badge rounded-pill bg-danger">Crítico</span>
+            </div>
+          </div>
+
+          <div class="row alerta-row-item">
+            <div class="col-12 col-md-3 ps-3 fw-bold">Máquina off-line</div>
+            <div class="col-4 col-md-1">ND</div>
+            <div class="col-4 col-md-1">90%</div>
+            <div class="col-12 col-md-3">10:00 - 22/08/2025</div>
+            <div class="col-6 col-md-2">Em andamento</div>
+            <div class="col-6 col-md-2 pe-3">
+              <span class="badge rounded-pill bg-danger">Crítico</span>
+            </div>
+          </div>
+
+        </div>
       </div>
 
-      <div class="alerts-table-container"></div>
+
     </section>
   </main>
 
