@@ -6,9 +6,9 @@ function getDadosEmpresaBd(idFuncionario) {
     idFuncionario,
   );
   var instrucaoSql = `
-    SELECT empresa.razaosocial, empresa.cnpj, funcionario.nome, funcionario.fkTipoUsuario
-    from empresa join funcionario
-        on funcionario.fkempresa = empresa.idempresa
+    SELECT Empresa.razaosocial, Empresa.cnpj, Funcionario.nome, Funcionario.fkTipoUsuario
+    from Empresa join funcionario
+        on funcionario.fkempresa = Empresa.idempresa
         where idfuncionario = ${idFuncionario} ;`;
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
@@ -17,30 +17,41 @@ function getDadosEmpresaBd(idFuncionario) {
 
 
 
-// function atualizarEmpresa(fkEmpresa, razaoSocial, cnpj) {
-//   var instrucaoSql = `
-//     UPDATE empresa
-//     SET razaoSocial = '${razaoSocial}', cnpj = '${cnpj}'
-//     WHERE idEmpresa = ${fkEmpresa};
-//   `;
-//   console.log("Atualizando empresa:", instrucaoSql);
-//   return database.executar(instrucaoSql);
-// }
+function atualizarEmpresa(fkEmpresa, razaoSocial, cnpj) {
+  var instrucaoSql = `
+    UPDATE Empresa
+    SET razaoSocial = '${razaoSocial}', cnpj = '${cnpj}'
+    WHERE idEmpresa = ${fkEmpresa};
+  `;
+  console.log("Atualizando empresa:", instrucaoSql);
+  return database.executar(instrucaoSql);
+}
 
-// function getFkEmpresa(idFuncionario) {
-//   var instrucaoSql = `
-//     SELECT fkEmpresa FROM funcionario WHERE idFuncionario = ${idFuncionario};
-//   `;
-//   console.log("Buscando fkEmpresa:", instrucaoSql);
-//   return database.executar(instrucaoSql);
-// }
+function getFkEmpresa(idFuncionario) {
+  var instrucaoSql = `
+    SELECT fkEmpresa FROM Funcionario WHERE idFuncionario = ${idFuncionario};
+  `;
+  console.log("Buscando fkEmpresa:", instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+
+
+
+function getSenha(idFuncionario) {
+  var instrucaoSql = `
+    SELECT senha FROM Funcionario WHERE idFuncionario = ${idFuncionario};
+  `;
+  console.log("Buscando fkEmpresa:", instrucaoSql);
+  return database.executar(instrucaoSql);
+}
 
 
 
 
   module.exports = {
     //     // Exportamos a função com o nome que o controller está chamando
-    getDadosEmpresaBd
-    // atualizarEmpresa,
-    // getFkEmpresa
+    getDadosEmpresaBd,
+    atualizarEmpresa,
+    getFkEmpresa,
+    getSenha
   };

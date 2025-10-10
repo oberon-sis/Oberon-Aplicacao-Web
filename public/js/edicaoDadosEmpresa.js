@@ -102,7 +102,7 @@ function ExcluirUsuario(idFuncionario) {
 
 
 
-function AtualizarUsuario(idFuncionario) {
+function AtualizarUsuario() {
     Swal.fire({
         title: 'Atualizar Empresa',
         html: `
@@ -153,40 +153,9 @@ function AtualizarUsuario(idFuncionario) {
 
             // Verifica se o usuário clicou em 'Excluir'
             if (resultadoSwal.isConfirmed) {
-
-                // Variáveis Mockadas (FIXAS)
-                const idFuncionarioGerente = ID_FUNCIONARIO_GERENTE_MOCK;
                 const senhaGerente = resultadoSwal.value.senha; // Pega a senha digitada
 
-                // CHAMADA FETCH
-               return fetch(`/edicaoEmpresa/atualizar/`, { // Caminho Relativo
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                  
-                })  
-                    // Segundo .then: Lida com a RESPOSTA do servidor (res)
-                    .then(res => {
-                        console.log("=====================")
-                        console.log(res)
-                        console.log("=====================")
-                        // Se a resposta for OK (status 200, 204 etc.)
-                        if (res.ok) {
-                            exibirSucesso('Atualização Concluída', 'A Empresa foi Atualizada com sucesso.');
-                            // Aqui você deve chamar a função para atualizar sua tabela/lista
-                            // Por exemplo: atualizarListaMaquinas(); 
-                        } else {
-                            // Se houver erro no servidor (400, 403, 404, 500)
-                            // Tenta ler a mensagem de erro que o backend enviou
-                            res.text().then(mensagemErro => {
-                                // O controller que fizemos no exemplo anterior envia status 403, 404, etc.
-                                exibirErro('Erro na Atualização', mensagemErro || 'Erro desconhecido ao tentar excluir.');
-                            });
-                        }
-                    })
-                    .catch(err => {
-                        // Erro de rede (fetch falhou)
-                        exibirErro('Erro de Rede', 'Não foi possível conectar ao servidor: ' + err);
-                    });
+               AtualizarEmpresa(senhaGerente)
 
             } else if (resultadoSwal.dismiss === Swal.DismissReason.cancel) {
                 // Se o usuário clicou em 'Cancelar'
@@ -245,33 +214,32 @@ function getDadosEmpresaBd() {
 
 
 
+function AtualizarEmpresa(senha) {
+  const idFuncionario = 4; 
+  const razaoSocial = document.getElementById("ipt_razao_social").value;
+  const cnpj = document.getElementById("ipt_cnpj").value;
 
+  if (!confirm('Tem certeza que deseja atualizar os dados da empresa?')) return;
 
-// function AtualizarEmpresa() {
-//   const idFuncionario = 4; // MOCK pra testar
-//   const razaoSocial = document.getElementById("ipt_razao_social").value;
-//   const cnpj = document.getElementById("ipt_cnpj").value;
-
-//   if (!confirm('Tem certeza que deseja atualizar os dados da empresa?')) return;
-
-//   fetch(`/edicaoEmpresa/atualizar/${idFuncionario}`, {
-//     method: 'PUT',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({
-//       razaoSocialServer: razaoSocial,
-//       cnpjServer: cnpj
-//     })
-//   })
-//   .then(response => {
-//     if (response.ok) {
-//       alert('Dados atualizados com sucesso!');
-//       getDadosEmpresaBd(); // Recarrega os dados atualizados
-//     } else {
-//       throw new Error('Erro ao atualizar os dados da empresa');
-//     }
-//   })
-//   .catch(error => {
-//     console.error('Erro ao atualizar:', error);
-//     alert('Erro ao atualizar: ' + error.message);
-//   });
-// }
+  fetch(`/edicaoEmpresa/atualizar/${idFuncionario}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      razaoSocialServer: razaoSocial,
+      cnpjServer: cnpj,
+      senhaServer: senha,
+    })
+  })
+  .then(response => {
+    if (response.ok) {
+      alert('Dados atualizados com sucesso!');
+      getDadosEmpresaBd(); // Recarrega os dados atualizados
+    } else {
+      throw new Error('Erro ao atualizar os dados da empresa');
+    }
+  })
+  .catch(error => {
+    console.error('Erro ao atualizar:', error);
+    alert('Erro ao atualizar: ' + error.message);
+  });
+}
