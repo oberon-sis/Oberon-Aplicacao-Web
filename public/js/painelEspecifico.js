@@ -1,11 +1,17 @@
-// GRAFICO DE LINHA --------------------------
+let linhaChartInstance = null;
+let barraChartInstance = null;
+let linhaIntervalId = null;
+let barraIntervalId = null;
+let maquinaAtualId = 1;
+const LINHA_CHART_ID = "utilizacaoChart";
+const BARRA_CHART_ID = 'graficoBarrasComparativo';
 const COLORS = {
     alpha: { line: "rgba(157, 206, 206, 0.8)", point: "#BADCDA" },
     beta: { line: "rgba(62, 150, 131, 0.8)", point: "#0C8186" },
     gamma: { line: "rgba(230, 126, 34, 0.8)", point: "#e67e22" },
     delta: { line: "rgba(51, 51, 51, 0.8)", point: "#000000ff" },
 };
-const dadosIniciais = {
+const LINHA_DATA_DEFAULT = {
     labels: ["21h", "23h", "01h", "03h", "05h", "07h", "09h", "11h", "13h"],
     datasets: [
         { label: "Uso de CPU  ", data: [80, 75, 90, 85, 100, 95, 110, 105, 120], borderColor: COLORS.alpha.line, tension: 0.4, fill: true, order: 4, pointBackgroundColor: COLORS.alpha.point, pointBorderColor: "#fff", pointRadius: 5, pointHoverRadius: 8, },
@@ -14,6 +20,7 @@ const dadosIniciais = {
         { label: "Taxa de utilização de rede  ", data: [50, 55, 50, 45, 60, 70, 65, 75, 85], borderColor: COLORS.delta.line, tension: 0.4, fill: true, order: 1, pointBackgroundColor: COLORS.delta.point, pointBorderColor: "#fff", pointRadius: 5, pointHoverRadius: 8, },
     ]
 };
+const dadosIniciais = LINHA_DATA_DEFAULT;
 
 const opcoes = {
     responsive: true,
@@ -66,7 +73,8 @@ const opcoes = {
 };
 
 function createGradient(ctx, chartArea, color, isTopPerformer = false) {
-    if (!chartArea) return;
+    if (!ctx || !chartArea || chartArea.top === undefined) return;
+
     const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
     if (isTopPerformer) {
         gradient.addColorStop(0, color.replace("0.8", "0.6"));
@@ -101,12 +109,10 @@ function getNewValue(oldValue) {
     return (Math.max(50, Math.min(130, newValue))).toFixed()
 }
 
-async function fetchData() {
-    // simulnbado o featch para fazer a requisição fazer aqui-----------
+async function fetchData(idMaquina) {
     await new Promise(resolve => setTimeout(resolve, 500));
 
     const newTime = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    // const newTime = '15h'
     return {
         label: newTime,
         cpu: getNewValue(120),
@@ -117,7 +123,7 @@ async function fetchData() {
 }
 
 async function updateChartData(chart) {
-    const newPoint = await fetchData();
+    const newPoint = await fetchData(maquinaAtualId);
 
     chart.data.datasets.forEach((dataset, index) => {
         let newValue;
@@ -138,28 +144,45 @@ async function updateChartData(chart) {
     chart.update();
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-    const ctx = document.getElementById("utilizacaoChart").getContext("2d");
-    const meuGrafico = new Chart(ctx, {
+function initLinhaChart(idMaquina) {
+    if (linhaChartInstance) {
+        linhaChartInstance.destroy();
+    }
+    if (linhaIntervalId) {
+        clearInterval(linhaIntervalId);
+    }
+    const canvas = document.getElementById(LINHA_CHART_ID);
+    if (!canvas) {
+        console.error(`Elemento canvas com ID "${LINHA_CHART_ID}" não encontrado.`);
+        return;
+    }
+    let ctx;
+    try {
+        ctx = canvas.getContext("2d");
+        if (!ctx) {
+            console.error("Não foi possível obter o contexto 2D do canvas.");
+            return;
+        }
+    } catch (e) {
+        console.error("Erro ao obter o contexto do canvas:", e);
+        return;
+    }
+    const dataCopy = JSON.parse(JSON.stringify(LINHA_DATA_DEFAULT));
+    linhaChartInstance = new Chart(ctx, {
         type: "line",
-        data: dadosIniciais,
+        data: dataCopy,
         options: opcoes,
     });
-    await updateChartData(meuGrafico);
-    meuGrafico.options.onResize = () => applyGradients(meuGrafico);
-    setInterval(() => {
-        updateChartData(meuGrafico);
+    setTimeout(() => {
+        applyGradients(linhaChartInstance);
+        linhaChartInstance.update();
+    }, 50);
+    linhaChartInstance.options.onResize = () => applyGradients(linhaChartInstance);
+    linhaIntervalId = setInterval(() => {
+        updateChartData(linhaChartInstance);
     }, 5000);
-});
+}
 
-
-
-// GRAFICO DE BARRA --------------------------
-
-
-
-
-const CHART_ID = 'graficoBarrasComparativo';
 const UPDATE_INTERVAL_MS = 3000;
 const MAX_VALUE_X = 9;
 
@@ -173,14 +196,13 @@ const labels = [
 ];
 
 const semanaPassadaTotalFixa = [9, 6, 8, 7, 7, 6];
-
-let nestaSemanaData = [6, 4, 5, 5, 4, 4];
+const BARRA_DATA_DEFAULT = [6, 4, 5, 5, 4, 4];
+let nestaSemanaData = [...BARRA_DATA_DEFAULT]; 
 
 function getNewRandomValue(currentValue) {
     const randomChange = Math.random() * 0.3;
-
     let newValue = currentValue + randomChange;
-    const maxAllowed = Math.min(...semanaPassadaTotalFixa) - 0.1; 
+    const maxAllowed = Math.min(...semanaPassadaTotalFixa) - 0.1;
     return Math.min(newValue, maxAllowed);
 }
 
@@ -190,7 +212,7 @@ function calculateSemanaPassadaComplement(currentNestaSemanaData) {
     });
 }
 
-function fetchNewData() {
+function fetchNewDataBarra(idMaquina) {
     return new Promise(resolve => {
         setTimeout(() => {
             nestaSemanaData = nestaSemanaData.map(getNewRandomValue);
@@ -199,7 +221,7 @@ function fetchNewData() {
     });
 }
 
-const initialData = {
+const initialData = { 
     labels: labels,
     datasets: [
         {
@@ -223,9 +245,8 @@ const initialData = {
     ]
 };
 
-const config = {
+const configBarra = {
     type: 'bar',
-    data: initialData,
     options: {
         indexAxis: 'y',
         responsive: true,
@@ -236,7 +257,7 @@ const config = {
                 stacked: true,
                 grid: { display: true, color: 'rgba(0, 0, 0, 0.08)' },
                 ticks: { font: { family: "Segoe UI", size: 12 }, color: "#666", callback: (value) => ` ${value}` },
-               title: { display: true, text: "Total de Ocorrências", font: { family: "Segoe UI", size: 14, weight: "bold" }, color: "#555" },
+                title: { display: true, text: "Total de Ocorrências", font: { family: "Segoe UI", size: 14, weight: "bold" }, color: "#555" },
                 max: MAX_VALUE_X,
                 min: 0,
             },
@@ -271,19 +292,93 @@ const config = {
     }
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    const ctx = document.getElementById(CHART_ID).getContext('2d');
-    const meuGrafico = new Chart(ctx, config);
-
-    setInterval(async () => {
-        await fetchNewData();
-
+function initBarraChart(idMaquina) {
+    if (barraChartInstance) {
+        barraChartInstance.destroy();
+    }
+    if (barraIntervalId) {
+        clearInterval(barraIntervalId);
+    }
+    nestaSemanaData = [...BARRA_DATA_DEFAULT];
+    const currentInitialData = {
+        labels: labels,
+        datasets: [
+            {label: 'Semana Passada',data: calculateSemanaPassadaComplement(nestaSemanaData), backgroundColor: '#ecf0f1', borderColor: '#ecf0f1',  order: 2, categoryPercentage: 0.8, barPercentage: 0.9},
+            {  label: 'Nesta Semana',  data: nestaSemanaData,  backgroundColor: '#0C8186',  borderColor: '#0C8186',  order: 1,  categoryPercentage: 0.8,  barPercentage: 0.9}
+        ]
+    };
+    const ctx = document.getElementById(BARRA_CHART_ID).getContext('2d');
+    if (!ctx) return; 
+    barraChartInstance = new Chart(ctx, { ...configBarra, data: currentInitialData });
+    barraIntervalId = setInterval(async () => {
+        await fetchNewDataBarra(idMaquina);
         const novoComplemento = calculateSemanaPassadaComplement(nestaSemanaData);
-
-        meuGrafico.data.datasets[1].data = nestaSemanaData;
-
-        meuGrafico.data.datasets[0].data = novoComplemento;
-
-        meuGrafico.update();
+        if (barraChartInstance) {
+            barraChartInstance.data.datasets[1].data = nestaSemanaData;
+            barraChartInstance.data.datasets[0].data = novoComplemento;
+            barraChartInstance.update();
+        }
     }, UPDATE_INTERVAL_MS);
+}
+document.addEventListener('DOMContentLoaded', () => {
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl, {
+            trigger: 'focus',
+            html: true
+        });
+    });
+    initLinhaChart(maquinaAtualId);
+    initBarraChart(maquinaAtualId);
 });
+
+let historicoChartInstance = null;
+
+function toggleFullscreen(wrapperId, chartId) {
+    const wrapper = document.getElementById(wrapperId);
+    const canvas = document.getElementById(chartId);
+
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+        wrapper.classList.remove('fullscreen-mode');
+    } else {
+        wrapper.classList.add('fullscreen-mode');
+        if (wrapper.requestFullscreen) {
+            wrapper.requestFullscreen();
+        } else if (wrapper.webkitRequestFullscreen) {
+            wrapper.webkitRequestFullscreen();
+        } else if (wrapper.msRequestFullscreen) {
+            wrapper.msRequestFullscreen();
+        }
+    }
+    setTimeout(() => {
+        if (historicoChartInstance) {
+            historicoChartInstance.resize();
+        }
+        if (linhaChartInstance) {
+            linhaChartInstance.resize();
+        }
+        if (barraChartInstance) {
+            barraChartInstance.resize();
+        }
+    }, 10);
+}
+
+const Maquinas = {
+    1: 'Estacao-001',
+    2: 'Estacao-002',
+    3: 'Estacao-003',
+    4: 'Estacao-004',
+    5: 'Estacao-005',
+}
+
+function trocar_maquina(idMaquina) {
+    maquinaAtualId = idMaquina;
+    const txt_nome_display = document.getElementById("valor_pesquisa");
+    const txt_nome_header = document.getElementById("nome_maquina");
+    const nomeMaquina = Maquinas[idMaquina];
+    if (txt_nome_display) txt_nome_display.innerHTML = nomeMaquina;
+    if (txt_nome_header) txt_nome_header.innerHTML = nomeMaquina;
+    initLinhaChart(idMaquina);
+    initBarraChart(idMaquina);
+}

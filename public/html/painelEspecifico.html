@@ -34,20 +34,20 @@
       <div>
         <button class="btn btn-outline-secondary dropdown-toggle botao_select" type="button" data-bs-toggle="dropdown"
           aria-expanded="false">
-          <span id="valor_pesquisa">Estacao-020</span>
+          <span id="nome_maquina">Estacao-005</span>
         </button>
         <ul class="dropdown-menu dropdown-menu-end hover_verde">
           <li>
-            <a class="dropdown-item" onclick="atualizar_parametro_lista(1)">Estacao-020</a>
+            <a class="dropdown-item" onclick="trocar_maquina(1)">Estacao-001</a>
           </li>
           <li>
-            <a class="dropdown-item" onclick="atualizar_parametro_lista(2)">Estacao-022</a>
+            <a class="dropdown-item" onclick="trocar_maquina(2)">Estacao-002</a>
           </li>
           <li>
-            <a class="dropdown-item" onclick="atualizar_parametro_lista(3)">Estacao-024</a>
+            <a class="dropdown-item" onclick="trocar_maquina(3)">Estacao-003</a>
           </li>
           <li>
-            <a class="dropdown-item" onclick="atualizar_parametro_lista(4)">Estacao-026</a>
+            <a class="dropdown-item" onclick="trocar_maquina(4)">Estacao-004</a>
           </li>
         </ul>
 
@@ -64,9 +64,13 @@
         </div>
         <div class="baixo-kpi">
           <div>
-            <span id="txt_conteudo"> 987 min </span>
+            <span id="txt_conteudo"> 780 min </span>
           </div>
-          <img src="../assets/svg/saber.svg" alt="" class="saber_mais" />
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="O que é Uptime?"
+            data-bs-content="Representa o tempo total em que o sistema ou máquina esteve funcional e disponível para uso durante a última semana. É uma métrica essencial de disponibilidade.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
+          </button>
         </div>
       </div>
       <div class="kpi-card">
@@ -78,15 +82,19 @@
         </div>
         <div class="baixo-kpi">
           <div>
-            <span id="txt_conteudo"> 230 min </span>
+            <span id="txt_conteudo"> 260 min </span>
           </div>
-          <img src="../assets/svg/saber.svg" alt="" class="saber_mais" />
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="O que é Downtime?"
+            data-bs-content="É o tempo total em que o sistema ou máquina esteve inoperante ou indisponível para uso na última semana. Indica a inatividade e a necessidade de intervenção.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
+          </button>
         </div>
       </div>
       <div class="kpi-card">
         <div class="topo-kpi">
           <div class="icone-kpi">
-            <img src="../assets/svg/time.png" alt="" />
+            <img src="../assets/svg/time_good_white.svg" alt="" style="scale: 0.9;" />
           </div>
           <h6>
             <!-- Tempo médio de resolução(MTTR) -->
@@ -95,15 +103,19 @@
         </div>
         <div class="baixo-kpi">
           <div>
-            <span id="txt_conteudo"> 2 min </span>
+            <span id="txt_conteudo"> 25 min </span>
           </div>
-          <img src="../assets/svg/saber.svg" alt="" class="saber_mais" />
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="O que é MTTR?"
+            data-bs-content="Mean Time To Resolve (Tempo Médio para Resolução). Mede o tempo médio que leva para restaurar um serviço ou máquina após uma falha. Quanto menor, mais eficiente é a equipe de suporte.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
+          </button>
         </div>
       </div>
       <div class="kpi-card">
         <div class="topo-kpi">
           <div class="icone-kpi">
-            <img src="../assets/svg/time.png" alt="" class="verde_claro_kpi" />
+            <img src="../assets/svg/time_black.svg" alt="" class="verde_claro_kpi"  style="scale: 1;"/>
           </div>
           <h6>
             <!-- Tempo Médio entre Falhas (MTBF) -->
@@ -112,18 +124,27 @@
         </div>
         <div class="baixo-kpi">
           <div>
-            <span id="txt_conteudo"> 200 min </span>
+            <span id="txt_conteudo"> 90 min </span>
           </div>
-          <img src="../assets/svg/saber.svg" alt="" class="saber_mais" />
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="O que é MTBF?"
+            data-bs-content="Mean Time Between Failures (Tempo Médio Entre Falhas). Mede o tempo médio que um sistema opera sem interrupções entre duas falhas. É um indicador-chave da confiabilidade do equipamento.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
+          </button>
         </div>
       </div>
     </section>
 
     <section class="charts-container">
-      <div class="chart-item chart-history">
-        <h3>
-          Histórico de Utilização de Recursos nas Últimas 24 Horas
-        </h3>
+      <div id="historico-chart-wrapper" class="chart-item chart-history">
+        <div class="chart-header">
+          <h3>
+            Histórico de Utilização de Recursos nas Últimas 24 Horas
+          </h3>
+          <button class="btn btn-link p-0" onclick="toggleFullscreen('historico-chart-wrapper', 'utilizacaoChart')">
+            <img src="../assets/svg/tela_cheia_verde.svg" alt="Tela Cheia" style="width: 24px; height: 24px;" />
+          </button>
+        </div>
         <canvas id="utilizacaoChart"></canvas>
       </div>
 
@@ -143,15 +164,15 @@
             <p>Uso da CPU</p>
           </div>
           <div class="par_baixo">
-            <div>
-              <h4 class="valor_limite" id="limite_cpu">
+            <div class="valor_limite">
+              <h4 id="limite_cpu">
                 >90%
               </h4>
               <p>Limite</p>
             </div>
             <div>
               <h4 id="cpu_atual">
-                89%
+                95%
               </h4>
               <p>Atual</p>
             </div>
@@ -165,8 +186,8 @@
             <p>Uso da Memória RAM</p>
           </div>
           <div class="par_baixo">
-            <div>
-              <h4 class="valor_limite" id="limite_cpu">
+            <div class="valor_limite">
+              <h4 id="limite_cpu">
                 >85%
               </h4>
               <p>Limite</p>
@@ -174,7 +195,7 @@
             <div>
 
               <h4 id="cpu_atual">
-                71%
+                92%
               </h4>
               <p>Atual</p>
             </div>
@@ -188,8 +209,8 @@
             <p>Taxa de Utilização da Rede</p>
           </div>
           <div class="par_baixo">
-            <div>
-              <h4 class="valor_limite" id="limite_cpu">
+            <div class="valor_limite">
+              <h4 id="limite_cpu">
                 >90%
               </h4>
               <p>Limite</p>
@@ -197,7 +218,7 @@
             <div>
 
               <h4 id="cpu_atual">
-                70%
+                84%
               </h4>
               <p>Atual</p>
             </div>
@@ -211,16 +232,16 @@
             <p>Uso do Disco Duro</p>
           </div>
           <div class="par_baixo">
-            <div>
-              <h4 class="valor_limite" id="limite_cpu">
-                >80%
+            <div class="valor_limite">
+              <h4 id="limite_cpu">
+                >95%
               </h4>
               <p>Limite</p>
             </div>
             <div>
 
               <h4 id="cpu_atual">
-                79%
+                85%
               </h4>
               <p>Atual</p>
             </div>
@@ -248,12 +269,12 @@
           </div>
 
           <div class="row alerta-row-item">
-            <div class="col-12 col-md-3 ps-3 fw-bold">Máquina off-line</div>
+            <div class="col-12 col-md-3 ps-3 fw-bold">Uso elevado de CPU</div>
 
-            <div class="col-4 col-md-1">ND</div>
+            <div class="col-4 col-md-1">95%</div>
             <div class="col-4 col-md-1">90%</div>
 
-            <div class="col-12 col-md-3">10:00 - 22/08/2025</div>
+            <div class="col-12 col-md-3">10:00 - 10/09/2025</div>
 
             <div class="col-6 col-md-2">Em andamento</div>
             <div class="col-6 col-md-2 pe-3">
@@ -261,47 +282,49 @@
             </div>
           </div>
 
+          <div class="row alerta-row-item py-1 border-bottom">
+            <div class="col-3 ps-3 fw-bold">Memória RAM Cheia</div>
+            <div class="col-1">92%</div>
+            <div class="col-1">85%</div>
+            <div class="col-3">10:05 - 10/09/2025</div>
+            <div class="col-2">Em andamento</div>
+            <div class="col-2 pe-3">
+              <span class="badge rounded-pill bg-danger">Crítico</span>
+            </div>
+          </div>
+
+
+
           <div class="row alerta-row-item">
             <div class="col-12 col-md-3 ps-3 fw-bold">Máquina off-line</div>
             <div class="col-4 col-md-1">ND</div>
             <div class="col-4 col-md-1">90%</div>
-            <div class="col-12 col-md-3">10:00 - 22/08/2025</div>
-            <div class="col-6 col-md-2">Em andamento</div>
+            <div class="col-12 col-md-3">10:00 - 05/09/2025</div>
+            <div class="col-6 col-md-2">10:05 - 05/09/2025</div>
             <div class="col-6 col-md-2 pe-3">
               <span class="badge rounded-pill bg-danger">Crítico</span>
             </div>
           </div>
 
           <div class="row alerta-row-item">
-            <div class="col-12 col-md-3 ps-3 fw-bold">Máquina off-line</div>
-            <div class="col-4 col-md-1">ND</div>
+            <div class="col-12 col-md-3 ps-3 fw-bold">Uso Alto de CPU</div>
+            <div class="col-4 col-md-1">91%</div>
             <div class="col-4 col-md-1">90%</div>
-            <div class="col-12 col-md-3">10:00 - 22/08/2025</div>
-            <div class="col-6 col-md-2">Em andamento</div>
+            <div class="col-12 col-md-3">10:00 - 04/09/2025</div>
+            <div class="col-6 col-md-2">10:30 - 04/09/2025</div>
             <div class="col-6 col-md-2 pe-3">
-              <span class="badge rounded-pill bg-danger">Crítico</span>
+              <span class="badge rounded-pill bg-secondary">Alerta</span>
             </div>
           </div>
 
           <div class="row alerta-row-item">
-            <div class="col-12 col-md-3 ps-3 fw-bold">Máquina off-line</div>
-            <div class="col-4 col-md-1">ND</div>
+            <div class="col-12 col-md-3 ps-3 fw-bold">Uso Moderado de CPU</div>
+            <div class="col-4 col-md-1">88%</div>
             <div class="col-4 col-md-1">90%</div>
-            <div class="col-12 col-md-3">10:00 - 22/08/2025</div>
-            <div class="col-6 col-md-2">Em andamento</div>
+            <div class="col-12 col-md-3">09:00 - 04/09/2025</div>
+            <div class="col-6 col-md-2">09:10 - 04/09/2025</div>
             <div class="col-6 col-md-2 pe-3">
-              <span class="badge rounded-pill bg-danger">Crítico</span>
-            </div>
-          </div>
-
-          <div class="row alerta-row-item">
-            <div class="col-12 col-md-3 ps-3 fw-bold">Máquina off-line</div>
-            <div class="col-4 col-md-1">ND</div>
-            <div class="col-4 col-md-1">90%</div>
-            <div class="col-12 col-md-3">10:00 - 22/08/2025</div>
-            <div class="col-6 col-md-2">Em andamento</div>
-            <div class="col-6 col-md-2 pe-3">
-              <span class="badge rounded-pill bg-danger">Crítico</span>
+              <span class="badge rounded-pill bg-black">Atenção</span>
             </div>
           </div>
 
@@ -313,6 +336,8 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/luxon@3.3.0/build/global/luxon.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.1.0/dist/chartjs-adapter-luxon.min.js"></script> -->
 </body>
 
 </html>
