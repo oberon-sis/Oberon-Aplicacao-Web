@@ -1,12 +1,10 @@
 var database = require("../database/config");
 
-
-
 function autenticar(email, senha) {
   console.log(
     "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
     email,
-    senha,
+    senha
   );
   var instrucaoSql = `
         SELECT id, nome, email, fk_empresa as empresaId FROM usuario WHERE email = '${email}' AND senha = '${senha}';
@@ -14,7 +12,6 @@ function autenticar(email, senha) {
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql);
 }
-
 
 // CADASTRO DE USÚARIO
 
@@ -26,7 +23,7 @@ function cadastrar(nome, cpf, email, fkEmpresa, fkTipoUsuario, senha) {
     email,
     fkEmpresa,
     fkTipoUsuario,
-    senha,
+    senha
   );
 
   var instrucaoSql = `
@@ -36,10 +33,8 @@ function cadastrar(nome, cpf, email, fkEmpresa, fkTipoUsuario, senha) {
   return database.executar(instrucaoSql);
 }
 
-
 // PEGAR DADOS ISOLADOS DO USÚARIO
 // ----------------------------------------------------------------------
-
 
 function PesquisarUsuario(campo, valor) {
   console.log(`
@@ -51,7 +46,7 @@ function PesquisarUsuario(campo, valor) {
 
   if (campo !== "nome" && campo !== "email") {
     console.error("Campo inválido! Use 'nome' ou 'email'.");
-    return ("Campo inválido para pesquisa.");
+    return "Campo inválido para pesquisa.";
   }
 
   var instrucaoSql = `
@@ -70,12 +65,10 @@ function PesquisarUsuario(campo, valor) {
   return database.executar(instrucaoSql);
 }
 
-
-
 function getFkEmpresa(idFuncionario) {
   console.log(
     "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
-    idFuncionario,
+    idFuncionario
   );
   var instrucaoSql = `
         SELECT fkEmpresa FROM funcionario WHERE idFuncionario = ${idFuncionario} ;
@@ -84,11 +77,10 @@ function getFkEmpresa(idFuncionario) {
   return database.executar(instrucaoSql);
 }
 
-
 function getUsuariobyID(idFuncionario) {
   console.log(
     "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
-    idFuncionario,
+    idFuncionario
   );
   var instrucaoSql = `
     SELECT
@@ -107,7 +99,7 @@ function getUsuariobyID(idFuncionario) {
 
 function getTipoUsuario() {
   console.log(
-    "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
+    "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): "
   );
 
   var instrucaoSql = `
@@ -123,14 +115,12 @@ function getTipoUsuario() {
 
 //--------------------------------------------------------------
 
-
 //MODIFICAR DADOS DO USÚARIO
-
 
 function ExcluirUsuario(idFuncionario) {
   console.log(
     "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
-    idFuncionario,
+    idFuncionario
   );
   var instrucaoSql = `
          DELETE FROM funcionario 
@@ -140,9 +130,6 @@ function ExcluirUsuario(idFuncionario) {
   return database.executar(instrucaoSql);
 }
 
-
-
-
 function salvarEdicao(nome, email, fkTipoUsuario, senha, idFuncionario) {
   console.log(
     "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
@@ -150,7 +137,7 @@ function salvarEdicao(nome, email, fkTipoUsuario, senha, idFuncionario) {
     email,
     fkTipoUsuario,
     senha,
-    idFuncionario,
+    idFuncionario
   );
   var instrucaoSql = `
          UPDATE funcionario
@@ -162,28 +149,25 @@ function salvarEdicao(nome, email, fkTipoUsuario, senha, idFuncionario) {
   return database.executar(instrucaoSql);
 }
 
-
 // LISTAGEM USÚARIOS
 //----------------------------
 
-
 function contarTotalUsuarios() {
   console.log(
-    "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
-
+    "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): "
   );
   var instrucaoSql = `
         SELECT COUNT(idFuncionario) AS totalItems 
         FROM Funcionario;
     `;
   console.log("Executando a instrução SQL: \n" + instrucaoSql);
-  return database.executar(instrucaoSql)
+  return database.executar(instrucaoSql);
 }
 
-
-
 function listarFuncionarios(limit, offset) {
-  console.log(`Executando listarFuncionarios(limit=${limit}, offset=${offset})`);
+  console.log(
+    `Executando listarFuncionarios(limit=${limit}, offset=${offset})`
+  );
 
   var instrucao = `
         SELECT 
@@ -201,9 +185,6 @@ function listarFuncionarios(limit, offset) {
   console.log("SQL executado:\n" + instrucao);
   return database.executar(instrucao);
 }
-
-
-
 
 //-----------------------------
 module.exports = {
