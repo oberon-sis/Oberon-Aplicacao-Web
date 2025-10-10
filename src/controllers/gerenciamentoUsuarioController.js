@@ -109,6 +109,7 @@ function getUsuariobyID(req, res) {
 
 
 function getTipoUsuario(req, res) {
+      console.log('Estou no tipo controller')
 
   gerenciamentoUsuarioModel.getTipoUsuario()
     .then(function (resultado) {
@@ -130,7 +131,7 @@ function getTipoUsuario(req, res) {
 
 function listarFuncionarios(req, res) {
   var pagina = parseInt(req.query.page) || 1;
-  var limite = 20;
+  var limite = 10;
   var offset = (pagina - 1) * limite;
 
   console.log(`Requisição recebida: página ${pagina}, limite ${limite}, offset ${offset}`);
@@ -151,7 +152,27 @@ function listarFuncionarios(req, res) {
 }
 
 
+function PesquisarUsuario(req, res) {
+    var campo = req.query.campo;
+    var valor = req.query.valor; 
 
+    if (!campo || !valor) {
+        return res.status(400).send("Informe o campo e o valor para pesquisa.");
+    }
+
+    gerenciamentoUsuarioModel.PesquisarUsuario(campo, valor)
+        .then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send();
+            }
+        })
+        .catch(function (erro) {
+            console.log("Erro ao pesquisar usuário:", erro.sqlMessage || erro);
+            res.status(500).json(erro.sqlMessage || erro);
+        });
+}
 
 // MODIFICAR DADOS DO USÚARIO
 
@@ -250,4 +271,5 @@ module.exports = {
   salvarEdicao,
   ExcluirUsuario,
   listarFuncionarios,
+  PesquisarUsuario,
 };

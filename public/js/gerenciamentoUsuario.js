@@ -1,4 +1,107 @@
 
+let tipoBusca = "nome";
+
+var inputPesquisa = document.querySelector(".input_pesquisa");
+var botaoNome = document.getElementById("nome_busca");
+var botaoEmail = document.getElementById("email_busca");
+var dropdownTexto = document.querySelector(".dropdown-toggle");
+var tabela = document.getElementById("Conteudo_real");
+
+botaoNome.addEventListener("click", (e) => {
+  e.preventDefault();
+  tipoBusca = "nome";
+  dropdownTexto.textContent = "Nome";
+});
+
+botaoEmail.addEventListener("click", (e) => {
+  e.preventDefault();
+  tipoBusca = "email";
+  dropdownTexto.textContent = "E-mail";
+});
+
+var timeoutPesquisa = null;
+inputPesquisa.addEventListener("input", () => {
+  clearTimeout(timeoutPesquisa);
+  timeoutPesquisa = setTimeout(() => {
+    var valor = inputPesquisa.value.trim();
+
+    if (valor === "") {
+      if (typeof buscarUsuarios === "function") {
+        buscarUsuarios(1);
+      }
+      return;
+    }
+
+    PesquisarUsuarios(valor);
+  }, 300);
+});
+
+
+function PesquisarUsuarios(valor) {
+  tabela.innerHTML = `
+      <tr>
+          <td colspan="7" class="text-center text-muted">Pesquisando...</td>
+      </tr>
+  `;
+
+  fetch(`/gerenciamentoUsuario/PesquisarUsuario?campo=${tipoBusca}&valor=${encodeURIComponent(valor)}`)
+    .then((res) => {
+      if (res.status === 200) return res.json();
+      if (res.status === 204) {
+        tabela.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-center text-muted">
+                    Nenhum resultado encontrado.
+                </td>
+            </tr>
+        `;
+        return [];
+      }
+      throw new Error("Erro ao buscar usuários.");
+    })
+    .then((dados) => {
+      if (!dados || dados.length === 0) return;
+
+      tabela.innerHTML = "";
+
+      dados.forEach((u) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${u.idFuncionario || u.id}</td>
+            <td>${u.nome}</td>
+            <td>${u.cpf || "-"}</td>
+            <td>${u.email}</td>
+            <td>${u.funcao || "-"}</td>
+            <td>
+                <span class="opcao_crud text-primary" data-bs-toggle="modal"
+                      onclick="getUsuariobyID(${u.idFuncionario || u.id})"
+                      data-bs-target="#modalAtualizarMaquina">
+                    <img src="../assets/svg/atualizar_blue.svg" alt="">
+                    Atualizar
+                </span>
+            </td>
+            <td>
+                <span class="opcao_crud text-danger"
+                      onclick="ExcluirUsuario(${u.idFuncionario || u.id})">
+                    <img src="../assets/svg/excluir_red.svg" alt="">
+                    Excluir
+                </span>
+            </td>
+        `;
+        tabela.appendChild(tr);
+      });
+    })
+    .catch((erro) => {
+      console.error("Erro na pesquisa:", erro);
+      tabela.innerHTML = `
+          <tr><td colspan="7" class="text-center text-danger">
+              Erro na pesquisa (${erro.message})
+          </td></tr>
+      `;
+    });
+}
+
+
 document.addEventListener("DOMContentLoaded", function () {
     buscarUsuarios(1);
 });
@@ -122,7 +225,7 @@ function cadastrar() {
     var email = document.getElementById('email_input').value;
     var cpf = document.getElementById('cpf_input').value;
     var senha = document.getElementById('senha_input').value;
-    var fkTipoUsuario = document.getElementById('tipo_usuario_select').value;
+    var fkTipoUsuario = document.getElementById('tipo_usuario_select_tipos').value;
 
     if (!nome || !email || !cpf || !senha || !fkTipoUsuario) {
         alert("Preencha todos os campos corretamente!");
@@ -161,29 +264,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 function getTipoUsuario() {
-    var select = document.getElementById('tipo_usuario_select');
+    alert('Estou no tipo js')
+    var select = document.getElementsByClassName('tipo_usuario_select_tipos');
 
     fetch("/gerenciamentoUsuario/getTipoUsuario")
         .then(res => {
             if (res.status === 204) {
-                select.innerHTML = '<option value="" disabled selected>Nenhum tipo cadastrado</option>';
+                select[0].innerHTML = '<option value="" disabled selected>Nenhum tipo cadastrado</option>';
+                select[1].innerHTML = '<option value="" disabled selected>Nenhum tipo cadastrado</option>';
                 throw new Error("Nenhum tipo de usuário encontrado.");
             }
             if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
             return res.json();
         })
         .then(tipos => {
-            select.innerHTML = '<option value="" disabled selected>Selecione o tipo de usuário</option>';
+            select[0].innerHTML = '<option value="" disabled selected>Selecione o tipo de usuário</option>';
             tipos.forEach(tipo => {
                 const option = document.createElement('option');
                 option.value = tipo.idTipoUsuario;
                 option.text = tipo.nomeTipo;
-                select.appendChild(option);
+                select[0].appendChild(option);
+            });
+                        select[1].innerHTML = '<option value="" disabled selected>Selecione o tipo de usuário</option>';
+            tipos.forEach(tipo => {
+                const option = document.createElement('option');
+                option.value = tipo.idTipoUsuario;
+                option.text = tipo.nomeTipo;
+                select[1].appendChild(option);
             });
         })
         .catch(erro => {
             console.error("Falha ao carregar tipos de usuário:", erro);
-            select.innerHTML = '<option value="" disabled selected>Erro ao carregar</option>';
+            select[0].innerHTML = '<option value="" disabled selected>Erro ao carregar</option>';
+                select[1].innerHTML = '<option value="" disabled selected>Nenhum tipo cadastrado</option>';
+
         });
 }
 
@@ -210,7 +324,7 @@ function getUsuariobyID(idFuncionario) {
             document.getElementById("ipt_email").value = usuario.email;
             document.getElementById("ipt_senha").value = usuario.senha || "";
 
-            var selectTipo = document.getElementById("tipo_usuario_select");
+            var selectTipo = document.getElementById("tipo_usuario_select_tipos");
             if (selectTipo) {
                 const intervalo = setInterval(() => {
                     if (selectTipo.options.length > 1) {
@@ -228,7 +342,7 @@ function salvarEdicao(idFuncionario) {
     var nome = document.getElementById("ipt_nome").value;
     var email = document.getElementById("ipt_email").value;
     var senha = document.getElementById("ipt_senha").value;
-    var fkTipoUsuario = document.getElementById("tipo_usuario_select").value;
+    var fkTipoUsuario = document.getElementById("tipo_usuario_select_tipos").value;
 
     if (!nome || !email || !fkTipoUsuario) {
         alert("Preencha todos os campos obrigatórios!");
@@ -261,8 +375,7 @@ function salvarEdicao(idFuncionario) {
 }
 
 
-// VARIÁVEL FIXA (MOCKADA) MANTIDA CONFORME SOLICITADO
-const ID_FUNCIONARIO_GERENTE_MOCK = 6; 
+ 
 
 function ExcluirUsuario(idFuncionario) {
     Swal.fire({
@@ -384,47 +497,3 @@ function exibirErro(titulo, texto) {
         confirmButtonText: 'OK'
     });
 }
-
-// function a(afdsa) {
-//     Conteudo_real.innerHTML += `
-//                         <tr>
-//                         <td>001</td>
-//                         <td><i class="bi bi-person-circle me-2"></i>Exemplo</td>
-//                         <td>{}gygjhg} Text</td>
-//                         <td>Exemplo Text</td>
-//                         <td>Exemplo Text</td>
-//                         <td>Exemplo Text</td>
-//                         <td>Exemplo Text</td>
-//                         <td>Exemplo Text</td>
-//                         <td><span class="opcao_crud text-primary" data-bs-toggle="modal"
-//                                 data-bs-target="#modalAtualizarMaquina"
-//                                 onclick="getUsuariobyID(${afdsa})"
-                                
-//                                 >
-//                                 <img src="../assets/svg/atualizar_blue.svg" alt="">
-//                                 Atualizar<i class="bi bi-arrow-clockwise"
-//                                 ></i></span>
-//                         </td>
-//                         <td><span class="opcao_crud text-danger" onclick="excluir_maquina()">
-//                                 <img src="../assets/svg/excluir_red.svg" alt="">
-//                                 Excluir<i class="bi bi-trash"></i></span>
-//                         </td>
-//                         <!-- <td><span class="opcao_crud detalhes">
-//                                 <img src="../assets/svg/eye_black.svg" alt="">
-//                                 Detalhes<i class="bi bi-trash"></i></span>
-//                         </td> -->
-//                     </tr>
-    
-//     `
-// }
-// setTimeout(() => {
-//     Estrutura_esqueleto_carregamento.style.display = "none"
-// }, 2000);
-
-// Conteudo_real.innerHTML = ""
-// a(1)
-// a(2)
-// a(3)
-// a(4)
-// a(5)
-// a(6)

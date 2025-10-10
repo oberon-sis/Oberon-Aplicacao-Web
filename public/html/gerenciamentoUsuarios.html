@@ -265,8 +265,8 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="tipo_usuario_select">Tipo de usuário</label>
-                                <select id="tipo_usuario_select" required>
+                                <label for="tipo_usuario_select_tipos">Tipo de usuário</label>
+                                <select class="tipo_usuario_select_tipos" required>
                                     <option value="" disabled selected>Carregando tipos...</option>
                                 </select>
                             </div>
@@ -276,11 +276,6 @@
                 <div class="modal-footer justify-content-center border-0 p-4">
                     <button type="button" id="btn_cadastrar"
                         class="btn fw-bold px-5 verde_claro botao_configuracao" onclick="cadastrar()">Cadastrar</button>
-                    <!-- <button type="button" id="btnVoltar" class="btn  fw-bold px-5 botao_branco botao_configuracao"
-                        style="display: none;">Voltar Atrás</button>
-                    <button type="submit" form="formCadastrarMaquina" id="btnCadastrar"
-                        class="btn fw-bold px-5 verde_claro botao_configuracao"
-                        style="display: none;">Cadastrar</button> -->
                 </div>
             </div>
         </div>
@@ -341,8 +336,8 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="mac_upd" class="form-label text-muted">Função</label>
-                                        <label for="tipo_usuario_select">Tipo de Usuário</label>
-                                        <select id="tipo_usuario_select">
+                                        <label for="tipo_usuario_select_tipos">Tipo de Usuário</label>
+                                        <select class="tipo_usuario_select_tipos">
                                             <option value="" disabled selected>Carregando...</option>
                                         </select>
                                     </div>
@@ -368,5 +363,5 @@
 </body>
 
 </html>
-<script src="../component/menu/Menu.js"></script>
+<script src="../component/menu/Menu.js"></script>_
 <script src="../js/gerenciamentoUsuario.js"></script>

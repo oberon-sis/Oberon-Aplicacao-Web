@@ -19,6 +19,9 @@ router.get("/listarFuncionarios", function (req, res) {
     gerenciamentoUsuarioController.listarFuncionarios(req, res);
 });
 
+router.get("/PesquisarUsuario", function (req, res) {
+    gerenciamentoUsuarioController.PesquisarUsuario(req, res);
+});
 
 
 router.delete("/ExcluirUsuario/:idFuncionarioServer", function (req, res) { 

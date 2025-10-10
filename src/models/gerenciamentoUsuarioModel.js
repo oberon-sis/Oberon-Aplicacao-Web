@@ -41,6 +41,37 @@ function cadastrar(nome, cpf, email, fkEmpresa, fkTipoUsuario, senha) {
 // ----------------------------------------------------------------------
 
 
+function PesquisarUsuario(campo, valor) {
+  console.log(`
+    ACESSEI O USUARIO MODEL
+    >> Função: PesquisarUsuario()
+    >> Campo: ${campo}
+    >> Valor: ${valor}
+  `);
+
+  if (campo !== "nome" && campo !== "email") {
+    console.error("Campo inválido! Use 'nome' ou 'email'.");
+    return ("Campo inválido para pesquisa.");
+  }
+
+  var instrucaoSql = `
+      SELECT 
+            f.idFuncionario AS id, 
+            f.nome, 
+            f.cpf, 
+            f.email, 
+            t.tipoUsuario AS funcao
+        FROM Funcionario AS f
+        JOIN tipoUsuario AS t ON f.fkTipoUsuario = t.idTipoUsuario
+      WHERE ${campo} LIKE '${valor}%';
+  `;
+
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+
+
+
 function getFkEmpresa(idFuncionario) {
   console.log(
     "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
@@ -78,6 +109,7 @@ function getTipoUsuario() {
   console.log(
     "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
   );
+
   var instrucaoSql = `
          SELECT 
             idTipoUsuario, 
@@ -138,22 +170,22 @@ function salvarEdicao(nome, email, fkTipoUsuario, senha, idFuncionario) {
 function contarTotalUsuarios() {
   console.log(
     "ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ",
-    
+
   );
   var instrucaoSql = `
         SELECT COUNT(idFuncionario) AS totalItems 
         FROM Funcionario;
     `;
-    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  console.log("Executando a instrução SQL: \n" + instrucaoSql);
   return database.executar(instrucaoSql)
 }
 
 
 
 function listarFuncionarios(limit, offset) {
-    console.log(`Executando listarFuncionarios(limit=${limit}, offset=${offset})`);
+  console.log(`Executando listarFuncionarios(limit=${limit}, offset=${offset})`);
 
-    var instrucao = `
+  var instrucao = `
         SELECT 
             f.idFuncionario AS id, 
             f.nome, 
@@ -166,8 +198,8 @@ function listarFuncionarios(limit, offset) {
         LIMIT ${limit} OFFSET ${offset};
     `;
 
-    console.log("SQL executado:\n" + instrucao);
-    return database.executar(instrucao);
+  console.log("SQL executado:\n" + instrucao);
+  return database.executar(instrucao);
 }
 
 
@@ -183,5 +215,6 @@ module.exports = {
   salvarEdicao,
   ExcluirUsuario,
   listarFuncionarios,
-  contarTotalUsuarios
+  contarTotalUsuarios,
+  PesquisarUsuario,
 };
