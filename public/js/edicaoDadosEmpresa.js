@@ -243,3 +243,30 @@ function AtualizarEmpresa(senha) {
     alert('Erro ao atualizar: ' + error.message);
   });
 }
+
+
+function deleteEmpresa(senha) {
+  
+
+  if (!confirm('Tem certeza que deseja Deletar os dados da empresa?')) return;
+
+  fetch(`/edicaoEmpresa/atualizar/${idFuncionario}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+     
+    })
+  })
+  .then(response => {
+    if (response.ok) {
+      alert('Dados atualizados com sucesso!');
+      getDadosEmpresaBd(); // Recarrega os dados atualizados
+    } else {
+      throw new Error('Erro ao atualizar os dados da empresa');
+    }
+  })
+  .catch(error => {
+    console.error('Erro ao atualizar:', error);
+    alert('Erro ao atualizar: ' + error.message);
+  });
+}

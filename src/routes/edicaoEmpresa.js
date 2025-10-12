@@ -10,5 +10,9 @@ router.put("/atualizar/:idFuncionario", (req, res) => {
     edicaoEmpresaController.getDadosEmpresaBd(req, res);
   });
 
+  router.delete("/deleteEmpresa/:idFuncionario", function (req, res) {
+  edicaoEmpresaController.deleteEmpresa(req, res);
+});
+
 
   module.exports = router;

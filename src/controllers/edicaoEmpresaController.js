@@ -81,7 +81,7 @@ function atualizarEmpresa(req, res) {
 }
 
 
-async function atualizarEmpresa(req, res) { // << Adicionar 'async' aqui
+async function atualizarEmpresa(req, res) { 
   console.log("\n[CONTROLLER] Requisição para atualizar empresa recebida.");
 
   var idFuncionario = req.params.idFuncionario;
@@ -98,7 +98,7 @@ async function atualizarEmpresa(req, res) { // << Adicionar 'async' aqui
         return res.status(404).send("Funcionário não encontrado.");
     }
 
-    // AQUI ESTÁ A CORREÇÃO PRINCIPAL
+    
     const senhaCorreta = await bcrypt.compare(senhaServer, resultadoSenha[0].senha);
 
     if (senhaCorreta) {
@@ -121,5 +121,33 @@ async function atualizarEmpresa(req, res) { // << Adicionar 'async' aqui
   }
 }
 
-module.exports = { getDadosEmpresaBd, atualizarEmpresa };
+
+async function deleteEmpresa(req,res) {
+   const idEmpresa = req.params.idEmpresa;
+   try{
+    await database.iniciarTransacao();
+
+    await empresaModel.EliminarAlertaEmpresa(idEmpresa);
+    await empresaModel.eliminarRegistrosEmpresa(idEmpresa);
+    await empresaModel.eliminarParEspeEmpresa(idEmpresa);
+    await empresaModel.eliminarMaqCompEmpresa(idEmpresa);
+    await empresaModel.eliminarFuncionarios(idEmpresa);
+    await empresaModel.eliminarParametrosPadrao(idEmpresa);
+    await empresaModel.eliminarMaquinas(idEmpresa);
+    await empresaModel.eliminarEmpresa(idEmpresa);
+
+    await database.commitTransacao(); 
+        res.status(200).send("Empresa e dados excluídos com sucesso.");
+
+    } catch (erro) {
+
+        await database.rollbackTransacao(); 
+        console.error("Erro ao excluir. Transação desfeita.", erro);
+        res.status(500).send("Falha na exclusão. Tente novamente.");
+    }
+   }
+  
+
+
+module.exports = { getDadosEmpresaBd, atualizarEmpresa, deleteEmpresa };
 
