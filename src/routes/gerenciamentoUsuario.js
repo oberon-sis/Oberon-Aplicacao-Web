@@ -15,7 +15,21 @@ router.get("/getTipoUsuario", function (req, res) {
     gerenciamentoUsuarioController.getTipoUsuario(req, res);
 });
 
-router.post("/salvarEdicao", function (req, res) {
+router.get("/listarFuncionarios", function (req, res) {
+    gerenciamentoUsuarioController.listarFuncionarios(req, res);
+});
+
+router.get("/PesquisarUsuario", function (req, res) {
+    gerenciamentoUsuarioController.PesquisarUsuario(req, res);
+});
+
+
+router.delete("/ExcluirUsuario/:idFuncionarioServer", function (req, res) { 
+    gerenciamentoUsuarioController.ExcluirUsuario(req, res);
+});
+
+
+router.put("/salvarEdicao", function (req, res) {
     gerenciamentoUsuarioController.salvarEdicao(req, res);
 });
 
