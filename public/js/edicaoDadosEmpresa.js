@@ -36,8 +36,7 @@ function ExcluirUsuario(idFuncionario) {
                 return false;
             }
 
-            // O ideal aqui é que a senha seja a do gerente autenticado na sessão, 
-            // mas mantive a validação de confirmação que você criou.
+           
             if (senha !== confirmarSenha) {
                 Swal.showValidationMessage('As senhas digitadas não são iguais.');
                 return false;
@@ -46,17 +45,17 @@ function ExcluirUsuario(idFuncionario) {
             return { senha: senha };
         }
     })
-        // Primeiro .then: Lida com o resultado do Swal (se foi confirmado ou cancelado)
+        
         .then((resultadoSwal) => {
 
-            // Verifica se o usuário clicou em 'Excluir'
+        
             if (resultadoSwal.isConfirmed) {
 
-                // Variáveis Mockadas (FIXAS)
+     
                 const idFuncionarioGerente = ID_FUNCIONARIO_GERENTE_MOCK;
-                const senhaGerente = resultadoSwal.value.senha; // Pega a senha digitada
+                const senhaGerente = resultadoSwal.value.senha; 
 
-                // CHAMADA FETCH
+       
                return fetch(`/gerenciamentoUsuario/ExcluirUsuario/${idFuncionario}`, {
 
                     headers: {
@@ -67,32 +66,27 @@ function ExcluirUsuario(idFuncionario) {
                         senha: senhaGerente
                     })
                 })
-                    // Segundo .then: Lida com a RESPOSTA do servidor (res)
+                    
                     .then(res => {
-                        console.log("=====================")
-                        console.log(res)
-                        console.log("=====================")
-                        // Se a resposta for OK (status 200, 204 etc.)
+                     
                         if (res.ok) {
                             exibirSucesso('Exclusão Concluída', 'A Empresa foi excluída com sucesso.');
-                            // Aqui você deve chamar a função para atualizar sua tabela/lista
-                            // Por exemplo: atualizarListaMaquinas(); 
+                            
                         } else {
-                            // Se houver erro no servidor (400, 403, 404, 500)
-                            // Tenta ler a mensagem de erro que o backend enviou
+                            
                             res.text().then(mensagemErro => {
-                                // O controller que fizemos no exemplo anterior envia status 403, 404, etc.
+                               
                                 exibirErro('Erro na Exclusão', mensagemErro || 'Erro desconhecido ao tentar excluir.');
                             });
                         }
                     })
                     .catch(err => {
-                        // Erro de rede (fetch falhou)
+                    
                         exibirErro('Erro de Rede', 'Não foi possível conectar ao servidor: ' + err);
                     });
 
             } else if (resultadoSwal.dismiss === Swal.DismissReason.cancel) {
-                // Se o usuário clicou em 'Cancelar'
+         
                 exibirErro('Exclusão Cancelada', 'A exclusão da Empresa foi cancelada pelo usuário.');
             }
 
@@ -138,8 +132,7 @@ function AtualizarUsuario() {
                 return false;
             }
 
-            // O ideal aqui é que a senha seja a do gerente autenticado na sessão, 
-            // mas mantive a validação de confirmação que você criou.
+           
             if (senha !== confirmarSenha) {
                 Swal.showValidationMessage('As senhas digitadas não são iguais.');
                 return false;
@@ -148,17 +141,17 @@ function AtualizarUsuario() {
             return { senha: senha };
         }
     })
-        // Primeiro .then: Lida com o resultado do Swal (se foi confirmado ou cancelado)
+       
         .then((resultadoSwal) => {
 
-            // Verifica se o usuário clicou em 'Excluir'
+           
             if (resultadoSwal.isConfirmed) {
-                const senhaGerente = resultadoSwal.value.senha; // Pega a senha digitada
+                const senhaGerente = resultadoSwal.value.senha;
 
                AtualizarEmpresa(senhaGerente)
 
             } else if (resultadoSwal.dismiss === Swal.DismissReason.cancel) {
-                // Se o usuário clicou em 'Cancelar'
+               
                 exibirErro('Atualização Cancelada', 'A Atualização da Empresa foi cancelada pelo usuário.');
             }
 
@@ -170,7 +163,7 @@ function exibirSucesso(titulo, texto) { Swal.fire({ title: titulo, text: texto, 
 
 
 function getDadosEmpresaBd() {
-  fetch(`/edicaoEmpresa/getDadosEmpresaBd/4`) // ID mocado apenas para teste
+  fetch(`/edicaoEmpresa/getDadosEmpresaBd/4`)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Erro ao buscar dados do usuário");
@@ -201,7 +194,7 @@ function getDadosEmpresaBd() {
         document.getElementById("cnpj_atual").textContent = usuario.cnpj;
         document.getElementById("nome_banco").textContent = usuario.razaosocial;
         document.getElementById("cargo_funcionario_logado").textContent = cargo;
-// opcional, se quiser que o título atualize também
+
       } else {
         alert("Nenhum dado encontrado para este funcionário.");
       }
@@ -233,7 +226,7 @@ function AtualizarEmpresa(senha) {
   .then(response => {
     if (response.ok) {
       alert('Dados atualizados com sucesso!');
-      getDadosEmpresaBd(); // Recarrega os dados atualizados
+      getDadosEmpresaBd(); 
     } else {
       throw new Error('Erro ao atualizar os dados da empresa');
     }
@@ -260,7 +253,7 @@ function deleteEmpresa(senha) {
   .then(response => {
     if (response.ok) {
       alert('Dados atualizados com sucesso!');
-      getDadosEmpresaBd(); // Recarrega os dados atualizados
+      getDadosEmpresaBd(); 
     } else {
       throw new Error('Erro ao atualizar os dados da empresa');
     }
