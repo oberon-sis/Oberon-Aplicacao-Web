@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const dadosEmpresaString = sessionStorage.getItem('dadosEmpresa');
 
     if (!dadosEmpresaString) {
-        // Esconde o formulário e redireciona se não houver dados da primeira etapa
         const formElement = document.getElementById('cadastroForm');
         const divMensagemElement = document.getElementById('mensagem-validacao');
         if (formElement) formElement.classList.add('hidden');
@@ -12,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
             divMensagemElement.textContent = 'Acesso negado. É necessário preencher os dados da empresa primeiro.';
             divMensagemElement.className = 'mensagem mensagem-erro';
         }
-        setTimeout(() => { window.location.href = './cadastroEmpresa.html'; }, 3000);
+        setTimeout(() => { window.location.href = './cadastro.html'; }, 1500);
         return; // Para a execução de todo o script
     }
 
@@ -78,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const erro = await resposta.json();
                 throw new Error(erro.mensagem || 'Erro ao finalizar o cadastro.');
             }
+            sessionStorage.setItem('nomeUsuarioSimples', nome);
             sessionStorage.removeItem('dadosEmpresa');
             exibirMensagem('sucesso', 'Cadastro realizado! Redirecionando...');
             setTimeout(() => { window.location.href = './login.html'; }, 2000);
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleNomeBlur() { if (!inputNome.value.trim()) exibirMensagem('erro', 'O campo Nome é obrigatório.'); }
     function handleEmailBlur() { const email = inputEmail.value.trim(); if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) exibirMensagem('erro', 'O formato do e-mail é inválido.'); }
     function handleCpfBlur() { const cpf = inputCpf.value.trim(); if (cpf && !validarCPF(cpf)) exibirMensagem('erro', 'O CPF informado é inválido.'); }
-    function handleConfirmPasswordBlur() { const senha = inputPassword.value; const confirmarSenha = inputConfirmPassword.value; if (confirmarSenha && senha !== confirmarSenha) exibirMensagem('erro', 'As senhas não coincidem.'); }
+    function handleConfirmPasswordBlur() { const senha = inputPassword.value; const confirmarSenha = inputConfirmPassword.value; if (confirmarSenha && senha !== confirmarSenha) exibirMensagem('erro', 'As senhas não coincidem.'); }  
 
     // --- 5. FUNÇÕES AUXILIARES (VALIDAÇÃO, FEEDBACK, ETC.) ---
 
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             img.alt = "Mostrar senha";
         }
     }
-
+    
     function exibirMensagem(tipo, texto) {
         clearTimeout(mensagemTimeout);
         divMensagem.textContent = texto;

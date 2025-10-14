@@ -12,7 +12,7 @@ function verificarDuplicidade(razaoSocial, cnpj) {
     // Query que usa OR para checar se um dos dois campos já existe em algum registro
     // E seleciona as colunas que o controller precisa para a lógica.
     var instrucaoSql = `
-        SELECT razaoSocial, cnpj FROM empresa WHERE razaoSocial = '${razaoSocial}' OR cnpj = '${cnpj}';
+        SELECT razaoSocial, cnpj FROM Empresa WHERE razaoSocial = '${razaoSocial}' OR cnpj = '${cnpj}';
     `;
 
     console.log("[MODEL] Executando a instrução SQL: \n" + instrucaoSql);

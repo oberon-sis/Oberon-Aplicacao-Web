@@ -82,8 +82,10 @@ Exemplo .env:
     DB_HOST=localhost
     DB_USER=root
     DB_PASSWORD=senha123
-    DB_NAME=maquina_monitoramento
-    PORT=3000
+    DB_DATABASE=bdOberon
+    APP_HOST=localhost
+    APP_PORT=3000
+    AMBIENTE_PROCESSO=producao
 
 
 Rodar o projeto:

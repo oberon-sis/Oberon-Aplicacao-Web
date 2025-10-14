@@ -42,7 +42,8 @@ const empresaController = {
 
                 } else {
                     console.log("[CONTROLLER] PASSO 5: Nenhuma duplicata encontrada. Enviando resposta 200.");
-                    res.status(200).json({ mensagem: "Dados disponíveis." });
+                    return res.status(200).json({ mensagem: "Dados disponíveis." });
+                    
                 }
             })
             .catch(erro => {

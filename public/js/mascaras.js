@@ -76,3 +76,70 @@ if (empresaForm) {
       .catch(err => console.error(err));
   });
 }
+
+function aplicarMascaraMacAddress(input, separador = ":") {
+    let valorLimpo = input.value.replace(/[^a-fA-F0-9]/g, '');
+    valorLimpo = valorLimpo.substring(0, 12);
+    let macFormatado = '';
+    for (let i = 0; i < valorLimpo.length; i++) {
+        macFormatado += valorLimpo[i];
+        if ((i + 1) % 2 === 0 && i !== valorLimpo.length - 1) {
+            macFormatado += separador;
+        }
+    }
+    input.value = macFormatado.toUpperCase();
+}
+
+function aplicarMascaraPorcentagem(input) {
+    let valor = input.value;
+    const unidade = ' %'; 
+    const cursorPosition = input.selectionStart;
+    let valorLimpo = valor.replace(unidade, '').replace(/[^0-9.]/g, '');
+    let numValor = parseFloat(valorLimpo);
+    
+    if (isNaN(numValor) || numValor < 0) {
+        input.value = '';
+        return;
+    }
+
+    if (numValor > 100) {
+        valorLimpo = '100';
+    } else {
+        valorLimpo = valorLimpo.replace(/^0+(?=\d)/, '');
+    }
+
+    const valorFormatado = valorLimpo + unidade;
+
+    input.value = valorFormatado;
+    const newCursorPosition = valorFormatado.length - unidade.length;
+    if (cursorPosition < valor.length - unidade.length) {
+        input.setSelectionRange(cursorPosition, cursorPosition);
+    } else {
+        input.setSelectionRange(newCursorPosition, newCursorPosition);
+    }
+
+}
+function aplicarMascaraMbps(input) {
+    let valor = input.value;
+    const unidade = ' Mbps';
+
+    const cursorPosition = input.selectionStart;
+
+    let valorLimpo = valor.replace(unidade, '').replace(/[^0-9]/g, '');
+
+    if (valorLimpo.length > 1 && valorLimpo.startsWith('0')) {
+        valorLimpo = parseInt(valorLimpo, 10).toString();
+    }
+    if (valorLimpo === "NaN" || valorLimpo === "") {
+        input.value = "";
+        return;
+    }
+    const valorFormatado = valorLimpo + unidade;
+    input.value = valorFormatado;
+    const newCursorPosition = valorFormatado.length - unidade.length;
+    if (cursorPosition < valor.length - unidade.length) {
+        input.setSelectionRange(cursorPosition, cursorPosition);
+    } else {
+        input.setSelectionRange(newCursorPosition, newCursorPosition);
+    }
+}
