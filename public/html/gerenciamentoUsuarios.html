@@ -34,7 +34,8 @@
 
             <div class="d-flex flex-column flex-md-row align-items-md-center mb-4 gap-2 div_pesquisa">
 
-                <div style="max-width: 450px;" class="input-group flex-grow-1 div_justify">
+                <div style="max-width: 450px;" 
+                        class="input-group flex-grow-1 div_justify">
                     <input required="required" type="text"
                         class="form-control border-start-0  shadow-none input_pesquisa"
                         placeholder="Buscar por nome ou email">
@@ -44,8 +45,12 @@
                         Nome
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end hover_verde">
-                        <li><a class="dropdown-item" href="#" id="nome_busca">Nome</a></li>
-                        <li><a class="dropdown-item" href="#" id="email_busca">E-mail</a></li>
+                        <li>
+                            <a class="dropdown-item" href="#" id="nome_busca">Nome</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#" id="email_busca">E-mail</a>
+                        </li>
                     </ul>
                 </div>
 
@@ -274,8 +279,8 @@
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0 p-4">
-                    <button type="button" id="btn_cadastrar"
-                        class="btn fw-bold px-5 verde_claro botao_configuracao" onclick="cadastrar()">Cadastrar</button>
+                    <button type="button" id="btn_cadastrar" class="btn fw-bold px-5 verde_claro botao_configuracao"
+                        onclick="cadastrar()">Cadastrar</button>
                 </div>
             </div>
         </div>
