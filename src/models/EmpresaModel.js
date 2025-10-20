@@ -20,7 +20,9 @@ function verificarDuplicidade(razaoSocial, cnpj) {
     return database.executar(instrucaoSql);
 }
 
+
 module.exports = {
     // Exportamos a função com o nome que o controller está chamando
     verificarDuplicidade
+    
 };
