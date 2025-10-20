@@ -1,4 +1,4 @@
-let ID_USUARIO = 5;
+let ID_USUARIO = 6;
 let paginaAtual = 1;
 let tipoFiltro = 'descricao';
 
@@ -33,19 +33,17 @@ function renderizarTabela(alertas) {
         const dataFinal = alerta.horarioFinal ? alerta.horarioFinal.replace(' ', ' às ') : 'Ativo';
         const duracaoFormatada = formatarDuracao(alerta.duracaoSegundos);
         let criticidadeClass = 'text-secondary';
-
         switch (alerta.nivel.toUpperCase()) {
-            case 'CRÍTICO':
+            case 'EMERGENCIA':
                 criticidadeClass = 'text-danger fw-bold';
                 break;
-            case 'ALTO':
+            case 'CRITICO':
                 criticidadeClass = 'text-danger';
                 break;
-            case 'ALERTA':
-            case 'MÉDIO':
+            case 'ATENCAO':
                 criticidadeClass = 'text-warning fw-bold'; 
                 break;
-            case 'BAIXO':
+            case 'INFORMATIVO':
                 criticidadeClass = 'text-success';
                 break;
             default:

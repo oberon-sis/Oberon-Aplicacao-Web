@@ -13,7 +13,7 @@ function construirClausulaWhere(tipoFiltro, termoPesquisa, dataInicio, dataFim) 
                 clausulaWhere += `AND M.nome LIKE ${termoLike} `;
                 break;
             case 'componente':
-                clausulaWhere += `AND C.tipoComponente LIKE ${termoLike} `;
+                clausulaWhere += `AND TC.tipoComponete LIKE ${termoLike} `;
                 break;
             case 'descricao':
             default:
@@ -22,10 +22,10 @@ function construirClausulaWhere(tipoFiltro, termoPesquisa, dataInicio, dataFim) 
         }
     }
     if (dataInicio) {
-        clausulaWhere += `AND A.horarioInicio >= '${dataInicio}' `;
+        clausulaWhere += `AND R.horario >= '${dataInicio}' `;
     }
     if (dataFim) {
-        clausulaWhere += `AND A.horarioInicio <= '${dataFim}' `;
+        clausulaWhere += `AND R.horario <= '${dataFim}' `;
     }
 
     return clausulaWhere;
@@ -39,6 +39,25 @@ function getFkEmpresa(idFuncionario) {
     return database.executar(instrucaoSql);
 }
 
+const selectAlertasBase = `
+    SELECT 
+        A.idAlerta,
+        A.descricao,
+        A.nivel,
+        R.horario AS horarioInicio,
+        NULL AS horarioFinal, -- O novo esquema não tem horárioFinal diretamente no Alerta/Registro
+        M.nome AS nomeMaquina,
+        TC.tipoComponete AS tipoComponente,
+        TC.funcaoMonitorar,
+        TIMESTAMPDIFF(SECOND, R.horario, NOW()) AS duracaoSegundos
+    FROM Alerta AS A
+    JOIN Registro AS R ON A.fkRegistro = R.idRegistro
+    JOIN Componente AS C ON R.fkComponente = C.idComponente
+    JOIN Maquina AS M ON C.fkMaquina = M.idMaquina
+    JOIN Parametro AS P ON A.fkParametro = P.idParametro
+    JOIN TipoComponente AS TC ON P.fkTipoComponente = TC.idTipoComponente
+`;
+
 function verAlertas(fkEmpresa, pagina, tipoFiltro, termoPesquisa, dataInicio, dataFim) {
     const limite = limitePagina;
     const offset = (pagina - 1) * limite;
@@ -47,23 +66,10 @@ function verAlertas(fkEmpresa, pagina, tipoFiltro, termoPesquisa, dataInicio, da
     console.log(`[ALERTA MODEL] Buscando alertas para a empresa ${fkEmpresa} - Termo: ${termoPesquisa}, Data Início: ${dataInicio}, Data Fim: ${dataFim}`);
 
     var instrucaoSql = `
-        SELECT 
-            A.idAlerta,
-            A.descricao,
-            A.nivel,
-            DATE_FORMAT(A.horarioInicio, '%Y-%m-%d %H:%i:%s') AS horarioInicio,
-            DATE_FORMAT(A.horarioFinal, '%Y-%m-%d %H:%i:%s') AS horarioFinal,
-            M.nome AS nomeMaquina,
-            C.tipoComponente,
-            C.funcaoMonitorar,
-            TIMESTAMPDIFF(SECOND, A.horarioInicio, COALESCE(A.horarioFinal, NOW())) AS duracaoSegundos
-        FROM Alerta AS A
-        JOIN Maquina AS M ON A.fkMaquina = M.idMaquina
-        JOIN MaquinaComponente AS MC ON A.fkMaquinaComponente = MC.idMaquinaComponente
-        JOIN Componente AS C ON MC.fkComponente = C.idComponente
+        ${selectAlertasBase}
         WHERE M.fkEmpresa = ${fkEmpresa}
         ${clausulaWhere} 
-        ORDER BY A.horarioInicio DESC
+        ORDER BY R.horario DESC
         LIMIT ${limite} OFFSET ${offset};
     `;
 
@@ -80,9 +86,11 @@ function contarTotalAlertas(fkEmpresa, tipoFiltro, termoPesquisa, dataInicio, da
         SELECT 
             COUNT(A.idAlerta) AS totalAlertas
         FROM Alerta AS A
-        JOIN Maquina AS M ON A.fkMaquina = M.idMaquina
-        JOIN MaquinaComponente AS MC ON A.fkMaquinaComponente = MC.idMaquinaComponente
-        JOIN Componente AS C ON MC.fkComponente = C.idComponente
+        JOIN Registro AS R ON A.fkRegistro = R.idRegistro
+        JOIN Componente AS C ON R.fkComponente = C.idComponente
+        JOIN Maquina AS M ON C.fkMaquina = M.idMaquina
+        JOIN Parametro AS P ON A.fkParametro = P.idParametro
+        JOIN TipoComponente AS TC ON P.fkTipoComponente = TC.idTipoComponente
         WHERE M.fkEmpresa = ${fkEmpresa}
         ${clausulaWhere};
     `;
@@ -97,23 +105,10 @@ function obterTodosAlertasParaExportacao(fkEmpresa, tipoFiltro, termoPesquisa, d
     console.log(`[ALERTA MODEL] Obtendo TODOS os alertas para exportação (sem paginação) para a empresa ${fkEmpresa}`);
 
     var instrucaoSql = `
-        SELECT 
-            A.idAlerta,
-            A.descricao,
-            A.nivel,
-            DATE_FORMAT(A.horarioInicio, '%Y-%m-%d %H:%i:%s') AS horarioInicio,
-            DATE_FORMAT(A.horarioFinal, '%Y-%m-%d %H:%i:%s') AS horarioFinal,
-            M.nome AS nomeMaquina,
-            C.tipoComponente,
-            C.funcaoMonitorar,
-            TIMESTAMPDIFF(SECOND, A.horarioInicio, COALESCE(A.horarioFinal, NOW())) AS duracaoSegundos
-        FROM Alerta AS A
-        JOIN Maquina AS M ON A.fkMaquina = M.idMaquina
-        JOIN MaquinaComponente AS MC ON A.fkMaquinaComponente = MC.idMaquinaComponente
-        JOIN Componente AS C ON MC.fkComponente = C.idComponente
+        ${selectAlertasBase}
         WHERE M.fkEmpresa = ${fkEmpresa}
         ${clausulaWhere} 
-        ORDER BY A.horarioInicio DESC;
+        ORDER BY R.horario DESC;
     `;
 
     console.log("Executando a instrução SQL de EXPORTAÇÃO: \n" + instrucaoSql);
