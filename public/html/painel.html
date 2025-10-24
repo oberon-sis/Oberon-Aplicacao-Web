@@ -21,6 +21,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   </head>
 
   <body class="d-flex w-100 h-100">
@@ -163,132 +164,7 @@
                 Uso mais perto do limite:
               </p>
               <ul class="list-unstyled small mb-3">
-                <li>CPU: <span class="fw-bold">95%</span></li>
-                <li><span class="text-danger">(5% Acima do Limite)</span></li>
-              </ul>
-              <button type="button" class="btn btn-danger btn-sm w-100">
-                Ver Detalhes
-              </button>
-            </div>
-
-            <div class="card card-recurso">
-              <div
-                class="d-flex justify-content-between align-items-start mb-2"
-              >
-                <h5 class="card-title h6 mb-0">ESTACAO-0002</h5>
-                <i class="bi bi-dash-circle-fill text-secondary fs-5"></i>
-              </div>
-              <p class="card-text mb-1">
-                <small class="text-secondary fw-bold">OFF-LINE</small>
-              </p>
-              <p class="card-text mb-1">
-                <small class="text-secondary">INDISPONÍVEL</small>
-              </p>
-              <p class="card-text mb-2 small text-muted">Último status:</p>
-              <ul class="list-unstyled small mb-3">
-                <li>CPU: <span class="fw-bold">N/A</span></li>
-                <li><span class="text-muted">(Desconectado há 1h)</span></li>
-              </ul>
-              <button type="button" class="btn btn-secondary btn-sm w-100">
-                Ver Detalhes
-              </button>
-            </div>
-
-            <div class="card card-recurso">
-              <div
-                class="d-flex justify-content-between align-items-start mb-2"
-              >
-                <h5 class="card-title h6 mb-0">ESTACAO-0015</h5>
-                <i class="bi bi-exclamation-circle-fill text-warning fs-5"></i>
-              </div>
-              <p class="card-text mb-1">
-                <small class="text-warning fw-bold">CRÍTICO</small>
-              </p>
-              <p class="card-text mb-1">
-                <small class="text-warning">REQUER ATENÇÃO</small>
-              </p>
-              <p class="card-text mb-2 small text-muted">
-                Uso mais perto do limite:
-              </p>
-              <ul class="list-unstyled small mb-3">
-                <li>RAM: <span class="fw-bold">88%</span></li>
-                <li><span class="text-warning">(3% Acima do Limite)</span></li>
-              </ul>
-              <button type="button" class="btn btn-warning btn-sm w-100">
-                Ver Detalhes
-              </button>
-            </div>
-
-            <div class="card card-recurso">
-              <div
-                class="d-flex justify-content-between align-items-start mb-2"
-              >
-                <h5 class="card-title h6 mb-0">ESTACAO-0021</h5>
-                <i class="bi bi-check-circle-fill text-success fs-5"></i>
-              </div>
-              <p class="card-text mb-1">
-                <small class="text-success fw-bold">ONLINE</small>
-              </p>
-              <p class="card-text mb-1">
-                <small class="text-muted">ESTÁVEL</small>
-              </p>
-              <p class="card-text mb-2 small text-muted">
-                Uso mais perto do limite:
-              </p>
-              <ul class="list-unstyled small mb-3">
-                <li>CPU: <span class="fw-bold">87%</span></li>
-                <li>
-                  <span class="text-danger">(1.2% Abaixo do Limite)</span>
-                </li>
-              </ul>
-              <button type="button" class="btn btn-success btn-sm w-100">
-                Ver Detalhes
-              </button>
-            </div>
-
-            <div class="card card-recurso">
-              <div
-                class="d-flex justify-content-between align-items-start mb-2"
-              >
-                <h5 class="card-title h6 mb-0">ESTACAO-0022</h5>
-                <i class="bi bi-check-circle-fill text-success fs-5"></i>
-              </div>
-              <p class="card-text mb-1">
-                <small class="text-success fw-bold">ONLINE</small>
-              </p>
-              <p class="card-text mb-1">
-                <small class="text-muted">ESTÁVEL</small>
-              </p>
-              <p class="card-text mb-2 small text-muted">
-                Uso mais perto do limite:
-              </p>
-              <ul class="list-unstyled small mb-3">
-                <li>CPU: <span class="fw-bold">65%</span></li>
-                <li><span class="text-success">(Normal)</span></li>
-              </ul>
-              <button type="button" class="btn btn-success btn-sm w-100">
-                Ver Detalhes
-              </button>
-            </div>
-
-            <div class="card card-recurso">
-              <div
-                class="d-flex justify-content-between align-items-start mb-2"
-              >
-                <h5 class="card-title h6 mb-0">ESTACAO-0001</h5>
-                <i class="bi bi-exclamation-triangle-fill text-danger fs-5"></i>
-              </div>
-              <p class="card-text mb-1">
-                <small class="text-danger fw-bold">EMERGÊNCIA</small>
-              </p>
-              <p class="card-text mb-1">
-                <small class="text-danger">ATENÇÃO URGENTE</small>
-              </p>
-              <p class="card-text mb-2 small text-muted">
-                Uso mais perto do limite:
-              </p>
-              <ul class="list-unstyled small mb-3">
-                <li>CPU: <span class="fw-bold">95%</span></li>
+                <li>CPU: <span class="fw-bold">75%</span></li>
                 <li><span class="text-danger">(5% Acima do Limite)</span></li>
               </ul>
               <button type="button" class="btn btn-danger btn-sm w-100">
@@ -347,29 +223,17 @@
 
           <aside class="details-sidebar flex-shrink-0">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <section class="chart-container">
-                <div
-                  id="historico-chart-wrapper"
-                  class="chart-item chart-history"
-                >
-                  <div class="chart-header">
-                    <h3>
-                      Histórico de Utilização de Recursos nas Últimas 24 Horas
-                    </h3>
-                    <button
-                      class="btn btn-link p-0"
-                      onclick="toggleFullscreen('historico-chart-wrapper', 'utilizacaoChart')"
-                    >
-                      <img
-                        src="../assets/svg/tela_cheia_verde.svg"
-                        alt="Tela Cheia"
-                        style="width: 24px; height: 24px"
-                      />
-                    </button>
-                  </div>
-                  <canvas id="utilizacaoChart"></canvas>
-                </div>
-              </section>
+              <h5 class="h6 mb-0 fw-bold">
+                ESTACAO-0001 | Histórico de Utilização de Recursos
+              </h5>
+              <i
+                class="bi bi-arrows-fullscreen text-secondary"
+                style="cursor: pointer"
+              ></i>
+            </div>
+
+            <div class="chart-container mb-4">
+              <canvas id="utilizacaoChart"></canvas>
             </div>
 
             <div class="row row-cols-2 g-3 mb-4 indicators-grid">
@@ -385,11 +249,11 @@
                     >
                       <div>
                         <small class="text-muted d-block">Limite:</small>
-                        <span class="fw-bold text-muted">90%</span>
+                        <span class="fw-bold text-muted">70%</span>
                       </div>
                       <div class="text-end">
                         <small class="text-muted d-block">Atual:</small>
-                        <span class="fw-bold text-danger fs-5">91%</span>
+                        <span class="fw-bold text-danger fs-5">75%</span>
                       </div>
                     </div>
                   </div>
@@ -408,7 +272,7 @@
                     >
                       <div>
                         <small class="text-muted d-block">Limite:</small>
-                        <span class="fw-bold text-muted">85%</span>
+                        <span class="fw-bold text-muted">89%</span>
                       </div>
                       <div class="text-end">
                         <small class="text-muted d-block">Atual:</small>
@@ -431,11 +295,11 @@
                     >
                       <div>
                         <small class="text-muted d-block">Limite:</small>
-                        <span class="fw-bold text-muted">40%</span>
+                        <span class="fw-bold text-muted">3.5%</span>
                       </div>
                       <div class="text-end">
                         <small class="text-muted d-block">Atual:</small>
-                        <span class="fw-bold text-success fs-5">30%</span>
+                        <span class="fw-bold text-success fs-5">2%</span>
                       </div>
                     </div>
                   </div>
@@ -454,11 +318,11 @@
                     >
                       <div>
                         <small class="text-muted d-block">Limite:</small>
-                        <span class="fw-bold text-muted">80%</span>
+                        <span class="fw-bold text-muted">88.8%</span>
                       </div>
                       <div class="text-end">
                         <small class="text-muted d-block">Atual:</small>
-                        <span class="fw-bold text-warning fs-5">79%</span>
+                        <span class="fw-bold text-warning fs-5">87%</span>
                       </div>
                     </div>
                   </div>
@@ -485,10 +349,6 @@
                 <span class="text-muted">Sistema Operacional:</span>
                 <span class="fw-bold">Windows 10 Pro</span>
               </p>
-
-              <button class="btn btn-success btn-sm w-100 mt-2">
-                Ver Análise Detalhada
-              </button>
             </div>
           </aside>
         </div>
@@ -496,7 +356,7 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/painel.js"></script>
     <script src="../component/menu/Menu.js"></script>
+    <script src="../js/painel.js"></script>
   </body>
 </html>

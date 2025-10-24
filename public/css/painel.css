@@ -120,12 +120,11 @@ body {
 }
 
 .details-sidebar {
-  width: 450px;
+  flex: 1;
   background-color: white;
   padding: 20px;
   border-radius: var(--oberon-border-radius);
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
-  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -133,8 +132,13 @@ body {
 
 .chart-container {
   position: relative;
-  height: 200px;
-  margin-bottom: 0.5rem;
+  height: 300px;
+  margin-bottom: 1.5rem;
+}
+
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .chart-placeholder {
@@ -147,17 +151,26 @@ body {
   background-color: #f8f9fa;
   border: 1px solid #e8e8e8;
   border-radius: var(--oberon-border-radius);
-  padding: 0.75rem;
+  padding: 0.5rem;
   height: auto;
 }
 
 .indicators-grid .resource-detail-card i {
   flex-shrink: 0;
-  margin-right: 0.5rem;
+  margin-right: 0.4rem;
+  font-size: 1.5rem;
 }
 
 .indicators-grid .resource-detail-card > div {
   flex-grow: 1;
+}
+
+.indicators-grid .resource-detail-card .small {
+  font-size: 0.75rem;
+}
+
+.indicators-grid .resource-detail-card .fw-bold {
+  font-size: 1.1rem;
 }
 
 .details-info p {
