@@ -440,6 +440,64 @@
   <!--FIM FOOTER-->
 
 
+  <script>
+
+    //Logica do Menu Mobile
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggleButton = document.querySelector('.menu-toggle');
+      const mobileMenu = document.querySelector('.mobile-nav');
+      const toggleIcon = document.querySelector('.toggle-icon');
+
+      toggleButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('active');
+
+        // Troca o ícone de Hambúrguer para Fechar (X)
+        if (mobileMenu.classList.contains('active')) {
+          toggleIcon.classList.remove('fa-bars');
+          toggleIcon.classList.add('fa-times'); // Ícone de Fechar (X)
+        } else {
+          toggleIcon.classList.remove('fa-times');
+          toggleIcon.classList.add('fa-bars'); // Ícone de Hambúrguer
+        }
+      });
+    });
+
+    // Logica do carrosel dinamico
+    document.addEventListener('DOMContentLoaded', () => {
+      const carouselTrack = document.querySelector('.testimonial-carousel-track');
+
+      if (carouselTrack) {
+        const carouselItems = document.querySelectorAll('.testimonial-col');
+        const totalItems = carouselItems.length;
+        let currentIndex = 0;
+        const slideInterval = 5000; // 5 segundos
+
+        function autoSlide() {
+          if (totalItems === 0) return;
+
+          currentIndex++;
+
+          if (currentIndex >= totalItems) {
+            // Se chegou ao fim, volta para o início (posição 0)
+            carouselTrack.scrollTo({
+              left: 0,
+              behavior: 'smooth'
+            });
+            currentIndex = 0;
+          } else {
+
+            carouselTrack.scrollTo({
+              left: carouselItems[currentIndex].offsetLeft,
+              behavior: 'smooth'
+            });
+          }
+        }
+
+        setInterval(autoSlide, slideInterval);
+      }
+    });
+  </script>
+
 </body>
 
 </html>
