@@ -1,9 +1,7 @@
 html,
 body {
   overflow: auto;
-  /* mantém a rolagem funcional */
   scrollbar-width: none;
-  /* Firefox */
 }
 
 html::-webkit-scrollbar,
@@ -13,19 +11,15 @@ body::-webkit-scrollbar {
 
 .scroll-fade {
   height: 300px;
-  /* ou o tamanho do seu container */
   overflow-y: auto;
   position: relative;
   scrollbar-width: none;
-  /* Firefox */
 }
 
 .scroll-fade::-webkit-scrollbar {
   display: none;
-  /* Chrome, Edge, Safari */
 }
 
-/* Fades superior e inferior */
 .scroll-fade::before,
 .scroll-fade::after {
   content: "";
@@ -34,7 +28,6 @@ body::-webkit-scrollbar {
   right: 0;
   height: 40px;
   pointer-events: none;
-  /* não bloqueia cliques/scroll */
   z-index: 2;
 }
 
@@ -114,7 +107,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 1ç000;
   width: 100%;
   background-color: var(--color-dark-bg);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
@@ -1173,8 +1166,6 @@ footer a:hover {
 /* ==============================================
    CÓDIGO ADICIONADO: Correções para Layout Mobile
   ==============================================
-   Isto força o layout de coluna única e 
-   centraliza textos, como nos screenshots.
 */
 @media (max-width: 991px) {
 
