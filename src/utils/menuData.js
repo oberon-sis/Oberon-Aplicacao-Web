@@ -5,7 +5,7 @@ const modulos = {
         permissao: 'ver_paineis', 
         isDropdown: true, 
         dropdownItens: [ 
-            { titulo: 'Visão Geral', link: 'painelGeral.html' },
+            { titulo: 'Visão Geral', link: 'painel.html' },
             { titulo: 'Específico', link: 'painelEspecifico.html' },
             // { titulo: 'Painel 3', link: 'painel3.html' },
             // { titulo: 'Painel 4', link: 'painel4.html' },
