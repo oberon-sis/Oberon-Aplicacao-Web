@@ -37,26 +37,10 @@
             <input
               type="text"
               class="form-control"
-              placeholder="Buscar pelo nome da máquina ou ID"
+              id="inputBusca"
+              placeholder="Buscar pelo nome da máquina"
             />
             <span class="input-group-text"><i class="bi bi-search"></i></span>
-          </div>
-          <div class="dropdown">
-            <button
-              class="btn btn-sm btn-outline-secondary dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Nome
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#">Nome</a></li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li><a class="dropdown-item" href="#">ID</a></li>
-            </ul>
           </div>
         </div>
       </header>
@@ -66,36 +50,54 @@
           class="d-flex flex-wrap align-items-center mb-4 filter-group-row flex-shrink-0"
         >
           <div class="btn-group me-3" role="group">
-            <button type="button" class="btn btn-custom-status active">
-              Todas <span class="badge text-bg-dark ms-1">21</span>
+            <button
+              type="button"
+              class="btn btn-custom-status active"
+              data-filtro="todas"
+            >
+              Todas <span class="badge text-bg-dark ms-1">5</span>
             </button>
             <button
               type="button"
-              class="btn btn-custom-status status-emergencia"
+              class="btn btn-custom-status"
+              data-filtro="critico"
             >
-              Emergência <span class="badge text-bg-danger ms-1">2</span>
-            </button>
-            <button type="button" class="btn btn-custom-status status-critico">
-              Crítico <span class="badge text-bg-warning ms-1">3</span>
-            </button>
-            <button type="button" class="btn btn-custom-status status-atencao">
-              Atenção <span class="badge text-bg-info ms-1">4</span>
-            </button>
-            <button type="button" class="btn btn-custom-status status-offline">
-              OFF-LINE <span class="badge badge-custom-gray ms-1">5</span>
+              Crítico <span class="badge text-bg-danger ms-1">1</span>
             </button>
             <button
               type="button"
-              class="btn btn-custom-status status-manutencao"
+              class="btn btn-custom-status"
+              data-filtro="atencao"
             >
-              Manutenção <span class="badge badge-custom-gray ms-1">7</span>
+              Atenção <span class="badge text-bg-warning ms-1">1</span>
+            </button>
+            <button
+              type="button"
+              class="btn btn-custom-status"
+              data-filtro="ocioso"
+            >
+              Ocioso <span class="badge text-bg-info ms-1">1</span>
+            </button>
+            <button
+              type="button"
+              class="btn btn-custom-status"
+              data-filtro="offline"
+            >
+              OFF-LINE <span class="badge badge-custom-gray ms-1">1</span>
+            </button>
+            <button
+              type="button"
+              class="btn btn-custom-status"
+              data-filtro="manutencao"
+            >
+              Manutenção <span class="badge badge-custom-gray ms-1">1</span>
             </button>
           </div>
         </div>
 
         <div class="main-content-area d-flex flex-grow-1 overflow-hidden">
           <section class="resource-cards flex-fill">
-            <div class="card card-recurso">
+            <div class="card card-recurso" data-maquina-id="1">
               <div
                 class="d-flex justify-content-between align-items-start mb-2"
               >
@@ -106,34 +108,7 @@
                 <small class="text-success fw-bold">ONLINE</small>
               </p>
               <p class="card-text mb-1">
-                <small class="text-muted">ESTÁVEL</small>
-              </p>
-              <p class="card-text mb-2 small text-muted">
-                Uso mais perto do limite:
-              </p>
-              <ul class="list-unstyled small mb-3">
-                <li>CPU: <span class="fw-bold">87%</span></li>
-                <li>
-                  <span class="text-danger">(1.2% Abaixo do Limite)</span>
-                </li>
-              </ul>
-              <button type="button" class="btn btn-success btn-sm w-100">
-                Ver Detalhes
-              </button>
-            </div>
-
-            <div class="card card-recurso">
-              <div
-                class="d-flex justify-content-between align-items-start mb-2"
-              >
-                <h5 class="card-title h6 mb-0">ESTACAO-0022</h5>
-                <i class="bi bi-check-circle-fill text-success fs-5"></i>
-              </div>
-              <p class="card-text mb-1">
-                <small class="text-success fw-bold">ONLINE</small>
-              </p>
-              <p class="card-text mb-1">
-                <small class="text-muted">ESTÁVEL</small>
+                <small class="text-muted">OCIOSO</small>
               </p>
               <p class="card-text mb-2 small text-muted">
                 Uso mais perto do limite:
@@ -147,7 +122,32 @@
               </button>
             </div>
 
-            <div class="card card-recurso">
+            <div class="card card-recurso" data-maquina-id="2">
+              <div
+                class="d-flex justify-content-between align-items-start mb-2"
+              >
+                <h5 class="card-title h6 mb-0">ESTACAO-0022</h5>
+                <i class="bi bi-check-circle-fill text-success fs-5"></i>
+              </div>
+              <p class="card-text mb-1">
+                <small class="text-success fw-bold">ONLINE</small>
+              </p>
+              <p class="card-text mb-1">
+                <small class="text-muted">OCIOSO</small>
+              </p>
+              <p class="card-text mb-2 small text-muted">
+                Uso mais perto do limite:
+              </p>
+              <ul class="list-unstyled small mb-3">
+                <li>RAM: <span class="fw-bold">71%</span></li>
+                <li><span class="text-success">(Normal)</span></li>
+              </ul>
+              <button type="button" class="btn btn-success btn-sm w-100">
+                Ver Detalhes
+              </button>
+            </div>
+
+            <div class="card card-recurso" data-maquina-id="3">
               <div
                 class="d-flex justify-content-between align-items-start mb-2"
               >
@@ -155,7 +155,7 @@
                 <i class="bi bi-exclamation-triangle-fill text-danger fs-5"></i>
               </div>
               <p class="card-text mb-1">
-                <small class="text-danger fw-bold">EMERGÊNCIA</small>
+                <small class="text-danger fw-bold">CRÍTICO</small>
               </p>
               <p class="card-text mb-1">
                 <small class="text-danger">ATENÇÃO URGENTE</small>
@@ -164,15 +164,15 @@
                 Uso mais perto do limite:
               </p>
               <ul class="list-unstyled small mb-3">
-                <li>CPU: <span class="fw-bold">75%</span></li>
-                <li><span class="text-danger">(5% Acima do Limite)</span></li>
+                <li>CPU: <span class="fw-bold">95%</span></li>
+                <li><span class="text-danger">(25% Acima do Limite)</span></li>
               </ul>
               <button type="button" class="btn btn-danger btn-sm w-100">
                 Ver Detalhes
               </button>
             </div>
 
-            <div class="card card-recurso">
+            <div class="card card-recurso" data-maquina-id="4">
               <div
                 class="d-flex justify-content-between align-items-start mb-2"
               >
@@ -195,7 +195,7 @@
               </button>
             </div>
 
-            <div class="card card-recurso">
+            <div class="card card-recurso" data-maquina-id="5">
               <div
                 class="d-flex justify-content-between align-items-start mb-2"
               >
@@ -203,7 +203,7 @@
                 <i class="bi bi-exclamation-circle-fill text-warning fs-5"></i>
               </div>
               <p class="card-text mb-1">
-                <small class="text-warning fw-bold">CRÍTICO</small>
+                <small class="text-warning fw-bold">ATENÇÃO</small>
               </p>
               <p class="card-text mb-1">
                 <small class="text-warning">REQUER ATENÇÃO</small>
@@ -219,17 +219,80 @@
                 Ver Detalhes
               </button>
             </div>
+
+            <div class="card card-recurso" data-maquina-id="6">
+              <div
+                class="d-flex justify-content-between align-items-start mb-2"
+              >
+                <h5 class="card-title h6 mb-0">ESTACAO-0030</h5>
+                <i class="bi bi-tools text-secondary fs-5"></i>
+              </div>
+              <p class="card-text mb-1">
+                <small class="text-secondary fw-bold">MANUTENÇÃO</small>
+              </p>
+              <p class="card-text mb-1">
+                <small class="text-secondary">EM MANUTENÇÃO</small>
+              </p>
+              <p class="card-text mb-2 small text-muted">Status:</p>
+              <ul class="list-unstyled small mb-3">
+                <li><span class="fw-bold">Programada</span></li>
+                <li><span class="text-muted">(Retorna em 2h)</span></li>
+              </ul>
+              <button type="button" class="btn btn-secondary btn-sm w-100">
+                Ver Detalhes
+              </button>
+            </div>
           </section>
 
           <aside class="details-sidebar flex-shrink-0">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="h6 mb-0 fw-bold">
-                ESTACAO-0001 | Histórico de Utilização de Recursos
+              <h5 class="h6 mb-0 fw-bold" id="tituloDetalhes">
+                ESTACAO-0021 | Histórico de Utilização de Recursos
               </h5>
-              <i
-                class="bi bi-arrows-fullscreen text-secondary"
-                style="cursor: pointer"
-              ></i>
+              <div class="dropdown">
+                <button
+                  class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                  type="button"
+                  id="dropdownComponente"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Todos
+                </button>
+                <ul
+                  class="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="dropdownComponente"
+                >
+                  <li>
+                    <a class="dropdown-item" href="#" data-componente="todos"
+                      >Todos</a
+                    >
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#" data-componente="cpu"
+                      >CPU</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#" data-componente="ram"
+                      >RAM</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#" data-componente="disco"
+                      >Disco</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#" data-componente="rede"
+                      >Rede</a
+                    >
+                  </li>
+                </ul>
+              </div>
             </div>
 
             <div class="chart-container mb-4">
@@ -242,18 +305,18 @@
                   <i class="bi bi-cpu-fill fs-3"></i>
                   <div class="flex-grow-1">
                     <span class="small text-muted d-block mb-1"
-                      >Uso da CPU</span
+                      >Alertas no componente CPU</span
                     >
                     <div
                       class="d-flex justify-content-between align-items-center"
                     >
                       <div>
-                        <small class="text-muted d-block">Limite:</small>
-                        <span class="fw-bold text-muted">70%</span>
+                        <small class="text-muted d-block">Últimas 24h:</small>
+                        <span class="fw-bold text-muted" id="cpu24h">10</span>
                       </div>
                       <div class="text-end">
-                        <small class="text-muted d-block">Atual:</small>
-                        <span class="fw-bold text-danger fs-5">75%</span>
+                        <small class="text-muted d-block">Ativos:</small>
+                        <span class="fw-bold fs-5" id="cpuAtivos">6</span>
                       </div>
                     </div>
                   </div>
@@ -265,18 +328,18 @@
                   <i class="bi bi-memory fs-3"></i>
                   <div class="flex-grow-1">
                     <span class="small text-muted d-block mb-1"
-                      >Uso da Memória RAM</span
+                      >Alertas no componente RAM</span
                     >
                     <div
                       class="d-flex justify-content-between align-items-center"
                     >
                       <div>
-                        <small class="text-muted d-block">Limite:</small>
-                        <span class="fw-bold text-muted">89%</span>
+                        <small class="text-muted d-block">Últimas 24h:</small>
+                        <span class="fw-bold text-muted" id="ram24h">4</span>
                       </div>
                       <div class="text-end">
-                        <small class="text-muted d-block">Atual:</small>
-                        <span class="fw-bold text-success fs-5">71%</span>
+                        <small class="text-muted d-block">Ativos:</small>
+                        <span class="fw-bold fs-5" id="ramAtivos">1</span>
                       </div>
                     </div>
                   </div>
@@ -288,18 +351,18 @@
                   <i class="bi bi-wifi fs-3"></i>
                   <div class="flex-grow-1">
                     <span class="small text-muted d-block mb-1"
-                      >Taxa de Utilização da Rede</span
+                      >Alertas de conexão de Rede</span
                     >
                     <div
                       class="d-flex justify-content-between align-items-center"
                     >
                       <div>
-                        <small class="text-muted d-block">Limite:</small>
-                        <span class="fw-bold text-muted">3.5%</span>
+                        <small class="text-muted d-block">Últimas 24h:</small>
+                        <span class="fw-bold text-muted" id="rede24h">3</span>
                       </div>
                       <div class="text-end">
-                        <small class="text-muted d-block">Atual:</small>
-                        <span class="fw-bold text-success fs-5">2%</span>
+                        <small class="text-muted d-block">Ativos:</small>
+                        <span class="fw-bold fs-5" id="redeAtivos">1</span>
                       </div>
                     </div>
                   </div>
@@ -311,18 +374,18 @@
                   <i class="bi bi-hdd-fill fs-3"></i>
                   <div class="flex-grow-1">
                     <span class="small text-muted d-block mb-1"
-                      >Uso do Disco Duro</span
+                      >Alertas no componente Disco</span
                     >
                     <div
                       class="d-flex justify-content-between align-items-center"
                     >
                       <div>
-                        <small class="text-muted d-block">Limite:</small>
-                        <span class="fw-bold text-muted">88.8%</span>
+                        <small class="text-muted d-block">Últimas 24h:</small>
+                        <span class="fw-bold text-muted" id="disco24h">7</span>
                       </div>
                       <div class="text-end">
-                        <small class="text-muted d-block">Atual:</small>
-                        <span class="fw-bold text-warning fs-5">87%</span>
+                        <small class="text-muted d-block">Ativos:</small>
+                        <span class="fw-bold fs-5" id="discoAtivos">3</span>
                       </div>
                     </div>
                   </div>
@@ -335,19 +398,21 @@
             <div class="details-info small">
               <p class="mb-1 d-flex justify-content-between">
                 <span class="text-muted">Modelo:</span>
-                <span class="fw-bold">Dell OptiPlex 3050 SFF</span>
+                <span class="fw-bold" id="infoModelo"
+                  >Dell OptiPlex 3050 SFF</span
+                >
               </p>
               <p class="mb-1 d-flex justify-content-between">
                 <span class="text-muted">IP:</span>
-                <span class="fw-bold">192.168.1.101</span>
+                <span class="fw-bold" id="infoIp">192.168.1.101</span>
               </p>
               <p class="mb-1 d-flex justify-content-between">
                 <span class="text-muted">Quantidade de núcleos:</span>
-                <span class="fw-bold">8</span>
+                <span class="fw-bold" id="infoNucleos">8</span>
               </p>
               <p class="mb-3 d-flex justify-content-between">
                 <span class="text-muted">Sistema Operacional:</span>
-                <span class="fw-bold">Windows 10 Pro</span>
+                <span class="fw-bold" id="infoSo">Windows 10 Pro</span>
               </p>
             </div>
           </aside>
@@ -356,6 +421,7 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.2.1/dist/chartjs-plugin-annotation.min.js"></script>
     <script src="../component/menu/Menu.js"></script>
     <script src="../js/painel.js"></script>
   </body>
