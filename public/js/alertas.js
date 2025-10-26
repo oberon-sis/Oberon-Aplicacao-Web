@@ -1,4 +1,4 @@
-let ID_USUARIO = 6;
+let ID_USUARIO = 12;
 let paginaAtual = 1;
 let tipoFiltro = 'descricao';
 
@@ -34,20 +34,18 @@ function renderizarTabela(alertas) {
         const duracaoFormatada = formatarDuracao(alerta.duracaoSegundos);
         let criticidadeClass = 'text-secondary';
         switch (alerta.nivel.toUpperCase()) {
-            case 'EMERGENCIA':
-                criticidadeClass = 'text-danger fw-bold';
+            case 'CRITICO': 
+                criticidadeClass = 'text-danger fw-bold'; 
                 break;
-            case 'CRITICO':
-                criticidadeClass = 'text-danger';
-                break;
-            case 'ATENCAO':
+            case 'ATENCAO': 
                 criticidadeClass = 'text-warning fw-bold'; 
                 break;
-            case 'INFORMATIVO':
+            case 'OCIOSO': 
                 criticidadeClass = 'text-success';
                 break;
             default:
-                criticidadeClass = 'text-info';
+                criticidadeClass = 'text-success';
+                break;
         }
 
         const row = `
