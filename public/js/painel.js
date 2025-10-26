@@ -140,7 +140,7 @@ const LINHA_DATA_DEFAULT = {
   datasets: [
     {
       label: "Uso de CPU",
-      data: [80, 75, 90, 85, 100, 95, 110, 105, 120],
+      data: [],
       borderColor: COLORS.alpha.line,
       tension: 0.4,
       fill: true,
@@ -152,7 +152,7 @@ const LINHA_DATA_DEFAULT = {
     },
     {
       label: "Uso de RAM",
-      data: [60, 65, 70, 75, 85, 80, 95, 90, 105],
+      data: [],
       borderColor: COLORS.beta.line,
       tension: 0.4,
       fill: true,
@@ -163,8 +163,8 @@ const LINHA_DATA_DEFAULT = {
       pointHoverRadius: 8,
     },
     {
-      label: "Uso do Disco",
-      data: [70, 60, 55, 65, 70, 60, 75, 80, 90],
+      label: "Uso do Disco Duro",
+      data: [],
       borderColor: COLORS.gamma.line,
       tension: 0.4,
       fill: true,
@@ -176,7 +176,7 @@ const LINHA_DATA_DEFAULT = {
     },
     {
       label: "Taxa de utilização de rede",
-      data: [50, 55, 50, 45, 60, 70, 65, 75, 85],
+      data: [],
       borderColor: COLORS.delta.line,
       tension: 0.4,
       fill: true,
@@ -189,12 +189,26 @@ const LINHA_DATA_DEFAULT = {
   ],
 };
 
-function getOpcoesChart() {
+function getLimiteMaximo() {
   const maquina = MAQUINAS_DATA[maquinaAtualId];
+  const limites = {
+    cpu: maquina.cpuLimite,
+    ram: maquina.ramLimite,
+    disco: maquina.discoLimite,
+    rede: maquina.redeLimite,
+  };
+  return limites[componenteAtual] || 90;
+}
+
+function getLimiteMinimo() {
+  return getLimiteMaximo() * 0.7;
+}
+
+function getOpcoesChart() {
   const limiteMax = getLimiteMaximo();
   const limiteMin = getLimiteMinimo();
 
-  const opcoes = {
+  return {
     responsive: true,
     maintainAspectRatio: false,
     interaction: { mode: "index", intersect: false },
@@ -218,7 +232,10 @@ function getOpcoesChart() {
             let label = context.dataset.label || "";
             if (label) label += ": ";
             if (context.parsed.y !== null) {
-              label += `${(context.parsed.y / 2).toFixed(1)}%`;
+              label +=
+                componenteAtual === "rede"
+                  ? `${context.parsed.y.toFixed(2)} %`
+                  : `${context.parsed.y.toFixed(1)}%`;
             }
             return label;
           },
@@ -230,14 +247,17 @@ function getOpcoesChart() {
               annotations: {
                 limiteMax: {
                   type: "line",
-                  yMin: limiteMax * 2,
-                  yMax: limiteMax * 2,
+                  yMin: limiteMax,
+                  yMax: limiteMax,
                   borderColor: "rgb(255, 99, 132)",
                   borderWidth: 2,
                   borderDash: [5, 5],
                   label: {
                     display: true,
-                    content: `Limite Máximo: ${limiteMax}%`,
+                    content:
+                      componenteAtual === "rede"
+                        ? `Limite Máximo: ${limiteMax} %`
+                        : `Limite Máximo: ${limiteMax}%`,
                     position: "end",
                     backgroundColor: "rgba(255, 99, 132, 0.8)",
                     color: "white",
@@ -246,14 +266,17 @@ function getOpcoesChart() {
                 },
                 limiteMin: {
                   type: "line",
-                  yMin: limiteMin * 2,
-                  yMax: limiteMin * 2,
+                  yMin: limiteMin,
+                  yMax: limiteMin,
                   borderColor: "rgb(54, 162, 235)",
                   borderWidth: 2,
                   borderDash: [5, 5],
                   label: {
                     display: true,
-                    content: `Limite Mínimo: ${limiteMin.toFixed(1)}%`,
+                    content:
+                      componenteAtual === "rede"
+                        ? `Limite Mínimo: ${limiteMin.toFixed(2)} %`
+                        : `Limite Mínimo: ${limiteMin.toFixed(1)}%`,
                     position: "start",
                     backgroundColor: "rgba(54, 162, 235, 0.8)",
                     color: "white",
@@ -271,11 +294,14 @@ function getOpcoesChart() {
         ticks: {
           font: { family: "Segoe UI", size: 12 },
           color: "#666",
-          callback: (value) => ` ${(value / 2).toFixed(0)}%`,
+          callback: (value) =>
+            componenteAtual === "rede"
+              ? `${value.toFixed(1)} %`
+              : `${value.toFixed(0)}%`,
         },
         title: {
           display: true,
-          text: "Porcentagem(%)",
+          text: componenteAtual === "rede" ? "Taxa (%)" : "Porcentagem (%)",
           font: { family: "Segoe UI", size: 14, weight: "bold" },
           color: "#555",
         },
@@ -293,27 +319,6 @@ function getOpcoesChart() {
     },
     animation: { duration: 2000, easing: "easeInOutQuart" },
   };
-  return opcoes;
-}
-
-function getLimiteMaximo() {
-  const maquina = MAQUINAS_DATA[maquinaAtualId];
-  switch (componenteAtual) {
-    case "cpu":
-      return maquina.cpuLimite;
-    case "ram":
-      return maquina.ramLimite;
-    case "disco":
-      return maquina.discoLimite;
-    case "rede":
-      return maquina.redeLimite;
-    default:
-      return 90;
-  }
-}
-
-function getLimiteMinimo() {
-  return getLimiteMaximo() * 0.7;
 }
 
 function createGradient(ctx, chartArea, color, isTopPerformer = false) {
@@ -349,46 +354,45 @@ function applyGradients(chart) {
 }
 
 function getNewValue(min, max) {
-  const value = Math.random() * (max - min) + min;
-  return value.toFixed(1);
+  return (Math.random() * (max - min) + min).toFixed(2);
+}
+
+function getValoresIniciais(maquina) {
+  return {
+    cpu: { min: maquina.cpuLimite * 0.7, max: maquina.cpuLimite * 1.05 },
+    ram: { min: maquina.ramLimite * 0.6, max: maquina.ramLimite * 1.05 },
+    disco: { min: maquina.discoLimite * 0.65, max: maquina.discoLimite * 1.02 },
+    rede: { min: maquina.redeLimite * 0.7, max: maquina.redeLimite * 1.05 },
+  };
 }
 
 async function fetchData(idMaquina) {
   await new Promise((resolve) => setTimeout(resolve, 500));
+  const maquina = MAQUINAS_DATA[idMaquina];
   const newTime = new Date().toLocaleTimeString("pt-BR", {
     hour: "2-digit",
     minute: "2-digit",
   });
+  const valores = getValoresIniciais(maquina);
+
   return {
     label: newTime,
-    cpu: getNewValue(12, 78),
-    ram: getNewValue(75, 89),
-    disco: getNewValue(87, 95),
-    rede: getNewValue(1, 4),
+    cpu: getNewValue(valores.cpu.min, valores.cpu.max),
+    ram: getNewValue(valores.ram.min, valores.ram.max),
+    disco: getNewValue(valores.disco.min, valores.disco.max),
+    rede: getNewValue(valores.rede.min, valores.rede.max),
   };
 }
 
 async function updateChartData(chart) {
   const newPoint = await fetchData(maquinaAtualId);
+  const dataKeys = ["cpu", "ram", "disco", "rede"];
+
   chart.data.datasets.forEach((dataset, index) => {
-    let newValue;
-    switch (index) {
-      case 0:
-        newValue = newPoint.cpu;
-        break;
-      case 1:
-        newValue = newPoint.ram;
-        break;
-      case 2:
-        newValue = newPoint.disco;
-        break;
-      case 3:
-        newValue = newPoint.rede;
-        break;
-    }
     dataset.data.shift();
-    dataset.data.push(newValue);
+    dataset.data.push(parseFloat(newPoint[dataKeys[index]]));
   });
+
   chart.data.labels.shift();
   chart.data.labels.push(newPoint.label);
   applyGradients(chart);
@@ -396,48 +400,67 @@ async function updateChartData(chart) {
 }
 
 function initLinhaChart(idMaquina) {
-  if (linhaChartInstance) {
-    linhaChartInstance.destroy();
-  }
-  if (linhaIntervalId) {
-    clearInterval(linhaIntervalId);
-  }
+  if (linhaChartInstance) linhaChartInstance.destroy();
+  if (linhaIntervalId) clearInterval(linhaIntervalId);
+
   const canvas = document.getElementById(LINHA_CHART_ID);
   if (!canvas) {
     console.error(`Elemento canvas com ID "${LINHA_CHART_ID}" não encontrado.`);
     return;
   }
-  let ctx;
-  try {
-    ctx = canvas.getContext("2d");
-    if (!ctx) {
-      console.error("Não foi possível obter o contexto 2D do canvas.");
-      return;
+
+  const maquina = MAQUINAS_DATA[idMaquina];
+
+  if (
+    maquina.criticidade === "offline" ||
+    maquina.criticidade === "manutencao"
+  ) {
+    canvas.style.display = "none";
+    let mensagemDiv = document.getElementById("mensagemGrafico");
+    if (!mensagemDiv) {
+      mensagemDiv = document.createElement("div");
+      mensagemDiv.id = "mensagemGrafico";
+      mensagemDiv.style.cssText =
+        "display: flex; align-items: center; justify-content: center; height: 300px; background-color: #f8f9fa; border-radius: 0.375rem; font-size: 1.2rem; color: #6c757d; font-weight: 500;";
+      canvas.parentElement.appendChild(mensagemDiv);
     }
-  } catch (e) {
-    console.error("Erro ao obter o contexto do canvas:", e);
+    mensagemDiv.style.display = "flex";
+    mensagemDiv.textContent =
+      maquina.criticidade === "offline"
+        ? "⚠️ Máquina OFF-LINE"
+        : "🔧 Máquina em Manutenção";
+    return;
+  }
+
+  const mensagemDiv = document.getElementById("mensagemGrafico");
+  if (mensagemDiv) mensagemDiv.style.display = "none";
+  canvas.style.display = "block";
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    console.error("Não foi possível obter o contexto 2D do canvas.");
     return;
   }
 
   let dataCopy = JSON.parse(JSON.stringify(LINHA_DATA_DEFAULT));
+  const valores = getValoresIniciais(maquina);
+
+  dataCopy.datasets[0].data = Array(9)
+    .fill(0)
+    .map(() => parseFloat(getNewValue(valores.cpu.min, valores.cpu.max)));
+  dataCopy.datasets[1].data = Array(9)
+    .fill(0)
+    .map(() => parseFloat(getNewValue(valores.ram.min, valores.ram.max)));
+  dataCopy.datasets[2].data = Array(9)
+    .fill(0)
+    .map(() => parseFloat(getNewValue(valores.disco.min, valores.disco.max)));
+  dataCopy.datasets[3].data = Array(9)
+    .fill(0)
+    .map(() => parseFloat(getNewValue(valores.rede.min, valores.rede.max)));
 
   if (componenteAtual !== "todos") {
-    let datasetIndex;
-    switch (componenteAtual) {
-      case "cpu":
-        datasetIndex = 0;
-        break;
-      case "ram":
-        datasetIndex = 1;
-        break;
-      case "disco":
-        datasetIndex = 2;
-        break;
-      case "rede":
-        datasetIndex = 3;
-        break;
-    }
-    dataCopy.datasets = [dataCopy.datasets[datasetIndex]];
+    const indices = { cpu: 0, ram: 1, disco: 2, rede: 3 };
+    dataCopy.datasets = [dataCopy.datasets[indices[componenteAtual]]];
   }
 
   linhaChartInstance = new Chart(ctx, {
@@ -453,9 +476,10 @@ function initLinhaChart(idMaquina) {
 
   linhaChartInstance.options.onResize = () =>
     applyGradients(linhaChartInstance);
-  linhaIntervalId = setInterval(() => {
-    updateChartData(linhaChartInstance);
-  }, 5000);
+  linhaIntervalId = setInterval(
+    () => updateChartData(linhaChartInstance),
+    5000
+  );
 }
 
 function trocar_maquina(idMaquina) {
@@ -470,25 +494,26 @@ function atualizarDetalhes() {
   document.getElementById("tituloDetalhes").textContent =
     `${maquina.nome} | Histórico de Utilização de Recursos`;
 
-  document.getElementById("cpu24h").textContent = maquina.cpu24h;
-  document.getElementById("cpuAtivos").textContent = maquina.cpuAtivos;
-  document.getElementById("cpuAtivos").className =
-    `fw-bold fs-5 ${maquina.cpuAtivos > 5 ? "text-danger" : maquina.cpuAtivos > 2 ? "text-warning" : "text-success"}`;
+  const metricas = [
+    { id: "cpu", valor: maquina.cpuAtivos },
+    { id: "ram", valor: maquina.ramAtivos },
+    { id: "rede", valor: maquina.redeAtivos },
+    { id: "disco", valor: maquina.discoAtivos },
+  ];
 
-  document.getElementById("ram24h").textContent = maquina.ram24h;
-  document.getElementById("ramAtivos").textContent = maquina.ramAtivos;
-  document.getElementById("ramAtivos").className =
-    `fw-bold fs-5 ${maquina.ramAtivos > 5 ? "text-danger" : maquina.ramAtivos > 2 ? "text-warning" : "text-success"}`;
-
-  document.getElementById("rede24h").textContent = maquina.rede24h;
-  document.getElementById("redeAtivos").textContent = maquina.redeAtivos;
-  document.getElementById("redeAtivos").className =
-    `fw-bold fs-5 ${maquina.redeAtivos > 3 ? "text-danger" : maquina.redeAtivos > 1 ? "text-warning" : "text-success"}`;
-
-  document.getElementById("disco24h").textContent = maquina.disco24h;
-  document.getElementById("discoAtivos").textContent = maquina.discoAtivos;
-  document.getElementById("discoAtivos").className =
-    `fw-bold fs-5 ${maquina.discoAtivos > 5 ? "text-danger" : maquina.discoAtivos > 2 ? "text-warning" : "text-success"}`;
+  metricas.forEach((m) => {
+    document.getElementById(`${m.id}24h`).textContent = maquina[`${m.id}24h`];
+    document.getElementById(`${m.id}Ativos`).textContent = m.valor;
+    const limite = m.id === "rede" ? 3 : 5;
+    const classe =
+      m.valor > limite
+        ? "text-danger"
+        : m.valor > 2
+          ? "text-warning"
+          : "text-success";
+    document.getElementById(`${m.id}Ativos`).className =
+      `fw-bold fs-5 ${classe}`;
+  });
 
   document.getElementById("infoModelo").textContent = maquina.modelo;
   document.getElementById("infoIp").textContent = maquina.ip;
@@ -498,19 +523,11 @@ function atualizarDetalhes() {
 
 function filtrarMaquinas(filtro) {
   filtroAtual = filtro;
-  const cards = document.querySelectorAll(".card-recurso");
-
-  cards.forEach((card) => {
+  document.querySelectorAll(".card-recurso").forEach((card) => {
     const idMaquina = parseInt(card.getAttribute("data-maquina-id"));
     const maquina = MAQUINAS_DATA[idMaquina];
-
-    if (filtro === "todas") {
-      card.style.display = "block";
-    } else if (maquina.criticidade === filtro) {
-      card.style.display = "block";
-    } else {
-      card.style.display = "none";
-    }
+    card.style.display =
+      filtro === "todas" || maquina.criticidade === filtro ? "block" : "none";
   });
 }
 
@@ -520,16 +537,11 @@ function trocarComponente(componente) {
 }
 
 function buscarMaquina(termo) {
-  const cards = document.querySelectorAll(".card-recurso");
   termo = termo.toLowerCase();
-
-  cards.forEach((card) => {
+  document.querySelectorAll(".card-recurso").forEach((card) => {
     const nome = card.querySelector(".card-title").textContent.toLowerCase();
-    if (nome.includes(termo) || termo === "") {
-      card.style.display = "block";
-    } else {
-      card.style.display = "none";
-    }
+    card.style.display =
+      nome.includes(termo) || termo === "" ? "block" : "none";
   });
 }
 
@@ -543,30 +555,27 @@ document.addEventListener("DOMContentLoaded", () => {
         .querySelectorAll(".btn-custom-status")
         .forEach((b) => b.classList.remove("active"));
       this.classList.add("active");
-      const filtro = this.getAttribute("data-filtro");
-      filtrarMaquinas(filtro);
+      filtrarMaquinas(this.getAttribute("data-filtro"));
     });
   });
 
   document.querySelectorAll(".card-recurso button").forEach((btn) => {
     btn.addEventListener("click", function () {
       const card = this.closest(".card-recurso");
-      const idMaquina = parseInt(card.getAttribute("data-maquina-id"));
-      trocar_maquina(idMaquina);
+      trocar_maquina(parseInt(card.getAttribute("data-maquina-id")));
     });
   });
 
-  document.getElementById("inputBusca").addEventListener("input", (e) => {
-    buscarMaquina(e.target.value);
-  });
+  document
+    .getElementById("inputBusca")
+    .addEventListener("input", (e) => buscarMaquina(e.target.value));
 
   document.querySelectorAll("[data-componente]").forEach((item) => {
     item.addEventListener("click", function (e) {
       e.preventDefault();
       const componente = this.getAttribute("data-componente");
-      const btnText = this.textContent;
       document.getElementById("dropdownComponente").textContent =
-        componente === "todos" ? "Todos" : btnText;
+        componente === "todos" ? "Todos" : this.textContent;
       trocarComponente(componente);
     });
   });
