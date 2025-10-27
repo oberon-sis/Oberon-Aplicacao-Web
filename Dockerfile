@@ -12,12 +12,13 @@ ENV NODE_ENV=production
 
 WORKDIR /usr/src/app
 
+COPY --from=builder /usr/src/app/package.json ./
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 
 COPY --from=builder /usr/src/app/app.js ./
 COPY --from=builder /usr/src/app/src ./src
 COPY --from=builder /usr/src/app/public ./public
-COPY --from=builder /usr/src/app/public ./downloads
+COPY --from=builder /usr/src/app/downloads ./downloads
 
 EXPOSE 80
 
