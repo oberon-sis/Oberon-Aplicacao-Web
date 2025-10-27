@@ -69,18 +69,11 @@ jobs:
 
 
             # 3. Gerenciamento do Container Antigo
-            if [ $(sudo docker ps -a -q -f name=$CONTAINER_NAME) ]; then # COMANDO CORRIGIDO: Adicionado 'sudo'
-              sudo docker stop $CONTAINER_NAME # COMANDO CORRIGIDO: Adicionado 'sudo'
-              sudo docker rm $CONTAINER_NAME # COMANDO CORRIGIDO: Adicionado 'sudo'
+            if [ $(sudo docker ps -a -q -f name=$CONTAINER_NAME) ]; then 
+              sudo docker stop $CONTAINER_NAME 
+              sudo docker rm $CONTAINER_NAME 
             fi
 
             # 4. Roda o Novo Container
-            sudo docker run -d \ # COMANDO CORRIGIDO: Adicionado 'sudo'
-              --name $CONTAINER_NAME \
-              -p 80:80 \ 
-              --restart always \
-              --env-file .env \ 
-              $IMAGE_NAME:$IMAGE_TAG
-            
-            # 5. Limpa imagens não utilizadas
-            sudo docker image prune -f # COMANDO CORRIGIDO: Adicionado 'sudo'
+            sudo docker run -d --name $CONTAINER_NAME -p 80:80 --restart always --env-file .env $IMAGE_NAME:$IMAGE_TAG
+            sudo docker image prune -f
