@@ -50,7 +50,7 @@ jobs:
             cd /home/$APP_USER/oberon || exit 1 
 
             echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-            docker pull $IMAGE_NAME:$IMAGE_TAG
+            sudo docker pull $IMAGE_NAME:$IMAGE_TAG
 
             # 2. CRIAÇÃO/SOBRESCRITA DO ARQUIVO .ENV NO SERVIDOR EC2
             echo "# Arquivo .env gerado pelo GitHub Actions (Staging)" > .env
@@ -69,18 +69,18 @@ jobs:
 
 
             # 3. Gerenciamento do Container Antigo
-            if [ $(docker ps -a -q -f name=$CONTAINER_NAME) ]; then
-              docker stop $CONTAINER_NAME
-              docker rm $CONTAINER_NAME
+            if [ $(sudo docker ps -a -q -f name=$CONTAINER_NAME) ]; then # COMANDO CORRIGIDO: Adicionado 'sudo'
+              sudo docker stop $CONTAINER_NAME # COMANDO CORRIGIDO: Adicionado 'sudo'
+              sudo docker rm $CONTAINER_NAME # COMANDO CORRIGIDO: Adicionado 'sudo'
             fi
 
             # 4. Roda o Novo Container
-            docker run -d \
+            sudo docker run -d \ # COMANDO CORRIGIDO: Adicionado 'sudo'
               --name $CONTAINER_NAME \
               -p 80:80 \ 
               --restart always \
               --env-file .env \ 
-              $IMAGE_NAME:$IMAGE_TAG # Usando a tag do SHA
+              $IMAGE_NAME:$IMAGE_TAG
             
             # 5. Limpa imagens não utilizadas
-            docker image prune -f
+            sudo docker image prune -f # COMANDO CORRIGIDO: Adicionado 'sudo'
