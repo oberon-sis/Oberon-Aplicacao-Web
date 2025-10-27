@@ -15,7 +15,7 @@ const COLORS = {
 const MAQUINAS_DATA = {
   1: {
     nome: "ESTACAO-0021",
-    criticidade: "ocioso",
+    criticidade: "normal",
     cpu24h: 5,
     cpuAtivos: 0,
     ram24h: 3,
@@ -37,13 +37,13 @@ const MAQUINAS_DATA = {
     nome: "ESTACAO-0022",
     criticidade: "ocioso",
     cpu24h: 4,
-    cpuAtivos: 0,
+    cpuAtivos: 2,
     ram24h: 2,
-    ramAtivos: 0,
+    ramAtivos: 1,
     rede24h: 1,
     redeAtivos: 0,
     disco24h: 3,
-    discoAtivos: 0,
+    discoAtivos: 1,
     cpuLimite: 90,
     ramLimite: 85,
     discoLimite: 88.8,
@@ -297,6 +297,14 @@ function getNewValue(min, max) {
 }
 
 function getValoresIniciais(maquina) {
+  if (maquina.criticidade === "ocioso") {
+    return {
+      cpu: { min: maquina.cpuLimite * 0.2, max: maquina.cpuLimite * 0.4 },
+      ram: { min: maquina.ramLimite * 0.2, max: maquina.ramLimite * 0.4 },
+      disco: { min: maquina.discoLimite * 0.2, max: maquina.discoLimite * 0.4 },
+      rede: { min: maquina.redeLimite * 0.2, max: maquina.redeLimite * 0.4 },
+    };
+  }
   return {
     cpu: { min: maquina.cpuLimite * 0.7, max: maquina.cpuLimite * 1.05 },
     ram: { min: maquina.ramLimite * 0.6, max: maquina.ramLimite * 1.05 },
@@ -513,8 +521,7 @@ document.addEventListener("DOMContentLoaded", () => {
     item.addEventListener("click", function (e) {
       e.preventDefault();
       const componente = this.getAttribute("data-componente");
-      if (componente === "todos") return; // Ignora a opção "Todos"
-
+      if (componente === "todos") return; 
       document.getElementById("dropdownComponente").textContent =
         this.textContent;
       trocarComponente(componente);

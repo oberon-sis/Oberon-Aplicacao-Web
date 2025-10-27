@@ -55,7 +55,7 @@
               class="btn btn-custom-status active"
               data-filtro="todas"
             >
-              Todas <span class="badge text-bg-dark ms-1">5</span>
+              Todas <span class="badge text-bg-dark ms-1">6</span>
             </button>
             <button
               type="button"
@@ -70,6 +70,13 @@
               data-filtro="atencao"
             >
               Atenção <span class="badge text-bg-warning ms-1">1</span>
+            </button>
+            <button
+              type="button"
+              class="btn btn-custom-status"
+              data-filtro="normal"
+            >
+              Normal <span class="badge text-bg-success ms-1">1</span>
             </button>
             <button
               type="button"
@@ -127,22 +134,20 @@
                 class="d-flex justify-content-between align-items-start mb-2"
               >
                 <h5 class="card-title h6 mb-0">ESTACAO-0022</h5>
-                <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                <i class="bi bi-exclamation-circle text-info fs-5"></i>
               </div>
               <p class="card-text mb-1">
-                <small class="text-success fw-bold">ONLINE</small>
+                <small class="text-info fw-bold">OCIOSO</small>
               </p>
               <p class="card-text mb-1">
-                <small class="text-muted">OCIOSO</small>
+                <small class="text-info">SUBUTILIZADO</small>
               </p>
-              <p class="card-text mb-2 small text-muted">
-                Uso mais perto do limite:
-              </p>
+              <p class="card-text mb-2 small text-muted">Uso atual:</p>
               <ul class="list-unstyled small mb-3">
-                <li>RAM: <span class="fw-bold">71%</span></li>
-                <li><span class="text-success">(Normal)</span></li>
+                <li>CPU: <span class="fw-bold">28%</span></li>
+                <li><span class="text-info">(62% Abaixo do ideal)</span></li>
               </ul>
-              <button type="button" class="btn btn-success btn-sm w-100">
+              <button type="button" class="btn btn-info btn-sm w-100">
                 Ver Detalhes
               </button>
             </div>
