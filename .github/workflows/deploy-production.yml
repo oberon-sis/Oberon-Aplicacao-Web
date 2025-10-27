@@ -1,16 +1,16 @@
-name: Deploy para Staging (EC2 Container)
+name: Deploy para Production (EC2 Container)
 
 on:
   push:
     branches:
-      - staging
+      - main
   workflow_dispatch: 
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     
-    environment: Staging 
+    environment: Production 
 
     steps:
       - name: Checkout do Repositório
