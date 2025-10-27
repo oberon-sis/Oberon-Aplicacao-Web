@@ -16,11 +16,11 @@ jobs:
       - name: Checkout do Repositório
         uses: actions/checkout@v4
 
-      - name: Definir Tag da Imagem
+      - name: Definir Tag da Imagem (usando o SHA do commit)
         id: set_tag
         run: echo "IMAGE_TAG=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
         
-      - name: Login no Docker Hub
+      - name: Login no Docker Hub (no runner do GitHub Actions)
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -41,14 +41,16 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            cd /home/${{ secrets.EC2_USERNAME }}/oberon || exit 1 
-
+            CONTAINER_NAME=oberon-web-c
+            APP_USER=${{ secrets.EC2_USERNAME }}
             IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/oberon-app-web
-            IMAGE_TAG_LATEST=staging
+            # Usando a tag do SHA do commit (IMAGE_TAG) para garantir a versão correta
+            IMAGE_TAG=${{ env.IMAGE_TAG }}
+            
+            cd /home/$APP_USER/oberon || exit 1 
 
-            # 1. Login e Pull
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker pull $IMAGE_NAME:$IMAGE_TAG_LATEST
+            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            docker pull $IMAGE_NAME:$IMAGE_TAG
 
             # 2. CRIAÇÃO/SOBRESCRITA DO ARQUIVO .ENV NO SERVIDOR EC2
             echo "# Arquivo .env gerado pelo GitHub Actions (Staging)" > .env
@@ -67,17 +69,18 @@ jobs:
 
 
             # 3. Gerenciamento do Container Antigo
-            if [ $(docker ps -a -q -f name=oberon-web-c) ]; then
-              docker stop oberon-web-c
-              docker rm oberon-web-c
+            if [ $(docker ps -a -q -f name=$CONTAINER_NAME) ]; then
+              docker stop $CONTAINER_NAME
+              docker rm $CONTAINER_NAME
             fi
 
             # 4. Roda o Novo Container
             docker run -d \
-              --name oberon-web-c \
+              --name $CONTAINER_NAME \
               -p 80:80 \ 
               --restart always \
               --env-file .env \ 
-              $IMAGE_NAME:$IMAGE_TAG_LATEST
+              $IMAGE_NAME:$IMAGE_TAG # Usando a tag do SHA
             
+            # 5. Limpa imagens não utilizadas
             docker image prune -f
