@@ -15,8 +15,8 @@
   <link rel="stylesheet" href="../component/notificao/Notificaocao.css">
   <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script
-    src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js">
+  </script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
 </head>
@@ -270,7 +270,7 @@
               a
               incidentes!
             </p>
-            <a href="https://slack.com/"  class="btn btn-danger w-100" target="_blank">
+            <a href="https://slack.com/" class="btn btn-danger w-100" target="_blank">
               Entrar ao Canal do Slack
             </a>
           </div>
@@ -316,21 +316,21 @@
       window.location.href = "gerenciamentoMaquinas.html";
     }
 
-
   </script>
   <script src="../js/tour/homeTour.js"></script>
 </body>
 
 </html>
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function() {
 
     var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+    var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
       return new bootstrap.Popover(popoverTriggerEl, {
         trigger: 'focus',
         html: true
       });
     });
   });
+
 </script>

@@ -1,24 +1,19 @@
-var database = require("../database/config");
+var database = require('../database/config');
 const limitePagina = 15;
 
-function construirClausulaWhere(
-  tipoFiltro,
-  termoPesquisa,
-  dataInicio,
-  dataFim
-) {
-  let clausulaWhere = "";
+function construirClausulaWhere(tipoFiltro, termoPesquisa, dataInicio, dataFim) {
+  let clausulaWhere = '';
   if (termoPesquisa) {
     const termoSql = termoPesquisa.replace(/'/g, "''");
     const termoLike = `'%${termoSql}%'`;
     switch (tipoFiltro) {
-      case "maquina":
+      case 'maquina':
         clausulaWhere += `AND VHA.maquinaAfetada LIKE ${termoLike} `;
         break;
-      case "componente":
+      case 'componente':
         clausulaWhere += `AND VHA.tipoComponente LIKE ${termoLike} `;
         break;
-      case "descricao":
+      case 'descricao':
       default:
         clausulaWhere += `AND VHA.motivoAlerta LIKE ${termoLike} `;
         break;
@@ -35,10 +30,7 @@ function construirClausulaWhere(
 }
 
 function getFkEmpresa(idFuncionario) {
-  console.log(
-    "[ALERTA MODEL] Buscando fkEmpresa para o funcionário:",
-    idFuncionario
-  );
+  console.log('[ALERTA MODEL] Buscando fkEmpresa para o funcionário:', idFuncionario);
   var instrucaoSql = `
  SELECT fkEmpresa FROM Funcionario WHERE idFuncionario = ${idFuncionario};
 `;
@@ -64,22 +56,10 @@ const selectAlertasBase = `
     JOIN TipoComponente AS TC ON P.fkTipoComponente = TC.idTipoComponente
 `;
 
-function verAlertas(
-  fkEmpresa,
-  pagina,
-  tipoFiltro,
-  termoPesquisa,
-  dataInicio,
-  dataFim
-) {
+function verAlertas(fkEmpresa, pagina, tipoFiltro, termoPesquisa, dataInicio, dataFim) {
   const limite = limitePagina;
   const offset = (pagina - 1) * limite;
-  const clausulaWhere = construirClausulaWhere(
-    tipoFiltro,
-    termoPesquisa,
-    dataInicio,
-    dataFim
-  );
+  const clausulaWhere = construirClausulaWhere(tipoFiltro, termoPesquisa, dataInicio, dataFim);
 
   console.log(`[ALERTA MODEL] Buscando alertas para a empresa ${fkEmpresa}`);
 
@@ -91,26 +71,13 @@ function verAlertas(
   LIMIT ${limite} OFFSET ${offset};
 `;
 
-  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  console.log('Executando a instrução SQL: \n' + instrucaoSql);
   return database.executar(instrucaoSql);
 }
 
-function contarTotalAlertas(
-  fkEmpresa,
-  tipoFiltro,
-  termoPesquisa,
-  dataInicio,
-  dataFim
-) {
-  const clausulaWhere = construirClausulaWhere(
-    tipoFiltro,
-    termoPesquisa,
-    dataInicio,
-    dataFim
-  );
-  console.log(
-    `[ALERTA MODEL] Contando total de alertas para a empresa ${fkEmpresa} com filtro`
-  );
+function contarTotalAlertas(fkEmpresa, tipoFiltro, termoPesquisa, dataInicio, dataFim) {
+  const clausulaWhere = construirClausulaWhere(tipoFiltro, termoPesquisa, dataInicio, dataFim);
+  console.log(`[ALERTA MODEL] Contando total de alertas para a empresa ${fkEmpresa} com filtro`);
   var instrucaoSql = `
     SELECT 
         COUNT(A.idAlerta) AS totalAlertas
@@ -122,7 +89,7 @@ function contarTotalAlertas(
     WHERE M.fkEmpresa = ${fkEmpresa}
  ${clausulaWhere};
  `;
-  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  console.log('Executando a instrução SQL: \n' + instrucaoSql);
   return database.executar(instrucaoSql);
 }
 
@@ -131,16 +98,11 @@ function obterTodosAlertasParaExportacao(
   tipoFiltro,
   termoPesquisa,
   dataInicio,
-  dataFim
+  dataFim,
 ) {
-  const clausulaWhere = construirClausulaWhere(
-    tipoFiltro,
-    termoPesquisa,
-    dataInicio,
-    dataFim
-  );
+  const clausulaWhere = construirClausulaWhere(tipoFiltro, termoPesquisa, dataInicio, dataFim);
   console.log(
-    `[ALERTA MODEL] Obtendo TODOS os alertas para exportação (sem paginação) para a empresa ${fkEmpresa}`
+    `[ALERTA MODEL] Obtendo TODOS os alertas para exportação (sem paginação) para a empresa ${fkEmpresa}`,
   );
   var instrucaoSql = `
  ${selectAlertasBase}
@@ -148,7 +110,7 @@ function obterTodosAlertasParaExportacao(
  ${clausulaWhere} 
  ORDER BY VHA.horarioRegistro DESC;
  `;
-  console.log("Executando a instrução SQL de EXPORTAÇÃO: \n" + instrucaoSql);
+  console.log('Executando a instrução SQL de EXPORTAÇÃO: \n' + instrucaoSql);
   return database.executar(instrucaoSql);
 }
 

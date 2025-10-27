@@ -1,68 +1,64 @@
-.div_banner{
-    position: relative;
-    overflow: hidden;
-    
+.div_banner {
+  position: relative;
+  overflow: hidden;
 }
-.div_banner div{
-    z-index: 2;
+.div_banner div {
+  z-index: 2;
 }
-.banner{
-    position: absolute;
-    width: 1600px;
-    max-width: 1600px;
-    top: -10px;
-    left: 0;
-    height: 157px;
+.banner {
+  position: absolute;
+  width: 1600px;
+  max-width: 1600px;
+  top: -10px;
+  left: 0;
+  height: 157px;
 }
-.fundo_verde{
-    background-color: var(--verde_claro);
-    border: none !important;
+.fundo_verde {
+  background-color: var(--verde_claro);
+  border: none !important;
 }
-.fundo_verde:hover{
-    background-color: var(--verde_obscuro) !important;
+.fundo_verde:hover {
+  background-color: var(--verde_obscuro) !important;
 }
-.fundo_branco{
-    background-color: white;
-    border: solid 2px var(--verde_claro) !important;
-    color: var(--verde_obscuro) !important;
+.fundo_branco {
+  background-color: white;
+  border: solid 2px var(--verde_claro) !important;
+  color: var(--verde_obscuro) !important;
 }
-.fundo_branco:hover{
-    background-color: var(--verde_obscuro) !important;
-    border: solid 2px var(--verde_obscuro) !important;
-    color: white !important;
-
+.fundo_branco:hover {
+  background-color: var(--verde_obscuro) !important;
+  border: solid 2px var(--verde_obscuro) !important;
+  color: white !important;
 }
 
-.shadow_div div{
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+.shadow_div div {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
-.shadow_div div div{
-    box-shadow: none;
+.shadow_div div div {
+  box-shadow: none;
 }
-@media (min-width: 770px) and (max-width: 800px){
-
- .div_cards_geral{
+@media (min-width: 770px) and (max-width: 800px) {
+  .div_cards_geral {
     display: flex;
     flex-direction: column;
     gap: 15px;
- }
- .div_cards_geral div{
+  }
+  .div_cards_geral div {
     width: 100%;
- }
+  }
 }
 
-@media (min-width: 800px) and (max-width: 1400px){
-
-    .div_cards_geral div{
+@media (min-width: 800px) and (max-width: 1400px) {
+  .div_cards_geral div {
     height: auto;
     min-height: 100%;
-    }
-    .div_etiquetas{
-        display: flex;
-    }
-.etiquetas{
+  }
+  .div_etiquetas {
+    display: flex;
+  }
+  .etiquetas {
     display: flex;
     flex-direction: column;
     text-align: center;
-}
+  }
 }

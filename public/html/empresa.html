@@ -13,12 +13,11 @@
   <link rel="stylesheet" href="../css/edicaoDadosEmpresa.css">
   <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  
- 
+
 
 </head>
 
-<body class="d-flex w-100 h-100" onload="getDadosEmpresaBd()" >
+<body class="d-flex w-100 h-100" onload="getDadosEmpresaBd()">
 
   <div id="menu-container"></div>
 
@@ -31,49 +30,47 @@
           d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
       </svg>
     </button>
-    <h2  id="titleh2" class="text-black mb-4">Edição de dados da Empresa</h2>
+    <h2 id="titleh2" class="text-black mb-4">Edição de dados da Empresa</h2>
 
 
     <div class="cont-usuario">
       <div id="txt-tudo">
-       <h2>
-            Olá <span id="nome_funcionario_logado"></span> - <span id="cargo_funcionario_logado"></span>
+        <h2>
+          Olá <span id="nome_funcionario_logado"></span> - <span id="cargo_funcionario_logado"></span>
         </h2>
-       <h3><span id="nome_banco">Upfinity Banco</span></h3>
+        <h3><span id="nome_banco">Upfinity Banco</span></h3>
         <p>Dados organizados, resultados otimizados. Gerencie as informações<br>da sua empresa com facilidade.</p>
-    </div>
+      </div>
     </div>
 
     <!-- Excluir empresa -->
     <div class="cont_tudo">
       <div class="container01">
-        
+
 
         <h3 class="txt-dados">Dados Atuais</h3>
         <div class="dadosAtuais">
-          
+
           <br>
-           <label for="name">Razão Social</label>
-                  <br>  <br>
-                <p id="razao_social_atual">Carregando...</p>
-          
+          <label for="name">Razão Social</label>
+          <br> <br>
+          <p id="razao_social_atual">Carregando...</p>
+
         </div>
 
         <br>
-      
+
         <div class="form-grupo">
-         <label for="id">CNPJ</label>
-           
-                <div class="input-container">
-                    <br>
-                    <p id="cnpj_atual">Carregando...</p>
-                    <p id="linha"></p>
-                </div>
+          <label for="id">CNPJ</label>
+
+          <div class="input-container">
+            <br>
+            <p id="cnpj_atual">Carregando...</p>
+            <p id="linha"></p>
+          </div>
 
 
-         
         </div>
-
 
 
         <button type="button" class="excluir-btn" onclick="deleteEmpresa()">Excluir Empresa</button>
@@ -86,39 +83,37 @@
         <h3 class="txt-dados">Novos dados</h3>
         <form id="editarEmpresa">
           <div class="form-empresa">
-              <br>  
+            <br>
             <label class="label-esp" for="ipt_razao_social">Razão Social</label>
-                <br><br>
-                <input type="text" class="ipt" id="ipt_razao_social" name="razao" placeholder="Digite a Razão Social de sua empresa" required>
-            </div>
+            <br><br>
+            <input type="text" class="ipt" id="ipt_razao_social" name="razao"
+              placeholder="Digite a Razão Social de sua empresa" required>
+          </div>
 
-         
-
-          <br>
-        <div class="form-empresa">
-                <label class="label-esp" for="ipt_cnpj">CNPJ</label>
-                <br><br>
-                <input type="text" class="ipt" id="ipt_cnpj" name="CNPJ" placeholder="Digite seu CNPJ" required>
-            </div>
 
           <br>
+          <div class="form-empresa">
+            <label class="label-esp" for="ipt_cnpj">CNPJ</label>
+            <br><br>
+            <input type="text" class="ipt" id="ipt_cnpj" name="CNPJ" placeholder="Digite seu CNPJ" required>
+          </div>
 
-         
+          <br>
+
+
         </form>
-         <button type="submit" class="atualizar-btn" onclick="AtualizarUsuario()">Atualizar</button>
+        <button type="submit" class="atualizar-btn" onclick="AtualizarUsuario()">Atualizar</button>
 
       </div>
     </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../js/edicaoDadosEmpresa.js"></script>
-<script src="../component/menu/Menu.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/edicaoDadosEmpresa.js"></script>
+    <script src="../component/menu/Menu.js"></script>
 
   </main>
-
 
 
 </body>
 
 </html>
-  

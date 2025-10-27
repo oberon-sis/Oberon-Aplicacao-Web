@@ -61,14 +61,20 @@
       // Chama a rota do back-end para gerar e enviar o token
       const resp = await fetch("http://localhost:3333/auth/esqueci-senha", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email
+        })
       });
 
       // 💥 Tratamento de erro robusto antes de ler o JSON
       if (!resp.ok) {
         // Tenta ler o JSON de erro (ex: 500), mas falha se for HTML
-        const errorData = await resp.json().catch(() => ({ msg: 'Erro interno do servidor. Verifique o console.' }));
+        const errorData = await resp.json().catch(() => ({
+          msg: 'Erro interno do servidor. Verifique o console.'
+        }));
         status.style.color = '#F44336';
         status.innerHTML = "⚠️ " + errorData.msg;
         return;
@@ -88,6 +94,7 @@
       btn.disabled = false;
     }
   });
+
 </script>
 <script src="../js/mascaras.js"></script>
 
