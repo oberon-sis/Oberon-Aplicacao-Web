@@ -10,7 +10,10 @@
   <link rel="stylesheet" href="./css/index.css" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-  <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="./assets/marca/icone_pequeno.svg" />
+
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 </head>
 
 <body>
@@ -19,7 +22,7 @@
   <div class="header-fixed-wrapper">
     <div class="container">
       <header class="header">
-        <div class="logo">
+        <div class="logo" data-aos="fade-right" data-aos-duration="600" data-aos-once="false">
           <img src="./assets/marca/icone_pequeno.svg" alt="Logo OBERON" class="logo-icon-img">
           <span class="logo-text">OBERON</span>
         </div>
@@ -27,12 +30,12 @@
         <div class="mobile-nav">
           <nav class="nav">
             <ul>
-              <li><a href="#" class="nav-link active">Início</a></li>
-              <li><a href="#" class="nav-link">Soluções</a></li>
-              <li><a href="#" class="nav-link">Benefícios</a></li>
-              <li><a href="#" class="nav-link">Serviços</a></li>
-              <li><a href="#" class="nav-link">Sobre nós</a></li>
-              <li><a href="#" class="nav-link">Feedbacks</a></li>
+              <li><a href="#inicio" class="nav-link active">Início</a></li>
+              <li><a href="#oque-fazemos" class="nav-link">Soluções</a></li>
+              <li><a href="#beneficios" class="nav-link">Benefícios</a></li>
+              <li><a href="#servicos" class="nav-link">Serviços</a></li>
+              <li><a href="#recursos" class="nav-link">Sobre nós</a></li>
+              <li><a href="#Feedbacks" class="nav-link">Feedbacks</a></li>
             </ul>
           </nav>
 
@@ -54,11 +57,14 @@
   <section class="hero-section">
     <div class="container hero-content-container">
       <div class="hero-content">
-        <h1>Segurança, eficiência e<br>monitoramento.</h1>
+        <h1 data-aos="fade-down" data-aos-duration="800" data-aos-delay="100">Segurança, eficiência e<br>monitoramento.
+        </h1>
 
         <div class="hero-buttons">
-          <a href="./html/cadastro.html" class="btn btn-action-primary">Quero ser um cliente</a>
-          <a href="./html/login.html" class="btn btn-action-secondary">Já sou um cliente</a>
+          <a href="./html/cadastro.html" class="btn btn-action-primary" data-aos="zoom-in" data-aos-duration="600"
+            data-aos-delay="500">Quero ser um cliente</a>
+          <a href="./html/login.html" class="btn btn-action-secondary" data-aos="zoom-in" data-aos-duration="600"
+            data-aos-delay="700">Já sou um cliente</a>
         </div>
       </div>
     </div>
@@ -70,7 +76,7 @@
     <div class="container">
       <div class="row justify-content-center">
 
-        <div class="col-lg-6 col-md-12 text-content mb-5 mb-lg-0">
+        <div class="col-lg-6 col-md-12 text-content mb-5 mb-lg-0" data-aos="fade-right" data-aos-duration="1000">
           <h3 class="section-subtitle fw-bold">O QUE FAZEMOS?</h3>
           <h1 class="display-4 title-main">Elevamos a segurança do seu negócio</h1>
           <p class="lead">
@@ -79,27 +85,27 @@
           </p>
 
           <div class="row g-3 features-list">
-            <div class="col-6">
+            <div class="col-6" data-aos="fade-up" data-aos-delay="200">
               <p class="feature-item"><span class="bullet-point"></span>Prevenir falhas em sistemas críticos</p>
             </div>
-            <div class="col-6">
+            <div class="col-6" data-aos="fade-up" data-aos-delay="400">
               <p class="feature-item"><span class="bullet-point"></span>Detectar anomalias em tempo real</p>
             </div>
-            <div class="col-6">
+            <div class="col-6" data-aos="fade-up" data-aos-delay="600">
               <p class="feature-item"><span class="bullet-point"></span>Evitar prejuízos financeiros</p>
             </div>
-            <div class="col-6">
+            <div class="col-6" data-aos="fade-up" data-aos-delay="800">
               <p class="feature-item"><span class="bullet-point"></span>Fomentar a vigilância proativa</p>
             </div>
           </div>
         </div>
 
-        <div class="col-lg-6 col-md-12 visual-content mt-5 mt-lg-0">
+        <div class="col-lg-6 col-md-12 visual-content mt-5 mt-lg-0" data-aos="fade-left" data-aos-duration="1000">
 
           <div class="team-container">
             <img src="./assets/svg/reuniao-de-equipe.png" alt="Team members" class="team-image">
 
-            <div class="team-tag text-center">
+            <div class="team-tag text-center" data-aos="zoom-in" data-aos-delay="500">
               <p class="fw-bold mb-1">Team member</p>
               <div class="avatars">
                 <img src="./assets/svg/equipe/bruna_photo.png" alt="Avatar 1" class="avatar-sm">
@@ -112,19 +118,19 @@
             </div>
           </div>
 
-          <div class="kpi-block">
+          <div class="kpi-block kpi-1" data-aos="flip-up" data-aos-delay="200">
             <div class="kpi-item">
               <p class="kpi-value">+10%</p>
               <p class="kpi-description">Aumento na eficiência da equipe de TI</p>
             </div>
           </div>
 
-          <div class="kpi-item" style="padding-left: 250px;">
+          <div class="kpi-item kpi-2" style="padding-left: 250px;" data-aos="flip-up" data-aos-delay="400">
             <p class="kpi-value">+95%</p>
             <p class="kpi-description">Taxa de detecção de falhas</p>
           </div>
           <div class="object-placeholder d-none d-lg-block">
-            <img src="./assets/marca/icon_oberon.png" alt="Objeto 3D">
+            <img src="./assets/marca/icon_oberon.png" alt="Objeto 3D" data-aos="zoom-in" data-aos-delay="600">
           </div>
 
         </div>
@@ -136,39 +142,40 @@
   <!--INICIO SEÇÃO BENEFICIOS -->
   <section class="benefits-section" id="beneficios">
     <div class="container">
-      <header class="section-header">
+      <header class="section-header" data-aos="fade-down" data-aos-duration="800">
         <h2 class="title-small">NOSSOS BENEFÍCIOS</h2>
         <h1 class="title-large">Sua segurança, garantida.</h1>
         <p class="subtitle">Eliminamos os pontos cegos e os riscos da sua operação bancária</p>
       </header>
 
       <div class="benefits-grid">
-        <div class="benefit-item text-left">
+        <div class="benefit-item text-left" data-aos="fade-right" data-aos-delay="100">
           <div class="icon-placeholder"><i class="fas fa-desktop"></i></div>
           <h3>Monitoramento Completo e Proativo</h3>
           <p>Prevemos e detectamos falhas operacionais e tentavivas de interrupções na sua vigilância.</p>
         </div>
 
-        <div class="central-content  d-none d-lg-block">
+        <div class="central-content d-none d-lg-block">
           <img src="./assets/svg/central-monitoracao-cftv.jpg" alt="Equipe de segurança monitorando"
-            class="main-image-top">
-          <img src="./assets/svg/images.jpeg" alt="Técnico monitorando individualmente" class="main-image-bottom">
+            class="main-image-top" data-aos="zoom-in" data-aos-delay="300">
+          <img src="./assets/svg/images.jpeg" alt="Técnico monitorando individualmente" class="main-image-bottom"
+            data-aos="zoom-in" data-aos-delay="500">
         </div>
 
-        <div class="benefit-item text-right">
+        <div class="benefit-item text-right" data-aos="fade-left" data-aos-delay="100">
           <div class="icon-placeholder"><i class="fas fa-shield-alt"></i></div>
           <h3>Proteção Contra Riscos Internos</h3>
           <p>Identificamos comportamentos anormais para proteger seu patrimônio e operações.</p>
         </div>
 
-        <div class="benefit-item text-left">
+        <div class="benefit-item text-left" data-aos="fade-right" data-aos-delay="400">
           <div class="icon-placeholder"><i class="fas fa-bolt"></i></div>
           <h3>Respostas Imediatas e Eficazes</h3>
           <p>Identificamos desligamentos e resolvemos problemas de segurança instantaneamente.</p>
         </div>
 
 
-        <div class="benefit-item text-right">
+        <div class="benefit-item text-right" data-aos="fade-left" data-aos-delay="400">
           <div class="icon-placeholder"><i class="fas fa-chart-line"></i></div>
           <h3>Otimização de Recursos</h3>
           <p>Fornecemos uma visão detalhada do consumo de recursos, permitindo que suas equipes de TI eliminem
@@ -187,11 +194,11 @@
 
   <section class="service-feature" id="servicos">
     <div class="container feature-content">
-      <div class="feature-image-block">
+      <div class="feature-image-block" data-aos="fade-right">
         <img src="./assets/svg/central-monitoracao-cftv.jpg" alt="Sala de monitoramento com vários operadores"
           class="feature-image-main">
       </div>
-      <div class="feature-text-block">
+      <div class="feature-text-block" data-aos="fade-left">
         <h2>Monitore os seus componentes de hardware</h2>
         <p>Nossa solução se integra aos computadores dos operadores de CFTV e acompanha em tempo real a saúde de cada
           componente, como uso da CPU, temperatura, uso da RAM e disco para identificar falhas e otimizar o desempenho,
@@ -204,25 +211,24 @@
     </div>
   </section>
 
-  <section class="cta-monitoramento-section bg-dark text-white py-5">
+  <section class="cta-monitoramento-section text-white py-5">
     <div class="container">
       <div class="row align-items-center">
 
-        <div class="col-lg-6 col-md-12 text-content-dark mb-5 mb-lg-0">
+        <div class="col-lg-6 col-md-12 text-content-dark mb-5 mb-lg-0" data-aos="fade-right">
           <h1 class="display-5 fw-bold mb-4">Proteja seu patrimônio, garanta sua operação</h1>
           <p class="lead-text-dark mb-4">
             Elimine os riscos críticos à segurança. Tenha todas as informações que você precisa para tomar
             decisões rápidas e assertivas, garantindo a máxima proteção e resiliência da sua infraestrutura
             bancária.
           </p>
-          <a href="./html/cadastro.html" class="cta-button-dark">
+          <a href="./html/cadastro.html" class="cta-button-dark" data-aos="zoom-in" data-aos-delay="400">
             <div class="icon-placeholder-small"><i class="fas fa-lock"></i></div>
             Garanta a segurança agora
           </a>
         </div>
 
-        <div class="col-lg-6 col-md-12 visual-content-screenshot">
-
+        <div class="col-lg-6 col-md-12 visual-content-screenshot" data-aos="fade-left">
         </div>
 
       </div>
@@ -234,7 +240,7 @@
     <div class="container">
       <div class="row align-items-center">
 
-        <div class="col-lg-6 col-md-12 visual-content-mobile mb-5 mb-lg-0">
+        <div class="col-lg-6 col-md-12 visual-content-mobile mb-5 mb-lg-0" data-aos="fade-right">
           <div class="mobile-mockups-container">
           </div>
           <div class="avatar-count-overlay">
@@ -244,14 +250,14 @@
           </div>
         </div>
 
-        <div class="col-lg-6 col-md-12 text-content-light">
+        <div class="col-lg-6 col-md-12 text-content-light" data-aos="fade-left">
           <h1 class="display-5 fw-bold mb-4">Mantenha seu time focado na segurança</h1>
           <p class="lead-text-light mb-4">
             Nós cuidamos das notificações para que sua equipe possa se concentrar naquilo que mais importa:
             proteger o seu patrimônio. Nossa plataforma garante que você seja notificado para qualquer problema
             antes que ele se torne uma ameaça real.
           </p>
-          <a href="./html/cadastro.html" class="cta-button-light">
+          <a href="./html/cadastro.html" class="cta-button-light" data-aos="zoom-in" data-aos-delay="400">
             <div class="icon-placeholder-small"><i class="fas fa-lock"></i></div>
             Garanta a segurança agora
           </a>
@@ -265,14 +271,13 @@
   <!--INICIO SEÇÃO SOBRE NOS-->
   <section class="about-section py-5 bg-white" id="recursos">
     <div class="container">
-      <header class="text-center mb-5">
+      <header class="text-center mb-5" data-aos="fade-down">
         <h2 class="title-small-dark">SOBRE NÓS</h2>
       </header>
 
       <div class="row justify-content-center g-4">
-
         <div class="col-lg-4 col-md-6">
-          <div class="feature-card text-center p-4 border rounded-3 h-100">
+          <div class="feature-card text-center p-4 border rounded-3 h-100" data-aos="zoom-in" data-aos-delay="100">
             <div class="icon-circle mb-3">
               <i class="fas fa-bullseye fa-2x"></i>
             </div>
@@ -282,7 +287,7 @@
         </div>
 
         <div class="col-lg-4 col-md-6">
-          <div class="feature-card text-center p-4 border rounded-3 h-100">
+          <div class="feature-card text-center p-4 border rounded-3 h-100" data-aos="zoom-in" data-aos-delay="300">
             <div class="icon-circle mb-3">
               <i class="fas fa-eye fa-2x">
               </i>
@@ -293,7 +298,7 @@
         </div>
 
         <div class="col-lg-4 col-md-6">
-          <div class="feature-card text-center p-4 border rounded-3 h-100">
+          <div class="feature-card text-center p-4 border rounded-3 h-100" data-aos="zoom-in" data-aos-delay="500">
             <div class="icon-circle mb-3">
               <i class="fas fa-handshake fa-2x"></i>
             </div>
@@ -316,7 +321,7 @@
 
     <div class="carousel-wrapper">
 
-      <div class="testimonial-carousel-track g-4 pb-4">
+      <div class="testimonial-carousel-track g-4 pb-4" data-aos="fade-up" data-aos-delay="200">
 
         <div class="testimonial-col">
           <div class="testimonial-card-white p-4 rounded-3 h-100">
@@ -393,7 +398,7 @@
   <footer id="contato">
     <div class="container">
       <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
           <div class="logo fw-bold d-flex align-items-center mb-3">
             <img src="./assets/marca/icon_oberon.png" width="24" height="24" class="d-inline-block align-top me-2"
               alt="">
@@ -409,27 +414,27 @@
           </div>
         </div>
 
-        <div class="col-lg-3">
+        <div class="col-lg-3" data-aos="fade-up" data-aos-delay="200">
           <h6 class="fw-bold mb-3">MAPA DO SITE</h6>
           <a href="#inicio">Início</a>
           <a href="#oque-fazemos">Soluções</a>
           <a href="#beneficios">Benefícios</a>
           <a href="#servicos">Serviços</a>
+          <a href="#recursos">Sobre nós</a>
+          <a href="#Feedbacks">Feedbacks</a>
         </div>
 
-        <div class="col-lg-3">
+        <div class="col-lg-3" data-aos="fade-up" data-aos-delay="300">
           <h6 class="fw-bold mb-3">RECURSOS</h6>
-          <a href="#">FAQ</a>
-          <a href="#">Documentação</a>
           <a href="#">Política de Privacidade</a>
           <a href="#">Termos de Uso</a>
         </div>
 
-        <div class="col-lg-2">
+        <div class="col-lg-2" data-aos="fade-up" data-aos-delay="400">
           <h6 class="fw-bold mb-3">CONTATO</h6>
           <p class="text-light-gray small mb-0">Rua da Segurança, 123</p>
           <p class="text-light-gray small mb-0">contato@oberon.com</p>
-          <p class="text-light-gray small">(11) 98765-4321</p>
+          <p class="text-light-gray small mb-0">(11) 98765-4321</p>
         </div>
       </div>
 
@@ -441,6 +446,13 @@
 
 
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      AOS.init({
+        offset: 120, // Ponto de deslocamento para iniciar a animação
+        duration: 800, // Duração da animação (em ms)
+        once: false // A animação deve acontecer apenas uma vez
+      });
+    });
 
     //Logica do Menu Mobile
     document.addEventListener('DOMContentLoaded', () => {
@@ -498,6 +510,7 @@
     });
   </script>
 
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 </body>
 
 </html>
