@@ -1,0 +1,83 @@
+name: Deploy para Staging (EC2 Container)
+
+on:
+  push:
+    branches:
+      - staging
+  workflow_dispatch: 
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    environment: Staging 
+
+    steps:
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+
+      - name: Definir Tag da Imagem
+        id: set_tag
+        run: echo "IMAGE_TAG=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
+        
+      - name: Login no Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build e Push da Imagem Docker
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/oberon-app-web:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USERNAME }}/oberon-app-web:staging
+
+      # --- 3. DEPLOY PARA EC2 VIA SSH ---
+      - name: Deploy para EC2 e Rodar Container (Staging)
+        uses: appleboy/ssh-action@v1.0.3 
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/oberon-app-web
+            IMAGE_TAG_LATEST=staging
+
+            # 1. Login e Pull (para a imagem mais recente)
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker pull $IMAGE_NAME:$IMAGE_TAG_LATEST
+
+            # 2. CRIAÇÃO/SOBRESCRITA DO ARQUIVO .ENV NO SERVIDOR EC2
+            echo "# Arquivo .env gerado pelo GitHub Actions (Staging)" > .env
+            
+            # Use sufixos de Staging (Recomendado: Seus Secrets devem ser DB_HOST_STAGING, etc.)
+            echo "AMBIENTE_PROCESSO=staging" >> .env
+            echo "DB_HOST=${{ secrets.DB_HOST_PROD }}" >> .env # Usando o secret existente (mude o nome se renomear!)
+            echo "DB_USER=${{ secrets.DB_USER_PROD }}" >> .env
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD_PROD }}" >> .env
+            echo "DB_DATABASE=${{ secrets.DB_DATABASE_PROD }}" >> .env
+            echo "DB_PORT=${{ secrets.DB_PORT_PROD }}" >> .env
+            echo "APP_HOST=${{ secrets.APP_HOST_PROD }}" >> .env
+            echo "APP_PORT=${{ secrets.APP_PORT_PROD }}" >> .env
+            echo "EMAIL_USER=${{ secrets.EMAIL_USER_PROD }}" >> .env
+            echo "EMAIL_PASS=${{ secrets.EMAIL_PASS_PROD }}" >> .env
+            echo "FRONTEND_URL=${{ secrets.FRONTEND_URL_PROD }}" >> .env
+
+
+            # 3. Gerenciamento do Container Antigo
+            if [ $(docker ps -a -q -f name=oberon-web-c) ]; then
+              docker stop oberon-web-c
+              docker rm oberon-web-c
+            fi
+
+            # 4. Roda o Novo Container
+            # 🚨 CORREÇÃO: Mapeia porta 80 do EC2 para a porta 3333 do Node.js (APP_PORT)
+            docker run -d \
+              --name oberon-web-c \
+              -p 80:3333 \ 
+              --restart always \
+              --env-file .env \ 
+              $IMAGE_NAME:$IMAGE_TAG_LATEST
+            
+            docker image prune -f
