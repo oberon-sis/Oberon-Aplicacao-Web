@@ -41,19 +41,20 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
+            cd /home/${{ secrets.EC2_USERNAME }}/oberon || exit 1 
+
             IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/oberon-app-web
             IMAGE_TAG_LATEST=staging
 
-            # 1. Login e Pull (para a imagem mais recente)
+            # 1. Login e Pull
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker pull $IMAGE_NAME:$IMAGE_TAG_LATEST
 
             # 2. CRIAÇÃO/SOBRESCRITA DO ARQUIVO .ENV NO SERVIDOR EC2
             echo "# Arquivo .env gerado pelo GitHub Actions (Staging)" > .env
             
-            # Use sufixos de Staging (Recomendado: Seus Secrets devem ser DB_HOST_STAGING, etc.)
-            echo "AMBIENTE_PROCESSO=staging" >> .env
-            echo "DB_HOST=${{ secrets.DB_HOST_PROD }}" >> .env # Usando o secret existente (mude o nome se renomear!)
+            echo "AMBIENTE_PROCESSO=producao" >> .env
+            echo "DB_HOST=${{ secrets.DB_HOST_PROD }}" >> .env
             echo "DB_USER=${{ secrets.DB_USER_PROD }}" >> .env
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD_PROD }}" >> .env
             echo "DB_DATABASE=${{ secrets.DB_DATABASE_PROD }}" >> .env
@@ -72,10 +73,9 @@ jobs:
             fi
 
             # 4. Roda o Novo Container
-            # 🚨 CORREÇÃO: Mapeia porta 80 do EC2 para a porta 3333 do Node.js (APP_PORT)
             docker run -d \
               --name oberon-web-c \
-              -p 80:3333 \ 
+              -p 80:80 \ 
               --restart always \
               --env-file .env \ 
               $IMAGE_NAME:$IMAGE_TAG_LATEST
