@@ -1,0 +1,159 @@
+/* ------------------------------------------- */
+/* ESTILOS DO COMPONENTE DE NOTIFICAÇÃO */
+/* ------------------------------------------- */
+
+.notification-component {
+  position: relative;
+  display: inline-block;
+}
+
+/* Ícone de sino */
+.notification-icon-img {
+  font-size: 24px;
+  color: #555;
+}
+
+/* Container da Lista de Alertas (o POP-UP) */
+.notification-list-container {
+  position: absolute;
+  /* Alinhamento à direita para aparecer do lado direito do header */
+  right: 0;
+  top: 45px; /* Posição abaixo do ícone */
+  width: 380px; /* Mais largo para o conteúdo */
+  background-color: white;
+  color: #333;
+  border-radius: 8px; /* Cantos arredondados */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); /* Sombra mais suave */
+  z-index: 1000;
+  max-height: 500px;
+  overflow-y: auto;
+  border: none; /* Remove a borda simples */
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Header do Pop-up (Notificações e Marcar todas como lidas) */
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 15px 10px 15px; /* Ajuste o padding */
+  border-bottom: 1px solid #eee;
+  background-color: #fff; /* Fundo branco no topo */
+  position: sticky; /* Para fixar o header ao rolar */
+  top: 0;
+  z-index: 10;
+}
+
+.notification-header h4 {
+  margin: 0;
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.mark-all-read-link {
+  font-size: 0.9em;
+  color: #007bff; /* Azul padrão para link de ação */
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.mark-all-read-link:hover {
+  color: #0056b3;
+}
+
+/* Estilos dos Itens da Lista */
+.notification-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.alert-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 15px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.alert-item:hover {
+  background-color: #f7f7f7;
+}
+
+.alert-info {
+  display: flex;
+  flex-grow: 1;
+  padding-right: 15px;
+}
+.alert-info span {
+  width: 50%;
+}
+
+/* DESTAQUE DO STATUS (Lido vs Não Lido) */
+/* Notificação Não Lida: Fundo levemente cinza e borda */
+.alert-item.alert-unread {
+  background-color: #eaf3ff; /* Fundo azul claro para destacar */
+  border-left: 4px solid #007bff; /* Borda lateral azul */
+  font-weight: 600;
+}
+.alert-item.alert-unread:hover {
+  background-color: #dae6f7;
+}
+
+/* Notificação Lida: Estilo padrão */
+.alert-item.alert-read {
+  font-weight: 400;
+  color: #666;
+}
+
+.alert-machine {
+  font-weight: bold;
+  color: #333;
+}
+
+.alert-message {
+  color: #555;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+.alert-timestamp {
+  color: #aaa;
+  font-size: 0.75em;
+  white-space: nowrap;
+  align-self: flex-start; /* Alinha o timestamp no topo */
+}
+
+/* Footer */
+.notification-footer {
+  padding: 10px;
+  border-top: 1px solid #eee;
+  text-align: center;
+  background-color: #fff;
+  position: sticky; /* Fixa o footer */
+  bottom: 0;
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+#notification-list-container {
+  display: flex;
+  flex-direction: column;
+}
+#botao_notificao {
+  border: none;
+  background-color: white;
+}
+#botao_notificao img {
+  width: 20px;
+  height: 20px;
+}
+header {
+  display: flex !important;
+  justify-content: space-between !important;
+}

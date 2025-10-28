@@ -4,20 +4,19 @@ Este repositório contém a interface web (front-end e back-end) da plataforma d
 
 ---
 
-
 ## 🌟 Funcionalidades Principais
 
 A aplicação web é uma solução completa para gerenciamento e monitoramento de ativos e usuários:
 
-* **Dashboard em Tempo Real:** Visualização imediata de métricas críticas ($\text{CPU}$, $\text{RAM}$, $\text{Disco}$, $\text{Rede}$) dos ativos, com painéis de visão geral e específicos por máquina (consumindo dados da tabela `Registro`).
-* **Gestão de Máquinas (Frotas):** Ferramentas para $\text{CRUD}$ de máquinas, com opções de configuração de limites de alerta (padrão Oberon, da empresa ou específico por máquina, manipulando a tabela `Parametro`).
-* **Histórico de Alertas:** Consulta e filtragem de todos os alertas passados e ativos, categorizados por componente, máquina ou descrição (lendo a tabela `Alerta`).
-* **Exportação de Relatórios:** Geração de relatórios completos em formato $\text{CSV}$ a partir do histórico de alertas com filtros aplicados.
-* **Autenticação Segura:** Login, cadastro de novo usuário e funcionalidade de Recuperação/Redefinição de Senha via e-mail (usando `BcryptJS` e `Nodemailer`).
-* **Controle de Acesso (Menu Dinâmico):** O menu de navegação é construído dinamicamente com base nas permissões de cada usuário, assegurando que apenas módulos autorizados sejam exibidos.
-* **Gestão de Usuários:** Ferramentas para Gerentes ou Administradores realizarem o $\text{CRUD}$ de colaboradores (`Funcionario`), incluindo pesquisa e paginação.
-* **Edição de Empresa:** Área dedicada para que usuários com permissão possam visualizar e atualizar os dados da `Empresa` (Razão Social e $\text{CNPJ}$).
-* **Design Responsivo:** A interface se adapta a diferentes tamanhos de tela (desktop, tablet, mobile).
+- **Dashboard em Tempo Real:** Visualização imediata de métricas críticas ($\text{CPU}$, $\text{RAM}$, $\text{Disco}$, $\text{Rede}$) dos ativos, com painéis de visão geral e específicos por máquina (consumindo dados da tabela `Registro`).
+- **Gestão de Máquinas (Frotas):** Ferramentas para $\text{CRUD}$ de máquinas, com opções de configuração de limites de alerta (padrão Oberon, da empresa ou específico por máquina, manipulando a tabela `Parametro`).
+- **Histórico de Alertas:** Consulta e filtragem de todos os alertas passados e ativos, categorizados por componente, máquina ou descrição (lendo a tabela `Alerta`).
+- **Exportação de Relatórios:** Geração de relatórios completos em formato $\text{CSV}$ a partir do histórico de alertas com filtros aplicados.
+- **Autenticação Segura:** Login, cadastro de novo usuário e funcionalidade de Recuperação/Redefinição de Senha via e-mail (usando `BcryptJS` e `Nodemailer`).
+- **Controle de Acesso (Menu Dinâmico):** O menu de navegação é construído dinamicamente com base nas permissões de cada usuário, assegurando que apenas módulos autorizados sejam exibidos.
+- **Gestão de Usuários:** Ferramentas para Gerentes ou Administradores realizarem o $\text{CRUD}$ de colaboradores (`Funcionario`), incluindo pesquisa e paginação.
+- **Edição de Empresa:** Área dedicada para que usuários com permissão possam visualizar e atualizar os dados da `Empresa` (Razão Social e $\text{CNPJ}$).
+- **Design Responsivo:** A interface se adapta a diferentes tamanhos de tela (desktop, tablet, mobile).
 
 ---
 
@@ -27,25 +26,25 @@ A aplicação utiliza uma arquitetura $\text{Node.js}$ com $\text{Express}$ no b
 
 ### Back-end (Node.js/Express)
 
-| Tecnologia | Propósito |
-| :--- | :--- |
-| **Node.js** | Ambiente de execução $\text{JavaScript}$ no lado do servidor. |
-| **Express** | Framework para construção de rotas e APIs $\text{RESTful}$. |
-| **MySQL2** | Driver para conexão e interação com o banco de dados $\text{MySQL}$. |
-| **Dotenv** | Gerenciamento de variáveis de ambiente (`.env` e `.env.dev`). |
-| **BcryptJS** | Implementação para hash seguro de senhas durante o cadastro e autenticação. |
-| **Nodemailer** | Serviço de envio de e-mail (usado para a função de recuperação de senha). |
-| **JSON2CSV** | Biblioteca para conversão de dados $\text{JSON}$ em formato $\text{CSV}$ (para exportação). |
-| **CORS** | Configuração de Cross-Origin Resource Sharing. |
+| Tecnologia     | Propósito                                                                                   |
+| :------------- | :------------------------------------------------------------------------------------------ |
+| **Node.js**    | Ambiente de execução $\text{JavaScript}$ no lado do servidor.                               |
+| **Express**    | Framework para construção de rotas e APIs $\text{RESTful}$.                                 |
+| **MySQL2**     | Driver para conexão e interação com o banco de dados $\text{MySQL}$.                        |
+| **Dotenv**     | Gerenciamento de variáveis de ambiente (`.env` e `.env.dev`).                               |
+| **BcryptJS**   | Implementação para hash seguro de senhas durante o cadastro e autenticação.                 |
+| **Nodemailer** | Serviço de envio de e-mail (usado para a função de recuperação de senha).                   |
+| **JSON2CSV**   | Biblioteca para conversão de dados $\text{JSON}$ em formato $\text{CSV}$ (para exportação). |
+| **CORS**       | Configuração de Cross-Origin Resource Sharing.                                              |
 
 ### Front-end (Web)
 
-| Tecnologia | Propósito |
-| :--- | :--- |
-| **HTML / CSS / JavaScript** | Estrutura, estilo e lógica de interação do cliente. |
-| **Bootstrap** | Framework $\text{CSS}$ e $\text{JS}$ para design responsivo e componentes de $\text{UI}$. |
-| **Chart.js** | Biblioteca utilizada para renderização dos gráficos de monitoramento de performance em tempo real. |
-| **SweetAlert2** | Biblioteca para modais e alertas personalizados (usado em exclusão e mensagens de sistema). |
+| Tecnologia                  | Propósito                                                                                          |
+| :-------------------------- | :------------------------------------------------------------------------------------------------- |
+| **HTML / CSS / JavaScript** | Estrutura, estilo e lógica de interação do cliente.                                                |
+| **Bootstrap**               | Framework $\text{CSS}$ e $\text{JS}$ para design responsivo e componentes de $\text{UI}$.          |
+| **Chart.js**                | Biblioteca utilizada para renderização dos gráficos de monitoramento de performance em tempo real. |
+| **SweetAlert2**             | Biblioteca para modais e alertas personalizados (usado em exclusão e mensagens de sistema).        |
 
 ---
 
@@ -80,7 +79,6 @@ A arquitetura do projeto segue o padrão $\text{MVC}$ com agrupamento lógico po
 
     .
 
-
 ---
 
 ## ⚙️ Configuração e Instalação
@@ -89,9 +87,9 @@ Siga os passos para configurar e executar o projeto localmente:
 
 ### Pré-requisitos
 
-* **Node.js:** Versão 18+ recomendada.
-* **npm:** Gerenciador de pacotes do $\text{Node.js}$.
-* **Banco de Dados:** Uma instância de banco de dados $\text{MySQL}$ compatível (conforme a documentação do $\text{bdOberon}$).
+- **Node.js:** Versão 18+ recomendada.
+- **npm:** Gerenciador de pacotes do $\text{Node.js}$.
+- **Banco de Dados:** Uma instância de banco de dados $\text{MySQL}$ compatível (conforme a documentação do $\text{bdOberon}$).
 
 ### 1. Instalar Dependências
 
@@ -102,7 +100,6 @@ No diretório raiz do projeto, execute o comando:
 ```
 
 ### 2. Configurar Variáveis de Ambiente
-
 
 Crie os arquivos .env (para produção) e .env.dev (para desenvolvimento) na raiz do projeto, baseando-se no exemplo fornecido.
 
@@ -129,16 +126,17 @@ Atenção: A variável AMBIENTE_PROCESSO em app.js define qual arquivo .env ser�
 
 ### 4. Acessar
 
-Acessar a AplicaçãoApós a execução, acesse a  no seu navegador (assumindo a porta configurada, ex: 
+Acessar a AplicaçãoApós a execução, acesse a no seu navegador (assumindo a porta configurada, ex:
 
 <a src="http://localhost:3333">http://localhost:3333</a>
 
-
 ### 💻 Exemplo de Telas
+
 Aqui você pode visualizar algumas partes da interface da aplicação:
 
 #### Dashboard de Monitoramento Geral
-Esta tela mostra os gráficos de performance em tempo real das máquinas cadastradas. 
+
+Esta tela mostra os gráficos de performance em tempo real das máquinas cadastradas.
 
 <div align="center" >
 <img src="https://i.imgur.com/4EPJt0I.png"width="230">
@@ -146,9 +144,9 @@ Esta tela mostra os gráficos de performance em tempo real das máquinas cadastr
 <img src="https://i.imgur.com/x7VUy12.png" width="230">
 </div>
 
-
 #### Gerenciamento e Alertas
-Tela utilizada para cadastrar, editar e excluir ativos, incluindo a configuração de alertas. 
+
+Tela utilizada para cadastrar, editar e excluir ativos, incluindo a configuração de alertas.
 
 <div align="center" >
 <img src="https://i.imgur.com/xkihNX0.png"width="230">
@@ -156,17 +154,14 @@ Tela utilizada para cadastrar, editar e excluir ativos, incluindo a configuraç�
 <img src="https://i.imgur.com/vAqKkah.png" width="230">
 </div>
 
-
 #### Tela de Login e Hero da landing Page
-A interface de acesso seguro à plataforma. 
+
+A interface de acesso seguro à plataforma.
 
 <div align="center" >
 <img src="https://i.imgur.com/gLfrZ8A.png"width="230">
 <img src="https://i.imgur.com/ZFVNQjT.png"width="230">
 <img src="https://i.imgur.com/F7PQkM2.png" width="230">
 </div>
-
-
-
 
 LicençaEste projeto está sob a Licença .Copyright (c) 2022 BandTec Digital School - agora é São Paulo Tech School

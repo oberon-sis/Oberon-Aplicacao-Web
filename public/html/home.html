@@ -11,10 +11,13 @@
   <link rel="stylesheet" href="../component/menu/Menu.css">
   <link rel="stylesheet" href="../css/home_dash.css">
   <link rel="stylesheet" href="../css/painelEspecifico.css">
+  <link rel="stylesheet" href="../component/tour/TourGuide.css">
+  <link rel="stylesheet" href="../component/notificao/Notificaocao.css">
   <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-
-
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js">
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
 </head>
 
@@ -23,7 +26,13 @@
   <div id="menu-container"></div>
 
   <main class="content flex-grow-1 padding_main">
-    <div class="d-flex justify-content-between align-items-center mb-4 p-4 bg-white shadow-sm rounded div_banner">
+    <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
+      <h2 class=" text-black">Home</h2>
+    </header>
+
+
+    <div class="d-flex justify-content-between align-items-center mb-2 p-4 bg-white shadow-sm rounded div_banner"
+      style="margin-top: 5px;">
       <div class="me-3">
         <h4 class="text-black mb-1">OLÁ FERNANDA CARAMICO!</h4>
         <p class="mb-0 text-secondary">
@@ -35,21 +44,30 @@
         </p>
       </div>
       <img src="../assets/img/Banner.jpg" alt="Imagem de Boas-Vindas - Pessoas em um painel"
-        class="img-fluid rounded d-none d-md-block banner">
+        class="img-fluid rounded  d-md-block banner">
     </div>
     <div class="row">
 
-      <div class="col-lg-8 mb-4">
+      <div class="col-lg-8">
 
-        <div class="card shadow-sm  mb-4">
+        <div class="card shadow-sm  mb-2" id="tour-card-desempenho-geral">
           <div class="card-body">
-            <h5 class="card-title text-black">
+            <h5 class="card-title text-black mb-3 d-flex">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                 class="bi bi-speedometer2 me-2" viewBox="0 0 16 16">
                 <path
                   d="M8 12a4 4 0 0 1 4-4V7a.5.5 0 0 1 1 0v1.01a5 5 0 1 0-8.995 0V7.001a.5.5 0 0 1 1 0v4.997a4 4 0 0 1 3.996.992zM6 7.001a.5.5 0 1 1-1 0a.5.5 0 0 1 1 0zM10 7.001a.5.5 0 1 1-1 0a.5.5 0 0 1 1 0z" />
               </svg>
-              Abrir Painel de Desempenho geral do Sistema
+              <p>
+
+                Abrir Painel de Desempenho geral do Sistema
+              </p>
+              <button type="button" class="saber_mais btn btn-link ms-auto" data-bs-toggle="popover"
+                data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Prioridades Atuais do Sistema"
+                data-bs-content="Estes cards exibem o top 3 de máquinas que estão em estado de Crítico ou Alerta no momento. É a sua lista de problemas urgentes.">
+                <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+              </button>
+
             </h5>
             <p class="card-text text-muted">
               Visualize e filtre o status em tempo real de CPU, RAM, Disco e Rede de todos ativos.
@@ -127,26 +145,83 @@
             </div>
             <a href="painelVisaoGeral.html" class="btn btn-info text-white w-100 mt-2 fundo_verde">
               Acessar painel geral
-            </a> 
+            </a>
           </div>
         </div>
-        <div class="chart-item chart-comparative">
-                      <h5 class="card-title text-black">
-              Status Geral das máquinas
-            </h5>
-            <h6 class="card-subtitle mb-2 text-muted">
-              Alertas por Máquina: Comparativo Semanal
-            </h6>
-          <canvas id="graficoBarrasComparativo"></canvas>
+        <div class="chart-item chart-comparative" id="tour-grafico-dispersao">
+          <div class="row mb-3 align-items-center justify-content-between">
+            <h5 class="col-6">Distribuição de Máquinas nas Últimas 24 horas</h5>
+
+            <div style="max-width: 350px;" class="input-group flex-grow-1 div_justify">
+
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <span id="valor_pesquisa">Uso de CPU e RAM</span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end hover_verde">
+                <li><a class="dropdown-item" href="#"
+                    onclick="atualizar_parametro_lista('cpu-ram', 'Uso de CPU e RAM')">Uso de CPU e RAM</a></li>
+                <li><a class="dropdown-item" href="#"
+                    onclick="atualizar_parametro_lista('enviados-recebidos', 'Rede: Pacotes Enviados e Recebidos')">Rede:
+                    Pacotes Enviados e Recebidos</a></li>
+              </ul>
+              <button type="button" class="saber_mais btn btn-link ms-auto" data-bs-toggle="popover"
+                data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Análise de Risco (CPU vs. RAM)"
+                data-bs-content="Este gráfico plota o uso de dois recursos por máquina, identificando rapidamente o risco operacional. Pontos Vermelhos (Crítico) indicam falha iminente.">
+                <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+              </button>
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <div class="card shadow-sm p-3">
+                <div class="chartjs-legend-container">
+                  <div id="chart-legend-html"></div>
+                </div>
+                <div class="chart-container">
+                  <canvas id="scatterChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="machineDetailModal" tabindex="-1" aria-labelledby="machineDetailModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="machineDetailModalLabel">Detalhes da Máquina Clicada</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" id="modal-body-content">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-info text-white" id="btn-analise-historica"
+                  onclick="navigateToHistorico()">
+                  Análise Histórica
+                </button>
+
+                <button type="button" class="btn btn-primary" onclick="navigateToMonitoramento()">
+                  Monitoramento Ativo
+                </button>
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Fechar
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="col-lg-4">
-        <h5 class="text-black mb-3">Acessos rápidos</h5>
+      <div class="col-lg-4" id="acessos-rapidos-section">
+        <h5 class="text-black mb-2">Acessos rápidos</h5>
 
         <div class="card shadow-sm  mb-3">
           <div class="card-body">
-            <h6 class="card-title text-black">
+            <h6 class="card-title text-black mb-3">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                 class="bi bi-file-earmark-arrow-down-fill me-2 text-primary" viewBox="0 0 16 16">
                 <path
@@ -157,14 +232,15 @@
             <p class="card-text small text-muted">
               Guia de instalação. Baixe o manual completo e configure seus equipamentos sem complicação.
             </p>
-            <button class="btn btn-outline-primary w-100">
+            <a href="/api/download/manual" class="btn btn-outline-primary w-100" download="ManualDeInstação.pdf"
+              role="button">
               Baixar Manual
-            </button>
+            </a>
           </div>
         </div>
         <div class="card shadow-sm  mb-3">
           <div class="card-body">
-            <h6 class="card-title text-black">
+            <h6 class="card-title text-black mb-3">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                 class="bi bi-gear-fill me-2 text-warning" viewBox="0 0 16 16">
                 <path d="M9.405 1.788L1.758 9.4l6.096 6.095 7.647-7.647A.75.75 0 0 0 13.91 7.64l-6.096-6.097z" />
@@ -181,7 +257,7 @@
         </div>
         <div class="card shadow-sm  mb-3">
           <div class="card-body">
-            <h6 class="card-title text-black">
+            <h6 class="card-title text-black mb-3">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                 class="bi bi-slack me-2 text-danger" viewBox="0 0 16 16">
                 <path
@@ -190,17 +266,18 @@
               Receber Alertas Através do Slack
             </h6>
             <p class="card-text small text-muted">
-              Receba notificações do Slack diretamente e fique por dentro das novidades. Acesse e responda rapidamente a
+              Receba notificações do Slack diretamente e fique por dentro das novidades. Acesse e responda rapidamente
+              a
               incidentes!
             </p>
-            <button class="btn btn-danger w-100">
+            <a href="https://slack.com/" class="btn btn-danger w-100" target="_blank">
               Entrar ao Canal do Slack
-            </button>
+            </a>
           </div>
         </div>
-        <div class="card shadow-sm mb-3">
+        <div class="card shadow-sm">
           <div class="card-body">
-            <h6 class="card-title text-black">
+            <h6 class="card-title text-black mb-3">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                 class="bi bi-download me-2 text-success" viewBox="0 0 16 16">
                 <path
@@ -214,26 +291,46 @@
               Gerencie incidentes e receba notificações importantes sem atrasos. Mantenha a visão completa do seu
               ambiente, onde quer que você esteja.
             </p>
-            <button class="btn btn-success w-100">
+
+            <a href="/api/download/agente" class="btn btn-success w-100" download="AgenteMonitoramento.zip"
+              role="button">
               Baixar Programa
-            </button>
+            </a>
           </div>
         </div>
       </div>
     </div>
   </main>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+  <script src="../component/menu/Menu.js"></script>
+  <script src="../component/tour/TourGuide.js"></script>
+  <script src="../component/notificao/Notificacao.js"></script>
+
+  <script src="../js/home.js"></script>
+  <script src="../js/dashboard/scatter_home.js"></script>
+
+  <script>
+    // Função utilitária fora do Tour
+    function configurar_parametro() {
+      window.location.href = "gerenciamentoMaquinas.html";
+    }
+
+  </script>
+  <script src="../js/tour/homeTour.js"></script>
 </body>
 
 </html>
-<script src="../component/menu/Menu.js"></script>
-<script src="../js/home.js" defer></script>
-<script src="../js/home_dash.js"></script>
 <script>
-  
-  function configurar_parametro() {
-    window.location.href = "gerenciamentoMaquinas.html";
-  }
+  document.addEventListener('DOMContentLoaded', function() {
+
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
+      return new bootstrap.Popover(popoverTriggerEl, {
+        trigger: 'focus',
+        html: true
+      });
+    });
+  });
+
 </script>

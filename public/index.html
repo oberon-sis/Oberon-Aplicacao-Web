@@ -10,192 +10,172 @@
   <link rel="stylesheet" href="./css/index.css" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-  <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="./assets/marca/icone_pequeno.svg" />
+
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="padding-left: 125px;">
-    <div class="container-fluid px-lg-5">
-      <a class="navbar-brand d-flex align-items-center" href="#inicio">
-        <img src="./assets/marca/icon_oberon.png" width="30" height="30" class="d-inline-block align-top me-2" alt="" />
-        OBERON
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
 
-      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-        <ul class="navbar-nav text-center">
-          <li class="nav-item">
-            <a class="nav-link" href="#inicio">Início</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#oque-fazemos">Soluções</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#beneficios">Benefícios</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#servicos">Serviços</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#recursos">Sobre nós</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#contato">Contato</a>
-          </li>
-        </ul>
+  <!--INICIO NAV-BAR -->
+  <div class="header-fixed-wrapper">
+    <div class="container">
+      <header class="header">
+        <div class="logo" data-aos="fade-right" data-aos-duration="600" data-aos-once="false">
+          <img src="./assets/marca/icone_pequeno.svg" alt="Logo OBERON" class="logo-icon-img">
+          <span class="logo-text">OBERON</span>
+        </div>
 
-        <div class="botoes-login-cadastro">
-          <div class="d-lg-flex ms-lg-5 mt-3 mt-lg-0 text-center">
-            <a href="./html/login.html" class="btn btn-outline-light me-lg-4">Login</a>
-            <a href="./html/cadastro.html" class="btn btn-light">Cadastro</a>
+        <div class="mobile-nav">
+          <nav class="nav">
+            <ul>
+              <li><a href="#inicio" class="nav-link active">Início</a></li>
+              <li><a href="#oque-fazemos" class="nav-link">Soluções</a></li>
+              <li><a href="#beneficios" class="nav-link">Benefícios</a></li>
+              <li><a href="#servicos" class="nav-link">Serviços</a></li>
+              <li><a href="#recursos" class="nav-link">Sobre nós</a></li>
+              <li><a href="#Feedbacks" class="nav-link">Feedbacks</a></li>
+            </ul>
+          </nav>
+
+          <div class="nav-actions">
+            <a href="./html/cadastro.html"><button class="btn btn-login">Login</button></a>
+            <a href="./html/login.html"><button class="btn btn-cadastro">Cadastro</button></a>
           </div>
         </div>
 
-      </div>
+        <button class="menu-toggle" aria-label="Abrir Menu">
+          <i class="fas fa-bars toggle-icon"></i>
+        </button>
+      </header>
     </div>
-  </nav>
-  <section class="hero" id="inicio">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <h1>Segurança, eficiência e monitoramento.</h1>
-      <p class="mb-5">
-        Mantenha sua infraestrutura bancária sempre estável, segura e
-        totalmente monitorada em tempo real com nossas soluções avançadas.
-      </p>
-      <div class="hero-buttons">
-        <a href="#" class="btn btn-primary">Quero ser um cliente</a>
-        <a href="#" class="btn btn-outline-light">Ver Soluções</a>
+  </div>
+  <!--FIM NAV-BAR -->
+
+  <!--INICIO HERO SECTION -->
+  <section class="hero-section">
+    <div class="container hero-content-container">
+      <div class="hero-content">
+        <h1 data-aos="fade-down" data-aos-duration="800" data-aos-delay="100">Segurança, eficiência e<br>monitoramento.
+        </h1>
+
+        <div class="hero-buttons">
+          <a href="./html/cadastro.html" class="btn btn-action-primary" data-aos="zoom-in" data-aos-duration="600"
+            data-aos-delay="500">Quero ser um cliente</a>
+          <a href="./html/login.html" class="btn btn-action-secondary" data-aos="zoom-in" data-aos-duration="600"
+            data-aos-delay="700">Já sou um cliente</a>
+        </div>
       </div>
     </div>
   </section>
+  <!--FIM HERO SECTION -->
 
+  <!--INICIO O QUE FAZEMOS -->
   <section class="security-section" id="oque-fazemos">
-    <div class="container-fluid content-wrapper px-lg-5">
-      <div class="row align-items-center">
-        <div class="col-lg-6 col-md-12 text-content">
-          <h3 class="o-que-fazemos">O QUE FAZEMOS?</h3>
-          <h1 class="display-3 mb-4 title-main">
-            Elevar a segurança do seu negócio
-          </h1>
+    <div class="container">
+      <div class="row justify-content-center">
 
-          <p class="lead-text">
-            Nós vamos além da vigilância tradicional, monitorando o coração da
-            sua infraestrutura de segurança para garantir a integridade e
-            resiliência dos seus sistemas.
+        <div class="col-lg-6 col-md-12 text-content mb-5 mb-lg-0" data-aos="fade-right" data-aos-duration="1000">
+          <h3 class="section-subtitle fw-bold">O QUE FAZEMOS?</h3>
+          <h1 class="display-4 title-main">Elevamos a segurança do seu negócio</h1>
+          <p class="lead">
+            Mais que vigilância, monitoramos o coração da sua infraestrutura para garantir a integridade e resiliência
+            dos seus sistemas.
           </p>
 
-          <div class="row features-list">
-            <div class="col-md-6 mb-3">
-              <p class="feature-item">
-                <span class="bullet-point"></span> Prevenir falhas em sistemas
-                críticos
-              </p>
+          <div class="row g-3 features-list">
+            <div class="col-6" data-aos="fade-up" data-aos-delay="200">
+              <p class="feature-item"><span class="bullet-point"></span>Prevenir falhas em sistemas críticos</p>
             </div>
-            <div class="col-md-6 mb-3">
-              <p class="feature-item">
-                <span class="bullet-point"></span> Detectar anomalias em tempo
-                real
-              </p>
+            <div class="col-6" data-aos="fade-up" data-aos-delay="400">
+              <p class="feature-item"><span class="bullet-point"></span>Detectar anomalias em tempo real</p>
             </div>
-            <div class="col-md-6 mb-3">
-              <p class="feature-item">
-                <span class="bullet-point"></span> Evitar prejuízos
-                financeiros
-              </p>
+            <div class="col-6" data-aos="fade-up" data-aos-delay="600">
+              <p class="feature-item"><span class="bullet-point"></span>Evitar prejuízos financeiros</p>
             </div>
-            <div class="col-md-6 mb-3">
-              <p class="feature-item">
-                <span class="bullet-point"></span> Fomentar a vigilância
-                proativa
-              </p>
+            <div class="col-6" data-aos="fade-up" data-aos-delay="800">
+              <p class="feature-item"><span class="bullet-point"></span>Fomentar a vigilância proativa</p>
             </div>
           </div>
         </div>
 
-        <div
-          class="col-lg-6 col-md-12 visual-content d-flex flex-column align-items-center align-items-lg-start mt-5 mt-lg-0">
+        <div class="col-lg-6 col-md-12 visual-content mt-5 mt-lg-0" data-aos="fade-left" data-aos-duration="1000">
 
-          <div class="team-container position-relative mb-5 d-none d-lg-block">
-            <img src="./assets/svg/reuniao-de-equipe.png" alt="Team members" class="img-fluid team-image rounded-3" />
+          <div class="team-container">
+            <img src="./assets/svg/reuniao-de-equipe.png" alt="Team members" class="team-image">
 
-            <div class="team-tag p-2 rounded-2 shadow-sm text-center">
-              <p class="mb-0 fw-bold">Team memember</p>
-              <div class="avatars d-flex justify-content-center">
-                <img src="./assets/svg/equipe/bruna_photo.png" alt="Avatar 1" class="avatar-sm rounded-circle" />
-                <img src="./assets/svg/equipe/dandara_photo.png" alt="Avatar 2" class="avatar-sm rounded-circle" />
-                <img src="./assets/svg/equipe/jhoel_photo.png" alt="Avatar 3" class="avatar-sm rounded-circle" />
-                <img src="./assets/svg/equipe/miguel_photo.png" alt="Avatar 4" class="avatar-sm rounded-circle" />
-                <img src="./assets/svg/equipe/nathan_photo.png" alt="Avatar 5" class="avatar-sm rounded-circle" />
-                <img src="./assets/svg/equipe/pedro_photo.png" alt="Avatar 6" class="avatar-sm rounded-circle" />
+            <div class="team-tag text-center" data-aos="zoom-in" data-aos-delay="500">
+              <p class="fw-bold mb-1">Team member</p>
+              <div class="avatars">
+                <img src="./assets/svg/equipe/bruna_photo.png" alt="Avatar 1" class="avatar-sm">
+                <img src="./assets/svg/equipe/dandara_photo.png" alt="Avatar 2" class="avatar-sm">
+                <img src="./assets/svg/equipe/jhoel_photo.png" alt="Avatar 3" class="avatar-sm">
+                <img src="./assets/svg/equipe/miguel_photo.png" alt="Avatar 4" class="avatar-sm">
+                <img src="./assets/svg/equipe/nathan_photo.png" alt="Avatar 5" class="avatar-sm">
+                <img src="./assets/svg/equipe/pedro_photo.png" alt="Avatar 6" class="avatar-sm">
               </div>
             </div>
           </div>
 
-          <div class="kpi-block d-flex justify-content-start w-100 position-relative">
-            <div class="kpi-item me-5 text-start">
-              <p class="kpi-value">+ 10%</p>
-              <p class="kpi-description">
-                Aumento na <br />
-                eficiência da equipe de TI
-              </p>
-            </div>
-
-            <div class="kpi-item text-start">
-              <p class="kpi-value">+ 95%</p>
-              <p class="kpi-description">
-                Taxa de detecção <br />
-                de falhas
-              </p>
-            </div>
-
-            <div class="object-placeholder position-absolute d-none d-lg-block">
-              <img src="./assets/marca/icon_oberon.png" alt="Objeto 3D Abstrato" class="img-fluid" />
+          <div class="kpi-block kpi-1" data-aos="flip-up" data-aos-delay="200">
+            <div class="kpi-item">
+              <p class="kpi-value">+10%</p>
+              <p class="kpi-description">Aumento na eficiência da equipe de TI</p>
             </div>
           </div>
+
+          <div class="kpi-item kpi-2" style="padding-left: 250px;" data-aos="flip-up" data-aos-delay="400">
+            <p class="kpi-value">+95%</p>
+            <p class="kpi-description">Taxa de detecção de falhas</p>
+          </div>
+          <div class="object-placeholder d-none d-lg-block">
+            <img src="./assets/marca/icon_oberon.png" alt="Objeto 3D" data-aos="zoom-in" data-aos-delay="600">
+          </div>
+
         </div>
       </div>
     </div>
   </section>
-  <section class="benefits-section">
+  <!--FIM O QUE FAZEMOS -->
+
+  <!--INICIO SEÇÃO BENEFICIOS -->
+  <section class="benefits-section" id="beneficios">
     <div class="container">
-      <header class="section-header">
+      <header class="section-header" data-aos="fade-down" data-aos-duration="800">
         <h2 class="title-small">NOSSOS BENEFÍCIOS</h2>
         <h1 class="title-large">Sua segurança, garantida.</h1>
         <p class="subtitle">Eliminamos os pontos cegos e os riscos da sua operação bancária</p>
       </header>
 
       <div class="benefits-grid">
-        <div class="benefit-item text-left">
+        <div class="benefit-item text-left" data-aos="fade-right" data-aos-delay="100">
           <div class="icon-placeholder"><i class="fas fa-desktop"></i></div>
           <h3>Monitoramento Completo e Proativo</h3>
           <p>Prevemos e detectamos falhas operacionais e tentavivas de interrupções na sua vigilância.</p>
         </div>
 
-        <div class="central-content">
+        <div class="central-content d-none d-lg-block">
           <img src="./assets/svg/central-monitoracao-cftv.jpg" alt="Equipe de segurança monitorando"
-            class="main-image-top">
-          <img src="./assets/svg/images.jpeg" alt="Técnico monitorando individualmente"
-            class="main-image-bottom d-none d-lg-block">
+            class="main-image-top" data-aos="zoom-in" data-aos-delay="300">
+          <img src="./assets/svg/images.jpeg" alt="Técnico monitorando individualmente" class="main-image-bottom"
+            data-aos="zoom-in" data-aos-delay="500">
         </div>
 
-        <div class="benefit-item text-right">
+        <div class="benefit-item text-right" data-aos="fade-left" data-aos-delay="100">
           <div class="icon-placeholder"><i class="fas fa-shield-alt"></i></div>
           <h3>Proteção Contra Riscos Internos</h3>
           <p>Identificamos comportamentos anormais para proteger seu patrimônio e operações.</p>
         </div>
 
-        <div class="benefit-item text-left">
+        <div class="benefit-item text-left" data-aos="fade-right" data-aos-delay="400">
           <div class="icon-placeholder"><i class="fas fa-bolt"></i></div>
           <h3>Respostas Imediatas e Eficazes</h3>
           <p>Identificamos desligamentos e resolvemos problemas de segurança instantaneamente.</p>
         </div>
 
-        <div></div>
 
-        <div class="benefit-item text-right">
+        <div class="benefit-item text-right" data-aos="fade-left" data-aos-delay="400">
           <div class="icon-placeholder"><i class="fas fa-chart-line"></i></div>
           <h3>Otimização de Recursos</h3>
           <p>Fornecemos uma visão detalhada do consumo de recursos, permitindo que suas equipes de TI eliminem
@@ -204,33 +184,221 @@
       </div>
     </div>
   </section>
+  <!--FIM SEÇÃO BENEFICIOS-->
+
+  <!--INICIO SEÇÃO SERVIÇOS-->
   <div class="services-separator">
     <p class="text-small">Serviços</p>
     <h2>Serviços de alto impacto para o seu negócio</h2>
   </div>
 
-  <section class="service-feature">
+  <section class="service-feature" id="servicos">
     <div class="container feature-content">
-      <div class="feature-image-block">
+      <div class="feature-image-block" data-aos="fade-right">
         <img src="./assets/svg/central-monitoracao-cftv.jpg" alt="Sala de monitoramento com vários operadores"
           class="feature-image-main">
       </div>
-      <div class="feature-text-block">
+      <div class="feature-text-block" data-aos="fade-left">
         <h2>Monitore os seus componentes de hardware</h2>
         <p>Nossa solução se integra aos computadores dos operadores de CFTV e acompanha em tempo real a saúde de cada
           componente, como uso da CPU, temperatura, uso da RAM e disco para identificar falhas e otimizar o desempenho,
           garantindo uma vigilância ininterrupta.</p>
-        <a href="#" class="cta-button">
+        <a href="./html/cadastro.html" class="cta-button">
           <div class="icon-placeholder-small"><i class="fas fa-lock"></i></div>
           Garanta a segurança agora
         </a>
       </div>
     </div>
   </section>
+
+  <section class="cta-monitoramento-section text-white py-5">
+    <div class="container">
+      <div class="row align-items-center">
+
+        <div class="col-lg-6 col-md-12 text-content-dark mb-5 mb-lg-0" data-aos="fade-right">
+          <h1 class="display-5 fw-bold mb-4">Proteja seu patrimônio, garanta sua operação</h1>
+          <p class="lead-text-dark mb-4">
+            Elimine os riscos críticos à segurança. Tenha todas as informações que você precisa para tomar
+            decisões rápidas e assertivas, garantindo a máxima proteção e resiliência da sua infraestrutura
+            bancária.
+          </p>
+          <a href="./html/cadastro.html" class="cta-button-dark" data-aos="zoom-in" data-aos-delay="400">
+            <div class="icon-placeholder-small"><i class="fas fa-lock"></i></div>
+            Garanta a segurança agora
+          </a>
+        </div>
+
+        <div class="col-lg-6 col-md-12 visual-content-screenshot" data-aos="fade-left">
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <section class="cta-time-focado-section py-5">
+    <div class="container">
+      <div class="row align-items-center">
+
+        <div class="col-lg-6 col-md-12 visual-content-mobile mb-5 mb-lg-0" data-aos="fade-right">
+          <div class="mobile-mockups-container">
+          </div>
+          <div class="avatar-count-overlay">
+            <img src="./assets/svg/equipe/pedro_photo.png" alt="Avatar 1" class="avatar-large">
+            <img src="./assets/svg/equipe/bruna_photo.png" alt="Avatar 2" class="avatar-large">
+            <span class="count-badge">+98</span>
+          </div>
+        </div>
+
+        <div class="col-lg-6 col-md-12 text-content-light" data-aos="fade-left">
+          <h1 class="display-5 fw-bold mb-4">Mantenha seu time focado na segurança</h1>
+          <p class="lead-text-light mb-4">
+            Nós cuidamos das notificações para que sua equipe possa se concentrar naquilo que mais importa:
+            proteger o seu patrimônio. Nossa plataforma garante que você seja notificado para qualquer problema
+            antes que ele se torne uma ameaça real.
+          </p>
+          <a href="./html/cadastro.html" class="cta-button-light" data-aos="zoom-in" data-aos-delay="400">
+            <div class="icon-placeholder-small"><i class="fas fa-lock"></i></div>
+            Garanta a segurança agora
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <!--FIM SEÇÃO SERVIÇOS-->
+
+  <!--INICIO SEÇÃO SOBRE NOS-->
+  <section class="about-section py-5 bg-white" id="recursos">
+    <div class="container">
+      <header class="text-center mb-5" data-aos="fade-down">
+        <h2 class="title-small-dark">SOBRE NÓS</h2>
+      </header>
+
+      <div class="row justify-content-center g-4">
+        <div class="col-lg-4 col-md-6">
+          <div class="feature-card text-center p-4 border rounded-3 h-100" data-aos="zoom-in" data-aos-delay="100">
+            <div class="icon-circle mb-3">
+              <i class="fas fa-bullseye fa-2x"></i>
+            </div>
+            <h4 class="fw-bold mb-3">Missão</h4>
+            <p>Garantir a segurança bancária com monitoramento proativo de hardware.</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="feature-card text-center p-4 border rounded-3 h-100" data-aos="zoom-in" data-aos-delay="300">
+            <div class="icon-circle mb-3">
+              <i class="fas fa-eye fa-2x">
+              </i>
+            </div>
+            <h4 class="fw-bold mb-3">Visão</h4>
+            <p>Ser referência em soluções inteligentes de vigilância e confiabilidade.</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="feature-card text-center p-4 border rounded-3 h-100" data-aos="zoom-in" data-aos-delay="500">
+            <div class="icon-circle mb-3">
+              <i class="fas fa-handshake fa-2x"></i>
+            </div>
+            <h4 class="fw-bold mb-3">Valores</h4>
+            <p class="mb-0">Confiabilidade, Inovação, Agilidade, Segurança, Transparência</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!--FIM SEÇÃO SOBRE NOS-->
+
+  <!--INICIO SEÇÃO FEEDBACKS-->
+  <section class="testimonials-section py-5 bg-white">
+    <header class="text-center mb-5 container">
+      <h2 class="title-small-dark">O QUE NOSSOS CLIENTES DIZEM</h2>
+    </header>
+
+    <div class="carousel-wrapper">
+
+      <div class="testimonial-carousel-track g-4 pb-4" data-aos="fade-up" data-aos-delay="200">
+
+        <div class="testimonial-col">
+          <div class="testimonial-card-white p-4 rounded-3 h-100">
+            <div class="quote-icon mb-3">“</div>
+            <p class="testimonial-text-dark mb-4">
+              "Equipe extremamente profissional e atenciosa. Desde que contratamos a Oberon, não tivemos mais
+              preocupações com falhas no sistema."
+            </p>
+            <p class="testimonial-author-dark fw-bold text-end mb-0">— K Olwake</p>
+          </div>
+        </div>
+
+        <div class="testimonial-col">
+          <div class="testimonial-card-white p-4 rounded-3 h-100">
+            <div class="quote-icon mb-3">“</div>
+            <p class="testimonial-text-dark mb-4">
+              "A Oberon transformou nossa segurança. O monitoramento é rápido, confiável e nos trouxe
+              tranquilidade no dia a dia."
+            </p>
+            <p class="testimonial-author-dark fw-bold text-end mb-0">— Julio</p>
+          </div>
+        </div>
+
+        <div class="testimonial-col">
+          <div class="testimonial-card-white p-4 rounded-3 h-100">
+            <div class="quote-icon mb-3">“</div>
+            <p class="testimonial-text-dark mb-4">
+              "Serviço de primeira! Tecnologia moderna e suporte ágil, realmente fazem a diferença na segurança
+              do nosso negócio."
+            </p>
+            <p class="testimonial-author-dark fw-bold text-end mb-0">— Marcos</p>
+          </div>
+        </div>
+
+        <div class="testimonial-col">
+          <div class="testimonial-card-white p-4 rounded-3 h-100">
+            <div class="quote-icon mb-3">“</div>
+            <p class="testimonial-text-dark mb-4">
+              "Nunca imaginei que a proteção de dados seria tão simples e eficaz. Recomendo a todos os bancos que buscam
+              excelência."
+            </p>
+            <p class="testimonial-author-dark fw-bold text-end mb-0">— Ana C.</p>
+          </div>
+        </div>
+
+        <div class="testimonial-col">
+          <div class="testimonial-card-white p-4 rounded-3 h-100">
+            <div class="quote-icon mb-3">“</div>
+            <p class="testimonial-text-dark mb-4">
+              "Nunca imaginei que a proteção de dados seria tão simples e eficaz. Recomendo a todos os bancos que buscam
+              excelência."
+            </p>
+            <p class="testimonial-author-dark fw-bold text-end mb-0">— Ana C.</p>
+          </div>
+        </div>
+
+        <div class="testimonial-col">
+          <div class="testimonial-card-white p-4 rounded-3 h-100">
+            <div class="quote-icon mb-3">“</div>
+            <p class="testimonial-text-dark mb-4">
+              "Nunca imaginei que a proteção de dados seria tão simples e eficaz. Recomendo a todos os bancos que buscam
+              excelência."
+            </p>
+            <p class="testimonial-author-dark fw-bold text-end mb-0">— Ana C.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <!--FIM SEÇÃO FEEDBACKS-->
+
+  <!--INICIO FOOTER-->
   <footer id="contato">
     <div class="container">
       <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
           <div class="logo fw-bold d-flex align-items-center mb-3">
             <img src="./assets/marca/icon_oberon.png" width="24" height="24" class="d-inline-block align-top me-2"
               alt="">
@@ -246,27 +414,27 @@
           </div>
         </div>
 
-        <div class="col-lg-3">
+        <div class="col-lg-3" data-aos="fade-up" data-aos-delay="200">
           <h6 class="fw-bold mb-3">MAPA DO SITE</h6>
           <a href="#inicio">Início</a>
           <a href="#oque-fazemos">Soluções</a>
           <a href="#beneficios">Benefícios</a>
           <a href="#servicos">Serviços</a>
+          <a href="#recursos">Sobre nós</a>
+          <a href="#Feedbacks">Feedbacks</a>
         </div>
 
-        <div class="col-lg-3">
+        <div class="col-lg-3" data-aos="fade-up" data-aos-delay="300">
           <h6 class="fw-bold mb-3">RECURSOS</h6>
-          <a href="#">FAQ</a>
-          <a href="#">Documentação</a>
           <a href="#">Política de Privacidade</a>
           <a href="#">Termos de Uso</a>
         </div>
 
-        <div class="col-lg-2">
+        <div class="col-lg-2" data-aos="fade-up" data-aos-delay="400">
           <h6 class="fw-bold mb-3">CONTATO</h6>
           <p class="text-light-gray small mb-0">Rua da Segurança, 123</p>
           <p class="text-light-gray small mb-0">contato@oberon.com</p>
-          <p class="text-light-gray small">(11) 98765-4321</p>
+          <p class="text-light-gray small mb-0">(11) 98765-4321</p>
         </div>
       </div>
 
@@ -274,36 +442,76 @@
       <p class="text-center text-light-gray small mb-0">© 2025 OBERON. Todos os direitos reservados.</p>
     </div>
   </footer>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    crossorigin="anonymous"></script>
+  <!--FIM FOOTER-->
+
+
   <script>
-    // JavaScript para interações dinâmicas
+    document.addEventListener('DOMContentLoaded', () => {
+      AOS.init({
+        offset: 120, // Ponto de deslocamento para iniciar a animação
+        duration: 800, // Duração da animação (em ms)
+        once: false // A animação deve acontecer apenas uma vez
+      });
+    });
 
-    // Fecha o menu no mobile ao clicar fora
-    document.addEventListener("click", function (event) {
-      const navbar = document.getElementById("navbarNav");
-      const toggler = document.querySelector(".navbar-toggler");
+    //Logica do Menu Mobile
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggleButton = document.querySelector('.menu-toggle');
+      const mobileMenu = document.querySelector('.mobile-nav');
+      const toggleIcon = document.querySelector('.toggle-icon');
 
-      if (
-        navbar.classList.contains("show") &&
-        !navbar.contains(event.target) &&
-        !toggler.contains(event.target)
-      ) {
-        const bsCollapse = new bootstrap.Collapse(navbar, { toggle: true });
-        bsCollapse.hide();
+      toggleButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('active');
+
+        // Troca o ícone de Hambúrguer para Fechar (X)
+        if (mobileMenu.classList.contains('active')) {
+          toggleIcon.classList.remove('fa-bars');
+          toggleIcon.classList.add('fa-times'); // Ícone de Fechar (X)
+        } else {
+          toggleIcon.classList.remove('fa-times');
+          toggleIcon.classList.add('fa-bars'); // Ícone de Hambúrguer
+        }
+      });
+    });
+
+    // Logica do carrosel dinamico
+    document.addEventListener('DOMContentLoaded', () => {
+      const carouselTrack = document.querySelector('.testimonial-carousel-track');
+
+      if (carouselTrack) {
+        const carouselItems = document.querySelectorAll('.testimonial-col');
+        const totalItems = carouselItems.length;
+        let currentIndex = 0;
+        const slideInterval = 5000; // 5 segundos
+
+        function autoSlide() {
+          if (totalItems === 0) return;
+
+          currentIndex++;
+
+          if (currentIndex >= totalItems) {
+            // Se chegou ao fim, volta para o início (posição 0)
+            carouselTrack.scrollTo({
+              left: 0,
+              behavior: 'smooth'
+            });
+            currentIndex = 0;
+          } else {
+
+            carouselTrack.scrollTo({
+              left: carouselItems[currentIndex].offsetLeft,
+              behavior: 'smooth'
+            });
+          }
+        }
+
+        setInterval(autoSlide, slideInterval);
       }
     });
 
-    // Efeito de fundo da Navbar ao rolar (Transparente para Opaco)
-    window.addEventListener('scroll', function () {
-      const navbar = document.querySelector('.navbar');
-      if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
-      }
-    });
   </script>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 </body>
 
 </html>

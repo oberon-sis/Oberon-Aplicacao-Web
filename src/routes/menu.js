@@ -1,9 +1,9 @@
-var express = require("express");
+var express = require('express');
 var router = express.Router();
 
-var menuController = require("../controllers/menuController");
+var menuController = require('../controllers/menuController');
 
-router.get("/getMenu/:idUsuario", function (req, res) {
+router.get('/getMenu/:idUsuario', function (req, res) {
   menuController.getMenu(req, res);
 });
 
