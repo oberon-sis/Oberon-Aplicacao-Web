@@ -10,7 +10,10 @@
   <link rel="stylesheet" href="../css/body.css" />
   <link rel="stylesheet" href="../component/menu/Menu.css" />
   <link rel="stylesheet" href="../css/painel.css" />
+  <link rel="stylesheet" href="../component/tour/TourGuide.css">
   <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
+  <link rel="stylesheet" href="../component/notificao/Notificaocao.css">
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
@@ -18,11 +21,21 @@
 <body class="d-flex w-100 h-100">
   <div id="menu-container"></div>
 
-  <main class="content flex-grow-1 d-flex flex-column h-100">
+  <main class="content flex-grow-1 padding_main">
+
+    <button class="btn btn-secondary d-md-none mb-4" type="button" data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
+        viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+          d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+      </svg>
+    </button>
     <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
-      <h1 class="h3 mb-0">Monitoramento em tempo real de recursos</h1>
+      <h2 id="titleh2" class="text-black">Monitoramento em tempo real de recursos</h2>
+
       <div class="d-flex align-items-center">
-        <div class="input-group input-group-sm me-3" style="width: 300px">
+        <div class="input-group input-group-sm " style="width: 300px">
           <input type="text" class="form-control" id="inputBusca" placeholder="Buscar pelo nome da máquina" />
           <span class="input-group-text"><i class="bi bi-search"></i></span>
         </div>
@@ -30,19 +43,16 @@
     </header>
 
     <div class="main-container p-4 d-flex flex-column flex-grow-1">
-      <div class="d-flex flex-wrap align-items-center mb-4 filter-group-row flex-shrink-0">
+      <div id="tour-filtros-status" class="d-flex flex-wrap align-items-center mb-4 filter-group-row flex-shrink-0">
         <div class="btn-group me-3" role="group">
           <button type="button" class="btn btn-custom-status active" data-filtro="todas">
-            Todas <span class="badge text-bg-dark ms-1">6</span>
+            Todas <span class="badge text-bg-dark ms-1">5</span>
           </button>
           <button type="button" class="btn btn-custom-status" data-filtro="critico">
             Crítico <span class="badge text-bg-danger ms-1">1</span>
           </button>
           <button type="button" class="btn btn-custom-status" data-filtro="atencao">
             Atenção <span class="badge text-bg-warning ms-1">1</span>
-          </button>
-          <button type="button" class="btn btn-custom-status" data-filtro="normal">
-            Normal <span class="badge text-bg-success ms-1">1</span>
           </button>
           <button type="button" class="btn btn-custom-status" data-filtro="ocioso">
             Ocioso <span class="badge text-bg-info ms-1">1</span>
@@ -57,7 +67,7 @@
       </div>
 
       <div class="main-content-area d-flex flex-grow-1 overflow-hidden">
-        <section class="resource-cards flex-fill">
+        <section class="resource-cards flex-fill" id="tour-cards-container">
           <div class="card card-recurso" data-maquina-id="1">
             <div class="d-flex justify-content-between align-items-start mb-2">
               <h5 class="card-title h6 mb-0">ESTACAO-0021</h5>
@@ -84,20 +94,22 @@
           <div class="card card-recurso" data-maquina-id="2">
             <div class="d-flex justify-content-between align-items-start mb-2">
               <h5 class="card-title h6 mb-0">ESTACAO-0022</h5>
-              <i class="bi bi-exclamation-circle text-info fs-5"></i>
+              <i class="bi bi-check-circle-fill text-success fs-5"></i>
             </div>
             <p class="card-text mb-1">
-              <small class="text-info fw-bold">OCIOSO</small>
+              <small class="text-success fw-bold">ONLINE</small>
             </p>
             <p class="card-text mb-1">
-              <small class="text-info">SUBUTILIZADO</small>
+              <small class="text-muted">OCIOSO</small>
             </p>
-            <p class="card-text mb-2 small text-muted">Uso atual:</p>
+            <p class="card-text mb-2 small text-muted">
+              Uso mais perto do limite:
+            </p>
             <ul class="list-unstyled small mb-3">
-              <li>CPU: <span class="fw-bold">28%</span></li>
-              <li><span class="text-info">(62% Abaixo do ideal)</span></li>
+              <li>RAM: <span class="fw-bold">71%</span></li>
+              <li><span class="text-success">(Normal)</span></li>
             </ul>
-            <button type="button" class="btn btn-info btn-sm w-100">
+            <button type="button" class="btn btn-success btn-sm w-100">
               Ver Detalhes
             </button>
           </div>
@@ -199,9 +211,15 @@
             <div class="dropdown">
               <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownComponente"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                CPU
+                Todos
               </button>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownComponente">
+                <li>
+                  <a class="dropdown-item" href="#" data-componente="todos">Todos</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
                 <li>
                   <a class="dropdown-item" href="#" data-componente="cpu">CPU</a>
                 </li>
@@ -218,11 +236,11 @@
             </div>
           </div>
 
-          <div class="chart-container mb-4">
+          <div class="chart-container mb-4" id="tour-grafico-utilizacao">
             <canvas id="utilizacaoChart"></canvas>
           </div>
 
-          <div class="row row-cols-2 g-3 mb-4 indicators-grid">
+          <div class="row row-cols-2 g-3 mb-4 indicators-grid" id="tour-indicadores-alertas">
             <div class="col">
               <div class="resource-detail-card d-flex align-items-center">
                 <i class="bi bi-cpu-fill fs-3"></i>
@@ -302,7 +320,7 @@
 
           <hr />
 
-          <div class="details-info small">
+          <div class="details-info small" id="tour-info-maquina">
             <p class="mb-1 d-flex justify-content-between">
               <span class="text-muted">Modelo:</span>
               <span class="fw-bold" id="infoModelo">Dell OptiPlex 3050 SFF</span>
@@ -330,6 +348,10 @@
   </script>
   <script src="../component/menu/Menu.js"></script>
   <script src="../js/painel.js"></script>
+  <script src="../component/tour/TourGuide.js"></script>
+  <script src="../js/tour/painelTour.js"></script>
+  <script src="../component/notificao/Notificacao.js"></script>
+
 </body>
 
 </html>

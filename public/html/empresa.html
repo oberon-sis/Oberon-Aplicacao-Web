@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="../component/menu/Menu.css">
   <link rel="stylesheet" href="../css/maquinas.css">
   <link rel="stylesheet" href="../css/edicaoDadosEmpresa.css">
+  <link rel="stylesheet" href="../css/home_dash.css">
+  <link rel="stylesheet" href="../component/notificao/Notificaocao.css">
   <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -30,21 +32,29 @@
           d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
       </svg>
     </button>
-    <h2 id="titleh2" class="text-black mb-4">Edição de dados da Empresa</h2>
-
-
-    <div class="cont-usuario">
-      <div id="txt-tudo">
-        <h2>
-          Olá <span id="nome_funcionario_logado"></span> - <span id="cargo_funcionario_logado"></span>
-        </h2>
-        <h3><span id="nome_banco">Upfinity Banco</span></h3>
-        <p>Dados organizados, resultados otimizados. Gerencie as informações<br>da sua empresa com facilidade.</p>
+    <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
+      <h2 id="titleh2" class="text-black">Edição de dados da Empresa</h2>
+    </header>
+    <div class="d-flex justify-content-between align-items-center mb-4 p-4 bg-white shadow-sm rounded div_banner"
+      style="margin-top: 10px;">
+      <div class="me-3">
+        <h4 class="text-black mb-1">
+          Olá <span id="nome_funcionario_logado"></span> - Seja bem-vindo(a)
+        </h4>
+        <p class="mb-0 text-secondary">
+          <span id="cargo_funcionario_logado"></span>(a) da <span id="nome_banco"></span>
+        </p>
+        <p class="mb-0 small text-muted">
+          Dados organizados, resultados otimizados. Gerencie as informações<br>da sua empresa com facilidade.
+        </p>
       </div>
+      <img src="../assets/img/Banner.jpg" alt="Imagem de Boas-Vindas - Pessoas em um painel"
+        class="img-fluid rounded  d-md-block banner">
     </div>
 
+
     <!-- Excluir empresa -->
-    <div class="cont_tudo">
+    <div class="cont_tudo w-100">
       <div class="container01">
 
 
@@ -110,6 +120,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/edicaoDadosEmpresa.js"></script>
     <script src="../component/menu/Menu.js"></script>
+    <script src="../component/notificao/Notificacao.js"></script>
+
 
   </main>
 
