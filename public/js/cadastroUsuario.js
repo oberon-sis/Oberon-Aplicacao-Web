@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     botaoSubmit.textContent = 'FINALIZANDO...';
 
     try {
-      const resposta = await fetch('http://localhost:3333/usuarios/finalizar', {
+      const resposta = await fetch('/usuarios/finalizar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dadosCompletos),

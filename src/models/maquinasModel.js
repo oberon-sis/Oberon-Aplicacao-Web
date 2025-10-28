@@ -160,7 +160,7 @@ function listarMaquinasPorEmpresa(fkEmpresa, limite, offset, condicao, termoDePe
         IFNULL(M.ip, 'Aguardando IP') AS ip,
         MAX(MC.origemParametro) AS origemParametro 
     FROM Maquina AS M
-    LEFT JOIN MaquinaComponente AS MC ON M.idMaquina = MC.fkMaquina
+    LEFT JOIN Componente AS MC ON M.idMaquina = MC.fkMaquina
     WHERE M.fkEmpresa = ${fkEmpresa}
       AND (M.${condicao} LIKE '%${termoDePesquisa}%' OR M.${condicao} = '${termoDePesquisa}')
     GROUP BY M.idMaquina

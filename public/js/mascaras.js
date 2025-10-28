@@ -45,7 +45,7 @@ if (cadastroForm) {
     const email = document.getElementById('email').value;
     const senha = document.getElementById('password').value;
 
-    fetch('http://localhost:3000/usuario/cadastrar', {
+    fetch('/usuario/cadastrar', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nome, cpf, email, senha }),

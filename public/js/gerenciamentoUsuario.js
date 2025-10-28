@@ -258,7 +258,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function getTipoUsuario() {
-  alert('Estou no tipo js');
   var select = document.getElementsByClassName('tipo_usuario_select_tipos');
 
   fetch('/gerenciamentoUsuario/getTipoUsuario')
