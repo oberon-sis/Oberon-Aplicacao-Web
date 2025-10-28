@@ -2,396 +2,403 @@
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>- OBERON</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>- OBERON</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../css/body.css" />
-    <link rel="stylesheet" href="../component/menu/Menu.css" />
-    <link rel="stylesheet" href="../css/maquinas.css" />
-    <link rel="stylesheet" href="../css/painelEspecifico.css" />
-    <link rel="stylesheet" href="../component/tour/TourGuide.css" />
-    <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
-    <link rel="stylesheet" href="../component/notificao/Notificaocao.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/body.css" />
+  <link rel="stylesheet" href="../component/menu/Menu.css" />
+  <link rel="stylesheet" href="../css/maquinas.css" />
+  <link rel="stylesheet" href="../css/painelEspecifico.css" />
+  <link rel="stylesheet" href="../component/tour/TourGuide.css" />
+  <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
+  <link rel="stylesheet" href="../component/notificao/Notificaocao.css" />
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js">
+  </script>
 </head>
 
 <body class="d-flex w-100 h-100">
-    <div id="menu-container"></div>
+  <div id="menu-container"></div>
 
-    <main class="content flex-grow-1 padding_main dashboard-main">
-        <button class="btn btn-secondary d-md-none mb-4" type="button" data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
-                viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                    d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
-            </svg>
-        </button>
-        <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
-            <h2 class="text-black me-3">
-                Análise Histórica de Desempenho: &nbsp;&nbsp; <span>Máquina-002</span>
-            </h2>
+  <main class="content flex-grow-1 padding_main dashboard-main">
+    <button class="btn btn-secondary d-md-none mb-4" type="button" data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
+        viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+          d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+      </svg>
+    </button>
+    <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
+      <h2 class="text-black me-3">
+        Análise Histórica de Desempenho: &nbsp;&nbsp; <span>Máquina-002</span>
+      </h2>
 
-            <div class="d-flex align-items-center flex-wrap flex-grow-1 me-3">
-                <div class="d-flex align-items-center me-3 mb-2 mb-md-0">
-<div class="search-autocomplete-container me-3" style="position: relative;"> 
-    
-    <div class="input-group input-group-sm" style="width: 200px">
-        <input type="text" class="form-control" id="inputBusca" 
-            placeholder="Buscar pelo nome da máquina" 
-            oninput="filtrarSugestoes(this.value)" 
-            autocomplete="off" /> <span class="input-group-text"><i class="bi bi-search"></i></span>
-    </div>
+      <div class="d-flex align-items-center flex-wrap flex-grow-1 me-3">
+        <div class="d-flex align-items-center me-3 mb-2 mb-md-0">
+          <div class="search-autocomplete-container me-3" style="position: relative;">
 
-    <ul id="listaSugestoes" class="autocomplete-list dropdown-menu" 
-        style="position: absolute; top: 100%; left: 0; width: 100%; display: none;">
-        </ul>
-</div>
-
-                    <p class="mx-2 mb-0 d-flex align-items-center">OU</p>
-
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <span id="valor_pesquisa_maquina">Selecionar</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end hover_verde">
-                        <li>
-                            <a class="dropdown-item" onclick="atualizar_painelEspecifico(1)">Maquina-001</a>
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" onclick="atualizar_painelEspecifico(2)">Maquina-003</a>
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" onclick="atualizar_painelEspecifico(3)">Maquina-004</a>
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" onclick="atualizar_painelEspecifico(4)">Maquina-005</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="d-flex align-items-center">
-                    <h2 class="text-black mb-0 me-2 fs-5">2025 - Bimestre 5</h2>
-
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <span id="valor_pesquisa_periodo">Selecionar</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end hover_verde">
-                        <li>
-                            <a class="dropdown-item" onclick="atualizar_painelEspecifico(1)">2025 - Bimestre 6</a>
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" onclick="atualizar_painelEspecifico(2)">2025 - Bimestre 4</a>
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" onclick="atualizar_painelEspecifico(3)">2025 - Bimestre 3
-                            </a>
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" onclick="atualizar_painelEspecifico(4)">2025 - Bimestre 2</a>
-                        </li>
-                    </ul>
-                </div>
+            <div class="input-group input-group-sm" style="width: 200px">
+              <input type="text" class="form-control" id="inputBusca" placeholder="Buscar pelo nome da máquina"
+                oninput="filtrarSugestoes(this.value)" autocomplete="off" /> <span class="input-group-text"><i
+                  class="bi bi-search"></i></span>
             </div>
 
-            <div class="d-flex align-items-center ms-auto"></div>
-        </header>
+            <ul id="listaSugestoes" class="autocomplete-list dropdown-menu"
+              style="position: absolute; top: 100%; left: 0; width: 100%; display: none;">
+            </ul>
+          </div>
 
-        <section class="kpi-container" id="kpi-section">
-            <div class="kpi-card" id="kpi-disponibilidade">
-                <div class="topo-kpi">
-                    <h6>Taxa De Disponibilidade Do Sistema</h6>
-                    <div class="icone-kpi"><i class="bi bi-box-arrow-in-up"></i></div>
-                </div>
+          <p class="mx-2 mb-0 d-flex align-items-center">OU</p>
 
-                <div class="baixo-kpi">
-                    <div>
-                        <span id="txt_disponibilidade"> 97% </span>
-                        <p>Bimestre Passado: 96%</p>
-                    </div>
-                    <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                        data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que é Disponibilidade?"
-                        data-bs-content="A porcentagem de tempo que o sistema ou máquina está operacional e acessível aos usuários durante o período de referência.">
-                        <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
-                    </button>
-                </div>
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <span id="valor_pesquisa_maquina">Selecionar</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end hover_verde">
+            <li>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(1)">Maquina-001</a>
+            </li>
+
+            <li>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(2)">Maquina-003</a>
+            </li>
+
+            <li>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(3)">Maquina-004</a>
+            </li>
+
+            <li>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(4)">Maquina-005</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="d-flex align-items-center">
+          <h2 class="text-black mb-0 me-2 fs-5">2025 - Bimestre 5</h2>
+
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <span id="valor_pesquisa_periodo">Selecionar</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end hover_verde">
+            <li>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(1)">2025 - Bimestre 6</a>
+            </li>
+
+            <li>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(2)">2025 - Bimestre 4</a>
+            </li>
+
+            <li>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(3)">2025 - Bimestre 3
+              </a>
+            </li>
+
+            <li>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(4)">2025 - Bimestre 2</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center ms-auto"></div>
+    </header>
+
+    <section class="kpi-container" id="kpi-section">
+      <div class="kpi-card" id="kpi-disponibilidade">
+        <div class="topo-kpi">
+          <h6>Taxa De Disponibilidade Do Sistema</h6>
+          <div class="icone-kpi"><i class="bi bi-box-arrow-in-up"></i></div>
+        </div>
+
+        <div class="baixo-kpi">
+          <div>
+            <span id="txt_disponibilidade"> 97% </span>
+            <p>Bimestre Passado: 96%</p>
+          </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="O que é Disponibilidade?"
+            data-bs-content="A porcentagem de tempo que o sistema ou máquina está operacional e acessível aos usuários durante o período de referência.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </div>
+      </div>
+
+      <div class="kpi-card" id="kpi-total-alertas">
+        <div class="topo-kpi">
+          <h6>Quantidade Total De Alertas</h6>
+          <div class="icone-kpi"><i class="bi bi-bell"></i></div>
+        </div>
+        <div class="baixo-kpi">
+          <div>
+            <span id="txt_total_alertas"> 200 </span>
+            <p>Bimestre Passado: 100</p>
+          </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="O que são Alertas?"
+            data-bs-content="Total de notificações geradas por exceder limites configurados de uso de recursos (CPU, RAM, etc.) ou falhas no sistema durante o bimestre.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </div>
+      </div>
+
+      <div class="kpi-card" id="kpi-percentual-critico">
+        <div class="topo-kpi">
+          <h6>Percentual De alertas Críticos</h6>
+          <div class="icone-kpi">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+          </div>
+        </div>
+        <div class="baixo-kpi">
+          <div>
+            <span id="txt_percentual_critico"> 20% </span>
+            <p>Bimestre Passado: 40%</p>
+          </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="O que é Alerta Crítico?"
+            data-bs-content="A proporção de alertas que atingiram o nível de maior gravidade ('Crítico'), indicando falhas graves ou iminentes que exigem ação imediata.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </div>
+      </div>
+      <div class="kpi-card" id="kpi-componente-critico">
+        <div class="topo-kpi">
+          <h6>Componente Com Mais Alertas Criticos</h6>
+          <div class="icone-kpi"><i class="bi bi-box-arrow-in-up"></i></div>
+        </div>
+
+        <div class="baixo-kpi">
+          <div>
+            <span id="txt_disponibilidade"> RAM </span>
+            <p>Bimestre Passado: DISCO</p>
+          </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="Componente Crítico"
+            data-bs-content="O recurso (CPU, RAM, DISCO, etc.) que gerou o maior número de alertas no nível 'Crítico' durante o bimestre analisado.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </div>
+      </div>
+
+      <div class="kpi-card" id="kpi-tempo-alertas">
+        <div class="topo-kpi">
+          <h6>Tempo Médio Entre Alertas</h6>
+          <div class="icone-kpi"><i class="bi bi-stopwatch"></i></div>
+        </div>
+        <div class="baixo-kpi">
+          <div>
+            <span id="txt_tempo_medio_alerta"> 10min </span>
+            <p>Bimestre Passado: 20min</p>
+          </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="O que é MTBA (Tempo Médio Entre Alertas)?"
+            data-bs-content="O tempo médio que decorre entre a geração de um alerta e o próximo, refletindo a frequência dos problemas de desempenho ou falhas no sistema.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="charts-container" style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px">
+      <div class="chart-item-wrapper" id="chart-comparativo-recurso">
+        <div class="select-group">
+          <div class="d-flex align-items-center me-3">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+              aria-expanded="false" id="dropdownRecursoToggle">
+              <span id="valor_pesquisa_recurso">Comparativo Geral</span>
+            </button>
+
+            <ul class="dropdown-menu hover_verde" aria-labelledby="dropdownRecursoToggle">
+              <li><a class="dropdown-item" href="#" data-value="comparativo">Comparativo Geral</a></li>
+              <li><a class="dropdown-item" href="#" data-value="CPU">CPU</a></li>
+              <li><a class="dropdown-item" href="#" data-value="RAM">RAM</a></li>
+              <li><a class="dropdown-item" href="#" data-value="DISCO">DISCO</a></li>
+              <li><a class="dropdown-item" href="#" data-value="REDE">REDE</a></li>
+            </ul>
+          </div>
+
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="Comparativo de Alertas por Recurso"
+            data-bs-content="Compara a incidência de alertas por recurso (CPU, RAM, DISCO, REDE) entre o bimestre atual (Barra Principal) e o bimestre passado (Barra Secundária).">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </div>
+
+        <canvas id="myDynamicChart"></canvas>
+      </div>
+
+      <div class="chart-item-wrapper" id="chart-uptime-downtime">
+        <h3 style="font-size: 1.1rem; margin-bottom: 15px">
+          Uptime / Downtime Semanal
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="Uptime / Downtime"
+            data-bs-content="Medição em horas do tempo que a máquina esteve operacional (Uptime) versus inoperacional (Downtime) ao longo das semanas do bimestre.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </h3>
+        <div style="height: 300px">
+          <canvas id="uptimeDowntimeChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="details-container" style="display: grid; grid-template-columns: 1fr 4fr; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <div class="select-group" style="display: flex; flex-direction: row" id="select-variacao-alertas">
+          <div class="d-flex align-items-center me-3">
+
+            <span class="text-secondary small me-2" style="white-space: nowrap;">Visualizar Por
+              Alerta:</span>
+
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+              aria-expanded="false" id="dropdownAlertaToggle">
+              <span id="valor_pesquisa_alerta">Total De Alertas</span>
+            </button>
+
+            <ul class="dropdown-menu hover_verde" aria-labelledby="dropdownAlertaToggle">
+              <li><a class="dropdown-item dropdown-alerta-item" href="#" data-value="Total De Alertas">Total De
+                  Alertas</a></li>
+              <li><a class="dropdown-item dropdown-alerta-item" href="#" data-value="Ocioso">Ocioso</a>
+              </li>
+              <li><a class="dropdown-item dropdown-alerta-item" href="#" data-value="Atenção">Atenção</a>
+              </li>
+              <li><a class="dropdown-item dropdown-alerta-item" href="#" data-value="Crítico">Crítico</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="card_tendencia_container">
+          <div class="card_tendencia" id="kpi-previsao-valor">
+            <h6>Previsão de Alertas (Próximo Bimestre)</h6>
+            <div class="baixo-kpi">
+              <span id="txt_previsao_alertas"> 27 </span>
+              <p>
+                Previsão Feita Para Este Bimestre: 100
+
+              </p>
+              <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+                data-bs-trigger="focus" data-bs-title="Previsão de Alertas"
+                data-bs-content="Estimativa do número total de alertas que a máquina pode gerar no próximo bimestre com base na taxa de variação histórica (tendência).">
+                <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+              </button>
             </div>
-
-            <div class="kpi-card" id="kpi-total-alertas">
-                <div class="topo-kpi">
-                    <h6>Quantidade Total De Alertas</h6>
-                    <div class="icone-kpi"><i class="bi bi-bell"></i></div>
-                </div>
-                <div class="baixo-kpi">
-                    <div>
-                        <span id="txt_total_alertas"> 200 </span>
-                        <p>Bimestre Passado: 100</p>
-                    </div>
-                    <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                        data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que são Alertas?"
-                        data-bs-content="Total de notificações geradas por exceder limites configurados de uso de recursos (CPU, RAM, etc.) ou falhas no sistema durante o bimestre.">
-                        <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
-                    </button>
-                </div>
+          </div>
+          <div class="card_tendencia" id="kpi-variacao">
+            <h6>Taxa de Variação (Bimestral)</h6>
+            <div class="baixo-kpi">
+              <span id="txt_variacao_linear" style="color: #0c8186">
+                3%
+              </span>
+              <p>
+                Bimestre Passado: 2,1%
+              </p>
+              <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+                data-bs-trigger="focus" data-bs-title="Taxa de Variação"
+                data-bs-content="Mede a inclinação da linha de tendência de alertas. Um valor **positivo** indica que o volume de problemas está aumentando, e um **negativo** indica que está diminuindo (melhoria).">
+                <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+              </button>
             </div>
+          </div>
+        </div>
+      </div>
 
-            <div class="kpi-card" id="kpi-percentual-critico">
-                <div class="topo-kpi">
-                    <h6>Percentual De alertas Críticos</h6>
-                    <div class="icone-kpi">
-                        <i class="bi bi-exclamation-triangle-fill"></i>
-                    </div>
-                </div>
-                <div class="baixo-kpi">
-                    <div>
-                        <span id="txt_percentual_critico"> 20% </span>
-                        <p>Bimestre Passado: 40%</p>
-                    </div>
-                    <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                        data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que é Alerta Crítico?"
-                        data-bs-content="A proporção de alertas que atingiram o nível de maior gravidade ('Crítico'), indicando falhas graves ou iminentes que exigem ação imediata.">
-                        <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
-                    </button>
-                </div>
-            </div>
-            <div class="kpi-card" id="kpi-componente-critico">
-                <div class="topo-kpi">
-                    <h6>Componente Com Mais Alertas Criticos</h6>
-                    <div class="icone-kpi"><i class="bi bi-box-arrow-in-up"></i></div>
-                </div>
+      <div class="chart-item-wrapper" id="chart-tendencia">
+        <h3 style="font-size: 1.1rem; margin-bottom: 15px">
+          Tendência de Alertas (Bimestral)
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="Tendência de Alertas"
+            data-bs-content="Exibe a trajetória histórica dos alertas e projeta uma **Linha de Previsão** (tracejada) que indica a direção futura do volume de problemas.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </h3>
+        <div style="height: 240px">
+          <canvas id="alertTrendChart"></canvas>
+        </div>
+      </div>
+    </section>
+  </main>
 
-                <div class="baixo-kpi">
-                    <div>
-                        <span id="txt_disponibilidade"> RAM </span>
-                        <p>Bimestre Passado: DISCO</p>
-                    </div>
-                    <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                        data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Componente Crítico"
-                        data-bs-content="O recurso (CPU, RAM, DISCO, etc.) que gerou o maior número de alertas no nível 'Crítico' durante o bimestre analisado.">
-                        <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
-                    </button>
-                </div>
-            </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-            <div class="kpi-card" id="kpi-tempo-alertas">
-                <div class="topo-kpi">
-                    <h6>Tempo Médio Entre Alertas</h6>
-                    <div class="icone-kpi"><i class="bi bi-stopwatch"></i></div>
-                </div>
-                <div class="baixo-kpi">
-                    <div>
-                        <span id="txt_tempo_medio_alerta"> 10min </span>
-                        <p>Bimestre Passado: 20min</p>
-                    </div>
-                    <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                        data-bs-placement="right" data-bs-trigger="focus"
-                        data-bs-title="O que é MTBA (Tempo Médio Entre Alertas)?"
-                        data-bs-content="O tempo médio que decorre entre a geração de um alerta e o próximo, refletindo a frequência dos problemas de desempenho ou falhas no sistema.">
-                        <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
-                    </button>
-                </div>
-            </div>
-        </section>
+  <script src="../component/menu/Menu.js"></script>
+  <script src="../js/dashboard/dash_especifico/utils.js"></script>
 
-        <section class="charts-container" style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px">
-            <div class="chart-item-wrapper" id="chart-comparativo-recurso">
-                <div class="select-group">
-                    <div class="d-flex align-items-center me-3">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false" id="dropdownRecursoToggle">
-                            <span id="valor_pesquisa_recurso">Comparativo Geral</span>
-                        </button>
+  <script src="../js/dashboard/dash_especifico/uptimeDowntimeChart.js"></script>
+  <script src="../js/dashboard/dash_especifico/alertTrendChart.js"></script>
+  <script src="../component/notificao/Notificacao.js"></script>
 
-                        <ul class="dropdown-menu hover_verde" aria-labelledby="dropdownRecursoToggle">
-                            <li><a class="dropdown-item" href="#" data-value="comparativo">Comparativo Geral</a></li>
-                            <li><a class="dropdown-item" href="#" data-value="CPU">CPU</a></li>
-                            <li><a class="dropdown-item" href="#" data-value="RAM">RAM</a></li>
-                            <li><a class="dropdown-item" href="#" data-value="DISCO">DISCO</a></li>
-                            <li><a class="dropdown-item" href="#" data-value="REDE">REDE</a></li>
-                        </ul>
-                    </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Inicializa APENAS o gráfico restante (uptime/downtime)
+      initUptimeDowntimeChart();
 
-                    <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                        data-bs-placement="right" data-bs-trigger="focus"
-                        data-bs-title="Comparativo de Alertas por Recurso"
-                        data-bs-content="Compara a incidência de alertas por recurso (CPU, RAM, DISCO, REDE) entre o bimestre atual (Barra Principal) e o bimestre passado (Barra Secundária).">
-                        <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
-                    </button>
-                </div>
+      // A inicialização do AlertTrendChart é feita no próprio script alertTrendChart.js
 
-                <canvas id="myDynamicChart"></canvas>
-            </div>
+      // Inicializa os popovers (se a função foi movida para utils.js)
+      if (typeof initializeBootstrap === "function") {
+        initializeBootstrap();
+      }
+    });
 
-            <div class="chart-item-wrapper" id="chart-uptime-downtime">
-                <h3 style="font-size: 1.1rem; margin-bottom: 15px">
-                    Uptime / Downtime Semanal
-                    <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                        data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Uptime / Downtime"
-                        data-bs-content="Medição em horas do tempo que a máquina esteve operacional (Uptime) versus inoperacional (Downtime) ao longo das semanas do bimestre.">
-                        <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
-                    </button>
-                </h3>
-                <div style="height: 300px">
-                    <canvas id="uptimeDowntimeChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <section class="details-container" style="display: grid; grid-template-columns: 1fr 4fr; gap: 20px">
-            <div style="display: flex; flex-direction: column; gap: 10px">
-                <div class="select-group" style="display: flex; flex-direction: row" id="select-variacao-alertas">
-                    <div class="d-flex align-items-center me-3">
-
-                        <span class="text-secondary small me-2" style="white-space: nowrap;">Visualizar Por
-                            Alerta:</span>
-
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false" id="dropdownAlertaToggle">
-                            <span id="valor_pesquisa_alerta">Total De Alertas</span>
-                        </button>
-
-                        <ul class="dropdown-menu hover_verde" aria-labelledby="dropdownAlertaToggle">
-                            <li><a class="dropdown-item dropdown-alerta-item" href="#"
-                                    data-value="Total De Alertas">Total De Alertas</a></li>
-                            <li><a class="dropdown-item dropdown-alerta-item" href="#" data-value="Ocioso">Ocioso</a>
-                            </li>
-                            <li><a class="dropdown-item dropdown-alerta-item" href="#" data-value="Atenção">Atenção</a>
-                            </li>
-                            <li><a class="dropdown-item dropdown-alerta-item" href="#" data-value="Crítico">Crítico</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="card_tendencia_container">
-                    <div class="card_tendencia" id="kpi-previsao-valor">
-                        <h6>Previsão de Alertas (Próximo Bimestre)</h6>
-                        <div class="baixo-kpi">
-                            <span id="txt_previsao_alertas"> 27 </span>
-                            <p>
-                                Previsão Feita Para Este Bimestre: 100
-
-                            </p>
-                            <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                                data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Previsão de Alertas"
-                                data-bs-content="Estimativa do número total de alertas que a máquina pode gerar no próximo bimestre com base na taxa de variação histórica (tendência).">
-                                <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info"
-                                    style="scale: 1.5" />
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card_tendencia" id="kpi-variacao">
-                        <h6>Taxa de Variação (Bimestral)</h6>
-                        <div class="baixo-kpi">
-                            <span id="txt_variacao_linear" style="color: #0c8186">
-                                3%
-                            </span>
-                            <p>
-                                Bimestre Passado: 2,1%
-                            </p>
-                                <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                                    data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Taxa de Variação"
-                                    data-bs-content="Mede a inclinação da linha de tendência de alertas. Um valor **positivo** indica que o volume de problemas está aumentando, e um **negativo** indica que está diminuindo (melhoria).">
-                                    <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info"
-                                        style="scale: 1.5" />
-                                </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chart-item-wrapper" id="chart-tendencia">
-                <h3 style="font-size: 1.1rem; margin-bottom: 15px">
-                    Tendência de Alertas (Bimestral)
-                    <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                        data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Tendência de Alertas"
-                        data-bs-content="Exibe a trajetória histórica dos alertas e projeta uma **Linha de Previsão** (tracejada) que indica a direção futura do volume de problemas.">
-                        <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
-                    </button>
-                </h3>
-                <div style="height: 240px">
-                    <canvas id="alertTrendChart"></canvas>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="../component/menu/Menu.js"></script>
-    <script src="../js/dashboard/dash_especifico/utils.js"></script>
-
-    <script src="../js/dashboard/dash_especifico/uptimeDowntimeChart.js"></script>
-    <script src="../js/dashboard/dash_especifico/alertTrendChart.js"></script>
-    <script src="../component/notificao/Notificacao.js"></script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Inicializa APENAS o gráfico restante (uptime/downtime)
-            initUptimeDowntimeChart();
-
-            // A inicialização do AlertTrendChart é feita no próprio script alertTrendChart.js
-
-            // Inicializa os popovers (se a função foi movida para utils.js)
-            if (typeof initializeBootstrap === "function") {
-                initializeBootstrap();
-            }
-        });
-    </script>
-    <script src="../js/dashboard/dash_especifico/comparacao_alertas.js"></script>
-    <script src="../component/tour/TourGuide.js"></script>
-    <script src="../js/tour/painelEspecificoTour.js"></script>
+  </script>
+  <script src="../js/dashboard/dash_especifico/comparacao_alertas.js"></script>
+  <script src="../component/tour/TourGuide.js"></script>
+  <script src="../js/tour/painelEspecificoTour.js"></script>
 </body>
 
 </html>
 <script>
-    // MOCK DE DADOS: Lista de máquinas para simular a busca
-const LISTA_MAQUINAS = [
-    { id: 1, nome: 'Maquina-001' },
-    { id: 2, nome: 'Maquina-003' },
-    { id: 3, nome: 'Maquina-004' },
-    { id: 4, nome: 'Maquina-005' },
-];
+  // MOCK DE DADOS: Lista de máquinas para simular a busca
+  const LISTA_MAQUINAS = [{
+      id: 1,
+      nome: 'Maquina-001'
+    },
+    {
+      id: 2,
+      nome: 'Maquina-003'
+    },
+    {
+      id: 3,
+      nome: 'Maquina-004'
+    },
+    {
+      id: 4,
+      nome: 'Maquina-005'
+    },
+  ];
 
-/**
- * Função principal de autocompletar. Chamada no evento oninput do campo de busca.
- * @param {string} termoBusca - O texto digitado pelo usuário.
- */
-function filtrarSugestoes(termoBusca) {
+  /**
+   * Função principal de autocompletar. Chamada no evento oninput do campo de busca.
+   * @param {string} termoBusca - O texto digitado pelo usuário.
+   */
+  function filtrarSugestoes(termoBusca) {
     const listaSugestoesEl = document.getElementById('listaSugestoes');
     const termo = termoBusca.trim().toUpperCase();
 
     // 1. Limpa e Oculta a lista se o termo estiver vazio
     if (termo.length < 2) { // Começa a filtrar a partir de 2 ou 3 caracteres
-        listaSugestoesEl.innerHTML = '';
-        listaSugestoesEl.style.display = 'none';
-        return;
+      listaSugestoesEl.innerHTML = '';
+      listaSugestoesEl.style.display = 'none';
+      return;
     }
 
     // 2. Filtra os dados
-    const resultados = LISTA_MAQUINAS.filter(maquina => 
-        maquina.nome.toUpperCase().includes(termo)
+    const resultados = LISTA_MAQUINAS.filter(maquina =>
+      maquina.nome.toUpperCase().includes(termo)
     );
 
     // 3. Constrói o HTML da lista
     let html = '';
-    
+
     if (resultados.length > 0) {
-        resultados.forEach(maquina => {
-            // Usa a classe dropdown-item e adiciona um evento de clique
-            html += `
+      resultados.forEach(maquina => {
+        // Usa a classe dropdown-item e adiciona um evento de clique
+        html += `
                 <li>
                     <a class="dropdown-item" href="#" 
                        onclick="selecionarMaquina('${maquina.nome}', ${maquina.id}); return false;">
@@ -399,29 +406,29 @@ function filtrarSugestoes(termoBusca) {
                     </a>
                 </li>
             `;
-        });
+      });
     } else {
-        // Mensagem de "nenhum resultado"
-        html = `<li><span class="dropdown-item text-muted">Nenhuma máquina encontrada.</span></li>`;
+      // Mensagem de "nenhum resultado"
+      html = `<li><span class="dropdown-item text-muted">Nenhuma máquina encontrada.</span></li>`;
     }
 
     // 4. Exibe os resultados
     listaSugestoesEl.innerHTML = html;
     listaSugestoesEl.style.display = 'block';
-}
+  }
 
-/**
- * Função chamada ao clicar em uma sugestão.
- * @param {string} nome - Nome completo da máquina.
- * @param {number} id - ID da máquina.
- */
-function selecionarMaquina(nome, id) {
+  /**
+   * Função chamada ao clicar em uma sugestão.
+   * @param {string} nome - Nome completo da máquina.
+   * @param {number} id - ID da máquina.
+   */
+  function selecionarMaquina(nome, id) {
     const inputBuscaEl = document.getElementById('inputBusca');
     const listaSugestoesEl = document.getElementById('listaSugestoes');
 
     // 1. Preenche o campo de busca com o nome selecionado
     inputBuscaEl.value = nome;
-    
+
     // 2. Oculta a lista de sugestões
     listaSugestoesEl.style.display = 'none';
     window.location.href = "painelEspecifico.html";
@@ -429,7 +436,8 @@ function selecionarMaquina(nome, id) {
     // 3. Ação Principal: Atualiza o painel para a máquina selecionada
     // Você deve chamar a função que carrega os dados da máquina aqui:
     // por exemplo: atualizar_painelEspecifico(id);
-    
+
     console.log(`Máquina selecionada: ${nome} (ID: ${id}). Iniciando carregamento do painel...`);
-}
+  }
+
 </script>

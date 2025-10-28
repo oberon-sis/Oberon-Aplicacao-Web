@@ -22,7 +22,7 @@ body::-webkit-scrollbar {
 
 .scroll-fade::before,
 .scroll-fade::after {
-  content: "";
+  content: '';
   position: sticky;
   left: 0;
   right: 0;
@@ -40,7 +40,6 @@ body::-webkit-scrollbar {
   bottom: 0;
   background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
 }
-
 
 /* ================================================= */
 /* CONFIGURAÇÕES BÁSICAS E VARIÁVEIS */
@@ -74,7 +73,9 @@ body {
   border: 1px solid transparent;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s, opacity 0.3s;
+  transition:
+    background-color 0.3s,
+    opacity 0.3s;
   text-decoration: none;
   display: inline-block;
 }
@@ -87,8 +88,10 @@ body {
   height: 90vh;
   min-height: 550px;
   margin-top: -70px;
-  background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.6)),
-    url("https://maxmonitoramento.com.br/wp-content/uploads/2023/11/image-28.png") no-repeat center center/cover;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.6)),
+    url('https://maxmonitoramento.com.br/wp-content/uploads/2023/11/image-28.png') no-repeat center
+      center/cover;
 
   background-size: cover;
   background-position: center center;
@@ -101,7 +104,6 @@ body {
 /* ================================================= */
 /* 2. NAVEGAÇÃO (HEADER) E MENU HAMBÚRGUER (CORRIGIDO) */
 /* ================================================= */
-
 
 .header-fixed-wrapper {
   position: fixed;
@@ -120,7 +122,6 @@ body {
   padding: 15px 0;
   width: 100%;
 }
-
 
 .logo {
   display: flex;
@@ -275,7 +276,6 @@ body {
 }
 
 @media (max-width: 991px) {
-
   .mobile-nav {
     display: none;
     position: fixed;
@@ -351,7 +351,6 @@ body {
 
 /* TELAS MUITO PEQUENAS (<= 768px) */
 @media (max-width: 768px) {
-
   .hero-content {
     align-items: center;
     text-align: center;
@@ -616,7 +615,6 @@ body {
   }
 }
 
-
 .benefits-section {
   background-color: #ffffff;
   color: #333;
@@ -736,7 +734,6 @@ body {
   clear: left;
 }
 
-
 /* ========================================= */
 /* --- SERVIÇOS (SERVICES SECTION) --- */
 /* ========================================= */
@@ -813,7 +810,9 @@ body {
   border-radius: 20px;
   text-decoration: none;
   font-weight: bold;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 .cta-button:hover {
@@ -834,7 +833,7 @@ body {
 /* --- 7. SEÇÃO: CTA MONITORAMENTO (Escuro) --- */
 /* ========================================= */
 .cta-monitoramento-section {
-    background-color: var(--color-dark-bg);
+  background-color: var(--color-dark-bg);
 
   color: #fff;
   overflow: hidden;
@@ -859,7 +858,9 @@ body {
   border-radius: 25px;
   text-decoration: none;
   font-weight: 600;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 .cta-button-dark:hover {
@@ -913,7 +914,9 @@ body {
   border-radius: 25px;
   text-decoration: none;
   font-weight: 600;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 .cta-button-light:hover {
@@ -975,7 +978,6 @@ body {
 
 /* Responsividade */
 @media (max-width: 992px) {
-
   .visual-content-screenshot,
   .visual-content-mobile {
     height: 350px;
@@ -1006,7 +1008,9 @@ body {
   background-color: #fff;
   border: 1px solid #ddd !important;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
   overflow: hidden;
   position: relative;
   padding: 30px !important;
@@ -1077,21 +1081,18 @@ body {
 }
 
 @media (min-width: 1200px) {
-
   .testimonial-col {
     width: calc(25% - 30px);
   }
 }
 
 @media (min-width: 993px) and (max-width: 1199px) {
-
   .testimonial-col {
     width: calc(33.333% - 30px);
   }
 }
 
 @media (max-width: 992px) {
-
   .testimonial-col {
     width: calc(50% - 30px);
   }
@@ -1102,8 +1103,6 @@ body {
 }
 
 @media (max-width: 768px) {
-
-
   .testimonial-col {
     width: calc(85% - 30px);
   }
@@ -1117,11 +1116,11 @@ body {
 
 .footer-cta-boxes {
   padding: 5rem 0;
-    background-color: var(--color-dark-bg);
+  background-color: var(--color-dark-bg);
 }
 
 .cta-box {
-    background-color: var(--color-dark-bg);
+  background-color: var(--color-dark-bg);
 
   padding: 2rem;
   border-radius: 10px;
@@ -1165,13 +1164,11 @@ footer a:hover {
   margin-right: 1rem;
 }
 
-
 /* ==============================================
    CÓDIGO ADICIONADO: Correções para Layout Mobile
   ==============================================
 */
 @media (max-width: 991px) {
-
   /* --- Seção "O que fazemos" --- */
   .kpi-block {
     flex-direction: column;
@@ -1261,7 +1258,6 @@ footer a:hover {
   }
 }
 
-
 /*ajustes*/
 .header-fixed-wrapper {
   z-index: 100000;
@@ -1270,24 +1266,23 @@ footer a:hover {
 @media (min-width: 2000px) {
   .hero-section {
     height: 100vh;
-    max-height: 45rem; 
+    max-height: 45rem;
 
-      background-color: var(--color-dark-bg);
+    background-color: var(--color-dark-bg);
 
-    background-image: 
+    background-image:
       linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.6)),
-      url("https://maxmonitoramento.com.br/wp-content/uploads/2023/11/image-28.png");
+      url('https://maxmonitoramento.com.br/wp-content/uploads/2023/11/image-28.png');
 
     background-repeat: no-repeat;
     background-position: top center;
-    
-    background-size: 100rem auto; 
+
+    background-size: 100rem auto;
   }
 }
 @view-transition {
   navigation: auto;
 }
-
 
 ::view-transition-old(root) {
   animation: deslizar-para-fora 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -1297,21 +1292,20 @@ footer a:hover {
   animation: deslizar-para-dentro 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
-
 @keyframes deslizar-para-fora {
   to {
-    opacity: 0; 
-    transform: translateX(-50px); 
+    opacity: 0;
+    transform: translateX(-50px);
   }
 }
 
 @keyframes deslizar-para-dentro {
   from {
-    opacity: 0; 
-    transform: translateX(50px); 
+    opacity: 0;
+    transform: translateX(50px);
   }
   to {
-    opacity: 1; 
+    opacity: 1;
     transform: translateX(0);
   }
 }

@@ -82,12 +82,10 @@ function listarAlertas(req, res) {
               '\nHouve um erro ao buscar os alertas! Erro: ',
               erro.sqlMessage || erro.message,
             );
-            res
-              .status(500)
-              .json({
-                erro: 'Erro interno do servidor ao buscar alertas',
-                detalhes: erro.sqlMessage || erro.message,
-              });
+            res.status(500).json({
+              erro: 'Erro interno do servidor ao buscar alertas',
+              detalhes: erro.sqlMessage || erro.message,
+            });
           });
       })
       .catch(function (erro) {
@@ -95,12 +93,10 @@ function listarAlertas(req, res) {
           '\nHouve um erro ao buscar a fkEmpresa! Erro: ',
           erro.sqlMessage || erro.message,
         );
-        res
-          .status(500)
-          .json({
-            erro: 'Erro interno do servidor ao buscar empresa',
-            detalhes: erro.sqlMessage || erro.message,
-          });
+        res.status(500).json({
+          erro: 'Erro interno do servidor ao buscar empresa',
+          detalhes: erro.sqlMessage || erro.message,
+        });
       });
   } catch (e) {
     return res.status(400).send(e.message);
@@ -152,12 +148,10 @@ function exportarAlertas(req, res) {
           '\nHouve um erro ao exportar os alertas! Erro: ',
           erro.sqlMessage || erro.message,
         );
-        res
-          .status(500)
-          .json({
-            erro: 'Erro interno do servidor ao exportar alertas',
-            detalhes: erro.sqlMessage || erro.message,
-          });
+        res.status(500).json({
+          erro: 'Erro interno do servidor ao exportar alertas',
+          detalhes: erro.sqlMessage || erro.message,
+        });
       });
   } catch (e) {
     return res.status(400).send(e.message);

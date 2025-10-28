@@ -1,6 +1,6 @@
 :root {
-  --verde_claro: #BADCDA;
-  --verde_obscuro: #0C8186;
+  --verde_claro: #badcda;
+  --verde_obscuro: #0c8186;
   --largura-menu: 250px;
 }
 
@@ -8,7 +8,8 @@
 /* -------------------------------------- */
 
 * {
-  transition: background-color 0.2s ease-in-out,
+  transition:
+    background-color 0.2s ease-in-out,
     color 0.2s ease-in-out,
     transform 0.2s ease-out;
 }
@@ -132,7 +133,6 @@ header h2 {
   align-items: center;
 }
 
-
 /* -------------------------------------- */
 /* 4. VIEW TRANSITION API KEYFRAMES */
 /* -------------------------------------- */
@@ -141,7 +141,6 @@ header h2 {
   navigation: auto;
 }
 
-
 ::view-transition-old(root) {
   animation: deslizar-para-fora 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
@@ -149,7 +148,6 @@ header h2 {
 ::view-transition-new(root) {
   animation: deslizar-para-dentro 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
-
 
 @keyframes deslizar-para-fora {
   to {
@@ -194,10 +192,7 @@ header h2 {
   margin-right: -20px;
 }
 
-
-
 @media (min-width: 2000px) {
-
   .padding_main {
     padding-top: 1.5rem;
     padding-left: 0rem;
@@ -206,7 +201,6 @@ header h2 {
     max-width: 1600px;
     flex-grow: 0 !important;
     overflow: hidden;
-
   }
 
   .header-top {
