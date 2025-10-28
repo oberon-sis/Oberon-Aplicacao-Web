@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Usúario - OBERON</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/body.css">
+    <link rel="stylesheet" href="../component/menu/Menu.css">
+    <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
+    <link rel="stylesheet" href="../css/maquinas.css">
+    <link rel="stylesheet" href="../component/notificao/Notificaocao.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+
+<body class="d-flex w-100 h-100">
+
+    <div id="menu-container"></div>
+
+    <main class="content flex-grow-1 padding_main main">
+        <button class="btn btn-secondary d-md-none mb-4 " type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar" style="margin-left: 1rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
+                viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+            </svg>
+        </button>
+                <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
+                <h2 class="text-black">Gerenciamento de Usúarios</h2>
+        </header>
+
+        <div class="container-fluid py-4">
+
+            <div class="d-flex flex-column flex-md-row align-items-md-center mb-4 gap-2 div_pesquisa">
+
+                <div style="max-width: 450px;" 
+                        class="input-group flex-grow-1 div_justify">
+                    <input required="required" type="text"
+                        class="form-control border-start-0  shadow-none input_pesquisa"
+                        placeholder="Buscar por nome ou email">
+
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Nome
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end hover_verde">
+                        <li>
+                            <a class="dropdown-item" href="#" id="nome_busca">Nome</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#" id="email_busca">E-mail</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="d-flex gap-2 flex-grow-1 justify-content-end div_pesquisa div_botoes">
+
+                    <button onmouseenter="mudar_icone_on('icone_nova')" onmouseleave="mudar_icone_lv('icone_nova')"
+                        data-bs-toggle="modal" data-bs-target="#modalCadastrarMaquina"
+                        class="btn fw-semibold border flex-fill flex-md-grow-0 verde_claro botao_configuracao botao_nova_maquina"
+                        style=" white-space: nowrap;">
+                        <img src="../assets/svg/plus_preto.svg" data-hover-src="../assets/svg/plus_white.svg" alt=""
+                            class="icone_botao" id="icone_nova">
+                        <i class=" me-2 espaco_branco "></i>Novo Usúario
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <div class="table-responsive shadow-sm border rounded div_tabela">
+            <table class="table table-hover mb-0" <thead>
+                <tr>
+                    <th scope="col" class="py-3">ID</th>
+                    <th scope="col" class="py-3">Nome <i class="bi bi-arrow-down-up ms-1"></i>
+                    </th>
+                    <th scope="col" class="py-3">CPF</th>
+                    <th scope="col" class="py-3">E-mail</th>
+                    <th scope="col" class="py-3">Função</th>
+                    <th scope="col" class="py-3">Atualizar</th>
+                    <th scope="col" class="py-3">Excluir</th>
+                    <!-- <th scope="col" class="py-3">Ver Mais</th> -->
+                </tr>
+                </thead>
+                <tbody id="Conteudo_real">
+                    <tr>
+                        <td></td>
+                        <td><i class="bi bi-person-circle me-2"></i></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><span class="opcao_crud text-primary" data-bs-toggle="modal" onclick="getUsuariobyID(1)"
+                                data-bs-target="#modalAtualizarMaquina">
+                                <img src="../assets/svg/atualizar_blue.svg" alt="">
+                                Atualizar<i class="bi bi-arrow-clockwise"></i></span>
+                        </td>
+                        <td><span class="opcao_crud text-danger" onclick="ExcluirUsuario()">
+                                <img src="../assets/svg/excluir_red.svg" alt="">
+                                Excluir<i class="bi bi-trash"></i></span>
+                        </td>
+                        <!-- <td><span class="opcao_crud detalhes">
+                                <img src="../assets/svg/eye_black.svg" alt="">
+                                Detalhes<i class="bi bi-trash"></i></span>
+                        </td> -->
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><i class="bi bi-person-circle me-2"></i></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><span class="opcao_crud text-primary" data-bs-toggle="modal" onclick="getUsuariobyID(2)"
+                                data-bs-target="#modalAtualizarMaquina">
+                                <img src="../assets/svg/atualizar_blue.svg" alt="">
+                                Atualizar<i class="bi bi-arrow-clockwise"></i></span>
+                        </td>
+                        <td><span class="opcao_crud text-danger" onclick="ExcluirUsuario()">
+                                <img src="../assets/svg/excluir_red.svg" alt="">
+                                Excluir<i class="bi bi-trash"></i></span>
+                        </td>
+                        <!-- <td><span class="opcao_crud detalhes">
+                                <img src="../assets/svg/eye_black.svg" alt="">
+                                Detalhes<i class="bi bi-trash"></i></span>
+                        </td> -->
+                    </tr>
+                </tbody>
+                <tbody id="Estrutura_esqueleto_carregamento">
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
+                    </tr>
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
+                        <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
+                    </tr>
+                </tbody>
+                </span>
+                </tbody>
+            </table>
+        </div>
+
+        <nav class="d-flex justify-content-center mt-3 div_paginas">
+            <ul class="pagination pagination-sm">
+            </ul>
+        </nav>
+
+
+
+
+    </main>
+    <div class="modal fade" id="modalCadastrarMaquina" tabindex="-1" aria-labelledby="modalCadastrarMaquinaLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content shadow-lg">
+                <div class="modal-header border-0 pb-0 d-block text-center">
+                    <h5 class="modal-title fs-4 fw-bold" id="modalCadastrarMaquinaLabel">Cadastrar Usuário</h5>
+                </div>
+
+                <div class="modal-body pt-3">
+                    <form id="formCadastrarMaquina">
+
+                        <div id="step-1">
+
+                            <h6 class="fs-5 fw-bold mb-4">Identificação do Usúario</h6>
+
+                            <div class="mb-3">
+                                <label for="hostname" class="form-label text-muted">Nome</label>
+                                <input required="required" type="text" class="form-control shadow-none input_pesquisa"
+                                    id="nome_input" placeholder="Insira o nome completo">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="modelo" class="form-label text-muted">CPF</label>
+                                <input required="required" type="text" class="form-control shadow-none input_pesquisa"
+                                    id="cpf_input" placeholder="Insira CPF(Cadastro de Pessoa Fisica)">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="modelo" class="form-label text-muted">E-mail</label>
+                                <input required="required" type="text" class="form-control shadow-none input_pesquisa"
+                                    id="email_input" placeholder="Insira o email de acesso">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="mac" class="form-label text-muted">Senha</label>
+                                <input required="required" type="text" class="form-control shadow-none input_pesquisa"
+                                    id="senha_input" placeholder="Insira a senha">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="tipo_usuario_select_tipos">Tipo de usuário</label>
+                                <select class="tipo_usuario_select_tipos" required>
+                                    <option value="" disabled selected>Carregando tipos...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-center border-0 p-4">
+                    <button type="button" id="btn_cadastrar" class="btn fw-bold px-5 verde_claro botao_configuracao"
+                        onclick="cadastrar()">Cadastrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modalAtualizarMaquina" tabindex="-1" aria-labelledby="modalAtualizarMaquinaLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content shadow-lg">
+                <div class="modal-header border-0 pb-0 d-block text-center mb-4">
+                    <h5 class="modal-title fs-4 fw-bold" id="modalAtualizarMaquinaLabel">Atualizar Dados Usúario</h5>
+                </div>
+
+                <div class="modal-body pt-0">
+                    <form id="formAtualizarMaquina">
+
+                        <div class="row">
+                            <div class="col-md-6 border-end">
+                                <h6 class="fs-5 fw-bold mb-3">Dados Atuais</h6>
+
+                                <div id="dadosAtuaisIdentificacao">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted small mb-0">Nome</label>
+                                        <p class="fw-bold" id="nome_atual"></p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted small mb-0">E-mail</label>
+                                        <p class="fw-bold" id="email_atual"></p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted small mb-0">Tipo de Usúario</label>
+                                        <p class="fw-bold" id="tipoUsuario_atual"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="step-update-1">
+                                    <h6 class="fs-5 fw-bold mb-3">Atualização Dados Pessoais</h6>
+                                    <div class="mb-3">
+                                        <label for="nome_upd" class="form-label text-muted">Nome(apelido)</label>
+                                        <input required="required" type="text"
+                                            class="form-control shadow-none input_pesquisa" id="ipt_nome"
+                                            placeholder="ex: Roberto lima...">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="modelo_upd" class="form-label text-muted">Email</label>
+                                        <input required="required" type="text"
+                                            class="form-control shadow-none input_pesquisa" id="ipt_email"
+                                            placeholder="Ex: robertolima@gmail.com ">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="mac_upd" class="form-label text-muted">Senha</label>
+                                        <input required="required" type="text"
+                                            class="form-control shadow-none input_pesquisa" id="ipt_senha"
+                                            placeholder="Ex: Nova senha">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="mac_upd" class="form-label text-muted">Função</label>
+                                        <label for="tipo_usuario_select_tipos">Tipo de Usuário</label>
+                                        <select class="tipo_usuario_select_tipos">
+                                            <option value="" disabled selected>Carregando...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer justify-content-center border-0 p-4">
+                    <button type="button" id="btnVoltarUpd" class="btn  fw-bold px-5 botao_branco botao_configuracao"
+                        style="display: none;">Voltar Atrás</button>
+                    <button type="button" id="btnAvancarUpd" class="btn fw-bold px-5 verde_claro botao_configuracao"
+                        onclick="salvarEdicao(1)">Finalizar</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
+<script src="../component/menu/Menu.js"></script>
+<script src="../js/gerenciamentoUsuario.js"></script>
+<script src="../component/notificao/Notificacao.js"></script>

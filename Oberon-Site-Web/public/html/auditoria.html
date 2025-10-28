@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log de Auditoria de Usuários - OBERON</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/body.css">
+    <link rel="stylesheet" href="../component/menu/Menu.css">
+    <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
+    <link rel="stylesheet" href="../css/maquinas.css">
+    <link rel="stylesheet" href="../component/notificao/Notificaocao.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .skeleton-row td {
+            padding: 1rem 0.5rem;
+        }
+
+        .filtro-container {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .form-label-custom {
+            font-weight: 600;
+            margin-bottom: .5rem;
+            color: #495057;
+        }
+
+        .btn-export-csv {
+            background-color: #BADCDA;
+            border-color: #BADCDA;
+            color: #000;
+            font-weight: 600;
+        }
+
+        .btn-export-csv:hover {
+            background-color: #A0C5C2;
+            border-color: #A0C5C2;
+            color: #000;
+        }
+
+        .page-header-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-actions-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-grow: 1;
+            justify-content: flex-end;
+            max-width: 600px;
+        }
+
+        .input-group-search {
+            flex-grow: 1;
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .input-group-search .form-control {
+            border-right: none;
+        }
+
+        .btn-export-csv {
+            height: 38px;
+            white-space: nowrap;
+        }
+
+        .log-cell {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+        }
+
+        .descricao-cell {
+            max-width: 300px;
+            white-space: normal;
+        }
+
+        /* Aumentando a largura para acomodar mais texto */
+
+        .table-log-row {
+            transition: background-color 0.2s;
+        }
+
+        .detail-cell {
+            cursor: pointer;
+            color: #385e5c;
+            font-weight: 600;
+            text-decoration: underline;
+            white-space: nowrap;
+        }
+
+        .detail-cell:hover {
+            color: #2b4543;
+        }
+
+        .modal-data-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+
+        .text-data-antiga {
+            color: #dc3545;
+        }
+
+        .text-data-nova {
+            color: #198754;
+        }
+    </style>
+</head>
+
+<body class="d-flex w-100 h-100">
+
+    <div id="menu-container">
+    </div>
+
+    <main class="content flex-grow-1 padding_main main">
+        <button class="btn btn-secondary d-md-none mb-4 " type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar" style="margin-left: 1rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
+                viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+            </svg>
+        </button>
+
+        <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
+            <h2 class="text-black mb-0">Log de Auditoria de Usuários </h2>
+
+            <div class="search-actions-group">
+
+                <button class="btn btn-export-csv">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-file-earmark-arrow-down-fill me-1" viewBox="0 0 16 16">
+                        <path
+                            d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1.99 1.99 0 0 0 13.707 4L10 .293A1.99 1.99 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1m-1.293 6.354l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L10.5 10.293V8.5a.5.5 0 0 0-1 0v1.793l-1.146-1.147a.5.5 0 0 0-.708.708" />
+                    </svg>
+                    Exportar CSV
+                </button>
+            </div>
+        </header>
+
+
+        <div class="container-fluid p-0">
+            <div class="filtro-container border">
+                <form class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label for="dropdownFuncionario" class="form-label-custom">Funcionário</label>
+
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary dropdown-toggle w-100 shadow-none text-start"
+                                type="button" data-bs-toggle="dropdown" aria-expanded="false" id="dropdownFuncionario">
+                                <span id="valor_funcionario_selecionado">Todos os Funcionários</span>
+                            </button>
+
+                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownFuncionario">
+                                <li><a class="dropdown-item dropdown-funcionario-item" href="#" data-value="todos">Todos
+                                        os Funcionários</a></li>
+                                <li><a class="dropdown-item dropdown-funcionario-item" href="#" data-value="1">João
+                                        Silva</a></li>
+                                <li><a class="dropdown-item dropdown-funcionario-item" href="#" data-value="2">Maria
+                                        Rodrigues</a></li>
+                                <li><a class="dropdown-item dropdown-funcionario-item" href="#" data-value="3">Admin
+                                        Global</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="dropdownTipoMudanca" class="form-label-custom">Tipo de Mudança</label>
+
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary dropdown-toggle w-100 shadow-none text-start"
+                                type="button" data-bs-toggle="dropdown" aria-expanded="false" id="dropdownTipoMudanca">
+                                <span id="valor_tipo_selecionado">Todos os Tipos</span>
+                            </button>
+
+                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownTipoMudanca">
+                                <li><a class="dropdown-item dropdown-tipo-mudanca-item" href="#"
+                                        data-value="todos">Todos os Tipos</a></li>
+                                <li><a class="dropdown-item dropdown-tipo-mudanca-item" href="#"
+                                        data-value="INSERT">Inclusão</a></li>
+                                <li><a class="dropdown-item dropdown-tipo-mudanca-item" href="#"
+                                        data-value="UPDATE">Alteração</a></li>
+                                <li><a class="dropdown-item dropdown-tipo-mudanca-item" href="#"
+                                        data-value="DELETE">Exclusão</a></li>
+                                <li><a class="dropdown-item dropdown-tipo-mudanca-item" href="#"
+                                        data-value="CONFIG">Configuração</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="filtroDataInicio" class="form-label-custom">Data Início</label>
+                        <div class="input-group date-picker">
+                            <input type="text" class="form-control shadow-none" id="filtroDataInicio"
+                                placeholder="dd/mm/aaaa">
+                            <span class="input-group-text border-start-0" id="btnDataInicio">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-calendar" viewBox="0 0 16 16">
+                                    <path
+                                        d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="filtroDataFim" class="form-label-custom">Data Fim</label>
+                        <div class="input-group date-picker">
+                            <input type="text" class="form-control shadow-none" id="filtroDataFim"
+                                placeholder="dd/mm/aaaa">
+                            <span class="input-group-text border-start-0" id="btnDataFim">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-calendar" viewBox="0 0 16 16">
+                                    <path
+                                        d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
+                                </svg>
+                            </span>
+                            <div class="form-check form-check-inline align-self-center ms-2 mb-0">
+                                <input class="form-check-input" type="checkbox" id="chkDataFim" value="true">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100"
+                            style="background-color: #0b2d49; border-color: #0b2d49;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-funnel-fill me-1" viewBox="0 0 16 16">
+                                <path
+                                    d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.618V13.5a.5.5 0 0 1-.3.45l-2 1a.5.5 0 0 1-.4 0l-2-1a.5.5 0 0 1-.3-.45V8.618L1.628 3.834A.5.5 0 0 1 1.5 3.5z" />
+                            </svg>
+                            Aplicar Filtro
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="table-responsive shadow-sm border rounded div_tabela">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr class="table-success" style="--bs-table-bg-type: none; background-color: #BADCDA;">
+                        <th scope="col" class="py-3">Horário <i class="bi bi-arrow-down-up ms-1"></i></th>
+                        <th scope="col" class="py-3">Ação</th>
+                        <th scope="col" class="py-3">Descrição</th>
+                        <th scope="col" class="py-3">Tabela Afetada</th>
+                        <th scope="col" class="py-3">ID Afetado</th>
+                        <th scope="col" class="py-3">Usuário Responsável</th>
+                        <th scope="col" class="py-3">Detalhes</th>
+                    </tr>
+                </thead>
+                <tbody id="Conteudo_real">
+                    <tr class="table-log-row">
+                        <td class="log-cell">25/10/2025 22:15:00</td>
+                        <td class="log-cell text-primary fw-semibold">ALTERAÇÃO</td>
+                        <td class="descricao-cell">Alteração de nome e MAC Address da máquina.</td>
+                        <td class="log-cell">Máquinas</td>
+                        <td class="log-cell">94</td>
+                        <td class="log-cell">joao.silva</td>
+                        <td class="detail-cell" data-bs-toggle="modal" data-bs-target="#logDetailModal"
+                            onclick="showLogDetails('Alteração de Identificação da Máquina', 'Nome: Máquina-094; Mac: 00:1A:2B:3C:4D:5E', 'Nome: Máquina-Sala-A; Mac: 00:1A:2B:3C:4D:99')">
+                            <i class="bi bi-eye-fill me-1"></i> Ver Detalhes
+                        </td>
+                    </tr>
+
+                    <tr class="table-log-row">
+                        <td class="log-cell">25/10/2025 22:10:30</td>
+                        <td class="log-cell text-success fw-semibold">INCLUSÃO</td>
+                        <td class="descricao-cell">Novo cadastro de máquina "Servidor-DB" no sistema.</td>
+                        <td class="log-cell">Máquinas</td>
+                        <td class="log-cell">101</td>
+                        <td class="log-cell">maria.rodrigues</td>
+                        <td class="detail-cell" data-bs-toggle="modal" data-bs-target="#logDetailModal"
+                            onclick="showLogDetails('Inclusão de Novo Equipamento', 'N/A', 'Nome: Servidor-DB\nMac: FF:EE:DD:CC:BB:AA\nSO: Linux Ubuntu 22.04\nParâmetros: CPU 90%, RAM 95%')">
+                            <i class="bi bi-eye-fill me-1"></i> Ver Detalhes
+                        </td>
+                    </tr>
+
+                    <tr class="table-log-row">
+                        <td class="log-cell">25/10/2025 21:50:12</td>
+                        <td class="log-cell text-info fw-semibold">CONFIGURAÇÃO</td>
+                        <td class="descricao-cell">Atualização dos limites de alerta padrão da empresa.</td>
+                        <td class="log-cell">Alertas Padrão</td>
+                        <td class="log-cell">1</td>
+                        <td class="log-cell">admin.global</td>
+                        <td class="detail-cell" data-bs-toggle="modal" data-bs-target="#logDetailModal"
+                            onclick="showLogDetails('Configuração de Alertas Padrão da Empresa', 'CPU: 80%\nRAM: 80%\nDisco: 90%\nRede: 100 Mbps', 'CPU: 85%\nRAM: 90%\nDisco: 95%\nRede: 200 Mbps')">
+                            <i class="bi bi-eye-fill me-1"></i> Ver Detalhes
+                        </td>
+                    </tr>
+
+                    <tr class="table-log-row">
+                        <td class="log-cell">25/10/2025 20:45:00</td>
+                        <td class="log-cell text-danger fw-semibold">EXCLUSÃO</td>
+                        <td class="descricao-cell">Remoção da máquina antiga do Laboratório B.</td>
+                        <td class="log-cell">Máquinas</td>
+                        <td class="log-cell">55</td>
+                        <td class="log-cell">joao.silva</td>
+                        <td class="detail-cell" data-bs-toggle="modal" data-bs-target="#logDetailModal"
+                            onclick="showLogDetails('Exclusão de Equipamento', 'Nome: LabB-PC-55\nMac: AA:BB:CC:DD:EE:FF\nLocal: Laboratório B', 'N/A: Registro removido do sistema.')">
+                            <i class="bi bi-eye-fill me-1"></i> Ver Detalhes
+                        </td>
+                    </tr>
+                </tbody>
+                <!-- <tbody id="Estrutura_esqueleto_carregamento">
+                    <tr class="skeleton-row">
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text short"></span></td>
+                        <td><span class="skeleton-text medium"></span></td>
+                    </tr>
+                </tbody> -->
+            </table>
+        </div>
+
+        <nav class="d-flex justify-content-center mt-3 div_paginas" id="paginazacao">
+            <ul class="pagination pagination-sm">
+                <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
+                <li class="page-item active_pagina"><a class="page-link" href="#">1</a></li>
+                <!-- <li class="page-item"><a class="page-link" href="#">2</a></li> -->
+                <!-- <li class="page-item"><a class="page-link" href="#">3</a></li> -->
+                <!-- <li class="page-item disabled"><span class="page-link">...</span></li> -->
+                <!-- <li class="page-item"><a class="page-link" href="#">11</a></li> -->
+                <li class="page-item disabled" ><a class="page-link" href="#">Seguinte</a></li>
+            </ul>
+        </nav>
+    </main>
+
+    <div class="modal fade" id="logDetailModal" tabindex="-1" aria-labelledby="logDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logDetailModalLabel">Detalhes da Ação: <span id="modalActionTitle"
+                            class="fw-bold"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-3 text-muted" id="modalDescription">Detalhes dos valores antes e depois da alteração.
+                    </p>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-data-antiga fw-bold">Valor(es) Antes da Mudança</h6>
+                            <div class="modal-data-block">
+                                <pre class="mb-0 text-data-antiga" id="modalValorAntigo"></pre>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="text-data-nova fw-bold">Valor(es) Após a Mudança</h6>
+                            <div class="modal-data-block">
+                                <pre class="mb-0 text-data-nova" id="modalValorNovo"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Funções para a usabilidade
+
+        // Função para preencher e exibir o modal
+        function showLogDetails(title, valorAntigo, valorNovo) {
+            document.getElementById('modalActionTitle').textContent = title;
+
+            let descriptionText = '';
+            if (valorAntigo.includes('N/A') && !valorNovo.includes('N/A')) {
+                descriptionText = 'Registro de Inclusão. O valor antigo é N/A.';
+            } else if (!valorAntigo.includes('N/A') && valorNovo.includes('N/A')) {
+                descriptionText = 'Registro de Exclusão. O valor novo é N/A.';
+            } else {
+                descriptionText = 'Comparação dos valores antes e depois da alteração.';
+            }
+            document.getElementById('modalDescription').textContent = descriptionText;
+
+            // Usamos textContent para preencher o <pre> e respeitar as quebras de linha (\n)
+            document.getElementById('modalValorAntigo').textContent = valorAntigo;
+            document.getElementById('modalValorNovo').textContent = valorNovo;
+        }
+
+        // Funções mock para o dropdown de pesquisa (mantidas)
+        function atualizar_parametro_lista_novo(param) {
+            let texto = '';
+            switch (param) {
+                case 1:
+                    texto = 'Usuário';
+                    break;
+                case 2:
+                    texto = 'Ação';
+                    break;
+                case 3:
+                    texto = 'Tabela Afetada';
+                    break;
+                case 4:
+                    texto = 'ID Afetado';
+                    break;
+            }
+            document.getElementById('valor_pesquisa_novo').textContent = texto;
+        }
+    </script>
+    <script src="../component/menu/Menu.js"></script>
+    <script src="../js/log_auditoria.js"></script>
+
+</body>
+
+</html>
