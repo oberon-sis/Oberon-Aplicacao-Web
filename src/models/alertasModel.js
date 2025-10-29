@@ -32,21 +32,21 @@ function construirClausulaWhere(tipoFiltro, termoPesquisa, dataInicio, dataFim) 
 function getFkEmpresa(idFuncionario) {
   console.log('[ALERTA MODEL] Buscando fkEmpresa para o funcionário:', idFuncionario);
   var instrucaoSql = `
- SELECT fkEmpresa FROM Funcionario WHERE idFuncionario = ${idFuncionario};
-`;
+    SELECT fkEmpresa FROM Funcionario WHERE idFuncionario = ${idFuncionario};
+  `;
   return database.executar(instrucaoSql);
 }
+
 const selectAlertasBase = `
     SELECT 
         A.idAlerta,
         VHA.motivoAlerta AS descricao,
         VHA.nivelAlerta AS nivel,
-        VHA.horarioRegistro AS horarioInicio,
-        NULL AS horarioFinal,
+        VHA.horarioRegistro AS horarioRegistro, -- Mantido apenas o Registro
         VHA.maquinaAfetada AS nomeMaquina,
         VHA.tipoComponente,
-        TC.funcaoMonitorar, 
-        TIMESTAMPDIFF(SECOND, VHA.horarioRegistro, NOW()) AS duracaoSegundos
+        TC.funcaoMonitorar
+        -- REMOVIDOS: horarioFinal e duracaoSegundos
     FROM vw_HistoricoAlertasAtivos AS VHA
     JOIN Alerta AS A ON VHA.fkRegistro = A.fkRegistro 
     JOIN Registro AS R ON A.fkRegistro = R.idRegistro
@@ -64,12 +64,12 @@ function verAlertas(fkEmpresa, pagina, tipoFiltro, termoPesquisa, dataInicio, da
   console.log(`[ALERTA MODEL] Buscando alertas para a empresa ${fkEmpresa}`);
 
   var instrucaoSql = `
- ${selectAlertasBase}
- WHERE M.fkEmpresa = ${fkEmpresa} 
- ${clausulaWhere} 
- ORDER BY VHA.horarioRegistro DESC
-  LIMIT ${limite} OFFSET ${offset};
-`;
+    ${selectAlertasBase}
+    WHERE M.fkEmpresa = ${fkEmpresa} 
+    ${clausulaWhere} 
+    ORDER BY VHA.horarioRegistro DESC
+    LIMIT ${limite} OFFSET ${offset};
+  `;
 
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
   return database.executar(instrucaoSql);
@@ -87,8 +87,8 @@ function contarTotalAlertas(fkEmpresa, tipoFiltro, termoPesquisa, dataInicio, da
     JOIN Componente AS C ON R.fkComponente = C.idComponente
     JOIN Maquina AS M ON C.fkMaquina = M.idMaquina
     WHERE M.fkEmpresa = ${fkEmpresa}
- ${clausulaWhere};
- `;
+    ${clausulaWhere};
+  `;
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
   return database.executar(instrucaoSql);
 }
@@ -105,11 +105,11 @@ function obterTodosAlertasParaExportacao(
     `[ALERTA MODEL] Obtendo TODOS os alertas para exportação (sem paginação) para a empresa ${fkEmpresa}`,
   );
   var instrucaoSql = `
- ${selectAlertasBase}
- WHERE M.fkEmpresa = ${fkEmpresa}
- ${clausulaWhere} 
- ORDER BY VHA.horarioRegistro DESC;
- `;
+    ${selectAlertasBase}
+    WHERE M.fkEmpresa = ${fkEmpresa}
+    ${clausulaWhere} 
+    ORDER BY VHA.horarioRegistro DESC;
+  `;
   console.log('Executando a instrução SQL de EXPORTAÇÃO: \n' + instrucaoSql);
   return database.executar(instrucaoSql);
 }

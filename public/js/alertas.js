@@ -9,30 +9,18 @@ function mudarTipoFiltro(novoTipo, textoBotao) {
   carregarAlertas(1);
 }
 
-function formatarDuracao(segundos) {
-  if (segundos === null || isNaN(segundos)) return 'Ativo';
-  const horas = Math.floor(segundos / 3600);
-  const minutos = Math.floor((segundos % 3600) / 60);
-  const secs = Math.floor(segundos % 60);
-  let duracao = [];
-  if (horas > 0) duracao.push(`${horas}h`);
-  if (minutos > 0) duracao.push(`${minutos}min`);
-  if (secs > 0 || duracao.length === 0) duracao.push(`${secs}s`);
-  return duracao.join(' ');
-}
-
 function renderizarTabela(alertas) {
   const tbody = document.getElementById('Conteudo_real');
   tbody.innerHTML = '';
   if (alertas.length === 0) {
     tbody.innerHTML =
-      '<tr><td colspan="8" class="text-center py-4">Nenhum alerta encontrado.</td></tr>';
+      '<tr><td colspan="6" class="text-center py-4">Nenhum alerta encontrado.</td></tr>';
     return;
   }
   alertas.forEach((alerta) => {
-    const dataInicio = alerta.horarioInicio ? alerta.horarioInicio.replace(' ', ' às ') : 'N/A';
-    const dataFinal = alerta.horarioFinal ? alerta.horarioFinal.replace(' ', ' às ') : 'Ativo';
-    const duracaoFormatada = formatarDuracao(alerta.duracaoSegundos);
+    const dataHoraRegistro = alerta.horarioRegistro
+      ? alerta.horarioRegistro.replace(' ', ' às ')
+      : 'N/A';
     let criticidadeClass = 'text-secondary';
     switch (alerta.nivel.toUpperCase()) {
       case 'CRITICO':
@@ -42,25 +30,21 @@ function renderizarTabela(alertas) {
         criticidadeClass = 'text-warning fw-bold';
         break;
       case 'OCIOSO':
-        criticidadeClass = 'text-success';
-        break;
       default:
         criticidadeClass = 'text-success';
         break;
     }
 
     const row = `
-            <tr>
-                <td>${alerta.descricao}</td>
-                <td>${alerta.tipoComponente}</td>
-                <td>${dataInicio}</td>
-                <td>${dataFinal}</td>
-                <td>${alerta.funcaoMonitorar}</td>
-                <td>${duracaoFormatada}</td>
-                <td class="${criticidadeClass}">${alerta.nivel}</td>
-                <td>${alerta.nomeMaquina}</td>
-            </tr>
-        `;
+      <tr>
+        <td>${alerta.descricao}</td>
+        <td>${alerta.tipoComponente}</td>
+        <td>${alerta.funcaoMonitorar}</td>
+        <td class="${criticidadeClass}">${alerta.nivel}</td>
+        <td>${alerta.nomeMaquina}</td>
+        <td>${dataHoraRegistro}</td> 
+      </tr>
+`;
     tbody.innerHTML += row;
   });
 }
@@ -112,8 +96,8 @@ function renderizarPaginacao(totalPaginas, paginaAtual) {
 
 function montarUrlFiltros(idFuncionario, pagina) {
   const termoPesquisa = document.getElementById('input_pesquisa_alerta').value || '';
-  const dataInicio = document.getElementById('input_data_inicio').value || 'vazio';
-  const dataFim = document.getElementById('input_data_fim').value || 'vazio';
+  const dataInicio = 'vazio';
+  const dataFim =   'vazio';
   const termoEncoded = encodeURIComponent(termoPesquisa === '' ? 'vazio' : termoPesquisa);
   const tipoEncoded = encodeURIComponent(tipoFiltro);
   const inicioEncoded = encodeURIComponent(dataInicio);
