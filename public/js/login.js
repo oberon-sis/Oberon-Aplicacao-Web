@@ -3,8 +3,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
   const togglePasswordButton = document.querySelector('.password-toggle');
-  const divMensagem = document.getElementById('mensagem-validacao');
-  let mensagemTimeout;
+  function exibirToast(icone, texto) {
+    const COR_DE_FUNDO = '#1a1a1a';
+    const COR_DO_ICONE = 'white';
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      background: COR_DE_FUNDO,
+      iconColor: COR_DO_ICONE,
+      color: COR_DO_ICONE,
+
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      },
+    });
+    Toast.fire({
+      icon: icone,
+      title: texto,
+    });
+  }
   togglePasswordButton.addEventListener('click', () => {
     const img = togglePasswordButton.querySelector('img');
     if (passwordInput.type === 'password') {
@@ -40,28 +61,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!resposta.ok) {
         const erro = await resposta.json();
-        throw new Error(erro.mensagem || 'Falha no login.');
+        throw new new Error(erro.mensagem || 'Falha no login.')();
       }
       const dadosUsuario = await resposta.json();
-      exibirMensagem('sucesso', 'Login realizado com sucesso! Redirecionando...');
+      exibirToast('success', 'Login realizado com sucesso! Redirecionando...');
       sessionStorage.setItem('usuario', JSON.stringify(dadosUsuario));
       setTimeout(() => {
         window.location.href = './home.html';
       }, 1500);
     } catch (erro) {
-      exibirMensagem('erro', erro.message);
+      exibirToast('error', 'Credenciais inválidas');
       botaoSubmit.disabled = false;
       botaoSubmit.textContent = 'ENTRAR';
     }
   });
-
-  function exibirMensagem(tipo, texto) {
-    clearTimeout(mensagemTimeout);
-    divMensagem.textContent = texto;
-    divMensagem.classList.add(`mensagem-${tipo}`);
-    mensagemTimeout = setTimeout(() => {
-      divMensagem.textContent = '';
-      divMensagem.classList.remove('mensagem-erro', 'mensagem-sucesso');
-    }, 1500);
-  }
 });
