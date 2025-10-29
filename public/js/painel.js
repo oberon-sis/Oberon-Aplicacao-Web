@@ -14,7 +14,7 @@ const COLORS = {
 
 const MAQUINAS_DATA = {
   1: {
-    nome: 'ESTACAO-0021',
+    nome: 'Máquina-0021',
     criticidade: 'normal',
     cpu24h: 5,
     cpuPico: 91,
@@ -34,7 +34,7 @@ const MAQUINAS_DATA = {
     so: 'Windows 10 Pro',
   },
   2: {
-    nome: 'ESTACAO-0022',
+    nome: 'Máquina-0022',
     criticidade: 'ocioso',
     cpu24h: 4,
     cpuPico: 25,
@@ -54,7 +54,7 @@ const MAQUINAS_DATA = {
     so: 'Windows 10 Pro',
   },
   3: {
-    nome: 'ESTACAO-0001',
+    nome: 'Máquina-0001',
     criticidade: 'critico',
     cpu24h: 15,
     cpuPico: 93,
@@ -74,7 +74,7 @@ const MAQUINAS_DATA = {
     so: 'Windows 10 Pro',
   },
   4: {
-    nome: 'ESTACAO-0002',
+    nome: 'Máquina-0002',
     criticidade: 'offline',
     cpu24h: 0,
     cpuPico: 0,
@@ -94,7 +94,7 @@ const MAQUINAS_DATA = {
     so: 'Windows 10 Pro',
   },
   5: {
-    nome: 'ESTACAO-0015',
+    nome: 'Máquina-0015',
     criticidade: 'atencao',
     cpu24h: 8,
     cpuPico:77,
@@ -114,7 +114,7 @@ const MAQUINAS_DATA = {
     so: 'Windows 10 Pro',
   },
   6: {
-    nome: 'ESTACAO-0030',
+    nome: 'Máquina-0030',
     criticidade: 'manutencao',
     cpu24h: 0,
     cpuPico: 0,
