@@ -29,6 +29,7 @@ async function esqueciSenha(req, res) {
   // 1. Verificar se o e-mail existe no BD
   try {
     const resultado = await database.executar(`
+            -- ${email}
             SELECT idFuncionario FROM Funcionario WHERE email = '${email}'
         `);
     if (resultado.length > 0) {
@@ -55,9 +56,8 @@ async function esqueciSenha(req, res) {
   try {
     // 💥 AQUI: Usando tokenReset e okenExpira (correto conforme seu schema!)
     await database.executar(`
-            UPDATE Funcionario 
-            SET tokenReset = '${token}', tokenExpira = '${expiracaoToken}' 
-            WHERE idFuncionario = ${usuario.idFuncionario}
+            INSERT INTO TokenRecuperacao (fkFuncionario, hashToken , horarioExpiracao ) VALUES 
+            (${usuario.idFuncionario},'${token}','${expiracaoToken}' )
         `);
   } catch (error) {
     console.error('Erro ao salvar token no BD:', error);
@@ -72,10 +72,113 @@ async function esqueciSenha(req, res) {
     to: email,
     subject: 'OBERON - Redefinição de Senha',
     html: `
-            <p>Você solicitou uma redefinição de senha para o e-mail ${email}.</p>
-            <p>Clique no link abaixo para redefinir sua senha. Este link expirará em 1 hora.</p>
-            <a href="${resetUrl}" style="color: white; background-color: #007bff; padding: 10px 15px; text-decoration: none; border-radius: 5px;">Redefinir Senha</a>
-            <p style="margin-top: 20px;">Se você não solicitou isso, ignore este e-mail.</p>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redefinição de Senha</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4;">
+
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f4f4f4;">
+        <tr>
+            <td align="center" style="padding: 20px 0;">
+                
+                <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);">
+                    <tr>
+                        <td style="padding: 40px; text-align: center;">
+
+                            <img src="https://i.imgur.com/Z22FIZJ.png" 
+                                 alt="OBERON Logo" 
+                                 width="150" 
+                                 height="auto" 
+                                 style="display: block; 
+                                        margin: 0 auto; 
+                                        padding-bottom: 25px; /* Espaço abaixo da logo */
+                                        max-width: 150px;">
+                            
+                            <h2 style="color: #333333; margin-top: 0; margin-bottom: 30px; font-size: 20px;">
+                                🔒 Solicitação de Redefinição de Senha
+                            </h2>
+                            
+                            <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                                Você solicitou uma redefinição de senha para o e-mail <b>${email}</b>.
+                            </p>
+                            
+                            <p style="color: #555555; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
+                                Clique no botão abaixo para redefinir sua senha. Este link expirará em <b>1 hora</b>.
+                            </p>
+
+                            <a href="${resetUrl}" 
+                                style="display: inline-block; 
+                                        color: white; 
+                                        background-color: #0c8186; /* Cor ajustada para o estilo OBERON */
+                                        padding: 12px 25px; 
+                                        text-decoration: none; 
+                                        border-radius: 6px; 
+                                        font-size: 16px; 
+                                        font-weight: bold; 
+                                        box-shadow: 0 2px 4px rgba(12, 129, 134, 0.4);">
+                                Redefinir Senha
+                            </a>
+                            
+                            <p style="margin-top: 30px; color: #777777; font-size: 14px;">
+                                Se você não solicitou esta redefinição, por favor, ignore este e-mail. Nenhuma alteração será feita na sua conta.
+                            </p>
+
+                        </td>
+                    </tr>
+                </table>
+                
+                <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" style="margin-top: 20px; background-color: #ffffff; border-radius: 8px;">
+                    <tr>
+                        <td align="center" style="padding: 30px 40px 10px 40px;">
+
+                            <img src="https://i.imgur.com/Z22FIZJ.png" alt="OBERON Logo" width="120" height="auto" style="display: inline-block; vertical-align: middle; margin-right: 10px;">
+                            
+                            <p style="color: #555555; font-size: 18px; margin-top: 10px; margin-bottom: 20px;">
+                                <b>Sua segurança é nossa prioridade.</b>
+                            </p>
+
+                            <div style="width: 100%; border-top: 1px solid #eeeeee; margin: 20px 0;"></div>
+
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="text-align: left;">
+                                <tr>
+                                    <td width="33%" style="color: #555555; font-size: 14px; padding-bottom: 20px;">
+                                        <img src="https://i.imgur.com/civoh7f.png" alt="Email" width="18" height="16" style="vertical-align: middle; margin-right: 5px;">
+                                        <span style="vertical-align: middle;">suporte@oberon.tech</span>
+                                    </td>
+                                    
+                                    <td width="33%" style="color: #555555; font-size: 14px; padding-bottom: 20px;">
+                                        <img src="https://i.imgur.com/3qJupDg.png" alt="Link" width="18" height="16" style="vertical-align: middle; margin-right: 5px;">
+                                        <span style="vertical-align: middle;"><a href="${process.env.FRONTEND_URL}" style="color: #40babd; text-decoration: none;">www.oberon-sis.tech</a></span>
+                                    </td>
+                                    
+                                    <td width="33%" style="color: #555555; font-size: 14px; padding-bottom: 20px; text-align: right;">
+                                        <img src="https://i.imgur.com/nXcqSmk.png" alt="Local" width="18" height="16" style="vertical-align: middle; margin-right: 5px;">
+                                        <span style="vertical-align: middle;">R. Haddock Lobo 595, SP-BR</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+                </table>
+                <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0">
+                    <tr>
+                        <td style="padding: 20px; text-align: center; color: #999999; font-size: 12px;">
+                            <p>&copy; 2025 Oberon Tech. Todos os direitos reservados.</p>
+                            <p>Este é um e-mail automático, por favor não responda.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
         `,
   };
 
@@ -107,10 +210,11 @@ async function redefinirSenha(req, res) {
   try {
     // 💥 AQUI: Usamos tokenReset e okenExpira e verificamos se não expirou
     const resultado = await database.executar(`
-            SELECT idFuncionario FROM Funcionario 
-            WHERE email = '${email}' 
-              AND tokenReset = '${token}' 
-              AND tokenExpira > '${dataAtual}'
+            SELECT tk.fkFuncionario as idFuncionario  FROM TokenRecuperacao as tk
+            JOIN Funcionario as f on tk.fkFuncionario = f.idFuncionario
+            WHERE f.email = '${email}' 
+              AND tk.hashToken  = '${token}' 
+              AND tk.horarioExpiracao > '${dataAtual}'
         `);
     if (resultado.length > 0) {
       usuario = resultado[0];
@@ -131,7 +235,7 @@ async function redefinirSenha(req, res) {
     // 3. Atualizar Senha e Invalidar Token
     await database.executar(`
             UPDATE Funcionario 
-            SET senha = '${novoHash}', tokenReset = NULL, tokenExpira = NULL 
+            SET senha = '${novoHash}'
             WHERE idFuncionario = ${usuario.idFuncionario}
         `);
 
