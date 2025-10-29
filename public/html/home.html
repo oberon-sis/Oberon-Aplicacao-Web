@@ -292,15 +292,91 @@
               ambiente, onde quer que você esteja.
             </p>
 
-            <a href="/api/download/agente" class="btn btn-success w-100" download="AgenteMonitoramento.zip"
-              role="button">
+            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#downloadModal">
               Baixar Programa
-            </a>
+            </button>
           </div>
         </div>
       </div>
     </div>
   </main>
+  <div class="modal fade" id="downloadModal" tabindex="-1" aria-labelledby="downloadModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header text-white" style="background-color: #0c8186;">
+          <h5 class="modal-title" id="downloadModalLabel">
+            <i class="bi bi-download me-2"></i>
+            Baixar Agente de Monitoramento OBERON
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <p class="text-muted text-center mb-4">Selecione o agente de monitoramento compatível com o sistema
+            operacional da máquina que será monitorada para garantir a coleta de dados de forma eficaz.</p>
+
+          <div class="row g-4 d-flex align-items-stretch">
+            <div class="col-md-6">
+              <div class="card shadow-sm p-3 d-flex flex-column h-100">
+                <div class="card-body d-flex flex-column text-center">
+                  <i class="bi bi-windows text-info mb-3" style="font-size: 3rem;"></i>
+                  <h5 class="card-title text-black mb-2 fw-bold">
+                    Agente Windows (Executáveis)
+                  </h5>
+                  <p class="card-text small text-muted flex-grow-1 mb-3">
+                    A solução mais simples para ambientes Windows. Arquivo executável (.exe) que dispensa instalações
+                    complexas.
+                  </p>
+                  <a href="/api/download/agente" class="btn btn-info w-100 mt-auto text-white"
+                    download="Agente_Windows.exe" role="button">
+                    <i class="bi bi-box-arrow-down me-1"></i>
+                    Baixar EXE para Windows
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 d-flex flex-column g-4">
+
+              <div class="card shadow-sm p-3 mb-3 flex-grow-1">
+                <div class="card-body d-flex flex-column text-center p-0">
+                  <i class="bi bi-terminal text-danger mb-2" style="font-size: 2.5rem;"></i>
+                  <h6 class="fw-bold mb-1 text-danger">Script Shell (.sh) - Linux</h6>
+                  <p class="card-text small text-muted flex-grow-1 mb-3">
+                    O agente mais coringa. Dependências mínimas, ideal para servidores Linux sem interface (headless).
+                  </p>
+                  <a href="/api/download/agente-shell-sh" class="btn btn-outline-danger w-100 mt-auto"
+                    download="Agente_Linux.sh" role="button">
+                    <i class="bi bi-file-code me-1"></i>
+                    Baixar Agente Shell (.sh)
+                  </a>
+                </div>
+              </div>
+
+              <div class="card shadow-sm p-3 flex-grow-1">
+                <div class="card-body d-flex flex-column text-center p-0">
+                  <i class="bi bi-code-slash text-danger mb-2" style="font-size: 2.5rem;"></i>
+                  <h6 class="fw-bold mb-1 text-black">Arquivo Java (.jar) e executável - Multiplataforma</h6>
+                  <p class="card-text small text-muted flex-grow-1 mb-3">
+                    Requer Java (JVM) instalado previamente. Oferece maior portabilidade.
+                  </p>
+                  <a href="/api/download/agente-java-jar" class="btn btn-danger w-100 mt-auto"
+                    download="Agente_Java.jar" role="button">
+                    <i class="bi bi-file-earmark-code me-1"></i>
+                    Baixar Agente Java (.jar) e executável (.exe)
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script src="../component/menu/Menu.js"></script>
@@ -322,10 +398,10 @@
 
 </html>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
 
     var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-    var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
       return new bootstrap.Popover(popoverTriggerEl, {
         trigger: 'focus',
         html: true

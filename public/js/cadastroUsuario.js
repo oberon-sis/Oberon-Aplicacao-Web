@@ -1,23 +1,49 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // --- 1. CONFIGURAÇÃO INICIAL E BARREIRA DE SEGURANÇA ---
+  // --- FUNÇÃO PADRONIZADA DO SWEETALERT2 TOAST ---
+  function exibirToast(icone, texto) {
+    const COR_DE_FUNDO = '#1a1a1a';
+    const COR_DO_ICONE = 'white';
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      background: COR_DE_FUNDO,
+      iconColor: COR_DO_ICONE,
+      color: COR_DO_ICONE,
+
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      },
+    });
+    Toast.fire({
+      icon: icone,
+      title: texto,
+    });
+  }
+
+  function aplicarMascaraCPF(valor) {
+    valor = valor.replace(/\D/g, '');
+    valor = valor.replace(/^(\d{3})(\d)/, '$1.$2');
+    valor = valor.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+    valor = valor.replace(/\.(\d{3})(\d{1,2})$/, '.$1-$2');
+    return valor.substring(0, 14);
+  }
+
   const dadosEmpresaString = sessionStorage.getItem('dadosEmpresa');
 
   if (!dadosEmpresaString) {
     const formElement = document.getElementById('cadastroForm');
-    const divMensagemElement = document.getElementById('mensagem-validacao');
     if (formElement) formElement.classList.add('hidden');
-    if (divMensagemElement) {
-      divMensagemElement.textContent =
-        'Acesso negado. É necessário preencher os dados da empresa primeiro.';
-      divMensagemElement.className = 'mensagem mensagem-erro';
-    }
+    exibirToast('error', 'Acesso negado. É necessário preencher os dados da empresa primeiro.');
     setTimeout(() => {
       window.location.href = './cadastro.html';
     }, 1500);
     return; // Para a execução de todo o script
   }
 
-  // --- 2. SELEÇÃO DOS ELEMENTOS DO DOM (VARIÁVEIS GLOBAIS DO SCRIPT) ---
   const dadosEmpresa = JSON.parse(dadosEmpresaString);
   const form = document.getElementById('cadastroForm');
   const inputNome = document.getElementById('nome');
@@ -28,8 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const togglePassword = document.getElementById('togglePassword');
   const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
   const botaoSubmit = form.querySelector('.login-btn');
-  const divMensagem = document.getElementById('mensagem-validacao');
-  let mensagemTimeout;
 
   // --- 3. ANEXAÇÃO DOS "OUVINTES" DE EVENTOS (EVENT LISTENERS) ---
   togglePassword.addEventListener('click', () =>
@@ -38,6 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
   toggleConfirmPassword.addEventListener('click', () =>
     handleTogglePassword(inputConfirmPassword, toggleConfirmPassword),
   );
+  inputCpf.addEventListener('input', (e) => {
+    e.target.value = aplicarMascaraCPF(e.target.value);
+  });
 
   // Listeners de validação em tempo real (on blur)
   inputNome.addEventListener('blur', handleNomeBlur);
@@ -53,8 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Função principal que lida com a submissão do formulário
   async function handleFormSubmit(event) {
     event.preventDefault();
-    divMensagem.textContent = '';
-    divMensagem.classList.remove('mensagem-erro', 'mensagem-sucesso');
 
     const nome = inputNome.value.trim();
     const cpf = inputCpf.value.trim();
@@ -62,16 +87,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const senha = inputPassword.value;
     const confirmarSenha = inputConfirmPassword.value;
 
-    // VALIDAÇÕES FINAIS EM ORDEM
     if (!nome || !cpf || !email || !senha || !confirmarSenha)
-      return exibirMensagem('erro', 'Por favor, preencha todos os campos.');
+      return exibirToast('error', 'Por favor, preencha todos os campos.');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-      return exibirMensagem('erro', 'O formato do e-mail é inválido.');
-    if (!validarCPF(cpf)) return exibirMensagem('erro', 'O CPF informado é inválido.');
-    if (senha !== confirmarSenha) return exibirMensagem('erro', 'As senhas não coincidem.');
+      return exibirToast('error', 'O formato do e-mail é inválido.');
+    if (!validarCPF(cpf)) return exibirToast('error', 'O CPF informado é inválido.');
+    if (senha !== confirmarSenha) return exibirToast('error', 'As senhas não coincidem.');
 
     const erroSenhaForte = validarSenhaForte(senha);
-    if (erroSenhaForte) return exibirMensagem('erro', erroSenhaForte);
+    if (erroSenhaForte) return exibirToast('error', erroSenhaForte);
 
     // SUCESSO! ENVIO FINAL AO BACK-END
     const dadosCompletos = {
@@ -94,37 +118,37 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       sessionStorage.setItem('nomeUsuarioSimples', nome);
       sessionStorage.removeItem('dadosEmpresa');
-      exibirMensagem('sucesso', 'Cadastro realizado! Redirecionando...');
+
+      exibirToast('success', 'Cadastro realizado! Redirecionando...');
+
       setTimeout(() => {
         window.location.href = './login.html';
       }, 2000);
     } catch (erro) {
-      exibirMensagem('erro', erro.message);
+      exibirToast('error', erro.message);
       restaurarBotao();
     }
   }
 
-  // Funções para validação em tempo real
   function handleNomeBlur() {
-    if (!inputNome.value.trim()) exibirMensagem('erro', 'O campo Nome é obrigatório.');
+    if (!inputNome.value.trim()) exibirToast('error', 'O campo Nome é obrigatório.');
   }
   function handleEmailBlur() {
     const email = inputEmail.value.trim();
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-      exibirMensagem('erro', 'O formato do e-mail é inválido.');
+      exibirToast('error', 'O formato do e-mail é inválido.');
   }
   function handleCpfBlur() {
     const cpf = inputCpf.value.trim();
-    if (cpf && !validarCPF(cpf)) exibirMensagem('erro', 'O CPF informado é inválido.');
+    if (cpf && !validarCPF(cpf)) exibirToast('error', 'O CPF informado é inválido.');
   }
   function handleConfirmPasswordBlur() {
     const senha = inputPassword.value;
     const confirmarSenha = inputConfirmPassword.value;
     if (confirmarSenha && senha !== confirmarSenha)
-      exibirMensagem('erro', 'As senhas não coincidem.');
+      exibirToast('error', 'As senhas não coincidem.');
   }
 
-  // --- 5. FUNÇÕES AUXILIARES (VALIDAÇÃO, FEEDBACK, ETC.) ---
 
   function handleTogglePassword(input, button) {
     const img = button.querySelector('img');
@@ -139,15 +163,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function exibirMensagem(tipo, texto) {
-    clearTimeout(mensagemTimeout);
-    divMensagem.textContent = texto;
-    divMensagem.classList.add(`mensagem-${tipo}`);
-    mensagemTimeout = setTimeout(() => {
-      divMensagem.textContent = '';
-      divMensagem.classList.remove('mensagem-erro', 'mensagem-sucesso');
-    }, 1000);
-  }
 
   function validarSenhaForte(senha) {
     if (senha.length < 8) return 'A senha deve ter no mínimo 8 caracteres.';

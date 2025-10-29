@@ -359,7 +359,7 @@ function initLinhaChart(idMaquina) {
     }
     mensagemDiv.style.display = 'flex';
     mensagemDiv.textContent =
-      maquina.criticidade === 'offline' ? '⚠️ Máquina OFF-LINE' : '🔧 Máquina em Manutenção';
+      maquina.criticidade === 'offline' ? 'Máquina OFF-LINE' : 'Máquina em Manutenção';
     return;
   }
 

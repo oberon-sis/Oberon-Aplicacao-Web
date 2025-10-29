@@ -17,7 +17,7 @@
 </head>
 
 <body>
-
+<div class="menu-backdrop"></div>
   <!--INICIO NAV-BAR -->
   <div class="header-fixed-wrapper">
     <div class="container">
@@ -40,8 +40,8 @@
           </nav>
 
           <div class="nav-actions">
-            <a href="./html/cadastro.html"><button class="btn btn-login">Login</button></a>
-            <a href="./html/login.html"><button class="btn btn-cadastro">Cadastro</button></a>
+            <a href="./html/login.html"><button class="btn btn-login">Login</button></a>
+            <a href="./html/cadastro.html"><button class="btn btn-cadastro">Cadastro</button></a>
           </div>
         </div>
 
@@ -54,7 +54,7 @@
   <!--FIM NAV-BAR -->
 
   <!--INICIO HERO SECTION -->
-  <section class="hero-section">
+  <section class="hero-section" id="inicio">
     <div class="container hero-content-container">
       <div class="hero-content">
         <h1 data-aos="fade-down" data-aos-duration="800" data-aos-delay="100">Segurança, eficiência e<br>monitoramento.
@@ -314,7 +314,7 @@
   <!--FIM SEÇÃO SOBRE NOS-->
 
   <!--INICIO SEÇÃO FEEDBACKS-->
-  <section class="testimonials-section py-5 bg-white">
+  <section class="testimonials-section py-5 bg-white" id="Feedbacks">
     <header class="text-center mb-5 container">
       <h2 class="title-small-dark">O QUE NOSSOS CLIENTES DIZEM</h2>
     </header>
@@ -432,8 +432,8 @@
 
         <div class="col-lg-2" data-aos="fade-up" data-aos-delay="400">
           <h6 class="fw-bold mb-3">CONTATO</h6>
-          <p class="text-light-gray small mb-0">Rua da Segurança, 123</p>
-          <p class="text-light-gray small mb-0">contato@oberon.com</p>
+          <p class="text-light-gray small mb-0">Rua Haddlock Lobo, 595 - São Paulo/SP</p>
+          <p class="text-light-gray small mb-0">atendimento@oberon.com</p>
           <p class="text-light-gray small mb-0">(11) 98765-4321</p>
         </div>
       </div>
@@ -456,22 +456,57 @@
 
     //Logica do Menu Mobile
     document.addEventListener('DOMContentLoaded', () => {
-      const toggleButton = document.querySelector('.menu-toggle');
-      const mobileMenu = document.querySelector('.mobile-nav');
-      const toggleIcon = document.querySelector('.toggle-icon');
+        const toggleButton = document.querySelector('.menu-toggle');
+        const mobileMenu = document.querySelector('.mobile-nav');
+        const toggleIcon = document.querySelector('.toggle-icon');
+        const navLinks = document.querySelectorAll('.mobile-nav a.nav-link');
+        const actionButtons = document.querySelectorAll('.mobile-nav .nav-actions a');
+        const menuBackdrop = document.querySelector('.menu-backdrop');
 
-      toggleButton.addEventListener('click', () => {
-        mobileMenu.classList.toggle('active');
+        const openMenu = () => {
+            mobileMenu.classList.add('active');
+            toggleIcon.classList.remove('fa-bars');
+            toggleIcon.classList.add('fa-times');
+            document.body.classList.add('menu-open'); 
+        };
 
-        // Troca o ícone de Hambúrguer para Fechar (X)
-        if (mobileMenu.classList.contains('active')) {
-          toggleIcon.classList.remove('fa-bars');
-          toggleIcon.classList.add('fa-times'); // Ícone de Fechar (X)
-        } else {
-          toggleIcon.classList.remove('fa-times');
-          toggleIcon.classList.add('fa-bars'); // Ícone de Hambúrguer
+        const closeMenu = () => {
+            if (mobileMenu.classList.contains('active')) {
+                mobileMenu.classList.remove('active');
+                toggleIcon.classList.remove('fa-times');
+                toggleIcon.classList.add('fa-bars');
+                document.body.classList.remove('menu-open');
+            }
+        };
+
+        toggleButton.addEventListener('click', (event) => {
+            event.stopPropagation(); 
+            
+            if (mobileMenu.classList.contains('active')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+        actionButtons.forEach(button => {
+            button.addEventListener('click', closeMenu);
+        });
+        if (menuBackdrop) {
+            menuBackdrop.addEventListener('click', closeMenu);
         }
-      });
+
+        document.addEventListener('click', (event) => {
+            if (mobileMenu.classList.contains('active') && 
+                !mobileMenu.contains(event.target) && 
+                !toggleButton.contains(event.target)) {
+                
+                closeMenu();
+            }
+        });
     });
 
     // Logica do carrosel dinamico

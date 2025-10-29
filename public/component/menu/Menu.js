@@ -13,6 +13,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // return fetch(`/menu/getMenu/${idUsuario}`);
     })
+    .then(() =>{
+          document.getElementById("nome_de_usuario").innerHTML = sessionStorage.nomeUsuarioSimples
+          const usuarioString = sessionStorage.getItem("usuario"); 
+          if (usuarioString) {
+              const usuarioObjeto = JSON.parse(usuarioString);
+              document.getElementById("email_de_usaurio").innerHTML = usuarioObjeto.email;
+          } else {
+              document.getElementById("email_de_usaurio").innerHTML = "E-mail não encontrado (sessão expirada)";
+          }
+
+    })
     // .then(response => {
     //     if (!response.ok) {
     //         throw new Error('Erro ao carregar os dados do menu do backend.');

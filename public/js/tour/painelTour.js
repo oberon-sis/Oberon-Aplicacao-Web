@@ -13,7 +13,7 @@ const painelTourSteps = [
     id: 'tour-filtros-status',
     title: 'Passo 2/6: Filtros de Status Rápido',
     content:
-      'Use estes botões para filtrar rapidamente as máquinas por status: Crítico, Atenção, Ocioso, OFF-LINE e Manutenção.',
+      'Use estes botões para filtrar rapidamente as máquinas por status: Crítico, Atenção, Normal, Ocioso, OFF-LINE e Manutenção.',
     position: 'bottom',
   },
   {
