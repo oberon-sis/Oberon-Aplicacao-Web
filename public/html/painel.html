@@ -45,10 +45,7 @@
       </header>
 
       <div class="main-container p-4 d-flex flex-column flex-grow-1">
-        <div
-          id="tour-filtros-status"
-          class="d-flex flex-wrap align-items-center mb-4 filter-group-row flex-shrink-0"
-        >
+        <div class="d-flex flex-wrap align-items-center mb-4 filter-group-row flex-shrink-0">
           <div class="btn-group me-3" role="group">
             <button type="button" class="btn btn-custom-status active" data-filtro="todas">
               Todas <span class="badge text-bg-dark ms-1">6</span>
@@ -75,7 +72,7 @@
         </div>
 
         <div class="main-content-area d-flex flex-grow-1 overflow-hidden">
-          <section class="resource-cards flex-fill" id="tour-cards-container">
+          <section class="resource-cards flex-fill">
             <div class="card card-recurso" data-maquina-id="1">
               <div class="d-flex justify-content-between align-items-start mb-2">
                 <h5 class="card-title h6 mb-0">ESTACAO-0021</h5>
@@ -184,8 +181,8 @@
               </p>
               <p class="card-text mb-2 small text-muted">Status:</p>
               <ul class="list-unstyled small mb-3">
-                <li><span class="fw-bold">Programada</span></li>
-                <li><span class="text-muted">(Retorna em 2h)</span></li>
+                <li><span class="fw-bold">Em manutenção</span></li>
+                <li><span class="text-muted">(Sem previsão de retorno)</span></li>
               </ul>
               <button type="button" class="btn btn-secondary btn-sm w-100">Ver Detalhes</button>
             </div>
@@ -223,11 +220,11 @@
               </div>
             </div>
 
-            <div class="chart-container mb-4" id="tour-grafico-utilizacao">
+            <div class="chart-container mb-4">
               <canvas id="utilizacaoChart"></canvas>
             </div>
 
-            <div class="row row-cols-2 g-3 mb-4 indicators-grid" id="tour-indicadores-alertas">
+            <div class="row row-cols-2 g-3 mb-4 indicators-grid">
               <div class="col">
                 <div class="resource-detail-card d-flex align-items-center">
                   <i class="bi bi-cpu-fill fs-3"></i>
@@ -239,8 +236,8 @@
                         <span class="fw-bold text-muted" id="cpu24h">10</span>
                       </div>
                       <div class="text-end">
-                        <small class="text-muted d-block">Ativos:</small>
-                        <span class="fw-bold fs-5" id="cpuAtivos">6</span>
+                        <small class="text-muted d-block">Pico de Uso:</small>
+                        <span class="fw-bold fs-5" id="cpuPico">6</span>
                       </div>
                     </div>
                   </div>
@@ -258,8 +255,8 @@
                         <span class="fw-bold text-muted" id="ram24h">4</span>
                       </div>
                       <div class="text-end">
-                        <small class="text-muted d-block">Ativos:</small>
-                        <span class="fw-bold fs-5" id="ramAtivos">1</span>
+                        <small class="text-muted d-block">Pico de Uso:</small>
+                        <span class="fw-bold fs-5" id="ramPico">1</span>
                       </div>
                     </div>
                   </div>
@@ -277,8 +274,8 @@
                         <span class="fw-bold text-muted" id="rede24h">3</span>
                       </div>
                       <div class="text-end">
-                        <small class="text-muted d-block">Ativos:</small>
-                        <span class="fw-bold fs-5" id="redeAtivos">1</span>
+                        <small class="text-muted d-block">Pico de Uso:</small>
+                        <span class="fw-bold fs-5" id="redePico">1</span>
                       </div>
                     </div>
                   </div>
@@ -296,8 +293,8 @@
                         <span class="fw-bold text-muted" id="disco24h">7</span>
                       </div>
                       <div class="text-end">
-                        <small class="text-muted d-block">Ativos:</small>
-                        <span class="fw-bold fs-5" id="discoAtivos">3</span>
+                        <small class="text-muted d-block">Pico de Uso:</small>
+                        <span class="fw-bold fs-5" id="discoPico">3</span>
                       </div>
                     </div>
                   </div>
@@ -307,7 +304,7 @@
 
             <hr />
 
-            <div class="details-info small" id="tour-info-maquina">
+            <div class="details-info small">
               <p class="mb-1 d-flex justify-content-between">
                 <span class="text-muted">Modelo:</span>
                 <span class="fw-bold" id="infoModelo">Dell OptiPlex 3050 SFF</span>
