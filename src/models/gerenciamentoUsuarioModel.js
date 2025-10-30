@@ -55,7 +55,7 @@ function PesquisarUsuario(campo, valor) {
             f.nome, 
             f.cpf, 
             f.email, 
-            t.tipoUsuario AS funcao
+            TipoUsuario.tipoUsuario AS funcao
         FROM Funcionario AS f
         JOIN TipoUsuario AS t ON f.fkTipoUsuario = t.idTipoUsuario
       WHERE ${campo} LIKE '${valor}%';
