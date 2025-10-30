@@ -7,7 +7,7 @@ function autenticar(email, senha) {
     senha,
   );
   var instrucaoSql = `
-        SELECT id, nome, email, fk_empresa as empresaId FROM usuario WHERE email = '${email}' AND senha = '${senha}';
+        SELECT id, nome, email, fk_empresa as empresaId FROM Usuario WHERE email = '${email}' AND senha = '${senha}';
     `;
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
   return database.executar(instrucaoSql);
@@ -57,7 +57,7 @@ function PesquisarUsuario(campo, valor) {
             f.email, 
             t.tipoUsuario AS funcao
         FROM Funcionario AS f
-        JOIN tipoUsuario AS t ON f.fkTipoUsuario = t.idTipoUsuario
+        JOIN TipoUsuario AS t ON f.fkTipoUsuario = t.idTipoUsuario
       WHERE ${campo} LIKE '${valor}%';
   `;
 
@@ -71,7 +71,7 @@ function getFkEmpresa(idFuncionario) {
     idFuncionario,
   );
   var instrucaoSql = `
-        SELECT fkEmpresa FROM funcionario WHERE idFuncionario = ${idFuncionario} ;
+        SELECT fkEmpresa FROM Funcionario WHERE idFuncionario = ${idFuncionario} ;
     `;
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
   return database.executar(instrucaoSql);
@@ -89,8 +89,8 @@ function getUsuariobyID(idFuncionario) {
        funcionario.email,
        funcionario.senha,
        funcionario.fkTipoUsuario,
-       tipoUsuario.tipoUsuario,
-       tipoUsuario.permissoes FROM funcionario JOIN tipoUsuario
+       TipoUsuario.tipoUsuario,
+       TipoUsuario.permissoes FROM funcionario JOIN TipoUsuario
        on funcionario.fkTipoUsuario = tipoUsuario.idTipoUsuario	
        WHERE idFuncionario = ${idFuncionario} ;    `;
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
@@ -106,7 +106,7 @@ function getTipoUsuario() {
          SELECT 
             idTipoUsuario, 
             tipoUsuario AS nomeTipo
-        FROM tipoUsuario
+        FROM TipoUsuario
         ORDER BY idTipoUsuario; 
     `;
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
@@ -123,7 +123,7 @@ function ExcluirUsuario(idFuncionario) {
     idFuncionario,
   );
   var instrucaoSql = `
-         DELETE FROM funcionario 
+         DELETE FROM Funcionario 
          WHERE idfuncionario = ${idFuncionario};
     `;
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
@@ -140,7 +140,7 @@ function salvarEdicao(nome, email, fkTipoUsuario, senha, idFuncionario) {
     idFuncionario,
   );
   var instrucaoSql = `
-         UPDATE funcionario
+         UPDATE Funcionario
           SET nome = '${nome}', email = '${email}', 
           fkTipoUsuario = ${fkTipoUsuario} , senha = '${senha}' 
           WHERE idFuncionario = ${idFuncionario}; 
@@ -175,7 +175,7 @@ function listarFuncionarios(limit, offset) {
             f.email, 
             t.tipoUsuario AS funcao
         FROM Funcionario AS f
-        JOIN tipoUsuario AS t ON f.fkTipoUsuario = t.idTipoUsuario
+        JOIN TipoUsuario AS t ON f.fkTipoUsuario = t.idTipoUsuario
         ORDER BY f.nome ASC
         LIMIT ${limit} OFFSET ${offset};
     `;
