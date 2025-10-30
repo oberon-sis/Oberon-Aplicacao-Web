@@ -47,7 +47,7 @@ body.tour-is-active {
 }
 
 .tour-box h4 {
-  color: var(--verde_obscuro, #0c8186);
+  color: #27acb1;
   margin-bottom: 10px;
   font-size: 1.25rem;
 }

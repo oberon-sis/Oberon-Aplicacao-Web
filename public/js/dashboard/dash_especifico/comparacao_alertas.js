@@ -1,20 +1,22 @@
 const comparativoLabels = ['CPU', 'RAM', 'DISCO', 'REDE'];
 const orangeColor = 'rgba(230, 126, 34, 1)';
 const greenColor = 'rgba(39, 174, 96, 1)';
-const comparativoBarColors = [orangeColor, greenColor, greenColor, greenColor];
+const redColor = 'rgba(220, 20, 60, 1)';
+const blueColor = 'rgba(0, 191, 255, 1)';
 const comparativoData = {
-  backgroundValues: [140, 215, 375, 430],
-  mainValues: [85, 200, 350, 410],
+  backgroundValues: [160, 180, 100, 50],
+  mainValues: [200, 240, 150, 60],
 };
+const comparativoBarColors = [orangeColor, redColor, orangeColor, blueColor];
 
 const especificoLabels = ['Crítico', 'Atenção', 'Ocioso'];
-const statusColors = ['rgba(231, 76, 60, 1)', 'rgba(241, 196, 15, 1)', 'rgba(46, 204, 113, 1)'];
+const statusColors = [redColor, orangeColor, greenColor];
 
 const especificoData = {
-  CPU: { bimestrePassado: [25, 40, 150], bimestreAtual: [10, 30, 120] },
-  RAM: { bimestrePassado: [30, 50, 250], bimestreAtual: [15, 40, 210] },
-  DISCO: { bimestrePassado: [15, 70, 100], bimestreAtual: [10, 50, 80] },
-  REDE: { bimestrePassado: [40, 60, 200], bimestreAtual: [30, 50, 180] },
+  CPU: { bimestrePassado: [20, 40, 100], bimestreAtual: [25, 65, 110] },
+  RAM: { bimestrePassado: [30, 50, 100], bimestreAtual: [40, 80, 120] },
+  DISCO: { bimestrePassado: [10, 30, 60], bimestreAtual: [15, 45, 90] },
+  REDE: { bimestrePassado: [5, 15, 30], bimestreAtual: [10, 20, 30] },
 };
 
 let chartInstance = null;
@@ -30,7 +32,7 @@ const customLegendGenerator = (chart) => {
     fillStyle: pastData.backgroundColor,
     strokeStyle: pastData.borderColor,
     lineWidth: pastData.borderWidth,
-    hidden: chart.isDatasetVisible(0),
+    hidden: false,
     datasetIndex: 0,
   });
 
@@ -44,7 +46,7 @@ const customLegendGenerator = (chart) => {
       strokeStyle: reversedColors[index],
       lineWidth: 0,
       hidden: false,
-      datasetIndex: 1,
+      datasetIndex: 1, // Este dataset será filtrado na legenda se não for o modo específico
     });
   });
 
@@ -78,30 +80,40 @@ function updateChart(viewType) {
     ];
     legendCallback = Chart.defaults.plugins.legend.labels.generateLabels;
   } else {
+    // Modo Específico (CPU, RAM, DISCO, REDE)
     currentLabels = especificoLabels;
     currentTitle = `Alertas de ${viewType} por Status de Criticidade`;
     const dataToUse = especificoData[viewType];
+
+    const colorsReversed = statusColors.slice().reverse();
+
+    // CORREÇÃO CRÍTICA AQUI: Usar os dados específicos do recurso selecionado.
     currentDatasets = [
       {
         label: 'Quantidade de alertas no bimestre passado',
-        data: dataToUse.bimestrePassado.slice().reverse(),
+        data: dataToUse.bimestrePassado.slice().reverse(), // Dados do recurso selecionado
         backgroundColor: 'rgba(200, 200, 200, 0.5)',
         order: 2,
         legendColor: 'rgba(200, 200, 200, 0.5)',
       },
       {
         label: 'Quantidade de alertas neste bimestre',
-        data: comparativoData.mainValues,
-        backgroundColor: comparativoBarColors,
+        data: dataToUse.bimestreAtual.slice().reverse(), // Dados do recurso selecionado
+        backgroundColor: colorsReversed, // Cores específicas [Ocioso, Atenção, Crítico]
         order: 1,
       },
     ];
-    legendCallback = Chart.defaults.plugins.legend.labels.generateLabels;
+
+    // Usar a função customizada para exibir as cores corretas na legenda
+    legendCallback = customLegendGenerator;
   }
 
   const config = {
     type: 'bar',
-    data: { labels: currentLabels, datasets: currentDatasets },
+    data: {
+      labels: isComparativo ? currentLabels : currentLabels.slice().reverse(),
+      datasets: currentDatasets,
+    },
     options: {
       indexAxis: 'y',
       responsive: true,
@@ -113,19 +125,20 @@ function updateChart(viewType) {
           labels: {
             generateLabels: legendCallback,
             filter: (legendItem, chartData) => {
+              // Esta lógica só é necessária para filtrar a legenda no modo específico
               if (!isComparativo && legendItem.datasetIndex === 1) {
                 return false;
               }
               return true;
             },
-          },
-          onClick: (e, legendItem, legend) => {
-            const index = legendItem.datasetIndex;
-            const chart = legend.chart;
-            if (index === 0) {
-              chart.setDatasetVisibility(index, !chart.isDatasetVisible(index));
-              chart.update();
-            }
+            onClick: (e, legendItem, legend) => {
+              const index = legendItem.datasetIndex;
+              const chart = legend.chart;
+              if (index === 0) {
+                chart.setDatasetVisibility(index, !chart.isDatasetVisible(index));
+                chart.update();
+              }
+            },
           },
         },
         title: {
@@ -139,21 +152,18 @@ function updateChart(viewType) {
       scales: {
         x: {
           beginAtZero: true,
-          max: 450,
+          max: 250,
           grid: { color: 'rgba(0, 0, 0, 0.1)' },
-          // Adicionar o título do eixo X aqui:
           title: {
             display: true,
             text: 'Nº de Alertas',
-            font: {
-              size: 14, // Opcional: define o tamanho da fonte
-            },
+            font: { size: 14 },
           },
           ticks: { stepSize: 50 },
         },
         y: {
           type: 'category',
-          labels: currentLabels.slice().reverse(),
+          labels: isComparativo ? currentLabels : currentLabels.slice().reverse(), // Garante a ordem correta
           grid: { display: false },
           reverse: true,
         },
@@ -165,6 +175,7 @@ function updateChart(viewType) {
     chartInstance.destroy();
   }
   const ctx = document.getElementById('myDynamicChart').getContext('2d');
+
   chartInstance = new Chart(ctx, config);
 }
 // Variável global para armazenar o recurso atualmente selecionado
@@ -172,16 +183,13 @@ let currentResourceView = 'comparativo';
 
 // Função que será chamada ao clicar nos itens do novo dropdown
 function atualizar_recurso_selecionado(valor, texto) {
-  // 1. Atualiza a variável global
   currentResourceView = valor;
 
-  // 2. Atualiza o texto do botão (O ID do span no HTML deve ser valor_pesquisa_recurso)
   const displaySpan = document.getElementById('valor_pesquisa_recurso');
   if (displaySpan) {
     displaySpan.textContent = texto;
   }
 
-  // 3. Atualiza o gráfico com o novo valor
   updateChart(currentResourceView);
 }
 
@@ -193,9 +201,8 @@ document.addEventListener('DOMContentLoaded', function () {
     .closest('.d-flex');
   const itensRecurso = dropdownRecursoContainer
     ? dropdownRecursoContainer.querySelectorAll('.dropdown-item')
-    : [];
+    : []; // 2. Mapeamento dos Eventos de Clique
 
-  // 2. Mapeamento dos Eventos de Clique
   itensRecurso.forEach((item) => {
     item.addEventListener('click', function (event) {
       event.preventDefault();
@@ -205,8 +212,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       atualizar_recurso_selecionado(valor, texto);
     });
-  });
+  }); // 3. Inicia o gráfico com o valor padrão ('comparativo')
 
-  // 3. Inicia o gráfico com o valor padrão ('comparativo')
   updateChart(currentResourceView);
 });

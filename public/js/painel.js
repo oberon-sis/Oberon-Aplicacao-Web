@@ -1,6 +1,6 @@
 let linhaChartInstance = null;
 let linhaIntervalId = null;
-let maquinaAtualId = 1;
+let maquinaAtualId = 3; // CORREÇÃO 1: Iniciar na Máquina-0001 (ID 3)
 let filtroAtual = 'todas';
 let componenteAtual = 'cpu';
 const LINHA_CHART_ID = 'utilizacaoChart';
@@ -14,124 +14,160 @@ const COLORS = {
 
 const MAQUINAS_DATA = {
   1: {
-    nome: 'ESTACAO-0021',
+    nome: 'Máquina-0021',
     criticidade: 'normal',
     cpu24h: 5,
-    cpuAtivos: 0,
+    cpuPico: 91,
     ram24h: 3,
-    ramAtivos: 0,
+    ramPico: 89,
     rede24h: 2,
-    redeAtivos: 0,
+    redePico: 5,
     disco24h: 4,
-    discoAtivos: 0,
-    cpuLimite: 90,
-    ramLimite: 85,
+    discoPico: 89,
+    cpuLimite: 78,
+    cpuLimiteMin: 12.4,
+    ramLimite: 74.3,
+    ramLimiteMin: 89.4,
     discoLimite: 88.8,
-    redeLimite: 80,
+    discoLimiteMin: 87.5,
+    redeLimite: 3.5,
+    redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 3050 SFF',
     ip: '192.168.1.101',
-    nucleos: 8,
     so: 'Windows 10 Pro',
+    nucleosCpu: 8,
+    capacidadeRam: '16 GB',
+    capacidadeDisco: '512 GB',
   },
   2: {
-    nome: 'ESTACAO-0022',
+    nome: 'Máquina-0022',
     criticidade: 'ocioso',
     cpu24h: 4,
-    cpuAtivos: 2,
+    cpuPico: 25,
     ram24h: 2,
-    ramAtivos: 1,
+    ramPico: 35,
     rede24h: 1,
-    redeAtivos: 0,
+    redePico: 1,
     disco24h: 3,
-    discoAtivos: 1,
-    cpuLimite: 90,
-    ramLimite: 85,
+    discoPico: 57,
+    cpuLimite: 78,
+    cpuLimiteMin: 12.4,
+    ramLimite: 74.3,
+    ramLimiteMin: 89.4,
     discoLimite: 88.8,
-    redeLimite: 80,
+    discoLimiteMin: 87.5,
+    redeLimite: 3.5,
+    redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 5060',
     ip: '192.168.1.102',
-    nucleos: 8,
     so: 'Windows 10 Pro',
+    nucleosCpu: 8,
+    capacidadeRam: '16 GB',
+    capacidadeDisco: '512 GB',
   },
   3: {
-    nome: 'ESTACAO-0001',
+    nome: 'Máquina-0001',
     criticidade: 'critico',
     cpu24h: 15,
-    cpuAtivos: 8,
+    cpuPico: 93,
     ram24h: 10,
-    ramAtivos: 5,
+    ramPico: 92,
     rede24h: 5,
-    redeAtivos: 2,
+    redePico: 10,
     disco24h: 12,
-    discoAtivos: 6,
-    cpuLimite: 70,
-    ramLimite: 80,
-    discoLimite: 85,
-    redeLimite: 60,
+    discoPico: 94,
+    cpuLimite: 78,
+    cpuLimiteMin: 12.4,
+    ramLimite: 74.3,
+    ramLimiteMin: 89.4,
+    discoLimite: 88.8,
+    discoLimiteMin: 87.5,
+    redeLimite: 3.5,
+    redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 3050 SFF',
     ip: '192.168.1.103',
-    nucleos: 8,
     so: 'Windows 10 Pro',
+    nucleosCpu: 8,
+    capacidadeRam: '8 GB',
+    capacidadeDisco: '256 GB',
   },
   4: {
-    nome: 'ESTACAO-0002',
+    nome: 'Máquina-0002',
     criticidade: 'offline',
     cpu24h: 0,
-    cpuAtivos: 0,
+    cpuPico: 0,
     ram24h: 0,
-    ramAtivos: 0,
+    ramPico: 0,
     rede24h: 0,
-    redeAtivos: 0,
+    redePico: 0,
     disco24h: 0,
-    discoAtivos: 0,
-    cpuLimite: 90,
-    ramLimite: 85,
+    discoPico: 0,
+    cpuLimite: 78,
+    cpuLimiteMin: 12.4,
+    ramLimite: 74.3,
+    ramLimiteMin: 89.4,
     discoLimite: 88.8,
-    redeLimite: 80,
+    discoLimiteMin: 87.5,
+    redeLimite: 3.5,
+    redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 7060',
     ip: '192.168.1.104',
-    nucleos: 8,
     so: 'Windows 10 Pro',
+    nucleosCpu: 8,
+    capacidadeRam: '8 GB',
+    capacidadeDisco: '512 GB',
   },
   5: {
-    nome: 'ESTACAO-0015',
+    nome: 'Máquina-0015',
     criticidade: 'atencao',
     cpu24h: 8,
-    cpuAtivos: 3,
+    cpuPico: 77,
     ram24h: 12,
-    ramAtivos: 6,
+    ramPico: 82,
     rede24h: 4,
-    redeAtivos: 1,
+    redePico: 4,
     disco24h: 9,
-    discoAtivos: 4,
-    cpuLimite: 80,
-    ramLimite: 85,
-    discoLimite: 88,
-    redeLimite: 70,
+    discoPico: 82,
+    cpuLimite: 78,
+    cpuLimiteMin: 12.4,
+    ramLimite: 74.3,
+    ramLimiteMin: 89.4,
+    discoLimite: 88.8,
+    discoLimiteMin: 87.5,
+    redeLimite: 3.5,
+    redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 3050 SFF',
     ip: '192.168.1.105',
-    nucleos: 8,
     so: 'Windows 10 Pro',
+    nucleosCpu: 8,
+    capacidadeRam: '8 GB',
+    capacidadeDisco: '512 GB',
   },
   6: {
-    nome: 'ESTACAO-0030',
+    nome: 'Máquina-0030',
     criticidade: 'manutencao',
     cpu24h: 0,
-    cpuAtivos: 0,
+    cpuPico: 0,
     ram24h: 0,
-    ramAtivos: 0,
+    ramPico: 0,
     rede24h: 0,
-    redeAtivos: 0,
+    redePico: 0,
     disco24h: 0,
-    discoAtivos: 0,
-    cpuLimite: 90,
-    ramLimite: 85,
+    discoPico: 0,
+    cpuLimite: 78,
+    cpuLimiteMin: 12.4,
+    ramLimite: 74.3,
+    ramLimiteMin: 89.4,
     discoLimite: 88.8,
-    redeLimite: 80,
+    discoLimiteMin: 87.5,
+    redeLimite: 3.5,
+    redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 3060',
     ip: '192.168.1.106',
-    nucleos: 8,
     so: 'Windows 11 Pro',
+    nucleosCpu: 8,
+    capacidadeRam: '8 GB',
+    capacidadeDisco: '256 GB',
   },
 };
 
@@ -154,7 +190,14 @@ function getLimiteMaximo() {
 }
 
 function getLimiteMinimo() {
-  return getLimiteMaximo() * 0.7;
+  const maquina = MAQUINAS_DATA[maquinaAtualId];
+  const limites = {
+    cpu: maquina.cpuLimiteMin,
+    ram: maquina.ramLimiteMin,
+    disco: maquina.discoLimiteMin,
+    rede: maquina.redeLimiteMin,
+  };
+  return limites[componenteAtual] || 90;
 }
 
 function getOpcoesChart() {
@@ -187,7 +230,7 @@ function getOpcoesChart() {
             if (label) label += ': ';
             if (context.parsed.y !== null) {
               label += isRede
-                ? `${context.parsed.y.toFixed(2)} Mbps`
+                ? `${context.parsed.y.toFixed(2)} %`
                 : `${context.parsed.y.toFixed(1)}%`;
             }
             return label;
@@ -205,7 +248,7 @@ function getOpcoesChart() {
             borderDash: [5, 5],
             label: {
               display: true,
-              content: isRede ? `Limite Máximo: ${limiteMax} Mbps` : `Limite Máximo: ${limiteMax}%`,
+              content: isRede ? `Limite Máximo: ${limiteMax} %` : `Limite Máximo: ${limiteMax}%`,
               position: 'end',
               backgroundColor: 'rgba(255, 99, 132, 0.8)',
               color: 'white',
@@ -222,7 +265,7 @@ function getOpcoesChart() {
             label: {
               display: true,
               content: isRede
-                ? `Limite Mínimo: ${limiteMin.toFixed(2)} Mbps`
+                ? `Limite Mínimo: ${limiteMin.toFixed(2)} %`
                 : `Limite Mínimo: ${limiteMin.toFixed(1)}%`,
               position: 'start',
               backgroundColor: 'rgba(54, 162, 235, 0.8)',
@@ -240,11 +283,11 @@ function getOpcoesChart() {
         ticks: {
           font: { family: 'Segoe UI', size: 12 },
           color: '#666',
-          callback: (value) => (isRede ? `${value.toFixed(1)} Mbps` : `${value.toFixed(0)}%`),
+          callback: (value) => (isRede ? `${value.toFixed(1)} %` : `${value.toFixed(0)}%`),
         },
         title: {
           display: true,
-          text: isRede ? 'Conectividade (Mbps)' : 'Porcentagem (%)',
+          text: isRede ? 'Conectividade (%)' : 'Porcentagem (%)',
           font: { family: 'Segoe UI', size: 14, weight: 'bold' },
           color: '#555',
         },
@@ -289,21 +332,34 @@ function getNewValue(min, max) {
 }
 
 function getValoresIniciais(maquina) {
+
   if (maquina.criticidade === 'ocioso') {
     return {
-      cpu: { min: maquina.cpuLimite * 0.2, max: maquina.cpuLimite * 0.4 },
-      ram: { min: maquina.ramLimite * 0.2, max: maquina.ramLimite * 0.4 },
-      disco: { min: maquina.discoLimite * 0.2, max: maquina.discoLimite * 0.4 },
-      rede: { min: maquina.redeLimite * 0.2, max: maquina.redeLimite * 0.4 },
+      cpu: { min: maquina.cpuLimiteMin * 0.2, max: maquina.cpuLimite * 0.4 }, 
+      ram: { min: maquina.ramLimiteMin * 0.8, max: maquina.ramLimite * 0.9 }, 
+      disco: { min: maquina.discoLimiteMin * 0.96, max: maquina.discoLimite * 0.99 }, 
+      rede: { min: maquina.redeLimiteMin * 0.2, max: maquina.redeLimite * 0.4 }, 
     };
   }
+
+  if (maquina.criticidade === 'critico') {
+    return {
+      cpu: { min: maquina.cpuLimite * 0.9, max: maquina.cpuLimite * 1.15 }, 
+      ram: { min: maquina.ramLimite * 0.9, max: maquina.ramLimite * 1.1 },
+      disco: { min: maquina.discoLimite * 0.9, max: maquina.discoLimite * 1.1 },
+      rede: { min: maquina.redeLimite * 0.8, max: maquina.redeLimite * 1.05 },
+    };
+  }
+  
+  // Para status 'normal' ou 'atencao' (padrão)
   return {
-    cpu: { min: maquina.cpuLimite * 0.7, max: maquina.cpuLimite * 1.05 },
-    ram: { min: maquina.ramLimite * 0.6, max: maquina.ramLimite * 1.05 },
-    disco: { min: maquina.discoLimite * 0.65, max: maquina.discoLimite * 1.02 },
-    rede: { min: maquina.redeLimite * 0.7, max: maquina.redeLimite * 1.05 },
+    cpu: { min: maquina.cpuLimiteMin, max: maquina.cpuLimite },
+    ram: { min: maquina.ramLimiteMin, max: maquina.ramLimite },
+    disco: { min: maquina.discoLimiteMin, max: maquina.discoLimite },
+    rede: { min: maquina.redeLimiteMin, max: maquina.redeLimite },
   };
 }
+
 
 async function fetchData(idMaquina) {
   await new Promise((resolve) => setTimeout(resolve, 500));
@@ -327,6 +383,7 @@ async function updateChartData(chart) {
   const newPoint = await fetchData(maquinaAtualId);
 
   chart.data.datasets[0].data.shift();
+  // Continua usando o valor simulado para o movimento.
   chart.data.datasets[0].data.push(parseFloat(newPoint[componenteAtual]));
 
   chart.data.labels.shift();
@@ -354,7 +411,7 @@ function initLinhaChart(idMaquina) {
       mensagemDiv = document.createElement('div');
       mensagemDiv.id = 'mensagemGrafico';
       mensagemDiv.style.cssText =
-        'display: flex; align-items: center; justify-content: center; height: 300px; background-color: #f8f9fa; border-radius: 0.375rem; font-size: 1.2rem; color: #6c757d; font-weight: 500;';
+        'display: flex; align-items: center; justify-content: center; height: 250px; background-color: #f8f9fa; border-radius: 0.375rem; font-size: 1.2rem; color: #6c757d; font-weight: 500;';
       canvas.parentElement.appendChild(mensagemDiv);
     }
     mensagemDiv.style.display = 'flex';
@@ -376,14 +433,20 @@ function initLinhaChart(idMaquina) {
   const valores = getValoresIniciais(maquina);
   const componenteValor = valores[componenteAtual];
 
+  const dadosHistorico = Array(8)
+    .fill(0)
+    .map(() => parseFloat(getNewValue(componenteValor.min, componenteValor.max)));
+  
+  let valorPico = maquina[`${componenteAtual}Pico`];
+  dadosHistorico.push(valorPico);
+  
+
   const dataChart = {
     labels: ['21h', '23h', '01h', '03h', '05h', '07h', '09h', '11h', '13h'],
     datasets: [
       {
         label: COMPONENT_LABELS[componenteAtual],
-        data: Array(9)
-          .fill(0)
-          .map(() => parseFloat(getNewValue(componenteValor.min, componenteValor.max))),
+        data: dadosHistorico,
         borderColor: COLORS[componenteAtual].line,
         tension: 0.4,
         fill: true,
@@ -404,7 +467,7 @@ function initLinhaChart(idMaquina) {
   setTimeout(() => {
     applyGradients(linhaChartInstance);
     linhaChartInstance.update();
-  }, 50);
+  }, 3000);
 
   linhaChartInstance.options.onResize = () => applyGradients(linhaChartInstance);
   linhaIntervalId = setInterval(() => updateChartData(linhaChartInstance), 5000);
@@ -423,24 +486,43 @@ function atualizarDetalhes() {
     `${maquina.nome} | Histórico de Utilização de Recursos`;
 
   const metricas = [
-    { id: 'cpu', valor: maquina.cpuAtivos },
-    { id: 'ram', valor: maquina.ramAtivos },
-    { id: 'rede', valor: maquina.redeAtivos },
-    { id: 'disco', valor: maquina.discoAtivos },
+    { id: 'cpu', pico: maquina.cpuPico, limite: maquina.cpuLimite, isRede: false },
+    { id: 'ram', pico: maquina.ramPico, limite: maquina.ramLimite, isRede: false },
+    { id: 'rede', pico: maquina.redePico, limite: maquina.redeLimite, isRede: true },
+    { id: 'disco', pico: maquina.discoPico, limite: maquina.discoLimite, isRede: false },
   ];
 
   metricas.forEach((m) => {
     document.getElementById(`${m.id}24h`).textContent = maquina[`${m.id}24h`];
-    document.getElementById(`${m.id}Ativos`).textContent = m.valor;
-    const limite = m.id === 'rede' ? 3 : 5;
-    const classe = m.valor > limite ? 'text-danger' : m.valor > 2 ? 'text-warning' : 'text-success';
-    document.getElementById(`${m.id}Ativos`).className = `fw-bold fs-5 ${classe}`;
+
+    const picoElement = document.getElementById(`${m.id}Pico`);
+    if (m.isRede) {
+      picoElement.textContent = `${m.pico} %`;
+    } else {
+      picoElement.textContent = `${m.pico}%`;
+    }
+    let classe;
+    if (maquina.criticidade === 'ocioso') {
+      classe = m.pico < m.limite * 0.5 ? 'text-info' : 'text-warning';
+    } else {
+      const porcentagemLimite = (m.pico / m.limite) * 100;
+      classe =
+        porcentagemLimite > 100
+          ? 'text-danger'
+          : porcentagemLimite > 85
+            ? 'text-warning'
+            : 'text-success';
+    }
+
+    picoElement.className = `fw-bold fs-5 ${classe}`;
   });
 
   document.getElementById('infoModelo').textContent = maquina.modelo;
   document.getElementById('infoIp').textContent = maquina.ip;
-  document.getElementById('infoNucleos').textContent = maquina.nucleos;
   document.getElementById('infoSo').textContent = maquina.so;
+  document.getElementById('infoCpuCapacidade').textContent = maquina.nucleosCpu;
+  document.getElementById('infoRamCapacidade').textContent = maquina.capacidadeRam;
+  document.getElementById('infoDiscoCapacidade').textContent = maquina.capacidadeDisco;
 }
 
 function filtrarMaquinas(filtro) {

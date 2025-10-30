@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="../css/login.css">
   <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <title>OBERON - Recuperar Senha</title>
 </head>
@@ -46,20 +47,40 @@
 </body>
 
 <script>
+  function exibirToast(icone, texto) {
+    const COR_DE_FUNDO = '#1a1a1a';
+    const COR_DO_ICONE = 'white';
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      background: COR_DE_FUNDO,
+      iconColor: COR_DO_ICONE,
+      color: COR_DO_ICONE,
+
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      }
+    });
+    Toast.fire({
+      icon: icone,
+      title: texto
+    });
+  }
+
   document.getElementById("recoverForm").addEventListener("submit", async (e) => {
     e.preventDefault();
+
     const email = document.getElementById("email").value;
     const btn = document.querySelector('.login-btn');
-    const status = document.getElementById('status-message');
-
-    // Feedback visual imediato
     btn.disabled = true;
-    status.style.color = '#fff';
-    status.innerHTML = 'Enviando link...';
+    btn.textContent = 'ENVIANDO...';
 
     try {
-      // Chama a rota do back-end para gerar e enviar o token
-      const resp = await fetch("http://localhost:3333/auth/esqueci-senha", {
+      const resp = await fetch("/auth/esqueci-senha", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -69,29 +90,30 @@
         })
       });
 
-      // 💥 Tratamento de erro robusto antes de ler o JSON
       if (!resp.ok) {
-        // Tenta ler o JSON de erro (ex: 500), mas falha se for HTML
         const errorData = await resp.json().catch(() => ({
           msg: 'Erro interno do servidor. Verifique o console.'
         }));
-        status.style.color = '#F44336';
-        status.innerHTML = "⚠️ " + errorData.msg;
+
+        exibirToast('error', errorData.msg);
+        btn.disabled = false;
+        btn.textContent = 'RECUPERAR SENHA';
         return;
       }
 
-      // Sucesso (código 200, mesmo que o e-mail não exista)
       const data = await resp.json();
-      status.style.color = '#4CAF50';
-      status.innerHTML = "✅ " + data.msg;
+
+      exibirToast('success', data.msg);
 
     } catch (err) {
-      // Erro de conexão (servidor fora do ar)
-      status.style.color = '#F44336';
-      status.innerHTML = "❌ Erro ao conectar com o servidor. Tente novamente.";
+      exibirToast('error', "Erro ao conectar com o servidor. Tente novamente.");
       console.error(err);
+
     } finally {
-      btn.disabled = false;
+      if (btn.disabled) {
+        btn.disabled = false;
+        btn.textContent = 'RECUPERAR SENHA';
+      }
     }
   });
 

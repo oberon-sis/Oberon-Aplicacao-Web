@@ -28,6 +28,7 @@
 
     <main class="content flex-grow-1 d-flex flex-column h-100">
       <header
+        id="header-top"
         class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0"
       >
         <h1 class="h3 mb-0">Monitoramento em tempo real de recursos</h1>
@@ -45,10 +46,7 @@
       </header>
 
       <div class="main-container p-4 d-flex flex-column flex-grow-1">
-        <div
-          id="tour-filtros-status"
-          class="d-flex flex-wrap align-items-center mb-4 filter-group-row flex-shrink-0"
-        >
+        <div id="filter-group-row" class="d-flex flex-wrap align-items-center mb-4 filter-group-row flex-shrink-0">
           <div class="btn-group me-3" role="group">
             <button type="button" class="btn btn-custom-status active" data-filtro="todas">
               Todas <span class="badge text-bg-dark ms-1">6</span>
@@ -75,10 +73,10 @@
         </div>
 
         <div class="main-content-area d-flex flex-grow-1 overflow-hidden">
-          <section class="resource-cards flex-fill" id="tour-cards-container">
+          <section id="resource-cards" class="resource-cards flex-fill">
             <div class="card card-recurso" data-maquina-id="1">
               <div class="d-flex justify-content-between align-items-start mb-2">
-                <h5 class="card-title h6 mb-0">ESTACAO-0021</h5>
+                <h5 class="card-title h6 mb-0">Máquina-0021</h5>
                 <i class="bi bi-check-circle-fill text-success fs-5"></i>
               </div>
               <p class="card-text mb-1">
@@ -89,7 +87,7 @@
               </p>
               <p class="card-text mb-2 small text-muted">Uso mais perto do limite:</p>
               <ul class="list-unstyled small mb-3">
-                <li>CPU: <span class="fw-bold">65%</span></li>
+                <li>CPU: <span class="fw-bold">55%</span></li>
                 <li><span class="text-success">(Normal)</span></li>
               </ul>
               <button type="button" class="btn btn-success btn-sm w-100">Ver Detalhes</button>
@@ -97,7 +95,7 @@
 
             <div class="card card-recurso" data-maquina-id="2">
               <div class="d-flex justify-content-between align-items-start mb-2">
-                <h5 class="card-title h6 mb-0">ESTACAO-0022</h5>
+                <h5 class="card-title h6 mb-0">Máquina-0022</h5>
                 <i class="bi bi-exclamation-circle text-info fs-5"></i>
               </div>
               <p class="card-text mb-1">
@@ -106,17 +104,17 @@
               <p class="card-text mb-1">
                 <small class="text-info">SUBUTILIZADO</small>
               </p>
-              <p class="card-text mb-2 small text-muted">Uso atual:</p>
+              <p class="card-text mb-2 small text-muted">Pior caso:</p>
               <ul class="list-unstyled small mb-3">
-                <li>CPU: <span class="fw-bold">28%</span></li>
-                <li><span class="text-info">(62% Abaixo do ideal)</span></li>
+                <li>RAM: <span class="fw-bold">28%</span></li>
+                <li><span class="text-info">(46% Abaixo do ideal)</span></li>
               </ul>
               <button type="button" class="btn btn-info btn-sm w-100">Ver Detalhes</button>
             </div>
 
             <div class="card card-recurso" data-maquina-id="3">
               <div class="d-flex justify-content-between align-items-start mb-2">
-                <h5 class="card-title h6 mb-0">ESTACAO-0001</h5>
+                <h5 class="card-title h6 mb-0">Máquina-0001</h5>
                 <i class="bi bi-exclamation-triangle-fill text-danger fs-5"></i>
               </div>
               <p class="card-text mb-1">
@@ -125,17 +123,17 @@
               <p class="card-text mb-1">
                 <small class="text-danger">ATENÇÃO URGENTE</small>
               </p>
-              <p class="card-text mb-2 small text-muted">Uso mais perto do limite:</p>
+              <p class="card-text mb-2 small text-muted">Pior caso:</p>
               <ul class="list-unstyled small mb-3">
                 <li>CPU: <span class="fw-bold">95%</span></li>
-                <li><span class="text-danger">(25% Acima do Limite)</span></li>
+                <li><span class="text-danger">(18% Acima do Limite)</span></li>
               </ul>
               <button type="button" class="btn btn-danger btn-sm w-100">Ver Detalhes</button>
             </div>
 
             <div class="card card-recurso" data-maquina-id="4">
               <div class="d-flex justify-content-between align-items-start mb-2">
-                <h5 class="card-title h6 mb-0">ESTACAO-0002</h5>
+                <h5 class="card-title h6 mb-0">Máquina-0002</h5>
                 <i class="bi bi-dash-circle-fill text-secondary fs-5"></i>
               </div>
               <p class="card-text mb-1">
@@ -154,7 +152,7 @@
 
             <div class="card card-recurso" data-maquina-id="5">
               <div class="d-flex justify-content-between align-items-start mb-2">
-                <h5 class="card-title h6 mb-0">ESTACAO-0015</h5>
+                <h5 class="card-title h6 mb-0">Máquina-0015</h5>
                 <i class="bi bi-exclamation-circle-fill text-warning fs-5"></i>
               </div>
               <p class="card-text mb-1">
@@ -165,15 +163,15 @@
               </p>
               <p class="card-text mb-2 small text-muted">Uso mais perto do limite:</p>
               <ul class="list-unstyled small mb-3">
-                <li>RAM: <span class="fw-bold">88%</span></li>
-                <li><span class="text-warning">(3% Acima do Limite)</span></li>
+                <li>RAM: <span class="fw-bold">86%</span></li>
+                <li><span class="text-warning">(3% Abaixo do Limite)</span></li>
               </ul>
               <button type="button" class="btn btn-warning btn-sm w-100">Ver Detalhes</button>
             </div>
 
             <div class="card card-recurso" data-maquina-id="6">
               <div class="d-flex justify-content-between align-items-start mb-2">
-                <h5 class="card-title h6 mb-0">ESTACAO-0030</h5>
+                <h5 class="card-title h6 mb-0">Máquina-0030</h5>
                 <i class="bi bi-tools text-secondary fs-5"></i>
               </div>
               <p class="card-text mb-1">
@@ -184,8 +182,8 @@
               </p>
               <p class="card-text mb-2 small text-muted">Status:</p>
               <ul class="list-unstyled small mb-3">
-                <li><span class="fw-bold">Programada</span></li>
-                <li><span class="text-muted">(Retorna em 2h)</span></li>
+                <li><span class="fw-bold">Em manutenção</span></li>
+                <li><span class="text-muted">(Sem previsão de retorno)</span></li>
               </ul>
               <button type="button" class="btn btn-secondary btn-sm w-100">Ver Detalhes</button>
             </div>
@@ -194,7 +192,7 @@
           <aside class="details-sidebar flex-shrink-0">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h5 class="h6 mb-0 fw-bold" id="tituloDetalhes">
-                ESTACAO-0021 | Histórico de Utilização de Recursos
+                Máquina-0021 | Histórico de Utilização de Recursos
               </h5>
               <div class="dropdown">
                 <button
@@ -223,11 +221,11 @@
               </div>
             </div>
 
-            <div class="chart-container mb-4" id="tour-grafico-utilizacao">
+            <div id="chart-container" class="chart-container mb-4">
               <canvas id="utilizacaoChart"></canvas>
             </div>
 
-            <div class="row row-cols-2 g-3 mb-4 indicators-grid" id="tour-indicadores-alertas">
+            <div id="indicators-grid" class="row row-cols-2 g-3 mb-4 indicators-grid">
               <div class="col">
                 <div class="resource-detail-card d-flex align-items-center">
                   <i class="bi bi-cpu-fill fs-3"></i>
@@ -239,8 +237,8 @@
                         <span class="fw-bold text-muted" id="cpu24h">10</span>
                       </div>
                       <div class="text-end">
-                        <small class="text-muted d-block">Ativos:</small>
-                        <span class="fw-bold fs-5" id="cpuAtivos">6</span>
+                        <small class="text-muted d-block">Pico de Uso:</small>
+                        <span class="fw-bold fs-5" id="cpuPico">6</span>
                       </div>
                     </div>
                   </div>
@@ -258,8 +256,8 @@
                         <span class="fw-bold text-muted" id="ram24h">4</span>
                       </div>
                       <div class="text-end">
-                        <small class="text-muted d-block">Ativos:</small>
-                        <span class="fw-bold fs-5" id="ramAtivos">1</span>
+                        <small class="text-muted d-block">Pico de Uso:</small>
+                        <span class="fw-bold fs-5" id="ramPico">1</span>
                       </div>
                     </div>
                   </div>
@@ -277,8 +275,8 @@
                         <span class="fw-bold text-muted" id="rede24h">3</span>
                       </div>
                       <div class="text-end">
-                        <small class="text-muted d-block">Ativos:</small>
-                        <span class="fw-bold fs-5" id="redeAtivos">1</span>
+                        <small class="text-muted d-block">Pico de Uso:</small>
+                        <span class="fw-bold fs-5" id="redePico">1</span>
                       </div>
                     </div>
                   </div>
@@ -296,8 +294,8 @@
                         <span class="fw-bold text-muted" id="disco24h">7</span>
                       </div>
                       <div class="text-end">
-                        <small class="text-muted d-block">Ativos:</small>
-                        <span class="fw-bold fs-5" id="discoAtivos">3</span>
+                        <small class="text-muted d-block">Pico de Uso:</small>
+                        <span class="fw-bold fs-5" id="discoPico">3</span>
                       </div>
                     </div>
                   </div>
@@ -307,23 +305,40 @@
 
             <hr />
 
-            <div class="details-info small" id="tour-info-maquina">
-              <p class="mb-1 d-flex justify-content-between">
-                <span class="text-muted">Modelo:</span>
-                <span class="fw-bold" id="infoModelo">Dell OptiPlex 3050 SFF</span>
-              </p>
-              <p class="mb-1 d-flex justify-content-between">
-                <span class="text-muted">IP:</span>
-                <span class="fw-bold" id="infoIp">192.168.1.101</span>
-              </p>
-              <p class="mb-1 d-flex justify-content-between">
-                <span class="text-muted">Quantidade de núcleos:</span>
-                <span class="fw-bold" id="infoNucleos">8</span>
-              </p>
-              <p class="mb-3 d-flex justify-content-between">
-                <span class="text-muted">Sistema Operacional:</span>
-                <span class="fw-bold" id="infoSo">Windows 10 Pro</span>
-              </p>
+            <div id="details-info" class="details-info small">
+              <div class="row g-3">
+                <div class="col-6">
+                  <p class="mb-2">
+                    <span class="text-muted d-block">Modelo:</span>
+                    <span class="fw-bold" id="infoModelo">Dell OptiPlex 3050 SFF</span>
+                  </p>
+                  <p class="mb-2">
+                    <span class="text-muted d-block">IP:</span>
+                    <span class="fw-bold" id="infoIp">192.168.1.101</span>
+                  </p>
+                  <p class="mb-0">
+                    <span class="text-muted d-block">Sistema Operacional:</span>
+                    <span class="fw-bold" id="infoSo">Windows 10 Pro</span>
+                  </p>
+                </div>
+                <div class="col-6">
+                  <p class="mb-2">
+                    <span class="text-muted d-block">CPU:</span>
+                    <span class="fw-bold" id="infoCpuCapacidade">8 núcleos</span>
+                  </p>
+                  <p class="mb-2">
+                    <span class="text-muted d-block">RAM:</span>
+                    <span class="fw-bold" id="infoRamCapacidade">16 GB</span>
+                  </p>
+                  <p class="mb-0">
+                    <span class="text-muted d-block">Disco:</span>
+                    <span class="fw-bold" id="infoDiscoCapacidade">512 GB</span>
+                  </p>
+                </div>
+              </div>
+              <a href="../html/painelEspecifico.html" class="btn btn-success btn-sm w-100 mt-2">
+                Ver Análise Detalhada
+              </a>
             </div>
           </aside>
         </div>

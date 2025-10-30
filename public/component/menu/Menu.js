@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const idUsuario = sessionStorage.ID_USUARIO ? sessionStorage.ID_USUARIO : 5;
+  const idUsuario = sessionStorage.ID_USUARIO
 
   fetch('../component/menu/MenuEsqueleto.html')
     .then((response) => {
@@ -14,13 +14,13 @@ document.addEventListener('DOMContentLoaded', function () {
       // return fetch(`/menu/getMenu/${idUsuario}`);
     })
     .then(() =>{
-          document.getElementById("nome_de_usuario").innerHTML = sessionStorage.nomeUsuarioSimples
           const usuarioString = sessionStorage.getItem("usuario"); 
           if (usuarioString) {
               const usuarioObjeto = JSON.parse(usuarioString);
+              document.getElementById("nome_de_usuario").innerHTML = usuarioObjeto.nome
               document.getElementById("email_de_usaurio").innerHTML = usuarioObjeto.email;
           } else {
-              document.getElementById("email_de_usaurio").innerHTML = "E-mail não encontrado (sessão expirada)";
+              document.getElementById("email_de_usaurio").innerHTML = "(sessão expirada)";
           }
 
     })

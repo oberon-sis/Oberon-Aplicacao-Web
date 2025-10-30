@@ -6,6 +6,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>OBERON - Redefinir Senha</title>
   <link rel="stylesheet" href="../css/login.css">
+  <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
@@ -43,6 +47,31 @@
 </body>
 
 <script>
+  // A função de exibição de Toast é global neste arquivo
+  function exibirToast(icone, texto) {
+    const COR_DE_FUNDO = '#1a1a1a';
+    const COR_DO_ICONE = 'white';
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      background: COR_DE_FUNDO,
+      iconColor: COR_DO_ICONE,
+      color: COR_DO_ICONE,
+
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      }
+    });
+    Toast.fire({
+      icon: icone,
+      title: texto
+    });
+  }
+
   // Função utilitária para extrair parâmetros (token, email) da URL
   function getUrlParameter(name) {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -59,8 +88,10 @@
 
   // 2. VALIDAÇÃO INICIAL DO LINK
   if (!token || !email) {
-    statusElement.innerHTML = '❌ Link inválido ou expirado. Por favor, solicite uma nova recuperação de senha.';
-    formElement.style.display = 'none'; // Esconde o formulário de senha
+    exibirToast('error', 'Link inválido ou expirado. Por favor, solicite uma nova recuperação de senha.');
+    if (formElement) {
+      formElement.style.display = 'none';
+    }
   }
 
   document.getElementById("resetForm").addEventListener("submit", async (e) => {
@@ -69,20 +100,18 @@
     const novaSenha = document.getElementById("nova-senha").value;
     const confirmaSenha = document.getElementById("confirma-senha").value;
 
-    // Validação básica de senhas
     if (novaSenha !== confirmaSenha) {
-      alert("As senhas digitadas não coincidem!");
+      exibirToast('error', "As senhas digitadas não coincidem!");
       return;
     }
 
     if (novaSenha.length < 6) {
-      alert("A senha deve ter pelo menos 6 caracteres.");
+      exibirToast('error', "A senha deve ter pelo menos 6 caracteres.");
       return;
     }
 
     try {
-      // Chama a rota do back-end para validar o token e atualizar a senha
-      const resp = await fetch("http://localhost:3333/auth/redefinir-senha", {
+      const resp = await fetch("/auth/redefinir-senha", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -94,27 +123,27 @@
         }) // Envia os 3 dados
       });
 
-      // 💥 Tratamento de erro robusto
       if (!resp.ok) {
         const errorData = await resp.json().catch(() => ({
           msg: 'Erro de comunicação.'
         }));
-        alert("⚠️ Erro ao redefinir a senha: " + (errorData.msg || 'Token inválido ou expirado.'));
-        statusElement.innerHTML = '⚠️ Erro ao redefinir. Tente novamente.';
+
+        exibirToast('error', "Erro ao redefinir a senha: " + (errorData.msg || 'Token inválido ou expirado.'));
         return;
       }
 
-      // Sucesso (código 200)
       const data = await resp.json();
-      alert("✅ Senha redefinida com sucesso! Redirecionando para a tela de login.");
-      window.location.href = './login.html';
+      exibirToast('success', "Senha redefinida com sucesso! Redirecionando para a tela de login.");
+      setTimeout(() => {
+        window.location.href = './login.html';
+      }, 1500);
+
 
     } catch (err) {
-      alert("❌ Erro ao conectar com o servidor.");
+      exibirToast('error', "Erro ao conectar com o servidor.");
       console.error(err);
     }
   });
-
 </script>
 
 </html>
