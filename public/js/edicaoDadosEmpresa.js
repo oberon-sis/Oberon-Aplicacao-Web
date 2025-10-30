@@ -1,4 +1,4 @@
-const ID_FUNCIONARIO_GERENTE_MOCK = 6;
+const ID_FUNCIONARIO_GERENTE_MOCK = sessionStorage.ID_USUARIO
 
 function ExcluirUsuario(idFuncionario) {
   Swal.fire({
@@ -194,7 +194,7 @@ function getDadosEmpresaBd() {
 }
 
 function AtualizarEmpresa(senha) {
-  const idFuncionario = 4;
+  const idFuncionario = sessionStorage.ID_USUARIO
   const razaoSocial = document.getElementById('ipt_razao_social').value;
   const cnpj = document.getElementById('ipt_cnpj').value;
 

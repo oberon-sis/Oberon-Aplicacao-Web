@@ -49,7 +49,7 @@ function AtualizarUsuario(idFuncionario) {
       // Verifica se o usuário clicou em 'Excluir'
       if (resultadoSwal.isConfirmed) {
         // Variáveis Mockadas (FIXAS)
-        const idFuncionarioGerente = ID_FUNCIONARIO_GERENTE_MOCK;
+        const idFuncionarioGerente = sessionStorage.ID_USUARIO
         const senhaGerente = resultadoSwal.value.senha; // Pega a senha digitada
 
         // CHAMADA FETCH
