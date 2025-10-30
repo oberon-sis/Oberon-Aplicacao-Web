@@ -1,6 +1,6 @@
 let linhaChartInstance = null;
 let linhaIntervalId = null;
-let maquinaAtualId = 1;
+let maquinaAtualId = 3; // CORREÇÃO 1: Iniciar na Máquina-0001 (ID 3)
 let filtroAtual = 'todas';
 let componenteAtual = 'cpu';
 const LINHA_CHART_ID = 'utilizacaoChart';
@@ -332,14 +332,26 @@ function getNewValue(min, max) {
 }
 
 function getValoresIniciais(maquina) {
+
   if (maquina.criticidade === 'ocioso') {
     return {
-      cpu: { min: maquina.cpuLimiteMin * 0.2, max: maquina.cpuLimite * 0.4 },
-      ram: { min: maquina.ramLimiteMin * 0.8, max: maquina.ramLimite * 0.9 },
-      disco: { min: maquina.discoLimiteMin * 0.96, max: maquina.discoLimite * 0.99 },
-      rede: { min: maquina.redeLimiteMin * 0.2, max: maquina.redeLimite * 0.4 },
+      cpu: { min: maquina.cpuLimiteMin * 0.2, max: maquina.cpuLimite * 0.4 }, 
+      ram: { min: maquina.ramLimiteMin * 0.8, max: maquina.ramLimite * 0.9 }, 
+      disco: { min: maquina.discoLimiteMin * 0.96, max: maquina.discoLimite * 0.99 }, 
+      rede: { min: maquina.redeLimiteMin * 0.2, max: maquina.redeLimite * 0.4 }, 
     };
   }
+
+  if (maquina.criticidade === 'critico') {
+    return {
+      cpu: { min: maquina.cpuLimite * 0.9, max: maquina.cpuLimite * 1.15 }, 
+      ram: { min: maquina.ramLimite * 0.9, max: maquina.ramLimite * 1.1 },
+      disco: { min: maquina.discoLimite * 0.9, max: maquina.discoLimite * 1.1 },
+      rede: { min: maquina.redeLimite * 0.8, max: maquina.redeLimite * 1.05 },
+    };
+  }
+  
+  // Para status 'normal' ou 'atencao' (padrão)
   return {
     cpu: { min: maquina.cpuLimiteMin, max: maquina.cpuLimite },
     ram: { min: maquina.ramLimiteMin, max: maquina.ramLimite },
@@ -347,6 +359,7 @@ function getValoresIniciais(maquina) {
     rede: { min: maquina.redeLimiteMin, max: maquina.redeLimite },
   };
 }
+
 
 async function fetchData(idMaquina) {
   await new Promise((resolve) => setTimeout(resolve, 500));
@@ -370,6 +383,7 @@ async function updateChartData(chart) {
   const newPoint = await fetchData(maquinaAtualId);
 
   chart.data.datasets[0].data.shift();
+  // Continua usando o valor simulado para o movimento.
   chart.data.datasets[0].data.push(parseFloat(newPoint[componenteAtual]));
 
   chart.data.labels.shift();
@@ -419,14 +433,20 @@ function initLinhaChart(idMaquina) {
   const valores = getValoresIniciais(maquina);
   const componenteValor = valores[componenteAtual];
 
+  const dadosHistorico = Array(8)
+    .fill(0)
+    .map(() => parseFloat(getNewValue(componenteValor.min, componenteValor.max)));
+  
+  let valorPico = maquina[`${componenteAtual}Pico`];
+  dadosHistorico.push(valorPico);
+  
+
   const dataChart = {
     labels: ['21h', '23h', '01h', '03h', '05h', '07h', '09h', '11h', '13h'],
     datasets: [
       {
         label: COMPONENT_LABELS[componenteAtual],
-        data: Array(9)
-          .fill(0)
-          .map(() => parseFloat(getNewValue(componenteValor.min, componenteValor.max))),
+        data: dadosHistorico,
         borderColor: COLORS[componenteAtual].line,
         tension: 0.4,
         fill: true,
@@ -447,7 +467,7 @@ function initLinhaChart(idMaquina) {
   setTimeout(() => {
     applyGradients(linhaChartInstance);
     linhaChartInstance.update();
-  }, 50);
+  }, 3000);
 
   linhaChartInstance.options.onResize = () => applyGradients(linhaChartInstance);
   linhaIntervalId = setInterval(() => updateChartData(linhaChartInstance), 5000);

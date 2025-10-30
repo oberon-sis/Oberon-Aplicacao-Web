@@ -161,7 +161,7 @@ function listarMaquinasPorEmpresa(fkEmpresa, limite, offset, condicao, termoDePe
         MAX(MC.origemParametro) AS origemParametro 
     FROM Maquina AS M
     LEFT JOIN Componente AS MC ON M.idMaquina = MC.fkMaquina
-    WHERE M.fkEmpresa = ${fkEmpresa}
+    WHERE M.fkEmpresa = 6
       AND (M.${condicao} LIKE '%${termoDePesquisa}%' OR M.${condicao} = '${termoDePesquisa}')
     GROUP BY M.idMaquina
     ORDER BY M.idMaquina ASC
@@ -183,7 +183,7 @@ function contarMaquinasPorEmpresa(fkEmpresa, condicao, termoDePesquisa) {
 
   var instrucaoCountSql = `
         SELECT COUNT(idMaquina) AS totalRegistros FROM Maquina
-        WHERE fkEmpresa = ${fkEmpresa} AND (${condicao} LIKE '%${termoDePesquisa}%'
+        WHERE fkEmpresa = 6 AND (${condicao} LIKE '%${termoDePesquisa}%'
           OR ${condicao} = '${termoDePesquisa}')
     `;
 
