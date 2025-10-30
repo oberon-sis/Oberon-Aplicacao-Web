@@ -24,14 +24,20 @@ const MAQUINAS_DATA = {
     redePico: 5,
     disco24h: 4,
     discoPico: 89,
-    cpuLimite: 90,
-    ramLimite: 85,
+    cpuLimite: 78,
+    cpuLimiteMin: 12.4,
+    ramLimite: 74.3,
+    ramLimiteMin: 89.4,
     discoLimite: 88.8,
-    redeLimite: 4,
+    discoLimiteMin: 87.5,
+    redeLimite: 3.5,
+    redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 3050 SFF',
     ip: '192.168.1.101',
-    nucleos: 8,
     so: 'Windows 10 Pro',
+    nucleosCpu: 8,
+    capacidadeRam: '16 GB',
+    capacidadeDisco: '512 GB',
   },
   2: {
     nome: 'Máquina-0022',
@@ -44,14 +50,20 @@ const MAQUINAS_DATA = {
     redePico: 1,
     disco24h: 3,
     discoPico: 57,
-    cpuLimite: 90,
-    ramLimite: 85,
+    cpuLimite: 78,
+    cpuLimiteMin: 12.4,
+    ramLimite: 74.3,
+    ramLimiteMin: 89.4,
     discoLimite: 88.8,
-    redeLimite: 2,
+    discoLimiteMin: 87.5,
+    redeLimite: 3.5,
+    redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 5060',
     ip: '192.168.1.102',
-    nucleos: 8,
     so: 'Windows 10 Pro',
+    nucleosCpu: 8,
+    capacidadeRam: '16 GB',
+    capacidadeDisco: '512 GB',
   },
   3: {
     nome: 'Máquina-0001',
@@ -64,14 +76,20 @@ const MAQUINAS_DATA = {
     redePico: 10,
     disco24h: 12,
     discoPico: 94,
-    cpuLimite: 70,
-    ramLimite: 80,
-    discoLimite: 85,
-    redeLimite: 5,
+    cpuLimite: 78,
+    cpuLimiteMin: 12.4,
+    ramLimite: 74.3,
+    ramLimiteMin: 89.4,
+    discoLimite: 88.8,
+    discoLimiteMin: 87.5,
+    redeLimite: 3.5,
+    redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 3050 SFF',
     ip: '192.168.1.103',
-    nucleos: 8,
     so: 'Windows 10 Pro',
+    nucleosCpu: 8,
+    capacidadeRam: '8 GB',
+    capacidadeDisco: '256 GB',
   },
   4: {
     nome: 'Máquina-0002',
@@ -84,34 +102,46 @@ const MAQUINAS_DATA = {
     redePico: 0,
     disco24h: 0,
     discoPico: 0,
-    cpuLimite: 90,
-    ramLimite: 85,
+    cpuLimite: 78,
+    cpuLimiteMin: 12.4,
+    ramLimite: 74.3,
+    ramLimiteMin: 89.4,
     discoLimite: 88.8,
-    redeLimite: 5,
+    discoLimiteMin: 87.5,
+    redeLimite: 3.5,
+    redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 7060',
     ip: '192.168.1.104',
-    nucleos: 8,
     so: 'Windows 10 Pro',
+    nucleosCpu: 8,
+    capacidadeRam: '8 GB',
+    capacidadeDisco: '512 GB',
   },
   5: {
     nome: 'Máquina-0015',
     criticidade: 'atencao',
     cpu24h: 8,
-    cpuPico:77,
+    cpuPico: 77,
     ram24h: 12,
     ramPico: 82,
     rede24h: 4,
     redePico: 4,
     disco24h: 9,
     discoPico: 82,
-    cpuLimite: 80,
-    ramLimite: 85,
-    discoLimite: 88,
-    redeLimite: 4,
+    cpuLimite: 78,
+    cpuLimiteMin: 12.4,
+    ramLimite: 74.3,
+    ramLimiteMin: 89.4,
+    discoLimite: 88.8,
+    discoLimiteMin: 87.5,
+    redeLimite: 3.5,
+    redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 3050 SFF',
     ip: '192.168.1.105',
-    nucleos: 8,
     so: 'Windows 10 Pro',
+    nucleosCpu: 8,
+    capacidadeRam: '8 GB',
+    capacidadeDisco: '512 GB',
   },
   6: {
     nome: 'Máquina-0030',
@@ -124,14 +154,20 @@ const MAQUINAS_DATA = {
     redePico: 0,
     disco24h: 0,
     discoPico: 0,
-    cpuLimite: 90,
-    ramLimite: 85,
+    cpuLimite: 78,
+    cpuLimiteMin: 12.4,
+    ramLimite: 74.3,
+    ramLimiteMin: 89.4,
     discoLimite: 88.8,
-    redeLimite: 5,
+    discoLimiteMin: 87.5,
+    redeLimite: 3.5,
+    redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 3060',
     ip: '192.168.1.106',
-    nucleos: 8,
     so: 'Windows 11 Pro',
+    nucleosCpu: 8,
+    capacidadeRam: '8 GB',
+    capacidadeDisco: '256 GB',
   },
 };
 
@@ -154,7 +190,14 @@ function getLimiteMaximo() {
 }
 
 function getLimiteMinimo() {
-  return getLimiteMaximo() * 0.7;
+  const maquina = MAQUINAS_DATA[maquinaAtualId];
+  const limites = {
+    cpu: maquina.cpuLimiteMin,
+    ram: maquina.ramLimiteMin,
+    disco: maquina.discoLimiteMin,
+    rede: maquina.redeLimiteMin,
+  };
+  return limites[componenteAtual] || 90;
 }
 
 function getOpcoesChart() {
@@ -291,17 +334,17 @@ function getNewValue(min, max) {
 function getValoresIniciais(maquina) {
   if (maquina.criticidade === 'ocioso') {
     return {
-      cpu: { min: maquina.cpuLimite * 0.2, max: maquina.cpuLimite * 0.4 },
-      ram: { min: maquina.ramLimite * 0.2, max: maquina.ramLimite * 0.4 },
-      disco: { min: maquina.discoLimite * 0.2, max: maquina.discoLimite * 0.4 },
-      rede: { min: maquina.redeLimite * 0.2, max: maquina.redeLimite * 0.4 },
+      cpu: { min: maquina.cpuLimiteMin * 0.2, max: maquina.cpuLimite * 0.4 },
+      ram: { min: maquina.ramLimiteMin * 0.8, max: maquina.ramLimite * 0.9 },
+      disco: { min: maquina.discoLimiteMin * 0.96, max: maquina.discoLimite * 0.99 },
+      rede: { min: maquina.redeLimiteMin * 0.2, max: maquina.redeLimite * 0.4 },
     };
   }
   return {
-    cpu: { min: maquina.cpuLimite * 0.7, max: maquina.cpuLimite * 1.05 },
-    ram: { min: maquina.ramLimite * 0.6, max: maquina.ramLimite * 1.05 },
-    disco: { min: maquina.discoLimite * 0.65, max: maquina.discoLimite * 1.02 },
-    rede: { min: maquina.redeLimite * 0.7, max: maquina.redeLimite * 1.05 },
+    cpu: { min: maquina.cpuLimiteMin, max: maquina.cpuLimite },
+    ram: { min: maquina.ramLimiteMin, max: maquina.ramLimite },
+    disco: { min: maquina.discoLimiteMin, max: maquina.discoLimite },
+    rede: { min: maquina.redeLimiteMin, max: maquina.redeLimite },
   };
 }
 
@@ -456,8 +499,10 @@ function atualizarDetalhes() {
 
   document.getElementById('infoModelo').textContent = maquina.modelo;
   document.getElementById('infoIp').textContent = maquina.ip;
-  document.getElementById('infoNucleos').textContent = maquina.nucleos;
   document.getElementById('infoSo').textContent = maquina.so;
+  document.getElementById('infoCpuCapacidade').textContent = maquina.nucleosCpu;
+  document.getElementById('infoRamCapacidade').textContent = maquina.capacidadeRam;
+  document.getElementById('infoDiscoCapacidade').textContent = maquina.capacidadeDisco;
 }
 
 function filtrarMaquinas(filtro) {

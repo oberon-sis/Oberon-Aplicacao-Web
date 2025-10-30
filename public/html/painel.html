@@ -86,7 +86,7 @@
               </p>
               <p class="card-text mb-2 small text-muted">Uso mais perto do limite:</p>
               <ul class="list-unstyled small mb-3">
-                <li>CPU: <span class="fw-bold">65%</span></li>
+                <li>CPU: <span class="fw-bold">55%</span></li>
                 <li><span class="text-success">(Normal)</span></li>
               </ul>
               <button type="button" class="btn btn-success btn-sm w-100">Ver Detalhes</button>
@@ -103,10 +103,10 @@
               <p class="card-text mb-1">
                 <small class="text-info">SUBUTILIZADO</small>
               </p>
-              <p class="card-text mb-2 small text-muted">Uso atual:</p>
+              <p class="card-text mb-2 small text-muted">Pior caso:</p>
               <ul class="list-unstyled small mb-3">
-                <li>CPU: <span class="fw-bold">28%</span></li>
-                <li><span class="text-info">(62% Abaixo do ideal)</span></li>
+                <li>RAM: <span class="fw-bold">28%</span></li>
+                <li><span class="text-info">(46% Abaixo do ideal)</span></li>
               </ul>
               <button type="button" class="btn btn-info btn-sm w-100">Ver Detalhes</button>
             </div>
@@ -122,10 +122,10 @@
               <p class="card-text mb-1">
                 <small class="text-danger">ATENÇÃO URGENTE</small>
               </p>
-              <p class="card-text mb-2 small text-muted">Uso mais perto do limite:</p>
+              <p class="card-text mb-2 small text-muted">Pior caso:</p>
               <ul class="list-unstyled small mb-3">
                 <li>CPU: <span class="fw-bold">95%</span></li>
-                <li><span class="text-danger">(25% Acima do Limite)</span></li>
+                <li><span class="text-danger">(18% Acima do Limite)</span></li>
               </ul>
               <button type="button" class="btn btn-danger btn-sm w-100">Ver Detalhes</button>
             </div>
@@ -162,8 +162,8 @@
               </p>
               <p class="card-text mb-2 small text-muted">Uso mais perto do limite:</p>
               <ul class="list-unstyled small mb-3">
-                <li>RAM: <span class="fw-bold">88%</span></li>
-                <li><span class="text-warning">(3% Acima do Limite)</span></li>
+                <li>RAM: <span class="fw-bold">86%</span></li>
+                <li><span class="text-warning">(3% Abaixo do Limite)</span></li>
               </ul>
               <button type="button" class="btn btn-warning btn-sm w-100">Ver Detalhes</button>
             </div>
@@ -305,22 +305,36 @@
             <hr />
 
             <div class="details-info small">
-              <p class="mb-1 d-flex justify-content-between">
-                <span class="text-muted">Modelo:</span>
-                <span class="fw-bold" id="infoModelo">Dell OptiPlex 3050 SFF</span>
-              </p>
-              <p class="mb-1 d-flex justify-content-between">
-                <span class="text-muted">IP:</span>
-                <span class="fw-bold" id="infoIp">192.168.1.101</span>
-              </p>
-              <p class="mb-1 d-flex justify-content-between">
-                <span class="text-muted">Quantidade de núcleos:</span>
-                <span class="fw-bold" id="infoNucleos">8</span>
-              </p>
-              <p class="mb-3 d-flex justify-content-between">
-                <span class="text-muted">Sistema Operacional:</span>
-                <span class="fw-bold" id="infoSo">Windows 10 Pro</span>
-              </p>
+              <div class="row g-3">
+                <div class="col-6">
+                  <p class="mb-2">
+                    <span class="text-muted d-block">Modelo:</span>
+                    <span class="fw-bold" id="infoModelo">Dell OptiPlex 3050 SFF</span>
+                  </p>
+                  <p class="mb-2">
+                    <span class="text-muted d-block">IP:</span>
+                    <span class="fw-bold" id="infoIp">192.168.1.101</span>
+                  </p>
+                  <p class="mb-0">
+                    <span class="text-muted d-block">Sistema Operacional:</span>
+                    <span class="fw-bold" id="infoSo">Windows 10 Pro</span>
+                  </p>
+                </div>
+                <div class="col-6">
+                  <p class="mb-2">
+                    <span class="text-muted d-block">CPU:</span>
+                    <span class="fw-bold" id="infoCpuCapacidade">8 núcleos</span>
+                  </p>
+                  <p class="mb-2">
+                    <span class="text-muted d-block">RAM:</span>
+                    <span class="fw-bold" id="infoRamCapacidade">16 GB</span>
+                  </p>
+                  <p class="mb-0">
+                    <span class="text-muted d-block">Disco:</span>
+                    <span class="fw-bold" id="infoDiscoCapacidade">512 GB</span>
+                  </p>
+                </div>
+              </div>
             </div>
           </aside>
         </div>
