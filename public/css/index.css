@@ -98,7 +98,8 @@ body {
   margin-top: -70px;
   background:
     linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.6)),
-    url('https://maxmonitoramento.com.br/wp-content/uploads/2023/11/image-28.png') no-repeat center center/cover;
+    url('https://maxmonitoramento.com.br/wp-content/uploads/2023/11/image-28.png') no-repeat center
+      center/cover;
 
   background-size: cover;
   background-position: center center;
@@ -982,7 +983,6 @@ body {
 
 /* Responsividade */
 @media (max-width: 992px) {
-
   .visual-content-screenshot,
   .visual-content-mobile {
     height: 350px;
@@ -1179,7 +1179,6 @@ footer a:hover {
   ==============================================
 */
 @media (max-width: 991px) {
-
   /* --- Seção "O que fazemos" --- */
   .kpi-block {
     flex-direction: column;
@@ -1358,7 +1357,7 @@ body.menu-open .menu-backdrop {
   visibility: visible;
 }
 
-body.menu-open>*:not(.menu-backdrop):not(.header-fixed-wrapper) {
+body.menu-open > *:not(.menu-backdrop):not(.header-fixed-wrapper) {
   filter: blur(3px);
   /* Aplica o desfoque */
   transition: filter 0.3s ease;
