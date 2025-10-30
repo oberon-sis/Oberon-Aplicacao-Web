@@ -115,7 +115,7 @@ function carregarAlertas(pagina = 1) {
   if (divPaginacao) divPaginacao.style.display = 'none';
 
   const usuarioSessao = JSON.parse(sessionStorage.getItem('usuario') || '{}');
-  const idFuncionario = usuarioSessao.idUsuario || usuarioSessao.id || usuarioSessao.fkUsuario;
+  const idFuncionario = usuarioSessao.idUFuncionario || usuarioSessao.id || usuarioSessao.fkUsuario;
 
   if (!idFuncionario) {
     console.error('ID do usuário não encontrado na sessão.');
