@@ -89,8 +89,8 @@ function getUsuariobyID(idFuncionario) {
        funcionario.email,
        funcionario.senha,
        funcionario.fkTipoUsuario,
-       tipoUsuario.tipoUsuario,
-       tipoUsuario.permissoes FROM funcionario JOIN TipoUsuario
+       TipoUsuario.tipoUsuario,
+       TipoUsuario.permissoes FROM funcionario JOIN TipoUsuario
        on funcionario.fkTipoUsuario = tipoUsuario.idTipoUsuario	
        WHERE idFuncionario = ${idFuncionario} ;    `;
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
