@@ -164,7 +164,6 @@ function exportarRelatorio() {
     },
   });
 
-  const usuarioSessao = JSON.parse(sessionStorage.getItem('usuario') || '{}');
   const idFuncionario = JSON.parse(sessionStorage.getItem('usuario') || '{}').idUsuario
 
 
