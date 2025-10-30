@@ -397,7 +397,7 @@ function initLinhaChart(idMaquina) {
       mensagemDiv = document.createElement('div');
       mensagemDiv.id = 'mensagemGrafico';
       mensagemDiv.style.cssText =
-        'display: flex; align-items: center; justify-content: center; height: 300px; background-color: #f8f9fa; border-radius: 0.375rem; font-size: 1.2rem; color: #6c757d; font-weight: 500;';
+        'display: flex; align-items: center; justify-content: center; height: 250px; background-color: #f8f9fa; border-radius: 0.375rem; font-size: 1.2rem; color: #6c757d; font-weight: 500;';
       canvas.parentElement.appendChild(mensagemDiv);
     }
     mensagemDiv.style.display = 'flex';
