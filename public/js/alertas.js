@@ -1,4 +1,3 @@
-let ID_USUARIO = sessionStorage.ID_USUARIO
 let paginaAtual = 1;
 let tipoFiltro = 'descricao';
 
@@ -114,7 +113,8 @@ function carregarAlertas(pagina = 1) {
   if (tbodySkeleton) tbodySkeleton.style.display = 'contents';
   if (divPaginacao) divPaginacao.style.display = 'none';
   const usuarioSessao = JSON.parse(sessionStorage.getItem('usuario') || '{}');
-  const idFuncionario = sessionStorage.ID_USUARIO
+  const idFuncionario = JSON.parse(sessionStorage.getItem('usuario') || '{}').idUsuario
+
   if (!idFuncionario) {
     console.error('ID do usuário não encontrado na sessão.');
     if (tbodyReal) tbodyReal.style.display = 'contents';
@@ -165,7 +165,8 @@ function exportarRelatorio() {
   });
 
   const usuarioSessao = JSON.parse(sessionStorage.getItem('usuario') || '{}');
-  const idFuncionario = sessionStorage.ID_USUARIO
+  const idFuncionario = JSON.parse(sessionStorage.getItem('usuario') || '{}').idUsuario
+
 
   if (!idFuncionario) {
     Swal.fire('Erro!', 'ID de usuário ausente.', 'error');
