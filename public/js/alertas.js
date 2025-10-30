@@ -43,7 +43,7 @@ function renderizarTabela(alertas) {
         <td>${alerta.nomeMaquina}</td>
         <td>${dataHoraRegistro}</td> 
       </tr>
-`;
+    `;
     tbody.innerHTML += row;
   });
 }
@@ -69,34 +69,34 @@ function renderizarPaginacao(totalPaginas, paginaAtual) {
     .filter((p) => p >= 1 && p <= totalPaginas)
     .sort((a, b) => a - b);
   ul.innerHTML += `
-        <li class="page-item ${paginaAtual === 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="carregarAlertas(${paginaAtual - 1})">Anterior</a>
-        </li>
-    `;
+    <li class="page-item ${paginaAtual === 1 ? 'disabled' : ''}">
+      <a class="page-link" href="#" onclick="carregarAlertas(${paginaAtual - 1})">Anterior</a>
+    </li>
+  `;
   let ultimaPaginaRenderizada = 0;
   sortedPages.forEach((p) => {
     if (p > ultimaPaginaRenderizada + 1) {
       ul.innerHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
     }
     ul.innerHTML += `
-            <li class="page-item ${p === paginaAtual ? 'active_pagina' : ''}">
-                <a class="page-link" href="#" onclick="carregarAlertas(${p})">${p}</a>
-            </li>
-        `;
+      <li class="page-item ${p === paginaAtual ? 'active_pagina' : ''}">
+        <a class="page-link" href="#" onclick="carregarAlertas(${p})">${p}</a>
+      </li>
+    `;
     ultimaPaginaRenderizada = p;
   });
   ul.innerHTML += `
-        <li class="page-item ${paginaAtual === totalPaginas ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="carregarAlertas(${paginaAtual + 1})">Seguinte</a>
-        </li>
-    `;
+    <li class="page-item ${paginaAtual === totalPaginas ? 'disabled' : ''}">
+      <a class="page-link" href="#" onclick="carregarAlertas(${paginaAtual + 1})">Seguinte</a>
+    </li>
+  `;
   navPaginas.style.display = 'flex';
 }
 
 function montarUrlFiltros(idFuncionario, pagina) {
   const termoPesquisa = document.getElementById('input_pesquisa_alerta').value || '';
   const dataInicio = 'vazio';
-  const dataFim =   'vazio';
+  const dataFim = 'vazio';
   const termoEncoded = encodeURIComponent(termoPesquisa === '' ? 'vazio' : termoPesquisa);
   const tipoEncoded = encodeURIComponent(tipoFiltro);
   const inicioEncoded = encodeURIComponent(dataInicio);
@@ -109,11 +109,13 @@ function carregarAlertas(pagina = 1) {
   const tbodyReal = document.getElementById('Conteudo_real');
   const tbodySkeleton = document.getElementById('Estrutura_esqueleto_carregamento');
   const divPaginacao = document.querySelector('.div_paginas');
+
   if (tbodyReal) tbodyReal.style.display = 'none';
   if (tbodySkeleton) tbodySkeleton.style.display = 'contents';
   if (divPaginacao) divPaginacao.style.display = 'none';
+
   const usuarioSessao = JSON.parse(sessionStorage.getItem('usuario') || '{}');
-  const idFuncionario = JSON.parse(sessionStorage.getItem('usuario') || '{}').idUsuario
+  const idFuncionario = usuarioSessao.idUsuario || usuarioSessao.id || usuarioSessao.fkUsuario;
 
   if (!idFuncionario) {
     console.error('ID do usuário não encontrado na sessão.');
@@ -164,15 +166,17 @@ function exportarRelatorio() {
     },
   });
 
-  const idFuncionario = JSON.parse(sessionStorage.getItem('usuario') || '{}').idUsuario
-
+  const usuarioSessao = JSON.parse(sessionStorage.getItem('usuario') || '{}');
+  const idFuncionario = usuarioSessao.idUsuario || usuarioSessao.id || usuarioSessao.fkUsuario;
 
   if (!idFuncionario) {
     Swal.fire('Erro!', 'ID de usuário ausente.', 'error');
     return;
   }
+
   const url = montarUrlFiltros(idFuncionario, 1);
   const urlExport = url.replace(`/listar/${idFuncionario}/1/`, `/exportar/${idFuncionario}/`);
+
   fetch(urlExport)
     .then((response) => {
       if (!response.ok) {
