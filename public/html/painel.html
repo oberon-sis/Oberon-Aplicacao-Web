@@ -28,6 +28,7 @@
 
     <main class="content flex-grow-1 d-flex flex-column h-100">
       <header
+        id="header-top"
         class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0"
       >
         <h1 class="h3 mb-0">Monitoramento em tempo real de recursos</h1>
@@ -45,7 +46,7 @@
       </header>
 
       <div class="main-container p-4 d-flex flex-column flex-grow-1">
-        <div class="d-flex flex-wrap align-items-center mb-4 filter-group-row flex-shrink-0">
+        <div id="filter-group-row" class="d-flex flex-wrap align-items-center mb-4 filter-group-row flex-shrink-0">
           <div class="btn-group me-3" role="group">
             <button type="button" class="btn btn-custom-status active" data-filtro="todas">
               Todas <span class="badge text-bg-dark ms-1">6</span>
@@ -72,7 +73,7 @@
         </div>
 
         <div class="main-content-area d-flex flex-grow-1 overflow-hidden">
-          <section class="resource-cards flex-fill">
+          <section id="resource-cards" class="resource-cards flex-fill">
             <div class="card card-recurso" data-maquina-id="1">
               <div class="d-flex justify-content-between align-items-start mb-2">
                 <h5 class="card-title h6 mb-0">Máquina-0021</h5>
@@ -220,11 +221,11 @@
               </div>
             </div>
 
-            <div class="chart-container mb-4">
+            <div id="chart-container" class="chart-container mb-4">
               <canvas id="utilizacaoChart"></canvas>
             </div>
 
-            <div class="row row-cols-2 g-3 mb-4 indicators-grid">
+            <div id="indicators-grid" class="row row-cols-2 g-3 mb-4 indicators-grid">
               <div class="col">
                 <div class="resource-detail-card d-flex align-items-center">
                   <i class="bi bi-cpu-fill fs-3"></i>
@@ -304,7 +305,7 @@
 
             <hr />
 
-            <div class="details-info small">
+            <div id="details-info" class="details-info small">
               <div class="row g-3">
                 <div class="col-6">
                   <p class="mb-2">
