@@ -17,7 +17,7 @@
 </head>
 
 <body>
-<div class="menu-backdrop"></div>
+  <div class="menu-backdrop"></div>
   <!--INICIO NAV-BAR -->
   <div class="header-fixed-wrapper">
     <div class="container">
@@ -103,7 +103,7 @@
         <div class="col-lg-6 col-md-12 visual-content mt-5 mt-lg-0" data-aos="fade-left" data-aos-duration="1000">
 
           <div class="team-container">
-            <img src="./assets/svg/reuniao-de-equipe.png" alt="Team members" class="team-image">
+            <img src="./assets/svg/equipe/fotoEquipe.jpg" alt="Team members" class="team-image">
 
             <div class="team-tag text-center" data-aos="zoom-in" data-aos-delay="500">
               <p class="fw-bold mb-1">Team member</p>
@@ -211,10 +211,12 @@
     </div>
   </section>
 
+  <!-- SEÇÃO ESCURA -->
   <section class="cta-monitoramento-section text-white py-5">
     <div class="container">
       <div class="row align-items-center">
 
+        <!-- Texto -->
         <div class="col-lg-6 col-md-12 text-content-dark mb-5 mb-lg-0" data-aos="fade-right">
           <h1 class="display-5 fw-bold mb-4">Proteja seu patrimônio, garanta sua operação</h1>
           <p class="lead-text-dark mb-4">
@@ -228,20 +230,28 @@
           </a>
         </div>
 
+        <!-- Imagem -->
         <div class="col-lg-6 col-md-12 visual-content-screenshot" data-aos="fade-left">
+          <div class="screenshot-layer layer1"></div>
+          <div class="screenshot-layer layer2"></div>
+          <div class="screenshot-layer layer3"></div>
         </div>
 
       </div>
     </div>
   </section>
 
-
+  <!-- SEÇÃO CLARA -->
   <section class="cta-time-focado-section py-5">
     <div class="container">
       <div class="row align-items-center">
 
+        <!-- Imagem -->
         <div class="col-lg-6 col-md-12 visual-content-mobile mb-5 mb-lg-0" data-aos="fade-right">
-          <div class="mobile-mockups-container">
+          <div class="mobile-gallery">
+            <img src="./assets/svg/modile1.jpg" alt="Mobile 1">
+            <img src="./assets/svg/mobile2 copy.jpg" alt="Mobile 2">
+            <img src="./assets/svg/mobile3.jpg" alt="Mobile 3">
           </div>
           <div class="avatar-count-overlay">
             <img src="./assets/svg/equipe/pedro_photo.png" alt="Avatar 1" class="avatar-large">
@@ -250,6 +260,7 @@
           </div>
         </div>
 
+        <!-- Texto -->
         <div class="col-lg-6 col-md-12 text-content-light" data-aos="fade-left">
           <h1 class="display-5 fw-bold mb-4">Mantenha seu time focado na segurança</h1>
           <p class="lead-text-light mb-4">
@@ -266,6 +277,7 @@
       </div>
     </div>
   </section>
+
   <!--FIM SEÇÃO SERVIÇOS-->
 
   <!--INICIO SEÇÃO SOBRE NOS-->
@@ -456,57 +468,57 @@
 
     //Logica do Menu Mobile
     document.addEventListener('DOMContentLoaded', () => {
-        const toggleButton = document.querySelector('.menu-toggle');
-        const mobileMenu = document.querySelector('.mobile-nav');
-        const toggleIcon = document.querySelector('.toggle-icon');
-        const navLinks = document.querySelectorAll('.mobile-nav a.nav-link');
-        const actionButtons = document.querySelectorAll('.mobile-nav .nav-actions a');
-        const menuBackdrop = document.querySelector('.menu-backdrop');
+      const toggleButton = document.querySelector('.menu-toggle');
+      const mobileMenu = document.querySelector('.mobile-nav');
+      const toggleIcon = document.querySelector('.toggle-icon');
+      const navLinks = document.querySelectorAll('.mobile-nav a.nav-link');
+      const actionButtons = document.querySelectorAll('.mobile-nav .nav-actions a');
+      const menuBackdrop = document.querySelector('.menu-backdrop');
 
-        const openMenu = () => {
-            mobileMenu.classList.add('active');
-            toggleIcon.classList.remove('fa-bars');
-            toggleIcon.classList.add('fa-times');
-            document.body.classList.add('menu-open'); 
-        };
+      const openMenu = () => {
+        mobileMenu.classList.add('active');
+        toggleIcon.classList.remove('fa-bars');
+        toggleIcon.classList.add('fa-times');
+        document.body.classList.add('menu-open');
+      };
 
-        const closeMenu = () => {
-            if (mobileMenu.classList.contains('active')) {
-                mobileMenu.classList.remove('active');
-                toggleIcon.classList.remove('fa-times');
-                toggleIcon.classList.add('fa-bars');
-                document.body.classList.remove('menu-open');
-            }
-        };
-
-        toggleButton.addEventListener('click', (event) => {
-            event.stopPropagation(); 
-            
-            if (mobileMenu.classList.contains('active')) {
-                closeMenu();
-            } else {
-                openMenu();
-            }
-        });
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', closeMenu);
-        });
-        actionButtons.forEach(button => {
-            button.addEventListener('click', closeMenu);
-        });
-        if (menuBackdrop) {
-            menuBackdrop.addEventListener('click', closeMenu);
+      const closeMenu = () => {
+        if (mobileMenu.classList.contains('active')) {
+          mobileMenu.classList.remove('active');
+          toggleIcon.classList.remove('fa-times');
+          toggleIcon.classList.add('fa-bars');
+          document.body.classList.remove('menu-open');
         }
+      };
 
-        document.addEventListener('click', (event) => {
-            if (mobileMenu.classList.contains('active') && 
-                !mobileMenu.contains(event.target) && 
-                !toggleButton.contains(event.target)) {
-                
-                closeMenu();
-            }
-        });
+      toggleButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+
+        if (mobileMenu.classList.contains('active')) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.addEventListener('click', closeMenu);
+      });
+      actionButtons.forEach(button => {
+        button.addEventListener('click', closeMenu);
+      });
+      if (menuBackdrop) {
+        menuBackdrop.addEventListener('click', closeMenu);
+      }
+
+      document.addEventListener('click', (event) => {
+        if (mobileMenu.classList.contains('active') &&
+          !mobileMenu.contains(event.target) &&
+          !toggleButton.contains(event.target)) {
+
+          closeMenu();
+        }
+      });
     });
 
     // Logica do carrosel dinamico

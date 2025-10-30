@@ -14,6 +14,7 @@
   --color-white: #ffffff;
   --color-black: #000000;
 }
+
 html,
 body {
   overflow: auto;
@@ -97,8 +98,7 @@ body {
   margin-top: -70px;
   background:
     linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.6)),
-    url('https://maxmonitoramento.com.br/wp-content/uploads/2023/11/image-28.png') no-repeat center
-      center/cover;
+    url('https://maxmonitoramento.com.br/wp-content/uploads/2023/11/image-28.png') no-repeat center center/cover;
 
   background-size: cover;
   background-position: center center;
@@ -836,18 +836,11 @@ body {
   color: #fff;
 }
 
-/* ========================================= */
-/* --- 7. SEÇÃO: CTA MONITORAMENTO (Escuro) --- */
-/* ========================================= */
+/* --- CTA MONITORAMENTO (Escuro) --- */
 .cta-monitoramento-section {
   background-color: var(--color-dark-bg);
-
   color: #fff;
   overflow: hidden;
-}
-
-.cta-monitoramento-section .display-5 {
-  font-weight: 700;
 }
 
 .cta-monitoramento-section .lead-text-dark {
@@ -855,109 +848,83 @@ body {
   font-size: 1.1rem;
 }
 
-.cta-button-dark {
-  display: inline-flex;
-  align-items: center;
-  background-color: var(--oberon_verde_obscuro);
-  color: #fff;
-  padding: 10px 20px;
-  border: 2px solid var(--oberon_verde_obscuro);
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: 600;
-  transition:
-    background-color 0.3s,
-    color 0.3s;
-}
-
-.cta-button-dark:hover {
-  background-color: transparent;
-  color: var(--oberon_verde_obscuro);
-}
-
 .visual-content-screenshot {
   position: relative;
   height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.screenshot-placeholder {
+.screenshot-layer {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 150%;
-  height: 100%;
-  background: url('../assets/svg/dash.png') no-repeat center center;
+  width: 80%;
+  height: 80%;
   background-size: cover;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+  background-position: center;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  transition: transform 0.4s ease;
 }
 
-/* ========================================= */
-/* --- 8. SEÇÃO: CTA TIME FOCADO (Claro) --- */
-/* ========================================= */
+.layer1 {
+  background-image: url('../assets/svg/dash.jpg');
+  z-index: 3;
+  transform: translateY(0);
+}
 
+.layer2 {
+  background-image: url('../assets/svg/dash.jpg');
+  z-index: 2;
+  opacity: 0.6;
+  transform: translateY(-30px) translateX(40px) scale(0.95);
+}
+
+.layer3 {
+  background-image: url('../assets/svg/dash.jpg');
+  z-index: 1;
+  opacity: 0.3;
+  transform: translateY(-60px) translateX(80px) scale(0.9);
+}
+
+/* --- CTA TIME FOCADO (Claro) --- */
 .cta-time-focado-section {
   background-color: #fff;
   color: #333;
-  padding: 100px 0;
-}
-
-.cta-time-focado-section .display-5 {
-  font-weight: 700;
-}
-
-.cta-time-focado-section .lead-text-light {
-  color: #666;
-  font-size: 1.1rem;
-}
-
-.cta-button-light {
-  display: inline-flex;
-  align-items: center;
-  background-color: #fff;
-  color: var(--oberon_verde_obscuro);
-  padding: 10px 20px;
-  border: 2px solid var(--oberon_verde_obscuro);
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: 600;
-  transition:
-    background-color 0.3s,
-    color 0.3s;
-}
-
-.cta-button-light:hover {
-  background-color: var(--oberon_verde_obscuro);
-  color: #fff;
 }
 
 .visual-content-mobile {
   position: relative;
+  height: 550px;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 550px;
-  margin-right: -50px;
 }
 
-.mobile-mockups-container {
-  width: 100%;
-  height: 100%;
-  background: url('caminho/para/mockup-mobile.png') no-repeat center center;
-  background-size: contain;
+.mobile-gallery {
+  display: flex;
+  gap: 20px;
+}
+
+.mobile-gallery img {
+  width: 130px;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 25px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
 .avatar-count-overlay {
   position: absolute;
-  bottom: 50px;
+  bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  padding: 8px 15px;
   background-color: #fff;
   border-radius: 20px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  padding: 6px 14px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
 .avatar-large {
@@ -965,12 +932,8 @@ body {
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #fff;
   margin-left: -10px;
-}
-
-.avatar-large:first-child {
-  margin-left: 0;
+  border: 2px solid #fff;
 }
 
 .count-badge {
@@ -983,15 +946,55 @@ body {
   margin-left: 10px;
 }
 
+/* Botões */
+.cta-button-dark,
+.cta-button-light {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 25px;
+  font-weight: 600;
+  padding: 10px 20px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.cta-button-dark {
+  background-color: var(--oberon_verde_obscuro);
+  color: #fff;
+  border: 2px solid var(--oberon_verde_obscuro);
+}
+
+.cta-button-dark:hover {
+  background: transparent;
+  color: var(--oberon_verde_obscuro);
+}
+
+.cta-button-light {
+  background: #fff;
+  border: 2px solid var(--oberon_verde_obscuro);
+  color: var(--oberon_verde_obscuro);
+}
+
+.cta-button-light:hover {
+  background-color: var(--oberon_verde_obscuro);
+  color: #fff;
+}
+
 /* Responsividade */
 @media (max-width: 992px) {
+
   .visual-content-screenshot,
   .visual-content-mobile {
     height: 350px;
   }
 
-  .visual-content-mobile {
-    margin-right: 0;
+  .mobile-gallery {
+    gap: 10px;
+  }
+
+  .mobile-gallery img {
+    width: 100px;
+    height: 220px;
   }
 }
 
@@ -1176,6 +1179,7 @@ footer a:hover {
   ==============================================
 */
 @media (max-width: 991px) {
+
   /* --- Seção "O que fazemos" --- */
   .kpi-block {
     flex-direction: column;
@@ -1287,6 +1291,7 @@ footer a:hover {
     background-size: 100rem auto;
   }
 }
+
 @view-transition {
   navigation: auto;
 }
@@ -1311,6 +1316,7 @@ footer a:hover {
     opacity: 0;
     transform: translateX(50px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -1339,6 +1345,7 @@ footer a:hover {
   .mobile-nav {
     z-index: 100001 !important;
   }
+
   body {
     width: 100vw;
     max-width: 100vw;
@@ -1351,8 +1358,9 @@ body.menu-open .menu-backdrop {
   visibility: visible;
 }
 
-body.menu-open > *:not(.menu-backdrop):not(.header-fixed-wrapper) {
-  filter: blur(3px); /* Aplica o desfoque */
+body.menu-open>*:not(.menu-backdrop):not(.header-fixed-wrapper) {
+  filter: blur(3px);
+  /* Aplica o desfoque */
   transition: filter 0.3s ease;
 }
 
