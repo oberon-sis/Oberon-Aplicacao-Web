@@ -1,33 +1,46 @@
-// 1. Definição das Informações do Tour
 const homeTourSteps = [
-  {
-    id: 'tour-card-desempenho-geral',
-    title: 'Passo 2/5: Visão Geral de Alertas',
-    content:
-      "Este card mostra as máquinas que estão em estado de Crítico ou Alerta. Clique em 'Ver Detalhes' em qualquer card para inspecionar uma máquina específica.",
-    position: 'bottom',
-  },
-  {
-    id: 'tour-grafico-dispersao',
-    title: 'Passo 3/5: Distribuição de Recursos',
-    content:
-      'O gráfico principal compara o uso de duas métricas (ex: CPU vs. RAM) de todas as máquinas. Clique em um ponto para abrir o modal de detalhes e ver os limites ativos.',
-    position: 'top',
-  },
-  {
-    id: 'valor_pesquisa', // ID do SPAN dentro do dropdown
-    title: 'Passo 4/5: Mudar o Contexto do Gráfico',
-    content:
-      "Use este menu para alternar entre as métricas, como 'Uso de CPU e RAM' ou 'Rede: Pacotes Enviados e Recebidos'.",
-    position: 'left',
-  },
-  {
-    id: 'acessos-rapidos-section',
-    title: 'Passo 5/5: Acessos Rápidos',
-    content:
-      'Aqui estão os links e botões essenciais: baixe o Agente de Monitoramento, configure parâmetros e acesse guias rápidos.',
-    position: 'left',
-  },
+    {
+        id: 'boas-vindas-card', 
+        title: 'Passo 1/6: Bem-Vindo(a)!',
+        content:
+          'Este é o seu painel inicial. Ele foca em alertas imediatos. Vamos conhecer os principais pontos.',
+        position: 'bottom',
+    },
+    {
+        id: 'tour-card-desempenho-geral', 
+        title: 'Passo 2/6: Visão Geral de Alertas (Top-Alerts)',
+        content:
+          "Os cards exibem as máquinas mais críticas ou em manutenção. O rótulo '+X' indica que mais de um recurso (CPU, RAM, Disco) está em alerta. Clique em 'Ver Detalhes' para diagnóstico.",
+        position: 'bottom',
+    },
+    {
+        id: 'acessar-painel-geral-button', // Se este for o ID do botão "Acessar painel geral"
+        title: 'Passo 3/6: Painel Completo',
+        content:
+          'Use este botão verde para acessar o painel completo de monitoramento, onde você pode ver a lista de todas as máquinas e aplicar filtros.',
+        position: 'bottom',
+    },
+    {
+        id: 'tour-grafico-dispersao', 
+        title: 'Passo 4/6: Distribuição de Recursos',
+        content:
+          'O gráfico compara o uso de CPU x RAM em relação aos limites de 50%. Máquinas no quadrante superior-direito estão em maior risco.',
+        position: 'top',
+    },
+    {
+        id: 'slack-card', 
+        title: 'Passo 5/6: Alertas em Tempo Real',
+        content:
+          'Configure rapidamente sua integração com o Slack para receber notificações de status Crítico imediatamente.',
+        position: 'left',
+    },
+    {
+        id: 'acessos-rapidos-section', 
+        title: 'Passo 6/6: Acessos Essenciais',
+        content:
+          'Nesta seção, você encontra o manual de instalação e o programa de monitoramento para garantir a cobertura de todas as suas máquinas.',
+        position: 'left',
+    },
 ];
 
 document.addEventListener('DOMContentLoaded', () => {

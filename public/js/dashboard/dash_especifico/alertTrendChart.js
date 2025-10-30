@@ -9,12 +9,12 @@ let alertTrendChartInstance = null;
 // Mock de dados para simular a mudança de contexto
 const MOCK_ALERT_DATA = {
   'Total De Alertas': {
-    labels: [65, 68, 70, 72, 75, 76, 78, 80, null, null, null, null],
-    trendLine: [60, 64, 68, 72, 76, 80, 84, 88, 92, 96, 98, 100],
-    prevBimestre: 27, // KPI
-    metaBimestre: 100, // KPI
-    variacao: 3, // KPI
-    cor: '#0C8186',
+    labels: [380, 390, 400, 410, 420, 430, 440, 450, null, null, null, null], // Último ponto é 450
+    trendLine: [380, 393, 406, 419, 432, 445, 458, 471, 484, 497, 510, 520], // Último ponto é 520 (Previsão)
+    prevBimestre: 520, // KPI - Próximo Bimestre (520)
+    metaBimestre: 450, // KPI - Total Deste Bimestre (450)
+    variacao: 8.5, // KPI - Variação (+8.5%)
+    cor: '#e74c3c', // Cor Vermelha para indicar Piora/Crítico (Em vez do ciano original)
   },
   Crítico: {
     labels: [10, 12, 15, 16, 17, 18, 18, 19, null, null, null, null],
@@ -41,6 +41,7 @@ const MOCK_ALERT_DATA = {
     cor: '#2ecc71',
   },
 };
+// ... (Restante do código)
 
 /**
  * Cria a função de callback do tooltip customizada.
