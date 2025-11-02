@@ -178,7 +178,7 @@
           </div>
         </div>
         <div class="modal fade" id="machineDetailModal" tabindex="-1" aria-labelledby="machineDetailModalLabel"
-          aria-hidden="true">
+          aria-hidden="true" style="z-index: 10000000;">
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
               <div class="modal-header">
@@ -307,7 +307,7 @@
           <div class="row g-4 d-flex align-items-stretch">
             <div class="col-md-6">
               <div class="card shadow-sm p-3 d-flex flex-column h-100">
-                <div class="card-body d-flex flex-column text-center">
+                <div class="card-body d-flex flex-column text-center justify-content-center">
                   <i class="bi bi-windows text-info mb-3" style="font-size: 3rem;"></i>
                   <h5 class="card-title text-black mb-2 fw-bold">
                     Agente Windows (Executáveis)
@@ -316,8 +316,8 @@
                     A solução mais simples para ambientes Windows. Arquivo executável (.exe) que dispensa instalações
                     complexas.
                   </p>
-                  <a href="/api/download/agente" class="btn btn-info w-100 mt-auto text-white"
-                    download="Agente_Windows.exe" role="button">
+                  <a href="/api/download//windows/agente" class="btn btn-info w-100 mt-auto text-white"
+                    download="Agente_Windows" role="button">
                     <i class="bi bi-box-arrow-down me-1"></i>
                     Baixar EXE para Windows
                   </a>
@@ -334,8 +334,8 @@
                   <p class="card-text small text-muted flex-grow-1 mb-3">
                     O agente mais coringa. Dependências mínimas, ideal para servidores Linux sem interface (headless).
                   </p>
-                  <a href="/api/download/agente-shell-sh" class="btn btn-outline-danger w-100 mt-auto"
-                    download="Agente_Linux.sh" role="button">
+                  <a href="api/download/sh/agente" class="btn btn-outline-danger w-100 mt-auto"
+                    download="Agente_Linux" role="button">
                     <i class="bi bi-file-code me-1"></i>
                     Baixar Agente Shell (.sh)
                   </a>
@@ -345,14 +345,14 @@
               <div class="card shadow-sm p-3 flex-grow-1">
                 <div class="card-body d-flex flex-column text-center p-0">
                   <i class="bi bi-code-slash text-danger mb-2" style="font-size: 2.5rem;"></i>
-                  <h6 class="fw-bold mb-1 text-black">Arquivo Java (.jar) e executável - Multiplataforma</h6>
+                  <h6 class="fw-bold mb-1 text-black">Agente Java (Executáveis)</h6>
                   <p class="card-text small text-muted flex-grow-1 mb-3">
-                    Requer Java (JVM) instalado previamente. Oferece maior portabilidade.
+                    A solução mais simples para ambientes Linux. Arquivo executável (.exe) que dispensa instalações complexas.
                   </p>
-                  <a href="/api/download/agente-java-jar" class="btn btn-danger w-100 mt-auto"
-                    download="Agente_Java.jar" role="button">
+                  <a href="/api/download//linux/agente" class="btn btn-danger w-100 mt-auto"
+                    download="Agente_Sh" role="button">
                     <i class="bi bi-file-earmark-code me-1"></i>
-                    Baixar Agente Java (.jar) e executável (.exe)
+                    Baixar EXE para Linux
                   </a>
                 </div>
               </div>

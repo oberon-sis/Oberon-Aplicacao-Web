@@ -310,25 +310,91 @@
               <h6 class="fs-5 fw-bold mb-4">Definir Limites de Alerta</h6>
 
               <div id="parametrizacaoIndividual">
-                <div class="mb-3">
-                  <label for="cpu" class="form-label small">CPU - Porcentagem de uso </label>
-                  <input required type="text" class="form-control shadow-none input_pesquisa" id="ipt_cpu_cad"
-                    placeholder="Insira o valor limite" oninput="aplicarMascaraPorcentagem(this)">
-                </div>
-                <div class="mb-3">
-                  <label for="ram" class="form-label small">Memória RAM - Porcentagem de uso</label>
-                  <input required type="text" class="form-control shadow-none input_pesquisa" id="ipt_ram_cad"
-                    placeholder="Insira o valor limite" oninput="aplicarMascaraPorcentagem(this)">
-                </div>
-                <div class="mb-3">
-                  <label for="disco" class="form-label small">Disco Duro - Porcentagem de uso</label>
-                  <input required type="text" class="form-control shadow-none input_pesquisa" id="ipt_disco_cad"
-                    placeholder="Insira o valor limite" oninput="aplicarMascaraPorcentagem(this)">
-                </div>
+
                 <div class="mb-4">
-                  <label for="rede" class="form-label small">Rede - Taxa de transferência </label>
-                  <input required type="text" class="form-control shadow-none input_pesquisa" id="ipt_rede_cad"
-                    placeholder="Insira o valor limite" maxlength="8" oninput="aplicarMascaraMbps(this)">
+                  <label class="form-label small d-block">CPU - Porcentagem de uso</label>
+                  <div class="row">
+                    <div class="col-4">
+                      <label for="ipt_cpu_ocioso_cad" class="form-label small text-muted">Ocioso (%)</label>
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="ipt_cpu_ocioso_cad" placeholder="Ex: 20" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                    <div class="col-4">
+                      <label for="ipt_cpu_atencao_cad" class="form-label small text-warning">Atenção (%)</label>
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="ipt_cpu_atencao_cad" placeholder="Ex: 75" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                    <div class="col-4">
+                      <label for="ipt_cpu_critico_cad" class="form-label small text-danger">Crítico (%)</label>
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="ipt_cpu_critico_cad" placeholder="Ex: 90" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <label class="form-label small d-block">Memória RAM - Porcentagem de uso</label>
+                  <div class="row">
+                    <div class="col-4">
+                      <label for="ipt_ram_ocioso_cad" class="form-label small text-muted">Ocioso (%)</label>
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="ipt_ram_ocioso_cad" placeholder="Ex: 30" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                    <div class="col-4">
+                      <label for="ipt_ram_atencao_cad" class="form-label small text-warning">Atenção (%)</label>
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="ipt_ram_atencao_cad" placeholder="Ex: 80" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                    <div class="col-4">
+                      <label for="ipt_ram_critico_cad" class="form-label small text-danger">Crítico (%)</label>
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="ipt_ram_critico_cad" placeholder="Ex: 95" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <label class="form-label small d-block">Disco Duro - Porcentagem de uso</label>
+                  <div class="row">
+                    <div class="col-4">
+                      <label for="ipt_disco_ocioso_cad" class="form-label small text-muted">Ocioso (%)</label>
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="ipt_disco_ocioso_cad" placeholder="Ex: 15" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                    <div class="col-4">
+                      <label for="ipt_disco_atencao_cad" class="form-label small text-warning">Atenção (%)</label>
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="ipt_disco_atencao_cad" placeholder="Ex: 85" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                    <div class="col-4">
+                      <label for="ipt_disco_critico_cad" class="form-label small text-danger">Crítico (%)</label>
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="ipt_disco_critico_cad" placeholder="Ex: 95" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <label class="form-label small d-block">Rede - Taxa de transferência (Mbps)</label>
+                  <div class="row">
+                    <div class="col-4">
+                      <label for="ipt_rede_ocioso_cad" class="form-label small text-muted">Ocioso (Mbps)</label>
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="ipt_rede_ocioso_cad" placeholder="Ex: 5" maxlength="8" oninput="aplicarMascaraMbps(this)">
+                    </div>
+                    <div class="col-4">
+                      <label for="ipt_rede_atencao_cad" class="form-label small text-warning">Atenção (Mbps)</label>
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="ipt_rede_atencao_cad" placeholder="Ex: 100" maxlength="8"
+                        oninput="aplicarMascaraMbps(this)">
+                    </div>
+                    <div class="col-4">
+                      <label for="ipt_rede_critico_cad" class="form-label small text-danger">Crítico (Mbps)</label>
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="ipt_rede_critico_cad" placeholder="Ex: 250" maxlength="8"
+                        oninput="aplicarMascaraMbps(this)">
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -356,6 +422,7 @@
       </div>
     </div>
   </div>
+
   <div id="modalMacHelp" class="modalHelpBackground">
     <div class="modal-dialog modal-dialog-centered modalHelp">
       <div class="modal-content">
@@ -413,6 +480,7 @@
       </div>
     </div>
   </div>
+
   <div class="modal fade" id="modalAtualizarMaquina" tabindex="-1" aria-labelledby="modalAtualizarMaquinaLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -445,23 +513,24 @@
 
                 <div id="dadosAtuaisAlertas" style="display: none;">
                   <div class="mb-3">
-                    <label class="form-label text-muted small mb-0">CPU - Porcentagem de uso</label>
-                    <p class="fw-bold" id="txt_cpu">80 %</p>
+                    <label class="form-label text-muted small mb-0">CPU - Limites (%)</label>
+                    <p class="fw-bold" id="txt_cpu">Ocioso: <span id="txt_cpu_ocioso">20 %</span> | Atenção: <span
+                        id="txt_cpu_atencao">75 %</span> | Crítico: <span id="txt_cpu_critico">90 %</span></p>
                   </div>
                   <div class="mb-3">
-                    <label class="form-label text-muted small mb-0">Memória RAM - Porcentagem de
-                      uso</label>
-                    <p class="fw-bold" id="txt_ram">80 %</p>
+                    <label class="form-label text-muted small mb-0">Memória RAM - Limites (%)</label>
+                    <p class="fw-bold" id="txt_ram">Ocioso: <span id="txt_ram_ocioso">30 %</span> | Atenção: <span
+                        id="txt_ram_atencao">80 %</span> | Crítico: <span id="txt_ram_critico">95 %</span></p>
                   </div>
                   <div class="mb-3">
-                    <label class="form-label text-muted small mb-0">Disco Duro - Porcentagem de
-                      uso</label>
-                    <p class="fw-bold" id="txt_disco">80 %</p>
+                    <label class="form-label text-muted small mb-0">Disco Duro - Limites (%)</label>
+                    <p class="fw-bold" id="txt_disco">Ocioso: <span id="txt_disco_ocioso">15 %</span> | Atenção: <span
+                        id="txt_disco_atencao">85 %</span> | Crítico: <span id="txt_disco_critico">95 %</span></p>
                   </div>
                   <div class="mb-3">
-                    <label class="form-label text-muted small mb-0">Taxa de transferência de
-                      rede</label>
-                    <p class="fw-bold" id="txt_rede">80 mbps</p>
+                    <label class="form-label text-muted small mb-0">Taxa de transferência (Mbps)</label>
+                    <p class="fw-bold" id="txt_rede">Ocioso: <span id="txt_rede_ocioso">5 Mbps</span> | Atenção: <span
+                        id="txt_rede_atencao">100 Mbps</span> | Crítico: <span id="txt_rede_critico">250 Mbps</span></p>
                   </div>
                 </div>
               </div>
@@ -491,29 +560,91 @@
                   <h6 class="fs-5 fw-bold mb-3">Definir Limites de Alerta</h6>
 
                   <div id="parametrizacaoIndividualUpd">
-                    <div class="mb-3">
-                      <label for="cpu_upd" class="form-label small">CPU - Porcentagem de
-                        uso</label>
-                      <input required type="text" class="form-control shadow-none input_pesquisa" id="ipt_cpu_upd"
-                        placeholder="Insira o valor limite" oninput="aplicarMascaraPorcentagem(this)">
+                    <div class="mb-4">
+                      <label class="form-label small d-block">CPU - Porcentagem de uso</label>
+                      <div class="row">
+                        <div class="col-4">
+                          <label for="ipt_cpu_ocioso_upd" class="form-label small text-muted">Ocioso (%)</label>
+                          <input required type="text" class="form-control shadow-none input_pesquisa"
+                            id="ipt_cpu_ocioso_upd" placeholder="Ocioso" oninput="aplicarMascaraPorcentagem(this)">
+                        </div>
+                        <div class="col-4">
+                          <label for="ipt_cpu_atencao_upd" class="form-label small text-warning">Atenção (%)</label>
+                          <input required type="text" class="form-control shadow-none input_pesquisa"
+                            id="ipt_cpu_atencao_upd" placeholder="Atenção" oninput="aplicarMascaraPorcentagem(this)">
+                        </div>
+                        <div class="col-4">
+                          <label for="ipt_cpu_critico_upd" class="form-label small text-danger">Crítico (%)</label>
+                          <input required type="text" class="form-control shadow-none input_pesquisa"
+                            id="ipt_cpu_critico_upd" placeholder="Crítico" oninput="aplicarMascaraPorcentagem(this)">
+                        </div>
+                      </div>
                     </div>
-                    <div class="mb-3">
-                      <label for="ram_upd" class="form-label small">Memória RAM - Porcentagem de
-                        uso</label>
-                      <input required type="text" class="form-control shadow-none input_pesquisa" id="ipt_ram_upd"
-                        placeholder="Insira o valor limite" oninput="aplicarMascaraPorcentagem(this)">
+
+                    <div class="mb-4">
+                      <label class="form-label small d-block">Memória RAM - Porcentagem de uso</label>
+                      <div class="row">
+                        <div class="col-4">
+                          <label for="ipt_ram_ocioso_upd" class="form-label small text-muted">Ocioso (%)</label>
+                          <input required type="text" class="form-control shadow-none input_pesquisa"
+                            id="ipt_ram_ocioso_upd" placeholder="Ocioso" oninput="aplicarMascaraPorcentagem(this)">
+                        </div>
+                        <div class="col-4">
+                          <label for="ipt_ram_atencao_upd" class="form-label small text-warning">Atenção (%)</label>
+                          <input required type="text" class="form-control shadow-none input_pesquisa"
+                            id="ipt_ram_atencao_upd" placeholder="Atenção" oninput="aplicarMascaraPorcentagem(this)">
+                        </div>
+                        <div class="col-4">
+                          <label for="ipt_ram_critico_upd" class="form-label small text-danger">Crítico (%)</label>
+                          <input required type="text" class="form-control shadow-none input_pesquisa"
+                            id="ipt_ram_critico_upd" placeholder="Crítico" oninput="aplicarMascaraPorcentagem(this)">
+                        </div>
+                      </div>
                     </div>
-                    <div class="mb-3">
-                      <label for="disco_upd" class="form-label small">Disco Duro - Porcentagem de
-                        uso</label>
-                      <input required type="text" class="form-control shadow-none input_pesquisa" id="ipt_disco_upd"
-                        placeholder="Insira o valor limite" oninput="aplicarMascaraPorcentagem(this)">
+
+                    <div class="mb-4">
+                      <label class="form-label small d-block">Disco Duro - Porcentagem de uso</label>
+                      <div class="row">
+                        <div class="col-4">
+                          <label for="ipt_disco_ocioso_upd" class="form-label small text-muted">Ocioso (%)</label>
+                          <input required type="text" class="form-control shadow-none input_pesquisa"
+                            id="ipt_disco_ocioso_upd" placeholder="Ocioso" oninput="aplicarMascaraPorcentagem(this)">
+                        </div>
+                        <div class="col-4">
+                          <label for="ipt_disco_atencao_upd" class="form-label small text-warning">Atenção (%)</label>
+                          <input required type="text" class="form-control shadow-none input_pesquisa"
+                            id="ipt_disco_atencao_upd" placeholder="Atenção" oninput="aplicarMascaraPorcentagem(this)">
+                        </div>
+                        <div class="col-4">
+                          <label for="ipt_disco_critico_upd" class="form-label small text-danger">Crítico (%)</label>
+                          <input required type="text" class="form-control shadow-none input_pesquisa"
+                            id="ipt_disco_critico_upd" placeholder="Crítico" oninput="aplicarMascaraPorcentagem(this)">
+                        </div>
+                      </div>
                     </div>
-                    <div class="mb-3">
-                      <label for="rede_upd" class="form-label small">Taxa de transferência de
-                        rede</label>
-                      <input required type="text" class="form-control shadow-none input_pesquisa" id="ipt_rede_upd"
-                        placeholder="Insira o valor limite" maxlength="8" oninput="aplicarMascaraMbps(this)">
+
+                    <div class="mb-4">
+                      <label class="form-label small d-block">Taxa de transferência de rede (Mbps)</label>
+                      <div class="row">
+                        <div class="col-4">
+                          <label for="ipt_rede_ocioso_upd" class="form-label small text-muted">Ocioso (Mbps)</label>
+                          <input required type="text" class="form-control shadow-none input_pesquisa"
+                            id="ipt_rede_ocioso_upd" placeholder="Ocioso" maxlength="8"
+                            oninput="aplicarMascaraMbps(this)">
+                        </div>
+                        <div class="col-4">
+                          <label for="ipt_rede_atencao_upd" class="form-label small text-warning">Atenção (Mbps)</label>
+                          <input required type="text" class="form-control shadow-none input_pesquisa"
+                            id="ipt_rede_atencao_upd" placeholder="Atenção" maxlength="8"
+                            oninput="aplicarMascaraMbps(this)">
+                        </div>
+                        <div class="col-4">
+                          <label for="ipt_rede_critico_upd" class="form-label small text-danger">Crítico (Mbps)</label>
+                          <input required type="text" class="form-control shadow-none input_pesquisa"
+                            id="ipt_rede_critico_upd" placeholder="Crítico" maxlength="8"
+                            oninput="aplicarMascaraMbps(this)">
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -534,7 +665,7 @@
         </div>
 
         <div class="modal-footer justify-content-center border-0 p-4">
-          <button type="button" id="btnVoltarUpd" class="btn  fw-bold px-5 botao_branco botao_configuracao"
+          <button type="button" id="btnVoltarUpd" class="btn  fw-bold px-5 botao_branco botao_configuracao"
             style="display: none;">Voltar Atrás</button>
           <button type="button" id="btnAvancarUpd"
             class="btn fw-bold px-5 verde_claro botao_configuracao">Avançar</button>
@@ -544,7 +675,6 @@
       </div>
     </div>
   </div>
-
   <div class="modal fade" id="modalConfigParametros" tabindex="-1" aria-labelledby="modalConfigParametrosLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -558,79 +688,141 @@
           <form id="formConfigParametros">
 
             <div class="row">
-              <div class="col-md-4 border-end">
-                <h6 class="fs-5 fw-bold mb-3">Dados Atuais (Empresa)</h6>
+
+              <div class="col-md-6 border-end">
+                <h6 class="fs-5 fw-bold mb-3">Dados Atuais e Referência (Oberon)</h6>
+                <p class="small text-muted mb-4">
+                  Use os limites da Oberon (em cinza claro) como uma sugestão de mercado.
+                </p>
 
                 <div class="mb-4">
-                  <label class="form-label text-muted small mb-0">CPU - Porcentagem de uso</label>
-                  <p id="atual_cpu" class="fw-bold">80 %</p>
+                  <label class="form-label small mb-0 fw-bold">CPU - Porcentagem de uso</label>
+                  <p class="fw-bold mb-0">
+                    Atual: Ocioso: <span id="atual_cpu_ocioso">20 %</span> | Atenção: <span id="atual_cpu_atencao">75
+                      %</span> | Crítico: <span id="atual_cpu_critico">90 %</span>
+                  </p>
+                  <p class="small text-secondary mb-0">
+                    Oberon: Ocioso: <span id="oberon_cpu_ocioso">25 %</span> | Atenção: <span id="oberon_cpu_atencao">70
+                      %</span> | Crítico: <span id="oberon_cpu_critico">85 %</span>
+                  </p>
                 </div>
+
                 <div class="mb-4">
-                  <label class="form-label text-muted small mb-0">Memória RAM - Porcentagem de
-                    uso</label>
-                  <p id="atual_ram" class="fw-bold">80 %</p>
+                  <label class="form-label small mb-0 fw-bold">Memória RAM - Porcentagem de uso</label>
+                  <p class="fw-bold mb-0">
+                    Atual: Ocioso: <span id="atual_ram_ocioso">30 %</span> | Atenção: <span id="atual_ram_atencao">80
+                      %</span> | Crítico: <span id="atual_ram_critico">95 %</span>
+                  </p>
+                  <p class="small text-secondary mb-0">
+                    Oberon: Ocioso: <span id="oberon_ram_ocioso">35 %</span> | Atenção: <span id="oberon_ram_atencao">75
+                      %</span> | Crítico: <span id="oberon_ram_critico">90 %</span>
+                  </p>
                 </div>
+
                 <div class="mb-4">
-                  <label class="form-label text-muted small mb-0">Disco Duro - Porcentagem de
-                    uso</label>
-                  <p id="atual_disco" class="fw-bold">80 %</p>
+                  <label class="form-label small mb-0 fw-bold">Disco Duro - Porcentagem de uso</label>
+                  <p class="fw-bold mb-0">
+                    Atual: Ocioso: <span id="atual_disco_ocioso">15 %</span> | Atenção: <span
+                      id="atual_disco_atencao">85 %</span> | Crítico: <span id="atual_disco_critico">95 %</span>
+                  </p>
+                  <p class="small text-secondary mb-0">
+                    Oberon: Ocioso: <span id="oberon_disco_ocioso">10 %</span> | Atenção: <span
+                      id="oberon_disco_atencao">80 %</span> | Crítico: <span id="oberon_disco_critico">90 %</span>
+                  </p>
                 </div>
+
                 <div class="mb-4">
-                  <label class="form-label text-muted small mb-0">Taxa de transferência de
-                    rede</label>
-                  <p id="atual_rede" class="fw-bold">80 mbps</p>
+                  <label class="form-label small mb-0 fw-bold">Taxa de transferência de rede</label>
+                  <p class="fw-bold mb-0">
+                    Atual: Ocioso: <span id="atual_rede_ocioso">5 mbps</span> | Atenção: <span
+                      id="atual_rede_atencao">100 mbps</span> | Crítico: <span id="atual_rede_critico">250 mbps</span>
+                  </p>
+                  <p class="small text-secondary mb-0">
+                    Oberon: Ocioso: <span id="oberon_rede_ocioso">10 mbps</span> | Atenção: <span
+                      id="oberon_rede_atencao">150 mbps</span> | Crítico: <span id="oberon_rede_critico">300 mbps</span>
+                  </p>
                 </div>
               </div>
 
-              <div class="col-md-4 border-end">
-                <h6 class="fs-5 fw-bold mb-3 text-secondary">Padrão de Referência (Oberon)</h6>
-
-                <div class="mb-4">
-                  <label class="form-label text-muted small mb-0">CPU - Porcentagem de uso</label>
-                  <p id="oberon_cpu" class="fw-bold text-secondary">90 %</p>
-                </div>
-                <div class="mb-4">
-                  <label class="form-label text-muted small mb-0">Memória RAM - Porcentagem de
-                    uso</label>
-                  <p id="oberon_ram" class="fw-bold text-secondary">95 %</p>
-                </div>
-                <div class="mb-4">
-                  <label class="form-label text-muted small mb-0">Disco Duro - Porcentagem de
-                    uso</label>
-                  <p id="oberon_disco" class="fw-bold text-secondary">75 %</p>
-                </div>
-                <div class="mb-4">
-                  <label class="form-label text-muted small mb-0">Taxa de transferência de
-                    rede</label>
-                  <p id="oberon_rede" class="fw-bold text-secondary">500 mbps</p>
-                </div>
-              </div>
-
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <h6 class="fs-5 fw-bold mb-3">Definir Novos Limites</h6>
+                <p class="small text-muted mb-4">
+                  Os valores que você definir aqui serão aplicados a todas as máquinas futuras.
+                </p>
 
-                <div class="mb-3">
-                  <label for="cpu_config" class="form-label small">CPU - Porcentagem de uso</label>
-                  <input required type="text" class="form-control shadow-none input_pesquisa" id="cpu_config"
-                    placeholder="Insira o valor limite" oninput="aplicarMascaraPorcentagem(this)">
+                <div class="mb-4">
+                  <label class="form-label small d-block mb-1">CPU</label>
+                  <div class="row">
+                    <div class="col-4">
+                      <input required type="text" class="form-control shadow-none input_pesquisa" id="cpu_ocioso_config"
+                        placeholder="Ocioso (%)" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                    <div class="col-4">
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="cpu_atencao_config" placeholder="Atenção (%)" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                    <div class="col-4">
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="cpu_critico_config" placeholder="Crítico (%)" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                  </div>
                 </div>
-                <div class="mb-3">
-                  <label for="ram_config" class="form-label small">Memória RAM - Porcentagem de
-                    uso</label>
-                  <input required type="text" class="form-control shadow-none input_pesquisa" id="ram_config"
-                    placeholder="Insira o valor limite" oninput="aplicarMascaraPorcentagem(this)">
+
+                <div class="mb-4">
+                  <label class="form-label small d-block mb-1">Memória RAM</label>
+                  <div class="row">
+                    <div class="col-4">
+                      <input required type="text" class="form-control shadow-none input_pesquisa" id="ram_ocioso_config"
+                        placeholder="Ocioso (%)" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                    <div class="col-4">
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="ram_atencao_config" placeholder="Atenção (%)" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                    <div class="col-4">
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="ram_critico_config" placeholder="Crítico (%)" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                  </div>
                 </div>
-                <div class="mb-3">
-                  <label for="disco_config" class="form-label small">Disco Duro - Porcentagem de
-                    uso</label>
-                  <input required type="text" class="form-control shadow-none input_pesquisa" id="disco_config"
-                    placeholder="Insira o valor limite" oninput="aplicarMascaraPorcentagem(this)">
+
+                <div class="mb-4">
+                  <label class="form-label small d-block mb-1">Disco Duro</label>
+                  <div class="row">
+                    <div class="col-4">
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="disco_ocioso_config" placeholder="Ocioso (%)" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                    <div class="col-4">
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="disco_atencao_config" placeholder="Atenção (%)" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                    <div class="col-4">
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="disco_critico_config" placeholder="Crítico (%)" oninput="aplicarMascaraPorcentagem(this)">
+                    </div>
+                  </div>
                 </div>
-                <div class="mb-3">
-                  <label for="rede_config" class="form-label small">Taxa de transferência de
-                    rede</label>
-                  <input required type="text" class="form-control shadow-none input_pesquisa" id="rede_config"
-                    placeholder="Insira o valor limite" maxlength="8" oninput="aplicarMascaraMbps(this)">
+
+                <div class="mb-4">
+                  <label class="form-label small d-block mb-1">Taxa de transferência de rede</label>
+                  <div class="row">
+                    <div class="col-4">
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="rede_ocioso_config" placeholder="Ocioso (Mbps)" maxlength="8"
+                        oninput="aplicarMascaraMbps(this)">
+                    </div>
+                    <div class="col-4">
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="rede_atencao_config" placeholder="Atenção (Mbps)" maxlength="8"
+                        oninput="aplicarMascaraMbps(this)">
+                    </div>
+                    <div class="col-4">
+                      <input required type="text" class="form-control shadow-none input_pesquisa"
+                        id="rede_critico_config" placeholder="Crítico (Mbps)" maxlength="8"
+                        oninput="aplicarMascaraMbps(this)">
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

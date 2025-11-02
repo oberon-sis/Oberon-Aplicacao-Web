@@ -29,9 +29,9 @@
     <main class="content flex-grow-1 d-flex flex-column h-100">
       <header
         id="header-top"
-        class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0"
+        class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0 px-md-5"
       >
-        <h1 class="h3 mb-0">Monitoramento em tempo real de recursos</h1>
+        <h1 class="h3 mb-0 me-3">Monitoramento Ativo em Tempo Real de Recursos</h1>
         <div class="d-flex align-items-center">
           <div class="input-group input-group-sm me-3" style="width: 300px">
             <input
@@ -73,7 +73,7 @@
         </div>
 
         <div class="main-content-area d-flex flex-grow-1 overflow-hidden">
-          <section id="resource-cards" class="resource-cards flex-fill">
+          <section id="resource-cards" class="resource-cards flex-fill position-relative">
             <div class="card card-recurso" data-maquina-id="1">
               <div class="d-flex justify-content-between align-items-start mb-2">
                 <h5 class="card-title h6 mb-0">Máquina-0021</h5>
@@ -187,6 +187,13 @@
               </ul>
               <button type="button" class="btn btn-secondary btn-sm w-100">Ver Detalhes</button>
             </div>
+            <nav class="d-flex justify-content-center mt-3 div_paginas align-self-md-end position-absolute bottom-0 " style="right: 20px;" id="paginazacao">
+              <ul class="pagination pagination-sm">
+                <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
+                <li class="page-item active_pagina"><a class="page-link" href="#">1</a></li>
+                <li class="page-item disabled"><a class="page-link" href="#">Seguinte</a></li>
+              </ul>
+            </nav>
           </section>
 
           <aside class="details-sidebar flex-shrink-0">
@@ -221,7 +228,30 @@
               </div>
             </div>
 
-            <div id="chart-container" class="chart-container mb-4">
+            <div id="chart-container" class="chart-container mb-5 fd_branco">
+              <div class="d-flex gap-3 mb-3">
+                  <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="toggleLimiteCritico" checked>
+                      <label class="form-check-label text-danger" for="toggleLimiteCritico">
+                          Crítico
+                      </label>
+                  </div>
+
+                  <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="toggleLimiteAtencao">
+                      <label class="form-check-label text-warning" for="toggleLimiteAtencao">
+                          Atenção
+                      </label>
+                  </div>
+
+                  <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="toggleLimiteOcioso" checked>
+                      <label class="form-check-label text-primary" for="toggleLimiteOcioso">
+                          Ocioso
+                      </label>
+                  </div>
+              </div>
+
               <canvas id="utilizacaoChart"></canvas>
             </div>
 
@@ -305,7 +335,7 @@
 
             <hr />
 
-            <div id="details-info" class="details-info small">
+            <div id="details-info" class="details-info small fd_branco">
               <div class="row g-3">
                 <div class="col-6">
                   <p class="mb-2">
@@ -323,21 +353,22 @@
                 </div>
                 <div class="col-6">
                   <p class="mb-2">
-                    <span class="text-muted d-block">CPU:</span>
+                    <span class="text-muted d-block">CPU - Quantidade de núcleos:</span>
                     <span class="fw-bold" id="infoCpuCapacidade">8 núcleos</span>
                   </p>
                   <p class="mb-2">
-                    <span class="text-muted d-block">RAM:</span>
+                    <span class="text-muted d-block">RAM - Capacidade Total:</span>
                     <span class="fw-bold" id="infoRamCapacidade">16 GB</span>
                   </p>
                   <p class="mb-0">
-                    <span class="text-muted d-block">Disco:</span>
+                    <span class="text-muted d-block">Disco - Capacidade Total:</span>
                     <span class="fw-bold" id="infoDiscoCapacidade">512 GB</span>
                   </p>
                 </div>
               </div>
-              <a href="../html/painelEspecifico.html" class="btn btn-success btn-sm w-100 mt-2">
-                Ver Análise Detalhada
+              <a href="./painelEspecifico.html" 
+                class="btn btn-success btn-sm w-100 mt-2"
+                id="linkAnaliseHistorica"> Ver Análise Histórica
               </a>
             </div>
           </aside>
@@ -354,3 +385,31 @@
     <script src="../component/notificao/Notificacao.js"></script>
   </body>
 </html>
+<script>
+const toggleLimites = document.getElementById('toggleLimites');
+if (toggleLimites) {
+    toggleLimites.addEventListener('change', function () {
+        // Quando o estado do checkbox muda, reinicializa o gráfico
+        initLinhaChart(maquinaAtualId);
+    });
+}
+document.querySelectorAll('.card_analise_historica a.btn-success').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault(); 
+        // const card = this.closest('.card-recurso');
+        // const idMaquina = card.getAttribute('data-maquina-id');
+        // const maquina = MAQUINAS_DATA[idMaquina];
+        const maquina = {nome: 'Máquina-015'}
+        if (maquina && maquina.nome) {
+            sessionStorage.setItem('Máquina-015');
+            sessionStorage.setItem(15);
+            console.log(`Máquina selecionada: ${maquina.nome} (ID: ${idMaquina}) salva no sessionStorage.`);
+        } else {
+            console.error('ID da máquina não encontrado ou inválido:', idMaquina);
+        }
+        
+        window.location.href = this.href;
+    });
+});
+
+</script>

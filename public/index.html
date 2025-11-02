@@ -232,10 +232,12 @@
 
         <!-- Imagem -->
         <div class="col-lg-6 col-md-12 visual-content-screenshot" data-aos="fade-left">
-          <div class="screenshot-layer layer1"></div>
-          <div class="screenshot-layer layer2"></div>
-          <div class="screenshot-layer layer3"></div>
-        </div>
+    <div class="screenshot-layer img-home layer1"></div> 
+    
+    <div class="screenshot-layer img-geral layer2"></div> 
+    
+    <div class="screenshot-layer img-especifica layer3"></div> 
+</div>
 
       </div>
     </div>
@@ -380,26 +382,26 @@
         </div>
 
         <div class="testimonial-col">
-          <div class="testimonial-card-white p-4 rounded-3 h-100">
-            <div class="quote-icon mb-3">“</div>
-            <p class="testimonial-text-dark mb-4">
-              "Nunca imaginei que a proteção de dados seria tão simples e eficaz. Recomendo a todos os bancos que buscam
-              excelência."
-            </p>
-            <p class="testimonial-author-dark fw-bold text-end mb-0">— Ana C.</p>
-          </div>
-        </div>
+    <div class="testimonial-card-white p-4 rounded-3 h-100">
+        <div class="quote-icon mb-3">“</div>
+        <p class="testimonial-text-dark mb-4">
+            "A implementação da solução foi incrivelmente rápida e o impacto na nossa eficiência operacional
+            superou as expectativas. Essencial para o nosso compliance com a LGPD."
+        </p>
+        <p class="testimonial-author-dark fw-bold text-end mb-0">— Armando M.</p>
+    </div>
+</div>
 
         <div class="testimonial-col">
-          <div class="testimonial-card-white p-4 rounded-3 h-100">
-            <div class="quote-icon mb-3">“</div>
-            <p class="testimonial-text-dark mb-4">
-              "Nunca imaginei que a proteção de dados seria tão simples e eficaz. Recomendo a todos os bancos que buscam
-              excelência."
-            </p>
-            <p class="testimonial-author-dark fw-bold text-end mb-0">— Ana C.</p>
-          </div>
-        </div>
+    <div class="testimonial-card-white p-4 rounded-3 h-100">
+        <div class="quote-icon mb-3">“</div>
+        <p class="testimonial-text-dark mb-4">
+            "Finalmente encontramos uma plataforma de segurança de dados robusta que nos dá total confiança. O suporte
+            técnico é de primeira, altamente recomendado para o setor financeiro."
+        </p>
+        <p class="testimonial-author-dark fw-bold text-end mb-0">— Carla U.</p>
+    </div>
+</div>
 
       </div>
     </div>
@@ -555,6 +557,40 @@
         setInterval(autoSlide, slideInterval);
       }
     });
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const layers = document.querySelectorAll('.visual-content-screenshot .screenshot-layer');
+    
+    const classes = ['layer1', 'layer2', 'layer3'];
+    const totalClasses = classes.length; // 3
+
+    const rotateClasses = () => {
+        layers.forEach((layer) => {
+            let currentClassIndex = +1;
+            
+            for (let i = 0; i < totalClasses; i++) {
+                if (layer.classList.contains(classes[i])) {
+                    currentClassIndex = i;
+                    break;
+                }
+            }
+            
+            if (currentClassIndex === -1) return;
+            
+            const nextClassIndex = (currentClassIndex + 1) % totalClasses;
+            
+            const oldClass = classes[currentClassIndex];
+            const newClass = classes[nextClassIndex];
+            
+            layer.classList.remove(oldClass);
+            layer.classList.add(newClass);
+        });
+    };
+
+    const intervalTime = 3000; 
+    
+    setInterval(rotateClasses, intervalTime);
+});
 
   </script>
 

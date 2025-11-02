@@ -35,7 +35,7 @@
     </button>
     <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
       <h2 class="text-black me-3">
-        Análise Histórica de Desempenho: &nbsp;&nbsp; <span>Máquina-002</span>
+        Análise Histórica de Desempenho: &nbsp;&nbsp; <span id="tituloDoPainel">Máquina-002</span>
       </h2>
 
       <div class="d-flex align-items-center flex-wrap flex-grow-1 me-3">
@@ -61,19 +61,25 @@
           </button>
           <ul class="dropdown-menu dropdown-menu-end hover_verde">
             <li>
-              <a class="dropdown-item" onclick="atualizar_painelEspecifico(1)">Maquina-001</a>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(1)">Máquina-0021</a>
             </li>
 
             <li>
-              <a class="dropdown-item" onclick="atualizar_painelEspecifico(2)">Maquina-003</a>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(2)">Máquina-0022</a>
             </li>
 
             <li>
-              <a class="dropdown-item" onclick="atualizar_painelEspecifico(3)">Maquina-004</a>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(3)">Máquina-0001</a>
             </li>
 
             <li>
-              <a class="dropdown-item" onclick="atualizar_painelEspecifico(4)">Maquina-005</a>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(4)">Máquina-0002</a>
+            </li>
+                        <li>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(5)">Máquina-0015</a>
+            </li>
+                        <li>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(6)">Máquina-0030</a>
             </li>
           </ul>
         </div>
@@ -169,7 +175,7 @@
     <div class="kpi-card" id="kpi-componente-critico">
         <div class="topo-kpi">
             <h6>Componente Com Mais Alertas Criticos</h6>
-            <div class="icone-kpi"><i class="bi bi-box-arrow-in-up"></i></div>
+            <div class="icone-kpi"><i class="bi bi-memory"></i></div>
         </div>
 
         <div class="baixo-kpi">
@@ -295,7 +301,7 @@
                 3%
               </span>
               <p>
-                Bimestre Passado: 2,1%
+                Bimestre Passado: 10.7%
               </p>
               <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
                 data-bs-trigger="focus" data-bs-title="Taxa de Variação"
@@ -309,7 +315,7 @@
 
       <div class="chart-item-wrapper" id="chart-tendencia">
         <h3 style="font-size: 1.1rem; margin-bottom: 15px">
-          Tendência de Alertas (Bimestral)
+          Progressão Acumulada de Alertas no Bimestre
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
             data-bs-trigger="focus" data-bs-title="Tendência de Alertas"
             data-bs-content="Exibe a trajetória histórica dos alertas e projeta uma **Linha de Previsão** (tracejada) que indica a direção futura do volume de problemas.">
@@ -356,20 +362,28 @@
   // MOCK DE DADOS: Lista de máquinas para simular a busca
   const LISTA_MAQUINAS = [{
       id: 1,
-      nome: 'Maquina-001'
+      nome: 'Máquina-0021'
     },
     {
       id: 2,
-      nome: 'Maquina-003'
+      nome: 'Máquina-0022'
     },
     {
       id: 3,
-      nome: 'Maquina-004'
+      nome: 'Máquina-0001'
     },
     {
       id: 4,
-      nome: 'Maquina-005'
+      nome: 'Máquina-0002'
     },
+    {
+      id: 5,
+      nome: 'Máquina-0015'
+    },
+    {
+      id: 6,
+      nome: 'Máquina-0030'
+    }
   ];
 
   /**
@@ -440,4 +454,22 @@
     console.log(`Máquina selecionada: ${nome} (ID: ${id}). Iniciando carregamento do painel...`);
   }
 
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const nomeMaquina = sessionStorage.getItem('maquinaSelecionadaNome');
+    const idMaquina = sessionStorage.getItem('maquinaSelecionadaId');
+
+    // 2. Identifica o elemento de destino (o <h1>)
+    const tituloElemento = document.getElementById('tituloDoPainel');
+
+    if (nomeMaquina && tituloElemento) {
+        tituloElemento.innerHTML = `${nomeMaquina}`;
+    } else {
+        if (tituloElemento) {
+            tituloElemento.innerHTML = 'Maquina-001';
+        }
+    }
+    // carregarDadosDoGrafico(idMaquina); 
+});
 </script>
