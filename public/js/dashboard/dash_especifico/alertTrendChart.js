@@ -8,14 +8,14 @@ let alertTrendChartInstance = null;
 
 // Mock de dados para simular a mudança de contexto
 const MOCK_ALERT_DATA = {
-  'Total De Alertas': {
-    labels: [380, 390, 400, 410, 420, 430, 440, 450, null, null, null, null], // Último ponto é 450
-    trendLine: [380, 393, 406, 419, 432, 445, 458, 471, 484, 497, 510, 520], // Último ponto é 520 (Previsão)
-    prevBimestre: 520, // KPI - Próximo Bimestre (520)
-    metaBimestre: 450, // KPI - Total Deste Bimestre (450)
-    variacao: 8.5, // KPI - Variação (+8.5%)
-    cor: '#e74c3c', // Cor Vermelha para indicar Piora/Crítico (Em vez do ciano original)
-  },
+'Total De Alertas': {
+    labels: [35, 80, 135, 195, 260, 330, 400, 450, null, null, null, null],
+    trendLine: [40, 109, 178, 247, 316, 385, 454, 520, 520+68.5, 520+68.5*2, 520+68.5*3, 520+68.5*4],
+    prevBimestre: 520,   // KPI - Previsão Acumulada no final da tendência.
+    metaBimestre: 450,   // KPI - Real Acumulado no último ponto.
+    variacao: 15.6,      // Variação (520 vs 450).
+    cor: '#e74c3c',
+},
   Crítico: {
     labels: [10, 12, 15, 16, 17, 18, 18, 19, null, null, null, null],
     trendLine: [9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31],
@@ -41,7 +41,6 @@ const MOCK_ALERT_DATA = {
     cor: '#2ecc71',
   },
 };
-// ... (Restante do código)
 
 /**
  * Cria a função de callback do tooltip customizada.
@@ -82,7 +81,7 @@ function updateAlertTrendChart(viewType) {
   const kpiPrevisaoValor = document.getElementById('kpi-previsao-valor');
   if (kpiPrevisaoValor && kpiPrevisaoValor.querySelector('p')) {
     kpiPrevisaoValor.querySelector('p').textContent =
-      `Previsão Feita Para Este Bimestre: ${data.metaBimestre}`;
+      `Previsão Feita Para Este Bimestre: ${data.metaBimestre - 16}`;
   }
 
   const txtVariacaoLinear = document.getElementById('txt_variacao_linear');
@@ -121,7 +120,7 @@ function updateAlertTrendChart(viewType) {
   };
 
   const actualAlertsDataset = {
-    label: 'Total de Alertas',
+    label: 'Alertas (Acumulado)',
     data: data.labels,
     borderColor: data.cor.replace('1)', '0.7)'),
     backgroundColor: data.cor,

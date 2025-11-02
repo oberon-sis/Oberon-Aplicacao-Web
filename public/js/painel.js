@@ -1,6 +1,6 @@
 let linhaChartInstance = null;
 let linhaIntervalId = null;
-let maquinaAtualId = 3; // CORREÇÃO 1: Iniciar na Máquina-0001 (ID 3)
+let maquinaAtualId = 3; // Iniciar na Máquina-0001 (ID 3)
 let filtroAtual = 'todas';
 let componenteAtual = 'cpu';
 const LINHA_CHART_ID = 'utilizacaoChart';
@@ -25,12 +25,16 @@ const MAQUINAS_DATA = {
     disco24h: 4,
     discoPico: 89,
     cpuLimite: 78,
+    cpuLimiteAtencao: 65, 
     cpuLimiteMin: 12.4,
     ramLimite: 74.3,
-    ramLimiteMin: 89.4,
+    ramLimiteAtencao: 60.0, 
+    ramLimiteMin: 20.4,
     discoLimite: 88.8,
-    discoLimiteMin: 87.5,
+    discoLimiteAtencao: 60.0, 
+    discoLimiteMin: 40.5,
     redeLimite: 3.5,
+    redeLimiteAtencao: 2.8, 
     redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 3050 SFF',
     ip: '192.168.1.101',
@@ -51,12 +55,16 @@ const MAQUINAS_DATA = {
     disco24h: 3,
     discoPico: 57,
     cpuLimite: 78,
+    cpuLimiteAtencao: 65, 
     cpuLimiteMin: 12.4,
     ramLimite: 74.3,
-    ramLimiteMin: 89.4,
+    ramLimiteAtencao: 60.0, 
+    ramLimiteMin: 20.4,
     discoLimite: 88.8,
-    discoLimiteMin: 87.5,
+    discoLimiteAtencao: 80.0, 
+    discoLimiteMin: 47.5,
     redeLimite: 3.5,
+    redeLimiteAtencao: 2.8, 
     redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 5060',
     ip: '192.168.1.102',
@@ -77,12 +85,16 @@ const MAQUINAS_DATA = {
     disco24h: 12,
     discoPico: 94,
     cpuLimite: 78,
+    cpuLimiteAtencao: 65, 
     cpuLimiteMin: 12.4,
     ramLimite: 74.3,
-    ramLimiteMin: 89.4,
+    ramLimiteAtencao: 60.0, 
+    ramLimiteMin: 25.4,
     discoLimite: 88.8,
-    discoLimiteMin: 87.5,
+    discoLimiteAtencao: 80.0, 
+    discoLimiteMin: 47.5,
     redeLimite: 3.5,
+    redeLimiteAtencao: 2.8, 
     redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 3050 SFF',
     ip: '192.168.1.103',
@@ -103,12 +115,16 @@ const MAQUINAS_DATA = {
     disco24h: 0,
     discoPico: 0,
     cpuLimite: 78,
+    cpuLimiteAtencao: 65, 
     cpuLimiteMin: 12.4,
     ramLimite: 74.3,
-    ramLimiteMin: 89.4,
+    ramLimiteAtencao: 60.0, 
+    ramLimiteMin: 25.4,
     discoLimite: 88.8,
-    discoLimiteMin: 87.5,
+    discoLimiteAtencao: 80.0, 
+    discoLimiteMin: 47.5,
     redeLimite: 3.5,
+    redeLimiteAtencao: 2.8, 
     redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 7060',
     ip: '192.168.1.104',
@@ -129,12 +145,16 @@ const MAQUINAS_DATA = {
     disco24h: 9,
     discoPico: 82,
     cpuLimite: 78,
+    cpuLimiteAtencao: 65, 
     cpuLimiteMin: 12.4,
     ramLimite: 74.3,
-    ramLimiteMin: 89.4,
+    ramLimiteAtencao: 60.0, 
+    ramLimiteMin: 25.4,
     discoLimite: 88.8,
-    discoLimiteMin: 87.5,
+    discoLimiteAtencao: 80.0, 
+    discoLimiteMin: 47.5,
     redeLimite: 3.5,
+    redeLimiteAtencao: 2.8, 
     redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 3050 SFF',
     ip: '192.168.1.105',
@@ -155,12 +175,16 @@ const MAQUINAS_DATA = {
     disco24h: 0,
     discoPico: 0,
     cpuLimite: 78,
+    cpuLimiteAtencao: 65, 
     cpuLimiteMin: 12.4,
     ramLimite: 74.3,
-    ramLimiteMin: 89.4,
+    ramLimiteAtencao: 60.0, 
+    ramLimiteMin: 25.4,
     discoLimite: 88.8,
-    discoLimiteMin: 87.5,
+    discoLimiteAtencao: 80.0, 
+    discoLimiteMin: 47.5,
     redeLimite: 3.5,
+    redeLimiteAtencao: 2.8, 
     redeLimiteMin: 1.7,
     modelo: 'Dell OptiPlex 3060',
     ip: '192.168.1.106',
@@ -177,6 +201,11 @@ const COMPONENT_LABELS = {
   disco: 'Uso do Disco Duro',
   rede: 'Taxa de utilização de rede',
 };
+
+function limiteEstaVisivel(id) {
+  const checkbox = document.getElementById(id);
+  return checkbox && checkbox.checked;
+}
 
 function getLimiteMaximo() {
   const maquina = MAQUINAS_DATA[maquinaAtualId];
@@ -200,10 +229,86 @@ function getLimiteMinimo() {
   return limites[componenteAtual] || 90;
 }
 
+function getLimiteAtencao() {
+  const maquina = MAQUINAS_DATA[maquinaAtualId];
+  const limiteKey = `${componenteAtual}LimiteAtencao`;
+
+  const limites = {
+    cpu: maquina.cpuLimiteAtencao,
+    ram: maquina.ramLimiteAtencao,
+    disco: maquina.discoLimiteAtencao,
+    rede: maquina.redeLimiteAtencao,
+  }; // Retorna o valor de atenção, ou 70 como fallback.
+
+  return limites[componenteAtual] || 70;
+}
+
 function getOpcoesChart() {
   const limiteMax = getLimiteMaximo();
-  const limiteMin = getLimiteMinimo();
+  const limiteMin = getLimiteMinimo(); // Obtém o limite de atenção SEM CÁLCULO
+  const limiteAtencao = getLimiteAtencao();
   const isRede = componenteAtual === 'rede';
+
+  const annotations = {}; // 1. LIMITE MÁXIMO (CRÍTICO)
+
+  if (limiteEstaVisivel('toggleLimiteCritico')) {
+    annotations.limiteCritico = {
+      type: 'line',
+      yMin: limiteMax,
+      yMax: limiteMax,
+      borderColor: 'rgb(255, 99, 132)', // Vermelho
+      borderWidth: 2,
+      borderDash: [5, 5],
+      label: {
+        display: true,
+        content: `Limite Máximo (Crítico): ${limiteMax}%`,
+        position: 'end',
+        backgroundColor: 'rgba(255, 99, 132, 0.8)',
+        color: 'white',
+        font: { size: 11 },
+      },
+    };
+  } // 2. LIMITE DE ATENÇÃO
+
+  if (limiteEstaVisivel('toggleLimiteAtencao')) {
+    annotations.limiteAtencao = {
+      type: 'line',
+      yMin: limiteAtencao,
+      yMax: limiteAtencao,
+      borderColor: 'rgb(255, 159, 64)', // Laranja
+      borderWidth: 2,
+      borderDash: [5, 5],
+      label: {
+        display: true,
+        content: `Limite de Atenção: ${limiteAtencao}%`,
+        position: 'end',
+        backgroundColor: 'rgba(255, 159, 64, 0.8)',
+        color: 'white',
+        font: { size: 11 },
+      },
+    };
+  } // 3. LIMITE MÍNIMO (OCIOSO)
+
+  if (limiteEstaVisivel('toggleLimiteOcioso')) {
+    annotations.limiteOcioso = {
+      type: 'line',
+      yMin: limiteMin,
+      yMax: limiteMin,
+      borderColor: 'rgb(54, 162, 235)', // Azul
+      borderWidth: 2,
+      borderDash: [5, 5],
+      label: {
+        display: true,
+        content: isRede
+          ? `Limite Mínimo (Ocioso): ${limiteMin.toFixed(2)} %`
+          : `Limite Mínimo (Ocioso): ${limiteMin.toFixed(1)}%`,
+        position: 'start',
+        backgroundColor: 'rgba(54, 162, 235, 0.8)',
+        color: 'white',
+        font: { size: 11 },
+      },
+    };
+  }
 
   return {
     responsive: true,
@@ -238,42 +343,7 @@ function getOpcoesChart() {
         },
       },
       annotation: {
-        annotations: {
-          limiteMax: {
-            type: 'line',
-            yMin: limiteMax,
-            yMax: limiteMax,
-            borderColor: 'rgb(255, 99, 132)',
-            borderWidth: 2,
-            borderDash: [5, 5],
-            label: {
-              display: true,
-              content: isRede ? `Limite Máximo: ${limiteMax} %` : `Limite Máximo: ${limiteMax}%`,
-              position: 'end',
-              backgroundColor: 'rgba(255, 99, 132, 0.8)',
-              color: 'white',
-              font: { size: 11 },
-            },
-          },
-          limiteMin: {
-            type: 'line',
-            yMin: limiteMin,
-            yMax: limiteMin,
-            borderColor: 'rgb(54, 162, 235)',
-            borderWidth: 2,
-            borderDash: [5, 5],
-            label: {
-              display: true,
-              content: isRede
-                ? `Limite Mínimo: ${limiteMin.toFixed(2)} %`
-                : `Limite Mínimo: ${limiteMin.toFixed(1)}%`,
-              position: 'start',
-              backgroundColor: 'rgba(54, 162, 235, 0.8)',
-              color: 'white',
-              font: { size: 11 },
-            },
-          },
-        },
+        annotations: annotations, // Aplica as anotações individualmente
       },
     },
     scales: {
@@ -332,26 +402,24 @@ function getNewValue(min, max) {
 }
 
 function getValoresIniciais(maquina) {
-
   if (maquina.criticidade === 'ocioso') {
     return {
-      cpu: { min: maquina.cpuLimiteMin * 0.2, max: maquina.cpuLimite * 0.4 }, 
-      ram: { min: maquina.ramLimiteMin * 0.8, max: maquina.ramLimite * 0.9 }, 
-      disco: { min: maquina.discoLimiteMin * 0.96, max: maquina.discoLimite * 0.99 }, 
-      rede: { min: maquina.redeLimiteMin * 0.2, max: maquina.redeLimite * 0.4 }, 
+      cpu: { min: maquina.cpuLimiteMin * 0.2, max: maquina.cpuLimite * 0.4 },
+      ram: { min: maquina.ramLimiteMin * 0.8, max: maquina.ramLimite * 0.9 },
+      disco: { min: maquina.discoLimiteMin * 0.96, max: maquina.discoLimite * 0.99 },
+      rede: { min: maquina.redeLimiteMin * 0.2, max: maquina.redeLimite * 0.4 },
     };
   }
 
   if (maquina.criticidade === 'critico') {
     return {
-      cpu: { min: maquina.cpuLimite * 0.9, max: maquina.cpuLimite * 1.15 }, 
+      cpu: { min: maquina.cpuLimite * 0.9, max: maquina.cpuLimite * 1.15 },
       ram: { min: maquina.ramLimite * 0.9, max: maquina.ramLimite * 1.1 },
       disco: { min: maquina.discoLimite * 0.9, max: maquina.discoLimite * 1.1 },
       rede: { min: maquina.redeLimite * 0.8, max: maquina.redeLimite * 1.05 },
     };
-  }
-  
-  // Para status 'normal' ou 'atencao' (padrão)
+  } // Para status 'normal' ou 'atencao' (padrão)
+
   return {
     cpu: { min: maquina.cpuLimiteMin, max: maquina.cpuLimite },
     ram: { min: maquina.ramLimiteMin, max: maquina.ramLimite },
@@ -359,7 +427,6 @@ function getValoresIniciais(maquina) {
     rede: { min: maquina.redeLimiteMin, max: maquina.redeLimite },
   };
 }
-
 
 async function fetchData(idMaquina) {
   await new Promise((resolve) => setTimeout(resolve, 500));
@@ -382,8 +449,7 @@ async function fetchData(idMaquina) {
 async function updateChartData(chart) {
   const newPoint = await fetchData(maquinaAtualId);
 
-  chart.data.datasets[0].data.shift();
-  // Continua usando o valor simulado para o movimento.
+  chart.data.datasets[0].data.shift(); // Continua usando o valor simulado para o movimento.
   chart.data.datasets[0].data.push(parseFloat(newPoint[componenteAtual]));
 
   chart.data.labels.shift();
@@ -436,10 +502,9 @@ function initLinhaChart(idMaquina) {
   const dadosHistorico = Array(8)
     .fill(0)
     .map(() => parseFloat(getNewValue(componenteValor.min, componenteValor.max)));
-  
+
   let valorPico = maquina[`${componenteAtual}Pico`];
   dadosHistorico.push(valorPico);
-  
 
   const dataChart = {
     labels: ['21h', '23h', '01h', '03h', '05h', '07h', '09h', '11h', '13h'],
@@ -578,5 +643,37 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('dropdownComponente').textContent = this.textContent;
       trocarComponente(componente);
     });
+  }); // NOVO: Listener para os checkboxes de limites (Ocultar/Mostrar individual)
+  document.querySelectorAll('.form-check-input[id^="toggleLimite"]').forEach((checkbox) => {
+    checkbox.addEventListener('change', function () {
+      // Recria o gráfico com as opções de anotação atualizadas
+      initLinhaChart(maquinaAtualId);
+    });
   });
+  const linkAnaliseHistorica = document.getElementById('linkAnaliseHistorica');
+
+if (linkAnaliseHistorica) {
+    linkAnaliseHistorica.addEventListener('click', function(e) {
+        // Previne a navegação imediata do link
+        e.preventDefault(); 
+        
+        // Usa a variável global maquinaAtualId
+        const idMaquina = maquinaAtualId; 
+        
+        // 1. Busca o objeto da máquina
+        const maquina = MAQUINAS_DATA[idMaquina];
+        
+        if (maquina && maquina.nome) {
+            // 2. Salva o nome e o ID da máquina no sessionStorage
+            sessionStorage.setItem('maquinaSelecionadaNome', maquina.nome);
+            sessionStorage.setItem('maquinaSelecionadaId', idMaquina);
+            console.log(`Máquina selecionada: ${maquina.nome} (ID: ${idMaquina}) salva no sessionStorage.`);
+        } else {
+            console.error('ID da máquina não encontrado ou inválido no maquinaAtualId:', idMaquina);
+        }
+        
+        // 3. Continua a navegação
+        window.location.href = this.href;
+    });
+}
 });
