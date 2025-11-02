@@ -12,11 +12,10 @@
     <link rel="stylesheet" href="../css/body.css" />
     <link rel="stylesheet" href="../component/menu/Menu.css" />
     <link rel="stylesheet" href="../css/painel.css" />
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="../assets/marca/icone_pequeno.svg"
-    />
+    <link rel="stylesheet" href="../component/tour/TourGuide.css" />
+    <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
+    <link rel="stylesheet" href="../component/notificao/Notificaocao.css" />
+
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
@@ -29,9 +28,10 @@
 
     <main class="content flex-grow-1 d-flex flex-column h-100">
       <header
-        class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0"
+        id="header-top"
+        class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0 px-md-5"
       >
-        <h1 class="h3 mb-0">Monitoramento em tempo real de recursos</h1>
+        <h1 class="h3 mb-0 me-3">Monitoramento Ativo em Tempo Real de Recursos</h1>
         <div class="d-flex align-items-center">
           <div class="input-group input-group-sm me-3" style="width: 300px">
             <input
@@ -46,62 +46,37 @@
       </header>
 
       <div class="main-container p-4 d-flex flex-column flex-grow-1">
-        <div
-          class="d-flex flex-wrap align-items-center mb-4 filter-group-row flex-shrink-0"
-        >
+        <div id="filter-group-row" class="d-flex flex-wrap align-items-center mb-4 filter-group-row flex-shrink-0">
           <div class="btn-group me-3" role="group">
-            <button
-              type="button"
-              class="btn btn-custom-status active"
-              data-filtro="todas"
-            >
-              Todas <span class="badge text-bg-dark ms-1">5</span>
+            <button type="button" class="btn btn-custom-status active" data-filtro="todas">
+              Todas <span class="badge text-bg-dark ms-1">6</span>
             </button>
-            <button
-              type="button"
-              class="btn btn-custom-status"
-              data-filtro="critico"
-            >
+            <button type="button" class="btn btn-custom-status" data-filtro="critico">
               Crítico <span class="badge text-bg-danger ms-1">1</span>
             </button>
-            <button
-              type="button"
-              class="btn btn-custom-status"
-              data-filtro="atencao"
-            >
+            <button type="button" class="btn btn-custom-status" data-filtro="atencao">
               Atenção <span class="badge text-bg-warning ms-1">1</span>
             </button>
-            <button
-              type="button"
-              class="btn btn-custom-status"
-              data-filtro="ocioso"
-            >
+            <button type="button" class="btn btn-custom-status" data-filtro="normal">
+              Normal <span class="badge text-bg-success ms-1">1</span>
+            </button>
+            <button type="button" class="btn btn-custom-status" data-filtro="ocioso">
               Ocioso <span class="badge text-bg-info ms-1">1</span>
             </button>
-            <button
-              type="button"
-              class="btn btn-custom-status"
-              data-filtro="offline"
-            >
+            <button type="button" class="btn btn-custom-status" data-filtro="offline">
               OFF-LINE <span class="badge badge-custom-gray ms-1">1</span>
             </button>
-            <button
-              type="button"
-              class="btn btn-custom-status"
-              data-filtro="manutencao"
-            >
+            <button type="button" class="btn btn-custom-status" data-filtro="manutencao">
               Manutenção <span class="badge badge-custom-gray ms-1">1</span>
             </button>
           </div>
         </div>
 
         <div class="main-content-area d-flex flex-grow-1 overflow-hidden">
-          <section class="resource-cards flex-fill">
+          <section id="resource-cards" class="resource-cards flex-fill position-relative">
             <div class="card card-recurso" data-maquina-id="1">
-              <div
-                class="d-flex justify-content-between align-items-start mb-2"
-              >
-                <h5 class="card-title h6 mb-0">ESTACAO-0021</h5>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title h6 mb-0">Máquina-0021</h5>
                 <i class="bi bi-check-circle-fill text-success fs-5"></i>
               </div>
               <p class="card-text mb-1">
@@ -110,48 +85,36 @@
               <p class="card-text mb-1">
                 <small class="text-muted">OCIOSO</small>
               </p>
-              <p class="card-text mb-2 small text-muted">
-                Uso mais perto do limite:
-              </p>
+              <p class="card-text mb-2 small text-muted">Uso mais perto do limite:</p>
               <ul class="list-unstyled small mb-3">
-                <li>CPU: <span class="fw-bold">65%</span></li>
+                <li>CPU: <span class="fw-bold">55%</span></li>
                 <li><span class="text-success">(Normal)</span></li>
               </ul>
-              <button type="button" class="btn btn-success btn-sm w-100">
-                Ver Detalhes
-              </button>
+              <button type="button" class="btn btn-success btn-sm w-100">Ver Detalhes</button>
             </div>
 
             <div class="card card-recurso" data-maquina-id="2">
-              <div
-                class="d-flex justify-content-between align-items-start mb-2"
-              >
-                <h5 class="card-title h6 mb-0">ESTACAO-0022</h5>
-                <i class="bi bi-check-circle-fill text-success fs-5"></i>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title h6 mb-0">Máquina-0022</h5>
+                <i class="bi bi-exclamation-circle text-info fs-5"></i>
               </div>
               <p class="card-text mb-1">
-                <small class="text-success fw-bold">ONLINE</small>
+                <small class="text-info fw-bold">OCIOSO</small>
               </p>
               <p class="card-text mb-1">
-                <small class="text-muted">OCIOSO</small>
+                <small class="text-info">SUBUTILIZADO</small>
               </p>
-              <p class="card-text mb-2 small text-muted">
-                Uso mais perto do limite:
-              </p>
+              <p class="card-text mb-2 small text-muted">Pior caso:</p>
               <ul class="list-unstyled small mb-3">
-                <li>RAM: <span class="fw-bold">71%</span></li>
-                <li><span class="text-success">(Normal)</span></li>
+                <li>RAM: <span class="fw-bold">28%</span></li>
+                <li><span class="text-info">(46% Abaixo do ideal)</span></li>
               </ul>
-              <button type="button" class="btn btn-success btn-sm w-100">
-                Ver Detalhes
-              </button>
+              <button type="button" class="btn btn-info btn-sm w-100">Ver Detalhes</button>
             </div>
 
             <div class="card card-recurso" data-maquina-id="3">
-              <div
-                class="d-flex justify-content-between align-items-start mb-2"
-              >
-                <h5 class="card-title h6 mb-0">ESTACAO-0001</h5>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title h6 mb-0">Máquina-0001</h5>
                 <i class="bi bi-exclamation-triangle-fill text-danger fs-5"></i>
               </div>
               <p class="card-text mb-1">
@@ -160,23 +123,17 @@
               <p class="card-text mb-1">
                 <small class="text-danger">ATENÇÃO URGENTE</small>
               </p>
-              <p class="card-text mb-2 small text-muted">
-                Uso mais perto do limite:
-              </p>
+              <p class="card-text mb-2 small text-muted">Pior caso:</p>
               <ul class="list-unstyled small mb-3">
                 <li>CPU: <span class="fw-bold">95%</span></li>
-                <li><span class="text-danger">(25% Acima do Limite)</span></li>
+                <li><span class="text-danger">(18% Acima do Limite)</span></li>
               </ul>
-              <button type="button" class="btn btn-danger btn-sm w-100">
-                Ver Detalhes
-              </button>
+              <button type="button" class="btn btn-danger btn-sm w-100">Ver Detalhes</button>
             </div>
 
             <div class="card card-recurso" data-maquina-id="4">
-              <div
-                class="d-flex justify-content-between align-items-start mb-2"
-              >
-                <h5 class="card-title h6 mb-0">ESTACAO-0002</h5>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title h6 mb-0">Máquina-0002</h5>
                 <i class="bi bi-dash-circle-fill text-secondary fs-5"></i>
               </div>
               <p class="card-text mb-1">
@@ -190,16 +147,12 @@
                 <li>CPU: <span class="fw-bold">N/A</span></li>
                 <li><span class="text-muted">(Desconectado há 1h)</span></li>
               </ul>
-              <button type="button" class="btn btn-secondary btn-sm w-100">
-                Ver Detalhes
-              </button>
+              <button type="button" class="btn btn-secondary btn-sm w-100">Ver Detalhes</button>
             </div>
 
             <div class="card card-recurso" data-maquina-id="5">
-              <div
-                class="d-flex justify-content-between align-items-start mb-2"
-              >
-                <h5 class="card-title h6 mb-0">ESTACAO-0015</h5>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title h6 mb-0">Máquina-0015</h5>
                 <i class="bi bi-exclamation-circle-fill text-warning fs-5"></i>
               </div>
               <p class="card-text mb-1">
@@ -208,23 +161,17 @@
               <p class="card-text mb-1">
                 <small class="text-warning">REQUER ATENÇÃO</small>
               </p>
-              <p class="card-text mb-2 small text-muted">
-                Uso mais perto do limite:
-              </p>
+              <p class="card-text mb-2 small text-muted">Uso mais perto do limite:</p>
               <ul class="list-unstyled small mb-3">
-                <li>RAM: <span class="fw-bold">88%</span></li>
-                <li><span class="text-warning">(3% Acima do Limite)</span></li>
+                <li>RAM: <span class="fw-bold">86%</span></li>
+                <li><span class="text-warning">(3% Abaixo do Limite)</span></li>
               </ul>
-              <button type="button" class="btn btn-warning btn-sm w-100">
-                Ver Detalhes
-              </button>
+              <button type="button" class="btn btn-warning btn-sm w-100">Ver Detalhes</button>
             </div>
 
             <div class="card card-recurso" data-maquina-id="6">
-              <div
-                class="d-flex justify-content-between align-items-start mb-2"
-              >
-                <h5 class="card-title h6 mb-0">ESTACAO-0030</h5>
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title h6 mb-0">Máquina-0030</h5>
                 <i class="bi bi-tools text-secondary fs-5"></i>
               </div>
               <p class="card-text mb-1">
@@ -235,19 +182,24 @@
               </p>
               <p class="card-text mb-2 small text-muted">Status:</p>
               <ul class="list-unstyled small mb-3">
-                <li><span class="fw-bold">Programada</span></li>
-                <li><span class="text-muted">(Retorna em 2h)</span></li>
+                <li><span class="fw-bold">Em manutenção</span></li>
+                <li><span class="text-muted">(Sem previsão de retorno)</span></li>
               </ul>
-              <button type="button" class="btn btn-secondary btn-sm w-100">
-                Ver Detalhes
-              </button>
+              <button type="button" class="btn btn-secondary btn-sm w-100">Ver Detalhes</button>
             </div>
+            <nav class="d-flex justify-content-center mt-3 div_paginas align-self-md-end position-absolute bottom-0 " style="right: 20px;" id="paginazacao">
+              <ul class="pagination pagination-sm">
+                <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
+                <li class="page-item active_pagina"><a class="page-link" href="#">1</a></li>
+                <li class="page-item disabled"><a class="page-link" href="#">Seguinte</a></li>
+              </ul>
+            </nav>
           </section>
 
           <aside class="details-sidebar flex-shrink-0">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h5 class="h6 mb-0 fw-bold" id="tituloDetalhes">
-                ESTACAO-0021 | Histórico de Utilização de Recursos
+                Máquina-0021 | Histórico de Utilização de Recursos
               </h5>
               <div class="dropdown">
                 <button
@@ -257,66 +209,66 @@
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  Todos
+                  CPU
                 </button>
-                <ul
-                  class="dropdown-menu dropdown-menu-end"
-                  aria-labelledby="dropdownComponente"
-                >
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownComponente">
                   <li>
-                    <a class="dropdown-item" href="#" data-componente="todos"
-                      >Todos</a
-                    >
+                    <a class="dropdown-item" href="#" data-componente="cpu">CPU</a>
                   </li>
                   <li>
-                    <hr class="dropdown-divider" />
+                    <a class="dropdown-item" href="#" data-componente="ram">RAM</a>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="#" data-componente="cpu"
-                      >CPU</a
-                    >
+                    <a class="dropdown-item" href="#" data-componente="disco">Disco</a>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="#" data-componente="ram"
-                      >RAM</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#" data-componente="disco"
-                      >Disco</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#" data-componente="rede"
-                      >Rede</a
-                    >
+                    <a class="dropdown-item" href="#" data-componente="rede">Rede</a>
                   </li>
                 </ul>
               </div>
             </div>
 
-            <div class="chart-container mb-4">
+            <div id="chart-container" class="chart-container mb-5 fd_branco">
+              <div class="d-flex gap-3 mb-3">
+                  <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="toggleLimiteCritico" checked>
+                      <label class="form-check-label text-danger" for="toggleLimiteCritico">
+                          Crítico
+                      </label>
+                  </div>
+
+                  <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="toggleLimiteAtencao">
+                      <label class="form-check-label text-warning" for="toggleLimiteAtencao">
+                          Atenção
+                      </label>
+                  </div>
+
+                  <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="toggleLimiteOcioso" checked>
+                      <label class="form-check-label text-primary" for="toggleLimiteOcioso">
+                          Ocioso
+                      </label>
+                  </div>
+              </div>
+
               <canvas id="utilizacaoChart"></canvas>
             </div>
 
-            <div class="row row-cols-2 g-3 mb-4 indicators-grid">
+            <div id="indicators-grid" class="row row-cols-2 g-3 mb-4 indicators-grid">
               <div class="col">
                 <div class="resource-detail-card d-flex align-items-center">
                   <i class="bi bi-cpu-fill fs-3"></i>
                   <div class="flex-grow-1">
-                    <span class="small text-muted d-block mb-1"
-                      >Alertas no componente CPU</span
-                    >
-                    <div
-                      class="d-flex justify-content-between align-items-center"
-                    >
+                    <span class="small text-muted d-block mb-1">Alertas no componente CPU</span>
+                    <div class="d-flex justify-content-between align-items-center">
                       <div>
                         <small class="text-muted d-block">Últimas 24h:</small>
                         <span class="fw-bold text-muted" id="cpu24h">10</span>
                       </div>
                       <div class="text-end">
-                        <small class="text-muted d-block">Ativos:</small>
-                        <span class="fw-bold fs-5" id="cpuAtivos">6</span>
+                        <small class="text-muted d-block">Pico de Uso:</small>
+                        <span class="fw-bold fs-5" id="cpuPico">6</span>
                       </div>
                     </div>
                   </div>
@@ -327,19 +279,15 @@
                 <div class="resource-detail-card d-flex align-items-center">
                   <i class="bi bi-memory fs-3"></i>
                   <div class="flex-grow-1">
-                    <span class="small text-muted d-block mb-1"
-                      >Alertas no componente RAM</span
-                    >
-                    <div
-                      class="d-flex justify-content-between align-items-center"
-                    >
+                    <span class="small text-muted d-block mb-1">Alertas no componente RAM</span>
+                    <div class="d-flex justify-content-between align-items-center">
                       <div>
                         <small class="text-muted d-block">Últimas 24h:</small>
                         <span class="fw-bold text-muted" id="ram24h">4</span>
                       </div>
                       <div class="text-end">
-                        <small class="text-muted d-block">Ativos:</small>
-                        <span class="fw-bold fs-5" id="ramAtivos">1</span>
+                        <small class="text-muted d-block">Pico de Uso:</small>
+                        <span class="fw-bold fs-5" id="ramPico">1</span>
                       </div>
                     </div>
                   </div>
@@ -350,19 +298,15 @@
                 <div class="resource-detail-card d-flex align-items-center">
                   <i class="bi bi-wifi fs-3"></i>
                   <div class="flex-grow-1">
-                    <span class="small text-muted d-block mb-1"
-                      >Alertas de conexão de Rede</span
-                    >
-                    <div
-                      class="d-flex justify-content-between align-items-center"
-                    >
+                    <span class="small text-muted d-block mb-1">Alertas de conexão de Rede</span>
+                    <div class="d-flex justify-content-between align-items-center">
                       <div>
                         <small class="text-muted d-block">Últimas 24h:</small>
                         <span class="fw-bold text-muted" id="rede24h">3</span>
                       </div>
                       <div class="text-end">
-                        <small class="text-muted d-block">Ativos:</small>
-                        <span class="fw-bold fs-5" id="redeAtivos">1</span>
+                        <small class="text-muted d-block">Pico de Uso:</small>
+                        <span class="fw-bold fs-5" id="redePico">1</span>
                       </div>
                     </div>
                   </div>
@@ -373,19 +317,15 @@
                 <div class="resource-detail-card d-flex align-items-center">
                   <i class="bi bi-hdd-fill fs-3"></i>
                   <div class="flex-grow-1">
-                    <span class="small text-muted d-block mb-1"
-                      >Alertas no componente Disco</span
-                    >
-                    <div
-                      class="d-flex justify-content-between align-items-center"
-                    >
+                    <span class="small text-muted d-block mb-1">Alertas no componente Disco</span>
+                    <div class="d-flex justify-content-between align-items-center">
                       <div>
                         <small class="text-muted d-block">Últimas 24h:</small>
                         <span class="fw-bold text-muted" id="disco24h">7</span>
                       </div>
                       <div class="text-end">
-                        <small class="text-muted d-block">Ativos:</small>
-                        <span class="fw-bold fs-5" id="discoAtivos">3</span>
+                        <small class="text-muted d-block">Pico de Uso:</small>
+                        <span class="fw-bold fs-5" id="discoPico">3</span>
                       </div>
                     </div>
                   </div>
@@ -395,25 +335,41 @@
 
             <hr />
 
-            <div class="details-info small">
-              <p class="mb-1 d-flex justify-content-between">
-                <span class="text-muted">Modelo:</span>
-                <span class="fw-bold" id="infoModelo"
-                  >Dell OptiPlex 3050 SFF</span
-                >
-              </p>
-              <p class="mb-1 d-flex justify-content-between">
-                <span class="text-muted">IP:</span>
-                <span class="fw-bold" id="infoIp">192.168.1.101</span>
-              </p>
-              <p class="mb-1 d-flex justify-content-between">
-                <span class="text-muted">Quantidade de núcleos:</span>
-                <span class="fw-bold" id="infoNucleos">8</span>
-              </p>
-              <p class="mb-3 d-flex justify-content-between">
-                <span class="text-muted">Sistema Operacional:</span>
-                <span class="fw-bold" id="infoSo">Windows 10 Pro</span>
-              </p>
+            <div id="details-info" class="details-info small fd_branco">
+              <div class="row g-3">
+                <div class="col-6">
+                  <p class="mb-2">
+                    <span class="text-muted d-block">Modelo:</span>
+                    <span class="fw-bold" id="infoModelo">Dell OptiPlex 3050 SFF</span>
+                  </p>
+                  <p class="mb-2">
+                    <span class="text-muted d-block">IP:</span>
+                    <span class="fw-bold" id="infoIp">192.168.1.101</span>
+                  </p>
+                  <p class="mb-0">
+                    <span class="text-muted d-block">Sistema Operacional:</span>
+                    <span class="fw-bold" id="infoSo">Windows 10 Pro</span>
+                  </p>
+                </div>
+                <div class="col-6">
+                  <p class="mb-2">
+                    <span class="text-muted d-block">CPU - Quantidade de núcleos:</span>
+                    <span class="fw-bold" id="infoCpuCapacidade">8 núcleos</span>
+                  </p>
+                  <p class="mb-2">
+                    <span class="text-muted d-block">RAM - Capacidade Total:</span>
+                    <span class="fw-bold" id="infoRamCapacidade">16 GB</span>
+                  </p>
+                  <p class="mb-0">
+                    <span class="text-muted d-block">Disco - Capacidade Total:</span>
+                    <span class="fw-bold" id="infoDiscoCapacidade">512 GB</span>
+                  </p>
+                </div>
+              </div>
+              <a href="./painelEspecifico.html" 
+                class="btn btn-success btn-sm w-100 mt-2"
+                id="linkAnaliseHistorica"> Ver Análise Histórica
+              </a>
             </div>
           </aside>
         </div>
@@ -424,5 +380,36 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.2.1/dist/chartjs-plugin-annotation.min.js"></script>
     <script src="../component/menu/Menu.js"></script>
     <script src="../js/painel.js"></script>
+    <script src="../component/tour/TourGuide.js"></script>
+    <script src="../js/tour/painelTour.js"></script>
+    <script src="../component/notificao/Notificacao.js"></script>
   </body>
 </html>
+<script>
+const toggleLimites = document.getElementById('toggleLimites');
+if (toggleLimites) {
+    toggleLimites.addEventListener('change', function () {
+        // Quando o estado do checkbox muda, reinicializa o gráfico
+        initLinhaChart(maquinaAtualId);
+    });
+}
+document.querySelectorAll('.card_analise_historica a.btn-success').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault(); 
+        // const card = this.closest('.card-recurso');
+        // const idMaquina = card.getAttribute('data-maquina-id');
+        // const maquina = MAQUINAS_DATA[idMaquina];
+        const maquina = {nome: 'Máquina-015'}
+        if (maquina && maquina.nome) {
+            sessionStorage.setItem('Máquina-015');
+            sessionStorage.setItem(15);
+            console.log(`Máquina selecionada: ${maquina.nome} (ID: ${idMaquina}) salva no sessionStorage.`);
+        } else {
+            console.error('ID da máquina não encontrado ou inválido:', idMaquina);
+        }
+        
+        window.location.href = this.href;
+    });
+});
+
+</script>

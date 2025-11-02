@@ -1,4 +1,4 @@
-var database = require("../database/config");
+var database = require('../database/config');
 
 function getDadosEmpresaBd(idFuncionario) {
   console.log(
@@ -10,12 +10,10 @@ function getDadosEmpresaBd(idFuncionario) {
         from  empresa join funcionario 
         on funcionario.fkEmpresa = empresa.idEmpresa
         where idFuncionario = ${idFuncionario};`;
-  console.log("Executando a instrução SQL: \n" + instrucaoSql);
+  console.log('Executando a instrução SQL: \n' + instrucaoSql);
   return database.executar(instrucaoSql);
 }
 
 module.exports = {
-    
-    getDadosEmpresaBd
-
+  getDadosEmpresaBd,
 };

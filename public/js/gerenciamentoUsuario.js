@@ -1,31 +1,31 @@
-let tipoBusca = "nome";
+let tipoBusca = 'nome';
 
-var inputPesquisa = document.querySelector(".input_pesquisa");
-var botaoNome = document.getElementById("nome_busca");
-var botaoEmail = document.getElementById("email_busca");
-var dropdownTexto = document.querySelector(".dropdown-toggle");
-var tabela = document.getElementById("Conteudo_real");
+var inputPesquisa = document.querySelector('.input_pesquisa');
+var botaoNome = document.getElementById('nome_busca');
+var botaoEmail = document.getElementById('email_busca');
+var dropdownTexto = document.querySelector('.dropdown-toggle');
+var tabela = document.getElementById('Conteudo_real');
 
-botaoNome.addEventListener("click", (e) => {
+botaoNome.addEventListener('click', (e) => {
   e.preventDefault();
-  tipoBusca = "nome";
-  dropdownTexto.textContent = "Nome";
+  tipoBusca = 'nome';
+  dropdownTexto.textContent = 'Nome';
 });
 
-botaoEmail.addEventListener("click", (e) => {
+botaoEmail.addEventListener('click', (e) => {
   e.preventDefault();
-  tipoBusca = "email";
-  dropdownTexto.textContent = "E-mail";
+  tipoBusca = 'email';
+  dropdownTexto.textContent = 'E-mail';
 });
 
 var timeoutPesquisa = null;
-inputPesquisa.addEventListener("input", () => {
+inputPesquisa.addEventListener('input', () => {
   clearTimeout(timeoutPesquisa);
   timeoutPesquisa = setTimeout(() => {
     var valor = inputPesquisa.value.trim();
 
-    if (valor === "") {
-      if (typeof buscarUsuarios === "function") {
+    if (valor === '') {
+      if (typeof buscarUsuarios === 'function') {
         buscarUsuarios(1);
       }
       return;
@@ -43,7 +43,7 @@ function PesquisarUsuarios(valor) {
   `;
 
   fetch(
-    `/gerenciamentoUsuario/PesquisarUsuario?campo=${tipoBusca}&valor=${encodeURIComponent(valor)}`
+    `/gerenciamentoUsuario/PesquisarUsuario?campo=${tipoBusca}&valor=${encodeURIComponent(valor)}`,
   )
     .then((res) => {
       if (res.status === 200) return res.json();
@@ -57,21 +57,21 @@ function PesquisarUsuarios(valor) {
         `;
         return [];
       }
-      throw new Error("Erro ao buscar usuários.");
+      throw new Error('Erro ao buscar usuários.');
     })
     .then((dados) => {
       if (!dados || dados.length === 0) return;
 
-      tabela.innerHTML = "";
+      tabela.innerHTML = '';
 
       dados.forEach((u) => {
-        const tr = document.createElement("tr");
+        const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${u.idFuncionario || u.id}</td>
             <td>${u.nome}</td>
-            <td>${u.cpf || "-"}</td>
+            <td>${u.cpf || '-'}</td>
             <td>${u.email}</td>
-            <td>${u.funcao || "-"}</td>
+            <td>${u.funcao || '-'}</td>
             <td>
                 <span class="opcao_crud text-primary" data-bs-toggle="modal"
                       onclick="getUsuariobyID(${u.idFuncionario || u.id})"
@@ -92,7 +92,7 @@ function PesquisarUsuarios(valor) {
       });
     })
     .catch((erro) => {
-      console.error("Erro na pesquisa:", erro);
+      console.error('Erro na pesquisa:', erro);
       tabela.innerHTML = `
           <tr><td colspan="7" class="text-center text-danger">
               Erro na pesquisa (${erro.message})
@@ -101,15 +101,15 @@ function PesquisarUsuarios(valor) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', function () {
   buscarUsuarios(1);
 });
 
 // LISTAGEM DOS USUARIOS COM PAGINAÇÃO
 
 function buscarUsuarios(pagina = 1) {
-  var tabela = document.getElementById("Conteudo_real");
-  var paginacao = document.querySelector(".pagination");
+  var tabela = document.getElementById('Conteudo_real');
+  var paginacao = document.querySelector('.pagination');
 
   tabela.innerHTML = `
         ${Array.from({ length: 5 })
@@ -122,9 +122,9 @@ function buscarUsuarios(pagina = 1) {
                     </div>
                 </td>
             </tr>
-        `
+        `,
           )
-          .join("")}
+          .join('')}
     `;
 
   fetch(`/gerenciamentoUsuario/listarFuncionarios?page=${pagina}`)
@@ -133,12 +133,12 @@ function buscarUsuarios(pagina = 1) {
       return res.json();
     })
     .then((dados) => {
-      Estrutura_esqueleto_carregamento.style.display = "none";
+      Estrutura_esqueleto_carregamento.style.display = 'none';
 
       if (!dados || dados.length === 0) {
         tabela.innerHTML = `<tr><td colspan="7" class="text-center">Nenhum usuário encontrado.</td></tr>`;
         paginacao.innerHTML = `
-                    <li class="page-item ${pagina === 1 ? "disabled" : ""}">
+                    <li class="page-item ${pagina === 1 ? 'disabled' : ''}">
                         <a class="page-link" href="#" onclick="buscarUsuarios(${pagina - 1})">Anterior</a>
                     </li>
                     <li class="page-item active"><a class="page-link" href="#">${pagina}</a></li>
@@ -147,9 +147,9 @@ function buscarUsuarios(pagina = 1) {
         return;
       }
 
-      tabela.innerHTML = "";
+      tabela.innerHTML = '';
       dados.forEach((u) => {
-        const tr = document.createElement("tr");
+        const tr = document.createElement('tr');
         tr.innerHTML = `
                     <td>${u.id}</td>
                     <td>${u.nome}</td>
@@ -173,9 +173,7 @@ function buscarUsuarios(pagina = 1) {
         tabela.appendChild(tr);
       });
 
-      return fetch(
-        `/gerenciamentoUsuario/listarFuncionarios?page=${pagina + 1}`
-      )
+      return fetch(`/gerenciamentoUsuario/listarFuncionarios?page=${pagina + 1}`)
         .then((nextRes) => {
           if (!nextRes.ok) throw new Error();
           return nextRes.json();
@@ -184,18 +182,18 @@ function buscarUsuarios(pagina = 1) {
           var temProxima = dadosProx && dadosProx.length > 0;
 
           paginacao.innerHTML = `
-                        <li class="page-item ${pagina === 1 ? "disabled" : ""}">
+                        <li class="page-item ${pagina === 1 ? 'disabled' : ''}">
                             <a class="page-link" href="#" onclick="buscarUsuarios(${pagina - 1})">Anterior</a>
                         </li>
                         <li class="page-item active"><a class="page-link" href="#">${pagina}</a></li>
-                        <li class="page-item ${!temProxima ? "disabled" : ""}">
+                        <li class="page-item ${!temProxima ? 'disabled' : ''}">
                             <a class="page-link" href="#" onclick="buscarUsuarios(${pagina + 1})">Próxima</a>
                         </li>
                     `;
         })
         .catch(() => {
           paginacao.innerHTML = `
-                        <li class="page-item ${pagina === 1 ? "disabled" : ""}">
+                        <li class="page-item ${pagina === 1 ? 'disabled' : ''}">
                             <a class="page-link" href="#" onclick="buscarUsuarios(${pagina - 1})">Anterior</a>
                         </li>
                         <li class="page-item active"><a class="page-link" href="#">${pagina}</a></li>
@@ -206,7 +204,7 @@ function buscarUsuarios(pagina = 1) {
         });
     })
     .catch((err) => {
-      console.error("Erro ao carregar usuários:", err);
+      console.error('Erro ao carregar usuários:', err);
       tabela.innerHTML = `
                 <tr><td colspan="7" class="text-center text-danger">
                     Erro ao carregar usuários (${err.message})
@@ -214,7 +212,7 @@ function buscarUsuarios(pagina = 1) {
             `;
 
       paginacao.innerHTML = `
-                <li class="page-item ${pagina === 1 ? "disabled" : ""}">
+                <li class="page-item ${pagina === 1 ? 'disabled' : ''}">
                     <a class="page-link" href="#" onclick="buscarUsuarios(${pagina - 1})">Anterior</a>
                 </li>
                 <li class="page-item active"><a class="page-link" href="#">${pagina}</a></li>
@@ -224,22 +222,20 @@ function buscarUsuarios(pagina = 1) {
 }
 
 function cadastrar() {
-  var nome = document.getElementById("nome_input").value;
-  var email = document.getElementById("email_input").value;
-  var cpf = document.getElementById("cpf_input").value;
-  var senha = document.getElementById("senha_input").value;
-  var fkTipoUsuario = document.getElementById(
-    "tipo_usuario_select_tipos"
-  ).value;
+  var nome = document.getElementById('nome_input').value;
+  var email = document.getElementById('email_input').value;
+  var cpf = document.getElementById('cpf_input').value;
+  var senha = document.getElementById('senha_input').value;
+  var fkTipoUsuario = document.getElementById('tipo_usuario_select_tipos').value;
 
   if (!nome || !email || !cpf || !senha || !fkTipoUsuario) {
-    alert("Preencha todos os campos corretamente!");
+    alert('Preencha todos os campos corretamente!');
     return;
   }
 
-  fetch("/gerenciamentoUsuario/cadastrar", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  fetch('/gerenciamentoUsuario/cadastrar', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       nomeServer: nome,
       cpfServer: cpf,
@@ -250,29 +246,26 @@ function cadastrar() {
     }),
   })
     .then((res) => {
-      if (res.ok) alert("Cadastro realizado com sucesso!");
+      if (res.ok) alert('Cadastro realizado com sucesso!');
       else res.json().then((json) => alert(`Erro: ${json}`));
     })
-    .catch((err) => alert("Erro de rede: " + err));
+    .catch((err) => alert('Erro de rede: ' + err));
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', function () {
   getTipoUsuario();
   // getUsuariobyID();
 });
 
 function getTipoUsuario() {
-  alert("Estou no tipo js");
-  var select = document.getElementsByClassName("tipo_usuario_select_tipos");
+  var select = document.getElementsByClassName('tipo_usuario_select_tipos');
 
-  fetch("/gerenciamentoUsuario/getTipoUsuario")
+  fetch('/gerenciamentoUsuario/getTipoUsuario')
     .then((res) => {
       if (res.status === 204) {
-        select[0].innerHTML =
-          '<option value="" disabled selected>Nenhum tipo cadastrado</option>';
-        select[1].innerHTML =
-          '<option value="" disabled selected>Nenhum tipo cadastrado</option>';
-        throw new Error("Nenhum tipo de usuário encontrado.");
+        select[0].innerHTML = '<option value="" disabled selected>Nenhum tipo cadastrado</option>';
+        select[1].innerHTML = '<option value="" disabled selected>Nenhum tipo cadastrado</option>';
+        throw new Error('Nenhum tipo de usuário encontrado.');
       }
       if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
       return res.json();
@@ -281,7 +274,7 @@ function getTipoUsuario() {
       select[0].innerHTML =
         '<option value="" disabled selected>Selecione o tipo de usuário</option>';
       tipos.forEach((tipo) => {
-        const option = document.createElement("option");
+        const option = document.createElement('option');
         option.value = tipo.idTipoUsuario;
         option.text = tipo.nomeTipo;
         select[0].appendChild(option);
@@ -289,18 +282,16 @@ function getTipoUsuario() {
       select[1].innerHTML =
         '<option value="" disabled selected>Selecione o tipo de usuário</option>';
       tipos.forEach((tipo) => {
-        const option = document.createElement("option");
+        const option = document.createElement('option');
         option.value = tipo.idTipoUsuario;
         option.text = tipo.nomeTipo;
         select[1].appendChild(option);
       });
     })
     .catch((erro) => {
-      console.error("Falha ao carregar tipos de usuário:", erro);
-      select[0].innerHTML =
-        '<option value="" disabled selected>Erro ao carregar</option>';
-      select[1].innerHTML =
-        '<option value="" disabled selected>Nenhum tipo cadastrado</option>';
+      console.error('Falha ao carregar tipos de usuário:', erro);
+      select[0].innerHTML = '<option value="" disabled selected>Erro ao carregar</option>';
+      select[1].innerHTML = '<option value="" disabled selected>Nenhum tipo cadastrado</option>';
     });
 }
 
@@ -312,22 +303,21 @@ function getUsuariobyID(idFuncionario) {
     })
     .then((dados) => {
       if (dados.length === 0) {
-        alert("Usuário não encontrado!");
+        alert('Usuário não encontrado!');
         return;
       }
 
       var usuario = dados[0];
 
-      document.getElementById("nome_atual").innerText = usuario.nome;
-      document.getElementById("email_atual").innerText = usuario.email;
-      document.getElementById("tipoUsuario_atual").innerText =
-        usuario.tipoUsuario;
+      document.getElementById('nome_atual').innerText = usuario.nome;
+      document.getElementById('email_atual').innerText = usuario.email;
+      document.getElementById('tipoUsuario_atual').innerText = usuario.tipoUsuario;
 
-      document.getElementById("ipt_nome").value = usuario.nome;
-      document.getElementById("ipt_email").value = usuario.email;
-      document.getElementById("ipt_senha").value = usuario.senha || "";
+      document.getElementById('ipt_nome').value = usuario.nome;
+      document.getElementById('ipt_email').value = usuario.email;
+      document.getElementById('ipt_senha').value = usuario.senha || '';
 
-      var selectTipo = document.getElementById("tipo_usuario_select_tipos");
+      var selectTipo = document.getElementById('tipo_usuario_select_tipos');
       if (selectTipo) {
         const intervalo = setInterval(() => {
           if (selectTipo.options.length > 1) {
@@ -337,19 +327,17 @@ function getUsuariobyID(idFuncionario) {
         }, 100);
       }
     })
-    .catch((error) => console.error("Erro:", error));
+    .catch((error) => console.error('Erro:', error));
 }
 
 function salvarEdicao(idFuncionario) {
-  var nome = document.getElementById("ipt_nome").value;
-  var email = document.getElementById("ipt_email").value;
-  var senha = document.getElementById("ipt_senha").value;
-  var fkTipoUsuario = document.getElementById(
-    "tipo_usuario_select_tipos"
-  ).value;
+  var nome = document.getElementById('ipt_nome').value;
+  var email = document.getElementById('ipt_email').value;
+  var senha = document.getElementById('ipt_senha').value;
+  var fkTipoUsuario = document.getElementById('tipo_usuario_select_tipos').value;
 
   if (!nome || !email || !fkTipoUsuario) {
-    alert("Preencha todos os campos obrigatórios!");
+    alert('Preencha todos os campos obrigatórios!');
     return;
   }
 
@@ -362,24 +350,24 @@ function salvarEdicao(idFuncionario) {
   };
   console.log(bodyData);
 
-  fetch("/gerenciamentoUsuario/salvarEdicao", {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
+  fetch('/gerenciamentoUsuario/salvarEdicao', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(bodyData),
   })
     .then((res) => {
       if (res.ok) {
-        alert("Alterações salvas com sucesso!");
+        alert('Alterações salvas com sucesso!');
       } else {
         res.json().then((json) => alert(`Erro ao salvar: ${json}`));
       }
     })
-    .catch((err) => alert("Erro de rede: " + err));
+    .catch((err) => alert('Erro de rede: ' + err));
 }
 
 function ExcluirUsuario(idFuncionario) {
   Swal.fire({
-    title: "Excluir Máquina",
+    title: 'Excluir Máquina',
     html: `
       <div class="form-group text-left mb-3">
         <p class="text-muted mb-3">Para confirmar a exclusão da Máquina, por favor, confirme com sua senha:</p>
@@ -391,36 +379,32 @@ function ExcluirUsuario(idFuncionario) {
         <input type="password" id="swal-input-confirmar-senha" class="form-control border-start-0  shadow-none input_pesquisa" placeholder="********">
       </div>
     `,
-    icon: "warning",
-    iconColor: "#ffc107",
+    icon: 'warning',
+    iconColor: '#ffc107',
     showCancelButton: true,
-    confirmButtonText: "Excluir",
-    cancelButtonText: "Cancelar",
+    confirmButtonText: 'Excluir',
+    cancelButtonText: 'Cancelar',
     focusConfirm: false,
     buttonsStyling: false,
     customClass: {
-      confirmButton: "btn btn-danger btn-lg mx-2",
-      cancelButton: "btn btn-secondary btn-lg mx-2",
-      popup: "shadow-lg",
-      input: "form-control",
+      confirmButton: 'btn btn-danger btn-lg mx-2',
+      cancelButton: 'btn btn-secondary btn-lg mx-2',
+      popup: 'shadow-lg',
+      input: 'form-control',
     },
     preConfirm: () => {
-      const senha = Swal.getPopup().querySelector("#swal-input-senha").value;
-      const confirmarSenha = Swal.getPopup().querySelector(
-        "#swal-input-confirmar-senha"
-      ).value;
+      const senha = Swal.getPopup().querySelector('#swal-input-senha').value;
+      const confirmarSenha = Swal.getPopup().querySelector('#swal-input-confirmar-senha').value;
 
       if (!senha || !confirmarSenha) {
-        Swal.showValidationMessage(
-          "Por favor, preencha ambos os campos de senha."
-        );
+        Swal.showValidationMessage('Por favor, preencha ambos os campos de senha.');
         return false;
       }
 
       // O ideal aqui é que a senha seja a do gerente autenticado na sessão,
       // mas mantive a validação de confirmação que você criou.
       if (senha !== confirmarSenha) {
-        Swal.showValidationMessage("As senhas digitadas não são iguais.");
+        Swal.showValidationMessage('As senhas digitadas não são iguais.');
         return false;
       }
 
@@ -432,15 +416,15 @@ function ExcluirUsuario(idFuncionario) {
       // Verifica se o usuário clicou em 'Excluir'
       if (resultadoSwal.isConfirmed) {
         // Variáveis Mockadas (FIXAS)
-        const idFuncionarioGerente = ID_FUNCIONARIO_GERENTE_MOCK;
+        const idFuncionarioGerente = sessionStorage.ID_USUARIO
         const senhaGerente = resultadoSwal.value.senha; // Pega a senha digitada
 
         // CHAMADA FETCH
         return (
           fetch(`/gerenciamentoUsuario/ExcluirUsuario/${idFuncionario}`, {
-            method: "DELETE",
+            method: 'DELETE',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify({
               idGerente: idFuncionarioGerente,
@@ -449,15 +433,12 @@ function ExcluirUsuario(idFuncionario) {
           })
             // Segundo .then: Lida com a RESPOSTA do servidor (res)
             .then((res) => {
-              console.log("=====================");
+              console.log('=====================');
               console.log(res);
-              console.log("=====================");
+              console.log('=====================');
               // Se a resposta for OK (status 200, 204 etc.)
               if (res.ok) {
-                exibirSucesso(
-                  "Exclusão Concluída",
-                  "A Máquina foi excluída com sucesso."
-                );
+                exibirSucesso('Exclusão Concluída', 'A Máquina foi excluída com sucesso.');
                 // Aqui você deve chamar a função para atualizar sua tabela/lista
                 // Por exemplo: atualizarListaMaquinas();
               } else {
@@ -466,26 +447,20 @@ function ExcluirUsuario(idFuncionario) {
                 res.text().then((mensagemErro) => {
                   // O controller que fizemos no exemplo anterior envia status 403, 404, etc.
                   exibirErro(
-                    "Erro na Exclusão",
-                    mensagemErro || "Erro desconhecido ao tentar excluir."
+                    'Erro na Exclusão',
+                    mensagemErro || 'Erro desconhecido ao tentar excluir.',
                   );
                 });
               }
             })
             .catch((err) => {
               // Erro de rede (fetch falhou)
-              exibirErro(
-                "Erro de Rede",
-                "Não foi possível conectar ao servidor: " + err
-              );
+              exibirErro('Erro de Rede', 'Não foi possível conectar ao servidor: ' + err);
             })
         );
       } else if (resultadoSwal.dismiss === Swal.DismissReason.cancel) {
         // Se o usuário clicou em 'Cancelar'
-        exibirErro(
-          "Exclusão Cancelada",
-          "A exclusão da Máquina foi cancelada pelo usuário."
-        );
+        exibirErro('Exclusão Cancelada', 'A exclusão da Máquina foi cancelada pelo usuário.');
       }
     });
 }
@@ -495,9 +470,9 @@ function exibirSucesso(titulo, texto) {
   Swal.fire({
     title: titulo,
     text: texto,
-    icon: "success",
-    confirmButtonColor: "#0C8186",
-    confirmButtonText: "OK",
+    icon: 'success',
+    confirmButtonColor: '#0C8186',
+    confirmButtonText: 'OK',
   });
 }
 
@@ -505,8 +480,8 @@ function exibirErro(titulo, texto) {
   Swal.fire({
     title: titulo,
     text: texto,
-    icon: "error",
-    confirmButtonColor: "#0C8186",
-    confirmButtonText: "OK",
+    icon: 'error',
+    confirmButtonColor: '#0C8186',
+    confirmButtonText: 'OK',
   });
 }

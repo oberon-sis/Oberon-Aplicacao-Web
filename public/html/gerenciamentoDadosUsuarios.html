@@ -11,8 +11,11 @@
   <link rel="stylesheet" href="../component/menu/Menu.css">
   <link rel="stylesheet" href="../css/maquinas.css">
   <link rel="stylesheet" href="../css/edicaoDadosUsuario.css">
+  <link rel="stylesheet" href="../css/home_dash.css">
+  <link rel="stylesheet" href="../component/notificao/Notificaocao.css">
+
   <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
-   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 </head>
@@ -30,40 +33,49 @@
           d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
       </svg>
     </button>
-    <h2 id="titleh2" class="text-black mb-4">Edição de dados Pessoais</h2>
+    <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
+      <h2 id="titleh2" class="text-black">Edição de dados Pessoais</h2>
+    </header>
 
 
-   
-    <div class="cont-usuario">
-      <div id="txt-tudo">
-       <h2>
-            Olá <span id="nome_funcionario_logado"></span> - <span id="cargo_funcionario_logado"></span>
-        </h2>
-        <h3><span id="nome_banco"></span></h3>
-        <p>Dados organizados, resultados otimizados. Gerencie as informações<br>da sua empresa com facilidade.</p>
+    <div class="d-flex justify-content-between align-items-center mb-4 p-4 bg-white shadow-sm rounded div_banner"
+      style="margin-top: 10px;">
+      <div class="me-3">
+        <h4 class="text-black mb-1">
+          Olá <span id="nome_funcionario_logado"></span> - Seja bem-vindo(a)
+        </h4>
+        <p class="mb-0 text-secondary">
+          <span id="cargo_funcionario_logado" style="display: none;"></span>Administrador(a) da <span id="nome_banco"></span>
+        </p>
+        <p class="mb-0 small text-muted">
+          Dados organizados, resultados otimizados. Gerencie as informações<br>da sua empresa com facilidade.
+        </p>
+      </div>
+      <img src="../assets/img/Banner.jpg" alt="Imagem de Boas-Vindas - Pessoas em um painel"
+        class="img-fluid rounded  d-md-block banner">
     </div>
-    </div>
+
+
     <!-- Excluir empresa -->
-    <div class="cont_tudo">
+    <div class="cont_tudo w-100">
       <div class="container01">
-        
+
 
         <h3 class="txt-dados">Dados Atuais</h3>
         <div class="dadosAtuais">
           <br>
           <label for="name">Nome completo</label>
 
-        <p><span id="nome_funcionario_logado_cont"></span></p> 
+          <p><span id="nome_funcionario_logado_cont"></span></p>
 
         </div>
 
-       
-        
+
         <div class="form-grupo">
           <label for="id">E-mail</label>
           <div class="input-container">
 
-            <p><span id="email_funcionario_logado"></span></p> 
+            <p><span id="email_funcionario_logado"></span></p>
 
           </div>
         </div>
@@ -71,23 +83,22 @@
           <label for="id">CPF</label>
           <div class="input-container">
 
-             <p><span id="cpf_logado_cont"></span></p> 
-
-          </div>
-        </div> 
-
-         <div class="form-grupo">
-          <label for="id">Tipo Usuário</label>
-          <div class="input-container">
-
-          <p>  <span id="cargo_funcionario_cont"></span></p>
+            <p><span id="cpf_logado_cont"></span></p>
 
           </div>
         </div>
- <p id="linha"></p>
+
+        <div class="form-grupo">
+          <label for="id">Tipo Usuário</label>
+          <div class="input-container">
+
+            <p> <span id="cargo_funcionario_cont"></span></p>
+
+          </div>
+        </div>
+        <p id="linha"></p>
 
 
-       
       </div>
       <!-- Editar empresa -->
 
@@ -102,44 +113,43 @@
 
             <input type="text" class="ipt" name="razao" placeholder="Digite seu nome" required>
           </div>
-         
+
 
           <br>
           <div class="form-empresa">
             <label class="label-esp" for="id">E-mail</label>
-            
-            
+
+
             <input type="text" class="ipt" name="email-ipt" placeholder="Digite seu E-mail" required>
 
           </div>
           <br>
 
-           <div class="form-empresa">
+          <div class="form-empresa">
             <label class="label-esp" for="id">CPF</label>
-            
-            
+
+
             <input type="text" class="ipt" name="cpf-ipt" placeholder="Digite seu cpf" required>
 
           </div>
 
           <br>
 
-         
+
         </form>
-         <button type="submit" class="atualizar-btn" onclick="AtualizarUsuario()">Atualizar</button>
+        <button type="submit" class="atualizar-btn" onclick="AtualizarUsuario()">Atualizar</button>
 
       </div>
     </div>
 
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+    <script src="../js/edicaoDadosUsuario.js"></script>
+    <script src="../component/menu/Menu.js"></script>
+    <script src="../component/notificao/Notificacao.js"></script>
 
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-  <script src="../js/edicaoDadosUsuario.js"></script>
-  <script src="../component/menu/Menu.js"></script>
-    </main>
+  </main>
 </body>
 
 </html>

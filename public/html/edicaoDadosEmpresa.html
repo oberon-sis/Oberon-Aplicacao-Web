@@ -1,72 +1,75 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/edicaoDadosEmpresa.css">
-    <link rel="stylesheet" href="../component/menu/Menu.css">
-    <link rel="stylesheet" href="../css/body.css">
-    <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
-    <title>Edição de Dados Da Empresa</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/edicaoDadosEmpresa.css">
+  <link rel="stylesheet" href="../component/menu/Menu.css">
+  <link rel="stylesheet" href="../css/body.css">
+  <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
+  <title>Edição de Dados Da Empresa</title>
 </head>
 
-<body onload="getUsuariobyID()"> 
-    
-    <p style="color: red;">Não foi possível carregar o menu.</p> 
-    
-    <h1>Edição de dados da Empresa</h1>
+<body onload="getUsuariobyID()">
 
-    <div class="cont-usuario">
-        <h2>
-            Olá <span id="nome_funcionario_logado"></span> - <span id="cargo_funcionario_logado"></span>
-        </h2>
-        <h3><span id="nome_banco">Upfinity Banco</span></h3>
-        <p>Dados organizados, resultados otimizados. Gerencie as informações<br>da sua empresa com facilidade.</p>
+  <p style="color: red;">Não foi possível carregar o menu.</p>
+
+  <h1>Edição de dados da Empresa</h1>
+
+  <div class="cont-usuario">
+    <h2>
+      Olá <span id="nome_funcionario_logado"></span> - <span id="cargo_funcionario_logado"></span>
+    </h2>
+    <h3><span id="nome_banco">Upfinity Banco</span></h3>
+    <p>Dados organizados, resultados otimizados. Gerencie as informações<br>da sua empresa com facilidade.</p>
+  </div>
+
+  <div class="cont_tudo">
+    <div class="container01">
+      <h3 class="txt-dados">Dados Atuais</h3>
+
+      <div class="dadosAtuais">
+        <label for="name">Razão Social</label>
+        <p id="razao_social_atual">Carregando...</p>
+      </div>
+
+      <br><br>
+
+      <div class="form-grupo">
+        <label for="id">CNPJ</label>
+        <div class="input-container">
+          <p id="cnpj_atual">Carregando...</p>
+        </div>
+      </div>
+
+      <button type="button" class="excluir-btn">Excluir Empresa</button>
     </div>
 
-    <div class="cont_tudo">
-        <div class="container01">
-            <h3 class="txt-dados">Dados Atuais</h3>
-            
-            <div class="dadosAtuais">
-                <label for="name">Razão Social</label>
-                <p id="razao_social_atual">Carregando...</p>
-            </div>
-            
-            <br><br>
-            
-            <div class="form-grupo">
-                <label for="id">CNPJ</label>
-                <div class="input-container">
-                    <p id="cnpj_atual">Carregando...</p>
-                </div>
-            </div>
+    <div class="container01">
+      <h3 class="txt-dados">Novos dados</h3>
+      <div class="form-empresa">
+        <label class="label-esp" for="ipt_razao_social">Razão Social</label>
+        <br><br>
+        <input type="text" class="ipt" id="ipt_razao_social" name="razao"
+          placeholder="Digite a Razão Social de sua empresa" required>
+      </div>
 
-            <button type="button" class="excluir-btn">Excluir Empresa</button>
-        </div>
-        
-        <div class="container01">
-            <h3 class="txt-dados">Novos dados</h3>
-            <div class="form-empresa">
-                <label class="label-esp" for="ipt_razao_social">Razão Social</label>
-                <br><br>
-                <input type="text" class="ipt" id="ipt_razao_social" name="razao" placeholder="Digite a Razão Social de sua empresa" required>
-            </div>
+      <br><br>
 
-            <br><br>
+      <div class="form-empresa">
+        <label class="label-esp" for="ipt_cnpj">CNPJ</label>
+        <br><br>
+        <input type="text" class="ipt" id="ipt_cnpj" name="CNPJ" placeholder="Digite seu CNPJ" required>
+      </div>
 
-            <div class="form-empresa">
-                <label class="label-esp" for="ipt_cnpj">CNPJ</label>
-                <br><br>
-                <input type="text" class="ipt" id="ipt_cnpj" name="CNPJ" placeholder="Digite seu CNPJ" required>
-            </div>
-
-            <br>
-            <button type="button" class="atualizar-btn" onclick="salvarEdicaoEmpresa()">Atualizar</button>
-        </div>
+      <br>
+      <button type="button" class="atualizar-btn" onclick="salvarEdicaoEmpresa()">Atualizar</button>
     </div>
-    
-    <script src="../js/gerenciamentoUsuario.js"></script>
+  </div>
+
+  <script src="../js/gerenciamentoUsuario.js"></script>
 
 </body>
+
 </html>

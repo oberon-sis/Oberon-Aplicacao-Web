@@ -1,0 +1,60 @@
+body.tour-is-active {
+  /* overflow: hidden; */
+}
+
+.tour-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 9999;
+  display: none;
+  transition: opacity 0.3s;
+  overflow: hidden;
+}
+
+.tour-overlay.active {
+  display: block;
+}
+
+.tour-box {
+  position: absolute;
+  max-width: 350px;
+  padding: 20px;
+  background-color: #212529;
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  z-index: 10003;
+  opacity: 0;
+
+  transition:
+    top 0.3s ease-in-out,
+    left 0.3s ease-in-out,
+    opacity 0.2s;
+}
+
+.tour-box-initial-hide {
+  top: -5000px !important;
+  left: -5000px !important;
+  opacity: 0 !important;
+}
+
+.tour-box.visible {
+  /* Esta classe controla a visibilidade geral do overlay. A opacidade individual é controlada no JS para a transição. */
+}
+
+.tour-box h4 {
+  color: #27acb1;
+  margin-bottom: 10px;
+  font-size: 1.25rem;
+}
+
+.tour-highlighted {
+  z-index: 10001 !important;
+  position: relative;
+  box-shadow: 0 0 0 5px rgba(12, 129, 134, 0.8) !important;
+  transition: box-shadow 0.3s;
+}

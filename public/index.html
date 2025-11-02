@@ -17,7 +17,7 @@
 </head>
 
 <body>
-
+  <div class="menu-backdrop"></div>
   <!--INICIO NAV-BAR -->
   <div class="header-fixed-wrapper">
     <div class="container">
@@ -40,8 +40,8 @@
           </nav>
 
           <div class="nav-actions">
-            <a href="./html/cadastro.html"><button class="btn btn-login">Login</button></a>
-            <a href="./html/login.html"><button class="btn btn-cadastro">Cadastro</button></a>
+            <a href="./html/login.html"><button class="btn btn-login">Login</button></a>
+            <a href="./html/cadastro.html"><button class="btn btn-cadastro">Cadastro</button></a>
           </div>
         </div>
 
@@ -54,7 +54,7 @@
   <!--FIM NAV-BAR -->
 
   <!--INICIO HERO SECTION -->
-  <section class="hero-section">
+  <section class="hero-section" id="inicio">
     <div class="container hero-content-container">
       <div class="hero-content">
         <h1 data-aos="fade-down" data-aos-duration="800" data-aos-delay="100">Segurança, eficiência e<br>monitoramento.
@@ -103,7 +103,7 @@
         <div class="col-lg-6 col-md-12 visual-content mt-5 mt-lg-0" data-aos="fade-left" data-aos-duration="1000">
 
           <div class="team-container">
-            <img src="./assets/svg/reuniao-de-equipe.png" alt="Team members" class="team-image">
+            <img src="./assets/svg/equipe/fotoEquipe.jpg" alt="Team members" class="team-image">
 
             <div class="team-tag text-center" data-aos="zoom-in" data-aos-delay="500">
               <p class="fw-bold mb-1">Team member</p>
@@ -211,10 +211,12 @@
     </div>
   </section>
 
+  <!-- SEÇÃO ESCURA -->
   <section class="cta-monitoramento-section text-white py-5">
     <div class="container">
       <div class="row align-items-center">
 
+        <!-- Texto -->
         <div class="col-lg-6 col-md-12 text-content-dark mb-5 mb-lg-0" data-aos="fade-right">
           <h1 class="display-5 fw-bold mb-4">Proteja seu patrimônio, garanta sua operação</h1>
           <p class="lead-text-dark mb-4">
@@ -228,20 +230,30 @@
           </a>
         </div>
 
+        <!-- Imagem -->
         <div class="col-lg-6 col-md-12 visual-content-screenshot" data-aos="fade-left">
-        </div>
+    <div class="screenshot-layer img-home layer1"></div> 
+    
+    <div class="screenshot-layer img-geral layer2"></div> 
+    
+    <div class="screenshot-layer img-especifica layer3"></div> 
+</div>
 
       </div>
     </div>
   </section>
 
-
+  <!-- SEÇÃO CLARA -->
   <section class="cta-time-focado-section py-5">
     <div class="container">
       <div class="row align-items-center">
 
+        <!-- Imagem -->
         <div class="col-lg-6 col-md-12 visual-content-mobile mb-5 mb-lg-0" data-aos="fade-right">
-          <div class="mobile-mockups-container">
+          <div class="mobile-gallery">
+            <img src="./assets/svg/modile1.jpg" alt="Mobile 1">
+            <img src="./assets/svg/mobile2 copy.jpg" alt="Mobile 2">
+            <img src="./assets/svg/mobile3.jpg" alt="Mobile 3">
           </div>
           <div class="avatar-count-overlay">
             <img src="./assets/svg/equipe/pedro_photo.png" alt="Avatar 1" class="avatar-large">
@@ -250,6 +262,7 @@
           </div>
         </div>
 
+        <!-- Texto -->
         <div class="col-lg-6 col-md-12 text-content-light" data-aos="fade-left">
           <h1 class="display-5 fw-bold mb-4">Mantenha seu time focado na segurança</h1>
           <p class="lead-text-light mb-4">
@@ -266,6 +279,7 @@
       </div>
     </div>
   </section>
+
   <!--FIM SEÇÃO SERVIÇOS-->
 
   <!--INICIO SEÇÃO SOBRE NOS-->
@@ -314,7 +328,7 @@
   <!--FIM SEÇÃO SOBRE NOS-->
 
   <!--INICIO SEÇÃO FEEDBACKS-->
-  <section class="testimonials-section py-5 bg-white">
+  <section class="testimonials-section py-5 bg-white" id="Feedbacks">
     <header class="text-center mb-5 container">
       <h2 class="title-small-dark">O QUE NOSSOS CLIENTES DIZEM</h2>
     </header>
@@ -368,26 +382,26 @@
         </div>
 
         <div class="testimonial-col">
-          <div class="testimonial-card-white p-4 rounded-3 h-100">
-            <div class="quote-icon mb-3">“</div>
-            <p class="testimonial-text-dark mb-4">
-              "Nunca imaginei que a proteção de dados seria tão simples e eficaz. Recomendo a todos os bancos que buscam
-              excelência."
-            </p>
-            <p class="testimonial-author-dark fw-bold text-end mb-0">— Ana C.</p>
-          </div>
-        </div>
+    <div class="testimonial-card-white p-4 rounded-3 h-100">
+        <div class="quote-icon mb-3">“</div>
+        <p class="testimonial-text-dark mb-4">
+            "A implementação da solução foi incrivelmente rápida e o impacto na nossa eficiência operacional
+            superou as expectativas. Essencial para o nosso compliance com a LGPD."
+        </p>
+        <p class="testimonial-author-dark fw-bold text-end mb-0">— Armando M.</p>
+    </div>
+</div>
 
         <div class="testimonial-col">
-          <div class="testimonial-card-white p-4 rounded-3 h-100">
-            <div class="quote-icon mb-3">“</div>
-            <p class="testimonial-text-dark mb-4">
-              "Nunca imaginei que a proteção de dados seria tão simples e eficaz. Recomendo a todos os bancos que buscam
-              excelência."
-            </p>
-            <p class="testimonial-author-dark fw-bold text-end mb-0">— Ana C.</p>
-          </div>
-        </div>
+    <div class="testimonial-card-white p-4 rounded-3 h-100">
+        <div class="quote-icon mb-3">“</div>
+        <p class="testimonial-text-dark mb-4">
+            "Finalmente encontramos uma plataforma de segurança de dados robusta que nos dá total confiança. O suporte
+            técnico é de primeira, altamente recomendado para o setor financeiro."
+        </p>
+        <p class="testimonial-author-dark fw-bold text-end mb-0">— Carla U.</p>
+    </div>
+</div>
 
       </div>
     </div>
@@ -432,8 +446,8 @@
 
         <div class="col-lg-2" data-aos="fade-up" data-aos-delay="400">
           <h6 class="fw-bold mb-3">CONTATO</h6>
-          <p class="text-light-gray small mb-0">Rua da Segurança, 123</p>
-          <p class="text-light-gray small mb-0">contato@oberon.com</p>
+          <p class="text-light-gray small mb-0">Rua Haddlock Lobo, 595 - São Paulo/SP</p>
+          <p class="text-light-gray small mb-0">atendimento@oberon.com</p>
           <p class="text-light-gray small mb-0">(11) 98765-4321</p>
         </div>
       </div>
@@ -459,17 +473,52 @@
       const toggleButton = document.querySelector('.menu-toggle');
       const mobileMenu = document.querySelector('.mobile-nav');
       const toggleIcon = document.querySelector('.toggle-icon');
+      const navLinks = document.querySelectorAll('.mobile-nav a.nav-link');
+      const actionButtons = document.querySelectorAll('.mobile-nav .nav-actions a');
+      const menuBackdrop = document.querySelector('.menu-backdrop');
 
-      toggleButton.addEventListener('click', () => {
-        mobileMenu.classList.toggle('active');
+      const openMenu = () => {
+        mobileMenu.classList.add('active');
+        toggleIcon.classList.remove('fa-bars');
+        toggleIcon.classList.add('fa-times');
+        document.body.classList.add('menu-open');
+      };
 
-        // Troca o ícone de Hambúrguer para Fechar (X)
+      const closeMenu = () => {
         if (mobileMenu.classList.contains('active')) {
-          toggleIcon.classList.remove('fa-bars');
-          toggleIcon.classList.add('fa-times'); // Ícone de Fechar (X)
-        } else {
+          mobileMenu.classList.remove('active');
           toggleIcon.classList.remove('fa-times');
-          toggleIcon.classList.add('fa-bars'); // Ícone de Hambúrguer
+          toggleIcon.classList.add('fa-bars');
+          document.body.classList.remove('menu-open');
+        }
+      };
+
+      toggleButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+
+        if (mobileMenu.classList.contains('active')) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.addEventListener('click', closeMenu);
+      });
+      actionButtons.forEach(button => {
+        button.addEventListener('click', closeMenu);
+      });
+      if (menuBackdrop) {
+        menuBackdrop.addEventListener('click', closeMenu);
+      }
+
+      document.addEventListener('click', (event) => {
+        if (mobileMenu.classList.contains('active') &&
+          !mobileMenu.contains(event.target) &&
+          !toggleButton.contains(event.target)) {
+
+          closeMenu();
         }
       });
     });
@@ -508,6 +557,41 @@
         setInterval(autoSlide, slideInterval);
       }
     });
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const layers = document.querySelectorAll('.visual-content-screenshot .screenshot-layer');
+    
+    const classes = ['layer1', 'layer2', 'layer3'];
+    const totalClasses = classes.length; // 3
+
+    const rotateClasses = () => {
+        layers.forEach((layer) => {
+            let currentClassIndex = +1;
+            
+            for (let i = 0; i < totalClasses; i++) {
+                if (layer.classList.contains(classes[i])) {
+                    currentClassIndex = i;
+                    break;
+                }
+            }
+            
+            if (currentClassIndex === -1) return;
+            
+            const nextClassIndex = (currentClassIndex + 1) % totalClasses;
+            
+            const oldClass = classes[currentClassIndex];
+            const newClass = classes[nextClassIndex];
+            
+            layer.classList.remove(oldClass);
+            layer.classList.add(newClass);
+        });
+    };
+
+    const intervalTime = 3000; 
+    
+    setInterval(rotateClasses, intervalTime);
+});
+
   </script>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

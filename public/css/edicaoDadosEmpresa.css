@@ -1,129 +1,116 @@
-
-.txt-dados{
-    border-bottom: 1px solid  grey  ;
+.txt-dados {
+  border-bottom: 1px solid grey;
 }
 
-.cont_tudo{
-    display: flex;
-    justify-content: flex-start;
-    height: 50%;
-    width: 90%;
-    background-color: #ffffff;
-    
+.cont_tudo {
+  display: flex;
+  justify-content: flex-start;
+  height: 50%;
+  width: 90%;
+  background-color: #ffffff;
 }
 @media (max-width: 900px) {
-.cont_tudo{
+  .cont_tudo {
     flex-direction: column;
     width: 100%;
-}
-.container01{
+  }
+  .container01 {
     width: 100% !important;
+  }
 }
-}
-.container01{
-    background-color: white;
-    width: 50%;
-    height: 60% ;
-    padding: 30px;
-    border-radius: 0.5rem;
-    display: block;
-    justify-content: flex-start;
-     border-radius: 10px;
-    
-}
-
-#razao_social_atual, #cnpj_atual{
-    padding-left: 10px;
+.container01 {
+  background-color: white;
+  width: 50%;
+  height: 60%;
+  padding: 30px;
+  border-radius: 0.5rem;
+  display: block;
+  justify-content: flex-start;
+  border-radius: 10px;
 }
 
-
-
-.excluir-btn{
-    margin-top: 10px;
-    
-    background-color: #003b46;
-    height: 5vh;
-    width: 98%;
-    color: white;
-    border: none;
-    align-self: center;
-     border-radius: 10px;
+#razao_social_atual,
+#cnpj_atual {
+  padding-left: 10px;
 }
 
-.atualizar-btn{
-     background-color: #BADCDA;
-    height: 5vh;
-    width: 99%;
-    color: black;
-    border: none;
-    justify-self: center;
-     border-radius: 10px;
-    
+.excluir-btn {
+  margin-top: 10px;
+
+  background-color: #003b46;
+  height: 5vh;
+  width: 98%;
+  color: white;
+  border: none;
+  align-self: center;
+  border-radius: 10px;
+}
+
+.atualizar-btn {
+  background-color: #badcda;
+  height: 5vh;
+  width: 99%;
+  color: black;
+  border: none;
+  justify-self: center;
+  border-radius: 10px;
 }
 
 .excluir-btn:hover {
-  background-color: #883C3C;
-  
+  background-color: #883c3c;
 }
 
 .atualizar-btn:hover {
   background-color: #076e26;
   color: #fff !important;
-  
 }
 
-.ipt{
-    border: none;
-    background-color: #F2F4F8;
-    border-bottom: 1px solid gray ;
-    padding: 20px;
-    height: 3vh;
-    width: 100%;
-    
+.ipt {
+  border: none;
+  background-color: #f2f4f8;
+  border-bottom: 1px solid gray;
+  padding: 20px;
+  height: 3vh;
+  width: 100%;
 }
 input::placeholder {
-    color: #888;
+  color: #888;
 }
 
 input:focus {
-    outline: none;
-    border-color: none;
-    box-shadow: none;
-    background:none;
+  outline: none;
+  border-color: none;
+  box-shadow: none;
+  background: none;
 }
 
-.label-esp{
-    padding: 5px;
+.label-esp {
+  padding: 5px;
 }
 
-
-
-#linha{
-    border-bottom: 1px solid gray;
-    padding-bottom: 16px;
-    padding-top: 6px;
+#linha {
+  border-bottom: 1px solid gray;
+  padding-bottom: 16px;
+  padding-top: 6px;
 }
 
+.cont-usuario {
+  background-image: url(../assets/marca/Banner.jpg);
+  background-repeat: no-repeat;
+  height: 25vh;
+  background-repeat: space;
+  pad: 10px;
+  width: 99%;
+  margin-left: 8px;
 
-
-.cont-usuario{
-    background-image: url(../assets/marca/Banner.jpg);
-    background-repeat: no-repeat;
-    height: 25vh; 
-    background-repeat: space;
-    pad: 10px;
-    width: 99%;
-     margin-left: 8px;
-    
-    border-radius: 10px;
+  border-radius: 10px;
 }
 
-#txt-tudo{
-    padding: 20px;
-     margin-left: 8px;
+#txt-tudo {
+  padding: 20px;
+  margin-left: 8px;
 }
 
-
-#titleh2{
-    margin-left: 10px;
+#titleh2 {
+  margin-left: 10px;
 }

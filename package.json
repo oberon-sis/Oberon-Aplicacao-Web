@@ -6,9 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon --exec node app.js",
-    "format": "npm run format:js && npm run format:html",
-    "format:js": "prettier --write '**/*.{js,ts,jsx,tsx,css,scss}'",
-    "format:html": "js-beautify -r '**/*.html'"
+    "format": "prettier --write \"**/*.{jsx,ts,tsx,json,css,md}\""
   },
   "author": "Feito pelos desenvolvedores @ São Paulo Tech School / Bandtec Digital School",
   "license": "MIT",
@@ -27,7 +25,6 @@
   "devDependencies": {
     "eslint": "^9.33.0",
     "jest": "^30.0.5",
-    "js-beautify": "^1.15.4",
     "prettier": "^3.6.2"
   }
 }
