@@ -231,7 +231,7 @@ class NotificationComponent {
                     <ul class="notification-list" id="notification-list">
                         </ul>
                     <div class="notification-footer">
-                        <a href="/alerts" class="view-all-link">Ver todas</a>
+                        <a href="/alertas.html" class="view-all-link">Ver todas</a>
                     </div>
                 </div>
             </div>

@@ -4,8 +4,8 @@ const greenColor = 'rgba(39, 174, 96, 1)';
 const redColor = 'rgba(220, 20, 60, 1)';
 const blueColor = 'rgba(0, 191, 255, 1)';
 const comparativoData = {
-  backgroundValues: [160, 180, 100, 50],
-  mainValues: [200, 240, 150, 60],
+  backgroundValues: [165,147, 54,  14],
+  mainValues: [150,200, 70,  30],
 };
 const comparativoBarColors = [orangeColor, redColor, orangeColor, blueColor];
 
@@ -13,11 +13,12 @@ const especificoLabels = ['Crítico', 'Atenção', 'Ocioso'];
 const statusColors = [redColor, orangeColor, greenColor];
 
 const especificoData = {
-  CPU: { bimestrePassado: [20, 40, 100], bimestreAtual: [25, 65, 110] },
-  RAM: { bimestrePassado: [30, 50, 100], bimestreAtual: [40, 80, 120] },
-  DISCO: { bimestrePassado: [10, 30, 60], bimestreAtual: [15, 45, 90] },
-  REDE: { bimestrePassado: [5, 15, 30], bimestreAtual: [10, 20, 30] },
+  CPU: { bimestrePassado: [100, 55, 10], bimestreAtual: [80, 45,25 ] },
+  RAM: { bimestrePassado: [60, 50, 37], bimestreAtual: [100, 60, 40] },
+  DISCO: { bimestrePassado: [ 20,24, 10], bimestreAtual: [25, 30,15] },
+  REDE: { bimestrePassado: [5,9,  0 ], bimestreAtual: [ 10,20, 0] },
 };
+
 
 let chartInstance = null;
 
@@ -152,7 +153,7 @@ function updateChart(viewType) {
       scales: {
         x: {
           beginAtZero: true,
-          max: 250,
+          max: 200,
           grid: { color: 'rgba(0, 0, 0, 0.1)' },
           title: {
             display: true,

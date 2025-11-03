@@ -1,45 +1,54 @@
 const homeTourSteps = [
     {
         id: 'boas-vindas-card', 
-        title: 'Passo 1/6: Bem-Vindo(a)!',
+        title: 'Passo 1/7: Bem-Vindo(a)!',
         content:
           'Este é o seu painel inicial. Ele foca em alertas imediatos. Vamos conhecer os principais pontos.',
         position: 'bottom',
     },
     {
         id: 'tour-card-desempenho-geral', 
-        title: 'Passo 2/6: Visão Geral de Alertas (Top-Alerts)',
+        title: 'Passo 2/7: Visão Geral de Alertas (Top-Alerts)',
         content:
           "Os cards exibem as máquinas mais críticas ou em manutenção. O rótulo '+X' indica que mais de um recurso (CPU, RAM, Disco) está em alerta. Clique em 'Ver Detalhes' para diagnóstico.",
         position: 'bottom',
     },
     {
-        id: 'acessar-painel-geral-button', // Se este for o ID do botão "Acessar painel geral"
-        title: 'Passo 3/6: Painel Completo',
-        content:
-          'Use este botão verde para acessar o painel completo de monitoramento, onde você pode ver a lista de todas as máquinas e aplicar filtros.',
-        position: 'bottom',
-    },
-    {
         id: 'tour-grafico-dispersao', 
-        title: 'Passo 4/6: Distribuição de Recursos',
+        title: 'Passo 3/7: Distribuição de Recursos',
         content:
           'O gráfico compara o uso de CPU x RAM em relação aos limites de 50%. Máquinas no quadrante superior-direito estão em maior risco.',
         position: 'top',
     },
+{
+    id: 'scatterChart', 
+    title: 'Passo 4/7: Acessar descrição breve da máquina', 
+    content:
+      'Clique em alguma máquina para ver as informações de uso de CPU e RAM de maneira detalhada.',
+    position: 'top',
+},
+    {
+        id: 'acessos-rapidos-section', 
+        title: 'Passo 5/7: Acessos Essenciais',
+        content:
+          'Nesta seção, você encontra o manual de instalação e o programa de monitoramento para garantir a cobertura de todas as suas máquinas.',
+        position: 'left',
+    },
+    
     {
         id: 'slack-card', 
-        title: 'Passo 5/6: Alertas em Tempo Real',
+        title: 'Passo 6/7: Alertas em Tempo Real',
         content:
           'Configure rapidamente sua integração com o Slack para receber notificações de status Crítico imediatamente.',
         position: 'left',
     },
+    
     {
-        id: 'acessos-rapidos-section', 
-        title: 'Passo 6/6: Acessos Essenciais',
+        id: 'acessar-painel-geral-button', // Se este for o ID do botão "Acessar painel geral"
+        title: 'Passo 7/7: Painel Completo',
         content:
-          'Nesta seção, você encontra o manual de instalação e o programa de monitoramento para garantir a cobertura de todas as suas máquinas.',
-        position: 'left',
+          'Use este botão verde para acessar o painel completo de monitoramento, onde você pode ver a lista de todas as máquinas e aplicar filtros.',
+        position: 'bottom',
     },
 ];
 
