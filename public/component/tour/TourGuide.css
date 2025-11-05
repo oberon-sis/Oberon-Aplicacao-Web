@@ -47,7 +47,7 @@ body.tour-is-active {
 }
 
 .tour-box h4 {
-  color: #27acb1;
+  color: #009ab4;
   margin-bottom: 10px;
   font-size: 1.25rem;
 }
@@ -55,6 +55,6 @@ body.tour-is-active {
 .tour-highlighted {
   z-index: 10001 !important;
   position: relative;
-  box-shadow: 0 0 0 5px rgba(12, 129, 134, 0.8) !important;
+  box-shadow: 0 0 0 5px rgba(1, 143, 168, 0.8) !important;
   transition: box-shadow 0.3s;
 }
