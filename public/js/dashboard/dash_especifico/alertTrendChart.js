@@ -14,7 +14,7 @@ const MOCK_ALERT_DATA = {
     prevBimestre: 520,   // KPI - Previsão Acumulada no final da tendência.
     metaBimestre: 450,   // KPI - Real Acumulado no último ponto.
     variacao: 15.6,      // Variação (520 vs 450).
-    cor: '#e74c3c',
+    cor: '#0069afff',
 },
   Crítico: {
     labels: [10, 12, 15, 16, 17, 18, 18, 19, null, null, null, null],

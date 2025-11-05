@@ -24,7 +24,7 @@
   <div id="menu-container"></div>
 
   <main class="content flex-grow-1 padding_main">
-    <button class="btn btn-secondary d-md-none mb-4" type="button" data-bs-toggle="offcanvas"
+    <button class="btn btn-secondary d-md-none mb-4 verde_obscuro" type="button" data-bs-toggle="offcanvas"
       data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
         viewBox="0 0 16 16">
@@ -38,13 +38,13 @@
     <div class="d-flex justify-content-between align-items-center mb-4 p-4 bg-white shadow-sm rounded div_banner"
       style="margin-top: 10px;">
       <div class="me-3">
-        <h4 class="text-black mb-1">
+        <h4 class="text-white mb-1">
           Olá <span id="nome_funcionario_logado"></span> - Seja bem-vindo(a)
         </h4>
-        <p class="mb-0 text-secondary">
+        <p class="mb-0 text-white">
           <span id="cargo_funcionario_logado" style="display: none;"></span>Administrador(a) da <span id="nome_banco"></span>
         </p>
-        <p class="mb-0 small text-muted">
+        <p class="mb-0 small text-white">
           Dados organizados, resultados otimizados. Gerencie as informações<br>da sua empresa com facilidade.
         </p>
       </div>
@@ -83,7 +83,7 @@
         </div>
 
 
-        <button type="button" class="excluir-btn" onclick="deleteEmpresa()">Excluir Empresa</button>
+        <button type="button" class="excluir-btn verde_obscuro" onclick="deleteEmpresa()">Excluir Empresa</button>
       </div>
       <!-- Editar empresa -->
 
@@ -112,7 +112,7 @@
 
 
         </form>
-        <button type="submit" class="atualizar-btn" onclick="AtualizarUsuario()">Atualizar</button>
+        <button type="submit" class="atualizar-btn" onclick="AtualizarUsuario()">Editar</button>
 
       </div>
     </div>

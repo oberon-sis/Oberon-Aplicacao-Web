@@ -1,6 +1,6 @@
 :root {
-  --verde_claro: #badcda;
-  --verde_obscuro: #0c8186;
+  --verde_claro: #062e3f;
+  --verde_obscuro: #009ab4;
   --largura-menu: 250px;
 }
 
@@ -227,9 +227,9 @@ main {
   z-index: 100000000000;
 }
 .verde_obscuro {
-  background-color: #0c8186;
+  background-color: #009ab4 !important;
+  color: white !important;
 }
 .verde_obscuro:hover {
-  background-color: var(--verde_claro);
-  color: black !important;
+  background-color: var(--verde_claro) !important;
 }
