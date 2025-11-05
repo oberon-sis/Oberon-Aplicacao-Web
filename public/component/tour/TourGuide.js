@@ -30,8 +30,8 @@ class TourGuide {
       return;
     }
     const iconeHTML = `
-                <button id="start-tour-btn" class="btn btn-primary btn-sm ms-auto  hover_verde " type="button" 
-                    style="background-color: #0c8186; justify-self: flex-end">
+                <button id="start-tour-btn" class="btn btn-primary btn-sm ms-auto  verde_obscuro " type="button" 
+                    style="justify-self: flex-end">
                     <i class="bi bi-question-circle me-1"></i> Primeiros Passos
                 </button>
         `;

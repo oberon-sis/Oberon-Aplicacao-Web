@@ -60,7 +60,7 @@
 
           <button onmouseenter="mudar_icone_on('icone_nova')" onmouseleave="mudar_icone_lv('icone_nova')"
             data-bs-toggle="modal" data-bs-target="#modalCadastrarMaquina"
-            class="btn fw-semibold border flex-fill flex-md-grow-0 verde_claro botao_configuracao botao_nova_maquina"
+            class="btn fw-semibold border flex-fill flex-md-grow-0 verde_claro botao_configuracao botao_nova_maquina verde_obscuro"
             style=" white-space: nowrap;">
             <img src="../assets/svg/plus_preto.svg" data-hover-src="../assets/svg/plus_white.svg" alt=""
               class="icone_botao" id="icone_nova">
@@ -71,15 +71,16 @@
 
     </div>
     <div class="table-responsive shadow-sm border rounded div_tabela">
+      
       <table class="table table-hover mb-0" <thead>
-        <tr>
+        <tr class="table-success" style="--bs-table-bg:  #009ab4; --bs-table-color: white !important">
           <th scope="col" class="py-3">ID</th>
           <th scope="col" class="py-3">Nome <i class="bi bi-arrow-down-up ms-1"></i>
           </th>
           <th scope="col" class="py-3">CPF</th>
           <th scope="col" class="py-3">E-mail</th>
           <th scope="col" class="py-3">Função</th>
-          <th scope="col" class="py-3">Atualizar</th>
+          <th scope="col" class="py-3">Editar</th>
           <th scope="col" class="py-3">Excluir</th>
           <!-- <th scope="col" class="py-3">Ver Mais</th> -->
         </tr>
@@ -94,7 +95,7 @@
             <td><span class="opcao_crud text-primary" data-bs-toggle="modal" onclick="getUsuariobyID(1)"
                 data-bs-target="#modalAtualizarMaquina">
                 <img src="../assets/svg/atualizar_blue.svg" alt="">
-                Atualizar<i class="bi bi-arrow-clockwise"></i></span>
+                Editar<i class="bi bi-arrow-clockwise"></i></span>
             </td>
             <td><span class="opcao_crud text-danger" onclick="ExcluirUsuario()">
                 <img src="../assets/svg/excluir_red.svg" alt="">
@@ -279,7 +280,7 @@
           </form>
         </div>
         <div class="modal-footer justify-content-center border-0 p-4">
-          <button type="button" id="btn_cadastrar" class="btn fw-bold px-5 verde_claro botao_configuracao"
+          <button type="button" id="btn_cadastrar" class="btn fw-bold px-5 verde_claro botao_configuracao verde_obscuro"
             onclick="cadastrar()">Cadastrar</button>
         </div>
       </div>
@@ -292,7 +293,7 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content shadow-lg">
         <div class="modal-header border-0 pb-0 d-block text-center mb-4">
-          <h5 class="modal-title fs-4 fw-bold" id="modalAtualizarMaquinaLabel">Atualizar Dados Usúario</h5>
+          <h5 class="modal-title fs-4 fw-bold" id="modalAtualizarMaquinaLabel">Editar Dados Usúario</h5>
         </div>
 
         <div class="modal-body pt-0">
@@ -319,7 +320,7 @@
               </div>
               <div class="col-md-6">
                 <div id="step-update-1">
-                  <h6 class="fs-5 fw-bold mb-3">Atualização Dados Pessoais</h6>
+                  <h6 class="fs-5 fw-bold mb-3">Editar Dados Pessoais</h6>
                   <div class="mb-3">
                     <label for="nome_upd" class="form-label text-muted">Nome(apelido)</label>
                     <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="ipt_nome"

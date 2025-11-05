@@ -60,7 +60,7 @@
         <div class="d-flex gap-2 flex-grow-1 justify-content-end div_pesquisa div_botoes">
           <button onmouseenter="mudar_icone_on('icone_conf')" onmouseleave="mudar_icone_lv('icone_conf')"
             data-bs-toggle="modal" data-bs-target="#modalConfigParametros"
-            class="btn btn-light border fw-semibold flex-fill flex-md-grow-0 botao_branco botao_configuracao"
+            class="btn btn-light border fw-semibold flex-fill flex-md-grow-0 botao_branco botao_configuracao verde_obscuro"
             style="color: #385e5c; white-space: nowrap;">
             <img src="../assets/svg/setting_preto.svg" data-hover-src="../assets/svg/setting_white.svg" alt=""
               class="icone_botao" id="icone_conf">
@@ -69,7 +69,7 @@
 
           <button onmouseenter="mudar_icone_on('icone_nova')" onmouseleave="mudar_icone_lv('icone_nova')"
             data-bs-toggle="modal" data-bs-target="#modalCadastrarMaquina"
-            class="btn fw-semibold border flex-fill flex-md-grow-0 verde_claro botao_configuracao botao_nova_maquina"
+            class="btn fw-semibold border flex-fill flex-md-grow-0 verde_claro botao_configuracao botao_nova_maquina verde_obscuro"
             style=" white-space: nowrap;">
             <img src="../assets/svg/plus_preto.svg" data-hover-src="../assets/svg/plus_white.svg" alt=""
               class="icone_botao" id="icone_nova">
@@ -81,7 +81,7 @@
     </div>
     <div class="table-responsive shadow-sm border rounded div_tabela">
       <table class="table table-hover mb-0" <thead>
-        <tr class="table-success" style="--bs-table-bg-type: none; background-color: #BADCDA;">
+            <tr class="table-success" style="--bs-table-bg:  #009ab4; --bs-table-color: white !important">
           <th scope="col" class="py-3">ID</th>
           <th scope="col" class="py-3">Nome <i class="bi bi-arrow-down-up ms-1"></i>
           </th>
@@ -92,7 +92,7 @@
           <th scope="col" class="py-3">Parâmetros</th>
           <th scope="col" class="py-3">Mac Adress</th>
           <th scope="col" class="py-3">IP</th>
-          <th scope="col" class="py-3">Atualizar</th>
+          <th scope="col" class="py-3">Editar</th>
           <th scope="col" class="py-3">Excluir</th>
           <!-- <th scope="col" class="py-3">Ver Mais</th> -->
         </tr>
@@ -486,7 +486,7 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content shadow-lg">
         <div class="modal-header border-0 pb-0 d-block text-center mb-4">
-          <h5 class="modal-title fs-4 fw-bold" id="modalAtualizarMaquinaLabel">Atualizar Dados Da Máquina</h5>
+          <h5 class="modal-title fs-4 fw-bold" id="modalAtualizarMaquinaLabel">Editar Dados Da Máquina</h5>
         </div>
 
         <div class="modal-body pt-0">
@@ -670,7 +670,7 @@
           <button type="button" id="btnAvancarUpd"
             class="btn fw-bold px-5 verde_claro botao_configuracao">Avançar</button>
           <button type="button" form="formAtualizarMaquina" id="btnCadastrarUpd"
-            class="btn fw-bold px-5 verde_claro botao_configuracao" style="display: none;">Atualizar</button>
+            class="btn fw-bold px-5 verde_claro botao_configuracao" style="display: none;">Editar</button>
         </div>
       </div>
     </div>
