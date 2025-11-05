@@ -1,13 +1,16 @@
 const comparativoLabels = ['CPU', 'RAM', 'DISCO', 'REDE'];
-const orangeColor = 'rgba(230, 126, 34, 1)';
-const greenColor = 'rgba(39, 174, 96, 1)';
 const redColor = 'rgba(220, 20, 60, 1)';
-const blueColor = 'rgba(0, 191, 255, 1)';
+const orangeColor = 'rgba(230, 126, 34, 1)';
+const greenColor = 'rgba(0, 191, 255, 1)';
+const cpuColor = 'rgba(90, 146, 199, 0.8)';
+const ramColor = 'rgba(153, 110, 170, 0.8)';
+const discoColor = ' rgba(90, 146, 199, 0.8)';
+const redeColor = 'rgba(153, 110, 170, 0.8)';
 const comparativoData = {
   backgroundValues: [165,147, 54,  14],
   mainValues: [150,200, 70,  30],
 };
-const comparativoBarColors = [orangeColor, redColor, orangeColor, blueColor];
+const comparativoBarColors = [cpuColor, ramColor, discoColor, redeColor];
 
 const especificoLabels = ['Crítico', 'Atenção', 'Ocioso'];
 const statusColors = [redColor, orangeColor, greenColor];

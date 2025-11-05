@@ -9,7 +9,7 @@ function initUptimeDowntimeChart() {
   const labels = weeklyLabels.slice(0, 8);
   const totalTime = 168; // 7 dias * 24 horas
   const downtimeData = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0];
-  const corUptime = '#0C8186';
+  const corUptime = '#009ab4';
   const corDowntime = '#ff1e1eff';
 
   const data = {

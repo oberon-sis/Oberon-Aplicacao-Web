@@ -60,7 +60,7 @@
 
 .profile-link-desktop:hover,
 .profile-link-desktop.active-link {
-  background-color: #313740;
+  background-color: #009ab4;
   color: #e0e6ea;
 }
 
@@ -88,7 +88,7 @@
 
 .nav-item-fixed:hover,
 .nav-item-fixed.active-link {
-  background-color: #313740;
+  background-color: #009ab4;
   color: #e0e6ea;
 }
 

@@ -77,7 +77,7 @@ function PesquisarUsuarios(valor) {
                       onclick="getUsuariobyID(${u.idFuncionario || u.id})"
                       data-bs-target="#modalAtualizarMaquina">
                     <img src="../assets/svg/atualizar_blue.svg" alt="">
-                    Atualizar
+                    Editar
                 </span>
             </td>
             <td>
@@ -160,7 +160,7 @@ function buscarUsuarios(pagina = 1) {
                         <span class="opcao_crud text-primary" data-bs-toggle="modal" onclick="getUsuariobyID(${u.id})"
                             data-bs-target="#modalAtualizarMaquina">
                             <img src="../assets/svg/atualizar_blue.svg" alt="">
-                            Atualizar
+                            Editar
                         </span>
                     </td>
                     <td>

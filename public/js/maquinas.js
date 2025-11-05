@@ -393,7 +393,7 @@ function renderizarTabela(maquinas) {
                             onClick="getDadosById(${m.idMaquina})"
                         >
                             <img src="../assets/svg/atualizar_blue.svg" alt="">
-                            Atualizar
+                            Editar
                             <i class="bi bi-arrow-clockwise"></i>
                         </span>
                     </td>
