@@ -25,12 +25,12 @@ function renderizarTabela(alertas) {
       case 'CRITICO':
         criticidadeClass = 'text-danger fw-bold';
         break;
-      case 'ATENCAO':
+      case 'ALERTA':
         criticidadeClass = 'text-warning fw-bold';
         break;
       case 'OCIOSO':
       default:
-        criticidadeClass = 'text-success';
+        criticidadeClass = 'text-danger';
         break;
     }
 
@@ -115,7 +115,7 @@ function carregarAlertas(pagina = 1) {
   if (divPaginacao) divPaginacao.style.display = 'none';
 
   const usuarioSessao = JSON.parse(sessionStorage.getItem('usuario') || '{}');
-  const idFuncionario = usuarioSessao.idUFuncionario || usuarioSessao.id || usuarioSessao.fkUsuario;
+  const idFuncionario = 12
 
   if (!idFuncionario) {
     console.error('ID do usuário não encontrado na sessão.');
