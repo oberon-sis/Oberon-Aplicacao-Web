@@ -26,6 +26,7 @@ var empresaRouter = require('./src/routes/empresas');
 var authRouter = require('./src/routes/email');
 var alertasRouter = require('./src/routes/alertas');
 const downloadRoutes = require('./src/routes/appInstalacao');
+const painelRoutes = require('./src/routes/painel');
 
 // --- CONFIGURAÇÃO DOS MIDDLEWARES ---
 app.use(express.json());
@@ -47,6 +48,7 @@ app.use('/maquinas', maquinasRouter);
 app.use('/auth', authRouter);
 app.use('/alertas', alertasRouter);
 app.use('/api/download', downloadRoutes);
+app.use('/painel', painelRoutes);
 
 app.listen(PORTA_APP, function () {
   console.log(`
