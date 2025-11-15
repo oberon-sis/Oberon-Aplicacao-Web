@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="../component/tour/TourGuide.css" />
     <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
     <link rel="stylesheet" href="../component/notificao/Notificaocao.css" />
-
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
@@ -89,9 +88,9 @@
               <p class="card-text mb-2 small text-muted">Uso mais perto do limite:</p>
               <ul class="list-unstyled small mb-3">
                 <li>CPU: <span class="fw-bold">55%</span></li>
-                <li><span class="text-success">(Normal)</span></li>
+                <li><span class="text-success">(Normal)11111</span></li>
               </ul>
-              <button type="button" class="btn btn-success btn-sm w-100">Ver Detalhes</button>
+              <button type="button" class="btn btn-success btn-sm w-100" onclick="procurar_detalhes_maquina(1)">Ver Detalhes</button>
             </div>
 
             <div class="card card-recurso" data-maquina-id="2">
@@ -198,6 +197,18 @@
           </section>
 
           <aside class="details-sidebar flex-shrink-0" style=" overflow-x: visible; overflow-y: visible; max-height: auto !important;">
+
+            <section id="initial-message" class="h-100 d-flex flex-column justify-content-center align-content-center" style="text-align: center; display: none;">
+                    <img src="../assets/svg/computer_black.svg" alt="" style="width: 100px; height: auto; align-self: center;">
+                    <h5 class="text-muted">Selecione uma máquina para ver os detalhes em tempo real.</h5>
+                    <p class="text-secondary small">Clique em "Ver Detalhes" em um dos cards à esquerda.</p>
+            </section>
+            <section id="error-message" class="h-100 d-flex flex-column justify-content-center align-content-center d-none " style="text-align: center;">
+                    <img src="../assets/svg/computer_black.svg" alt="" style="width: 100px; height: auto; align-self: center;">
+                    <h5 class="text-muted">Máquina OFF-LINE</h5>
+                    <p class="text-secondary small">Verifique se os agentes de Monitoramento estão ligados</p>
+            </section>
+            <section id="card_dash_body" style="display: none;">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h5 class="h6 mb-0 fw-bold" id="tituloDetalhes">
                 Máquina-0021 | Histórico de Utilização de Recursos
@@ -252,8 +263,9 @@
                       </label>
                   </div>
               </div>
-
-              <canvas id="utilizacaoChart"></canvas>
+              <span id="chart-contianer">
+                <canvas id="utilizacaoChart"></canvas>
+              </span>
             </div>
 
             <div id="indicators-grid" class="row row-cols-2 g-3 indicators-grid">
@@ -372,6 +384,8 @@
                 id="linkAnaliseHistorica"> Ver Análise Histórica
               </a>
             </div>
+
+            </section>
           </aside>
         </div>
       </div>
@@ -397,10 +411,9 @@ if (toggleLimites) {
 document.querySelectorAll('.card_analise_historica a.btn-success').forEach(link => {
     link.addEventListener('click', function(e) {
         e.preventDefault(); 
-        // const card = this.closest('.card-recurso');
-        // const idMaquina = card.getAttribute('data-maquina-id');
-        // const maquina = MAQUINAS_DATA[idMaquina];
-        const maquina = {nome: 'Máquina-015'}
+        const card = this.closest('.card-recurso');
+        const idMaquina = card.getAttribute('data-maquina-id');
+        const maquina = MAQUINAS_DATA[idMaquina];
         if (maquina && maquina.nome) {
             sessionStorage.setItem('Máquina-015');
             sessionStorage.setItem(15);
