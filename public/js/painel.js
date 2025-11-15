@@ -324,7 +324,7 @@ function atualizarDetalhes() {
   const getKpi = (comp, key) => DADOS_KPI_ALERTAS[comp.toUpperCase()]?.[key] || 'N/A';
 
   document.getElementById('tituloDetalhes').textContent =
-    `${maquina.nome || 'Máquina'} | Histórico de Utilização de Recursos`;
+    `${maquina.nome || 'Máquina'} | Tendência de Utilização de Recursos (24 Horas)`;
 
   const metricas = [
     { id: 'cpu', limite: getLimiteMaximo(), isRede: false },

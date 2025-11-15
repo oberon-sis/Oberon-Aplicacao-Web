@@ -39,9 +39,8 @@ function buscar_dados_kpi(idMaquina) {
                         ',', 
                         1
                     ),
-                    '%H:%i'
-                ),
-                ' hrs'
+                    '%h:%i %p'
+                )
             ) AS maiorPicoUso
 
         FROM
