@@ -15,7 +15,6 @@ var app = express();
 
 // --- IMPORTAÇÃO DAS ROTAS (agrupadas) ---
 var indexRouter = require('./src/routes/index');
-var menuRouter = require('./src/routes/menu');
 var usuarioRouter = require('./src/routes/usuarios');
 var empresaRouter = require('./src/routes/empresas'); // Corrigido o nome do arquivo para 'empresas'
 var edicaoEmpresaRouter = require('./src/routes/edicaoEmpresa');
@@ -37,7 +36,6 @@ app.use(cors());
 
 // --- REGISTRO DAS ROTAS ---
 app.use('/', indexRouter);
-app.use('/menu', menuRouter);
 app.use('/usuarios', usuarioRouter);
 app.use('/gerenciamentoUsuario', gerenciamentoUsuarioRouter);
 // CORRIGIDO: O prefixo agora está no plural para corresponder ao front-end
@@ -51,21 +49,7 @@ app.use('/api/download', downloadRoutes);
 app.use('/painel', painelRoutes);
 
 app.listen(PORTA_APP, function () {
-  console.log(`
-
-      ------------                                                                                          
-  #+---------------  ##                                                                                     
-  ###+-------------- ##      ########       #########      ##########  #########        ########      ####       ###    
-  #####         ----- ##     ############     ###########   ##########  ###########     ############      #####       ###    
-  ##### --      ----- ##   ###          ###    ##       ###   ###         ###       ###   ###          ###    ######       ###    
-  ##### --      ----- ##   ##              ###   ##      ####   ###         ###       ###  ###              ###  ### ###      ###    
-  ##### --      ----- ##  ###              ###   ##########     #########   ##########   ###              ###  ###  ####     ###    
-  ##### --      ----- ##   ##              ###   ##       ###   ###         #########    ###              ###  ###   ####    ###    
-  ##### --      ----- ##   ###          ###    ##       ###   ###         ###      ###   ###          ###   ###      ######    
-  ######++######+--- ##      ###### #####     ###########   #########   ###       ###    ############    ###        #####    
-   ##############+- ##         #########       #########    ##########  ###        ###     ########      ###         ####     
-     ###########+-----+#                                                                                
-       # -----------                                                                                  
+  console.log(`                                                                            
 
        ##   ##  ######   #####          ####       ##      ######      ##                 ##  ##      ####      ######  
        ##   ##  ##       ##  ##          ## ##     ####        ##     ####                 ##  ##       ##          ##  

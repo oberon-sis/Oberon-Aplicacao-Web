@@ -1,53 +1,6 @@
 const usuarioModel = require('../models/CadastroModel');
-const { modulos } = require('../utils/menuData');
 const bcrypt = require('bcryptjs');
-function gerarLinkHTML(item) {
-  return `<a class="nav-link rounded py-2 mb-1 d-flex align-items-center linha" href="${item.link}">
-                <img src="../assets/svg/${item.icone}" alt="" class="icone_nav">
-                ${item.titulo}
-            </a>`;
-}
-function gerarDropdownHTML(item, isMobile) {
-  const idDropdown = isMobile ? 'dropdownMenuLinkOffcanvas' : 'dropdownMenuLink';
-  const dropdownHtml = item.dropdownItens
-    .map((dItem) => `<li><a class="dropdown-item" href="#">${dItem}</a></li>`)
-    .join('');
-  return `
-        <div class="dropdown">
-            <a class="nav-link rounded py-2 mb-1 d-flex align-items-center dropdown-toggle linha" href="#"
-                role="button" id="${idDropdown}" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="../assets/svg/${item.icone}" alt="" class="icone_nav">
-                ${item.titulo}
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark w-100" aria-labelledby="${idDropdown}">
-                ${dropdownHtml}
-            </ul>
-        </div>`;
-}
 
-function gerarSecaoGestaoHTML(permissoesArray) {
-  let htmlGestao = '';
-  const linksGestao = ['usuarios', 'maquinas', 'empresa'];
-  const temPermissaoGestao = linksGestao.some((linkId) =>
-    permissoesArray.includes(modulos[linkId].permissao),
-  );
-
-  if (temPermissaoGestao) {
-    linksGestao.forEach((linkId) => {
-      if (permissoesArray.includes(modulos[linkId].permissao)) {
-        htmlGestao += gerarLinkHTML(modulos[linkId]);
-      }
-    });
-    return `
-            <div class="mt-4">
-                <h6 class="text-uppercase text-secondary mb-3 small">Gestão</h6>
-                <div class="nav flex-column">
-                    ${htmlGestao}
-                </div>
-            </div>`;
-  }
-  return '';
-}
 
 const usuarioController = {
   async autenticar(req, res) {
