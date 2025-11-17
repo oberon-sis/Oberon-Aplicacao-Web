@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Análise de Desempenho Geral - OBERON</title>
+    <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg"/>
+    <link rel="stylesheet" href="../css/body.css"/>
+    <link rel="stylesheet" href="../component/menu/Menu.css"/>
+    <link rel="stylesheet" href="../component/tour/TourGuide.css"/>
+    <link rel="stylesheet" href="../component/notificao/Notificaocao.css" />
+    <link rel="stylesheet" href="../css/analiseGeral.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+</head>
+<body class="d-flex w-100 h-100">
+    <div id="menu-container"></div> 
+
+    <main class="content flex-grow-1 padding_main main dashboard-main">
+        
+            <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
+            <h2 class="text-black me-3">Análise de Desempenho Geral - SPTECH</h2>
+            
+            <div class="period-filter d-flex align-items-center flex-shrink-0">
+                <span class="me-2 text-muted">Filtrar por:</span>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-primary active" data-period="mensal" data-label="Mês">Mês</button>
+                    <button type="button" class="btn btn-outline-primary" data-period="semanal" data-label="Semana">Semana</button>
+                    <button type="button" class="btn btn-outline-primary" data-period="diario" data-label="Dia">Dia</button>
+                    <button type="button" class="btn btn-outline-primary" data-period="anual" data-label="Ano">Ano</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="dynamic-filters-container">
+            
+            <div class="filter-group" id="filter-mensal">
+                <span class="me-2 small text-muted">Selecione Mês e Ano:</span>
+                <select class="form-select form-select-sm" id="select-mes-mensal"><option value="11">Novembro</option><option value="10">Outubro</option><option value="09">Setembro</option></select>
+                <select class="form-select form-select-sm" id="select-ano-mensal"><option value="2025">2025</option><option value="2024">2024</option></select>
+            </div>
+
+            <div class="filter-group" id="filter-semanal">
+                <span class="me-2 small text-muted">Selecione Semana, Mês e Ano:</span>
+                <select class="form-select form-select-sm" id="select-semana"><option value="4">Semana 4</option><option value="3">Semana 3</option></select>
+                <select class="form-select form-select-sm" id="select-mes-semanal"><option value="11">Novembro</option></select>
+                <select class="form-select form-select-sm" id="select-ano-semanal"><option value="2025">2025</option></select>
+            </div>
+
+            <div class="filter-group" id="filter-diario">
+                <span class="me-2 small text-muted">Selecione Dia, Mês e Ano:</span>
+                <select class="form-select form-select-sm" id="select-dia"><option value="16">Dia 16</option><option value="15">Dia 15</option></select>
+                <select class="form-select form-select-sm" id="select-mes-diario"><option value="11">Novembro</option></select>
+                <select class="form-select form-select-sm" id="select-ano-diario"><option value="2025">2025</option></select>
+            </div>
+
+            <div class="filter-group" id="filter-anual">
+                <span class="me-2 small text-muted">Selecione Ano:</span>
+                <select class="form-select form-select-sm" id="select-ano-anual"><option value="2025">2025</option><option value="2024">2024</option></select>
+            </div>
+                    <div id="filter-status">
+            <p class="mb-0">Carregando status do filtro...</p>
+        </div>
+        </div>
+        <div class="row kpi-row align-items-center">
+            <div class="col-lg-9 col-md-12">
+                <div class="kpi-container-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-header"><span>Taxa de disponibilidade (Uptime)</span>
+                        </div>
+                        <div class="kpi-icon-group">
+                            <h3>97%</h3>
+                            <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="O que é Uptime?" data-bs-content="A porcentagem de tempo que o sistema está operacional."></i><i class="bi bi-lightning-charge-fill" onclick="generateInsight('UPTIME')"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-header"><span>Total de Alertas</span>
+                        </div>
+                        <div class="kpi-icon-group">
+                            <h3>20000</h3>
+                            <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="Total de Alertas" data-bs-content="Soma de todas as notificações de uso de recursos fora do padrão."></i><i class="bi bi-lightning-charge-fill" onclick="generateInsight('TOTAL_ALERTAS')"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-header"><span>Total de Alertas Críticos</span>
+                        </div>
+                        <div class="kpi-icon-group">
+                            <h3>3000</h3>
+                            <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="Alertas Críticos" data-bs-content="Alertas de maior gravidade que exigem ação imediata."></i><i class="bi bi-lightning-charge-fill" onclick="generateInsight('CRITICOS')"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-header"><span>Máquina com maior criticidade</span>
+                        </div>
+                        <div class="kpi-icon-group">
+                            <h3>000432</h3>
+                            <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="Maior Criticidade" data-bs-content="ID da máquina que gerou mais alertas críticos no período."></i><i class="bi bi-lightning-charge-fill" onclick="generateInsight('CRITICAL_MAQ')"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-12">
+                <div class="report-button-area">
+                    <button class="btn w-100 mb-1" onclick="alert('Gerando Relatório Completo...')">Gerar relatório</button>
+                    <p class="small text-muted mb-0">Gere um relatório completo com análises e insights valiosos da IA</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9 col-md-12">
+                <div class="charts-and-table-area">
+                    <div class="chart-box" id="alert-flow-box">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0" id="alertFlowTitle">Mapa de calor do fluxo de alertas</h5>
+                            <div class="kpi-icon-group">
+                                <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="Fluxo de Alertas" data-bs-content="Exibe a tendência temporal dos alertas."></i>
+                                <i class="bi bi-lightning-charge-fill" onclick="generateInsight('HEATMAP')"></i>
+                            </div>
+                        </div>
+                        <div class="alert-filter-group" id="alertTypeFilterContainer">
+                            <span class="text-secondary small me-2" style="white-space: nowrap;">Visualizar Por Alerta:</span>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="dropdownAlertaToggle">
+                                    <span id="valor_pesquisa_alerta">Total De Alertas</span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownAlertaToggle">
+                                    <li><a class="dropdown-item dropdown-alerta-item" href="#" data-value="TOTAL">Total De Alertas</a></li>
+                                    <li><a class="dropdown-item dropdown-alerta-item" href="#" data-value="OCIOSO">Ocioso</a></li>
+                                    <li><a class="dropdown-item dropdown-alerta-item" href="#" data-value="ATENCAO">Atenção</a></li>
+                                    <li><a class="dropdown-item dropdown-alerta-item" href="#" data-value="CRITICO">Crítico</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="heatmap-container" style="height: 300px;">
+                            <canvas id="alertFlowChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-box">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">Tempo total de uptime / Downtime por período</h5>
+                            <div class="kpi-icon-group">
+                                <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="Uptime / Downtime" data-bs-content="Comparativo do tempo operacional vs. inoperacional."></i>
+                                <i class="bi bi-lightning-charge-fill" onclick="generateInsight('UPTIME_GRAFICO')"></i>
+                            </div>
+                        </div>
+                        <div style="height: 300px;">
+                            <canvas id="uptimeDowntimeChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="table-card">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">Top 5 Máquinas com menor taxa de uptime - e o total de alertas - no geral</h5>
+                            <div class="kpi-icon-group">
+                                <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="Tabela de Máquinas" data-bs-content="Lista as máquinas com pior desempenho."></i>
+                                <i class="bi bi-lightning-charge-fill" onclick="generateInsight('TABELA')"></i>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Uptime(%)</th>
+                                        <th>Dif. Mês Passado</th>
+                                        <th>Downtime(%)</th>
+                                        <th>Dif. Mês Passado</th>
+                                        <th>Total Alertas</th>
+                                        <th>Dif. Mês Passado</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Máquina-001</td><td>91%</td><td class="text-success">+1%</td><td>9%</td><td class="text-danger">-1%</td><td>54</td><td class="text-danger">+10</td><td><button class="btn btn-sm btn-info me-1">Análise Histórica</button><button class="btn btn-sm btn-primary">Modificar Parâmetro</button></td></tr>
+                                    <tr><td>Máquina-020</td><td>90%</td><td class="text-danger">-1%</td><td>10%</td><td class="text-success">+1%</td><td>465</td><td class="text-success">-4</td><td><button class="btn btn-sm btn-info me-1">Análise Histórica</button><button class="btn btn-sm btn-primary">Modificar Parâmetro</button></td></tr>
+                                    <tr><td>Máquina-008</td><td>88%</td><td class="text-success">+2%</td><td>12%</td><td class="text-danger">-2%</td><td>120</td><td class="text-danger">+25</td><td><button class="btn btn-sm btn-info me-1">Análise Histórica</button><button class="btn btn-sm btn-primary">Modificar Parâmetro</button></td></tr>
+                                    <tr><td>Máquina-015</td><td>87%</td><td class="text-danger">-5%</td><td>13%</td><td class="text-success">+5%</td><td>980</td><td class="text-success">-50</td><td><button class="btn btn-sm btn-info me-1">Análise Histórica</button><button class="btn btn-sm btn-primary">Modificar Parâmetro</button></td></tr>
+                                    <tr><td>Máquina-003</td><td>85%</td><td class="text-success">+1%</td><td>15%</td><td class="text-danger">-1%</td><td>30</td><td class="text-danger">+5</td><td><button class="btn btn-sm btn-info me-1">Análise Histórica</button><button class="btn btn-sm btn-primary">Modificar Parâmetro</button></td></tr>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-12 insights-col">
+                <div class="insight-card">
+                    <div class="d-flex align-items-center mb-2">
+                        <h5 class="mb-0 me-2">Insight Atual <i class="bi bi-lightning-charge-fill text-warning"></i></h5>
+                    </div>
+                    <div id="currentInsightPlaceholder">
+                         <div class="insight-tags">
+                            <span class="tag tag-source">TABLE</span>
+                            <span class="tag tag-period">DIÁRIO</span>
+                         </div>
+                         <p class="mb-0">A máquina Máquina-020 teve o maior salto de alertas. Sugerimos revisar o Modificar Parâmetro aplicado no último ciclo.</p>
+                    </div>
+                </div>
+
+                <div class="insight-history" id="insightHistory">
+                    <h6 class="text-muted small mb-2">Histórico (Máx. 5 Itens)</h6>
+                    
+                    <div class="history-item">
+                        <div class="insight-tags">
+                            <span class="tag tag-source">HEATMAP</span>
+                            <span class="tag tag-time">Gerado: 16/11/2025 19:02</span>
+                        </div>
+                        <p class="mb-0 small">O padrão de Concentração 0-6h (0h-6h) é alarmante. Confirme se há rotinas de backup ou processos de ETL pesados concorrendo com a produção.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@2.0.0/dist/chartjs-chart-matrix.min.js"></script>
+</body>
+</html>
+<script src="../component/menu/Menu.js"></script>
+<script src="../js/dashboard/dash_especifico/utils.js"></script>
+<script src="../js/dashboard/dash_especifico/uptimeDowntimeChart.js"></script>
+<script src="../js/dashboard/dash_especifico/alertTrendChart.js"></script>
+<script src="../component/notificao/Notificacao.js"></script>
+<script src="../component/tour/TourGuide.js"></script>
+<script src="../js/tour/painelEspecificoTour.js"></script>
