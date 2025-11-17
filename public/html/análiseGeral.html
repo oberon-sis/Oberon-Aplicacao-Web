@@ -19,16 +19,16 @@
 
     <main class="content flex-grow-1 padding_main main dashboard-main">
         
-            <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
+        <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
             <h2 class="text-black me-3">Análise de Desempenho Geral - SPTECH</h2>
             
             <div class="period-filter d-flex align-items-center flex-shrink-0">
                 <span class="me-2 text-muted">Filtrar por:</span>
                 <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-primary" data-period="anual" data-label="Ano">Ano</button>
                     <button type="button" class="btn btn-outline-primary active" data-period="mensal" data-label="Mês">Mês</button>
                     <button type="button" class="btn btn-outline-primary" data-period="semanal" data-label="Semana">Semana</button>
                     <button type="button" class="btn btn-outline-primary" data-period="diario" data-label="Dia">Dia</button>
-                    <button type="button" class="btn btn-outline-primary" data-period="anual" data-label="Ano">Ano</button>
                 </div>
             </div>
         </header>
@@ -64,14 +64,14 @@
         </div>
         </div>
         <div class="row kpi-row align-items-center">
-            <div class="col-lg-9 col-md-12">
+            <div class="col-lg-12 col-md-12">
                 <div class="kpi-container-grid">
                     <div class="kpi-card">
                         <div class="kpi-header"><span>Taxa de disponibilidade (Uptime)</span>
                         </div>
                         <div class="kpi-icon-group">
                             <h3>97%</h3>
-                            <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="O que é Uptime?" data-bs-content="A porcentagem de tempo que o sistema está operacional."></i><i class="bi bi-lightning-charge-fill" onclick="generateInsight('UPTIME')"></i>
+                            <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="O que é Uptime?" data-bs-content="A porcentagem de tempo que o sistema está operacional."></i><img src="../assets/svg/IA.svg" alt="Ícone de Insight de IA" class="icon-insight" onclick="generateInsight('UPTIME')"></i>
                         </div>
                     </div>
                     <div class="kpi-card">
@@ -79,7 +79,7 @@
                         </div>
                         <div class="kpi-icon-group">
                             <h3>20000</h3>
-                            <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="Total de Alertas" data-bs-content="Soma de todas as notificações de uso de recursos fora do padrão."></i><i class="bi bi-lightning-charge-fill" onclick="generateInsight('TOTAL_ALERTAS')"></i>
+                            <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="Total de Alertas" data-bs-content="Soma de todas as notificações de uso de recursos fora do padrão."></i><img src="../assets/svg/IA.svg" alt="Ícone de Insight de IA" class="icon-insight" onclick="generateInsight('TOTAL_ALERTAS')"></i>
                         </div>
                     </div>
                     <div class="kpi-card">
@@ -87,7 +87,7 @@
                         </div>
                         <div class="kpi-icon-group">
                             <h3>3000</h3>
-                            <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="Alertas Críticos" data-bs-content="Alertas de maior gravidade que exigem ação imediata."></i><i class="bi bi-lightning-charge-fill" onclick="generateInsight('CRITICOS')"></i>
+                            <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="Alertas Críticos" data-bs-content="Alertas de maior gravidade que exigem ação imediata."></i><img src="../assets/svg/IA.svg" alt="Ícone de Insight de IA" class="icon-insight" onclick="generateInsight('CRITICOS')"></i>
                         </div>
                     </div>
                     <div class="kpi-card">
@@ -95,27 +95,27 @@
                         </div>
                         <div class="kpi-icon-group">
                             <h3>000432</h3>
-                            <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="Maior Criticidade" data-bs-content="ID da máquina que gerou mais alertas críticos no período."></i><i class="bi bi-lightning-charge-fill" onclick="generateInsight('CRITICAL_MAQ')"></i>
+                            <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="Maior Criticidade" data-bs-content="ID da máquina que gerou mais alertas críticos no período."></i><img src="../assets/svg/IA.svg" alt="Ícone de Insight de IA" class="icon-insight" onclick="generateInsight('CRITICAL_MAQ')"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-12">
+            <div class="col-lg-3 col-md-12" style="display: none;">
                 <div class="report-button-area">
                     <button class="btn w-100 mb-1" onclick="alert('Gerando Relatório Completo...')">Gerar relatório</button>
                     <p class="small text-muted mb-0">Gere um relatório completo com análises e insights valiosos da IA</p>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-9 col-md-12">
+        <div class="row" >
+            <div class="col-md-10" style="width: 85.5%;">
                 <div class="charts-and-table-area">
                     <div class="chart-box" id="alert-flow-box">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h5 class="mb-0" id="alertFlowTitle">Mapa de calor do fluxo de alertas</h5>
                             <div class="kpi-icon-group">
                                 <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="Fluxo de Alertas" data-bs-content="Exibe a tendência temporal dos alertas."></i>
-                                <i class="bi bi-lightning-charge-fill" onclick="generateInsight('HEATMAP')"></i>
+                                <img src="../assets/svg/IA.svg" alt="Ícone de Insight de IA" class="icon-insight" onclick="generateInsight('HEATMAP')"></i>
                             </div>
                         </div>
                         <div class="alert-filter-group" id="alertTypeFilterContainer">
@@ -142,7 +142,7 @@
                             <h5 class="mb-0">Tempo total de uptime / Downtime por período</h5>
                             <div class="kpi-icon-group">
                                 <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="Uptime / Downtime" data-bs-content="Comparativo do tempo operacional vs. inoperacional."></i>
-                                <i class="bi bi-lightning-charge-fill" onclick="generateInsight('UPTIME_GRAFICO')"></i>
+                                <img src="../assets/svg/IA.svg" alt="Ícone de Insight de IA" class="icon-insight" onclick="generateInsight('UPTIME_GRAFICO')"></i>
                             </div>
                         </div>
                         <div style="height: 300px;">
@@ -154,7 +154,7 @@
                             <h5 class="mb-0">Top 5 Máquinas com menor taxa de uptime - e o total de alertas - no geral</h5>
                             <div class="kpi-icon-group">
                                 <i class="bi bi-info-circle" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" title="Tabela de Máquinas" data-bs-content="Lista as máquinas com pior desempenho."></i>
-                                <i class="bi bi-lightning-charge-fill" onclick="generateInsight('TABELA')"></i>
+                                <img src="../assets/svg/IA.svg" alt="Ícone de Insight de IA" class="icon-insight" onclick="generateInsight('TABELA')"></i>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -184,7 +184,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-12 insights-col">
+            <div class="col-lg-3 col-md-12 insights-col card_inse" style="position: absolute; display: none;">
                 <div class="insight-card">
                     <div class="d-flex align-items-center mb-2">
                         <h5 class="mb-0 me-2">Insight Atual <i class="bi bi-lightning-charge-fill text-warning"></i></h5>
@@ -215,12 +215,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@2.0.0/dist/chartjs-chart-matrix.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 </body>
 </html>
+
+<script src="../js/analiseGeral/index.js"></script> 
+<script src="../js/analiseGeral/grafico-tabela/mapaDeCalor.js"></script>
+<script src="../js/analiseGeral/grafico-tabela/uptimeDowntime.js"></script>
+<script src="../js/analiseGeral/insights-IA/insights.js"></script>
+
+
 <script src="../component/menu/Menu.js"></script>
-<script src="../js/dashboard/dash_especifico/utils.js"></script>
-<script src="../js/dashboard/dash_especifico/uptimeDowntimeChart.js"></script>
-<script src="../js/dashboard/dash_especifico/alertTrendChart.js"></script>
 <script src="../component/notificao/Notificacao.js"></script>
 <script src="../component/tour/TourGuide.js"></script>
 <script src="../js/tour/painelEspecificoTour.js"></script>
+
