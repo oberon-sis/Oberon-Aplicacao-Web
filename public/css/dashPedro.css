@@ -1,0 +1,277 @@
+.header-top {
+  background-color: white;
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-main {
+  background-color: #f5f7fa;
+  padding: 20px;
+}
+
+.notification-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background-color: #e74c3c;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.hover_verde .dropdown-item:hover {
+  background-color: #badcda;
+  color: #000;
+}
+
+.stats-section {
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  height: 100%;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.stat-header h6 {
+  font-size: 0.9rem;
+  font-weight: normal;
+  color: #6c757d;
+  margin: 0;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+}
+
+.info-btn {
+  padding: 0;
+  border: none;
+  background: transparent;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.info-btn:hover {
+  opacity: 1;
+}
+
+.main-grid-section {
+  margin-bottom: 1.5rem;
+}
+
+.chart-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  height: 100%;
+}
+
+.chart-header-with-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.chart-header-with-info h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.chart-container-boxplot {
+  position: relative;
+  height: 450px;
+  max-height: 450px;
+  min-height: 450px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.chart-container-boxplot canvas {
+  width: 100% !important;
+  height: 450px !important;
+  max-height: 450px !important;
+  display: block;
+}
+
+.sidebar-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.sidebar-header h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.quartil-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  margin-bottom: 8px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.quartil-item:hover {
+  background-color: #e9ecef;
+}
+
+.quartil-item:last-child {
+  margin-bottom: 0;
+}
+
+.quartil-label {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.quartil-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #000;
+}
+
+.param-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.param-item:hover {
+  background-color: #e9ecef;
+}
+
+.param-label {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+@media (max-width: 991px) {
+  .chart-container-boxplot {
+    height: 350px;
+    max-height: 350px;
+    min-height: 350px;
+  }
+
+  .chart-container-boxplot canvas {
+    height: 350px !important;
+    max-height: 350px !important;
+  }
+
+  .sidebar-card {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .dashboard-main {
+    padding: 10px;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .chart-container-boxplot {
+    height: 300px;
+    max-height: 300px;
+    min-height: 300px;
+  }
+
+  .chart-container-boxplot canvas {
+    height: 300px !important;
+    max-height: 300px !important;
+  }
+}
+
+.text-black {
+  color: #000 !important;
+}
+
+.padding_main {
+  padding: 20px;
+}
+
+.btn-success {
+  background-color: #0c8186;
+  border-color: #0c8186;
+}
+
+.btn-success:hover {
+  background-color: #0a6d71;
+  border-color: #0a6d71;
+}
+
+.btn-outline-secondary {
+  border-color: #c0c0c0;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #badcda;
+  border-color: #badcda;
+  color: #000;
+}
+
+.popover {
+  max-width: 300px;
+}
+
+.popover-header {
+  background-color: #0c8186;
+  color: white;
+  font-weight: 600;
+}
+
+.popover-body {
+  font-size: 0.875rem;
+  color: #495057;
+}
