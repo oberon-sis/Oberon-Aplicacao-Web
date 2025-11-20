@@ -20,6 +20,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-box-and-violin-plot@4.1.0/dist/chartjs-chart-box-and-violin-plot.min.js"></script>
   </head>
 
   <body class="d-flex w-100 h-100">
@@ -62,7 +63,7 @@
       </header>
       <section class="stats-section mb-4">
         <div class="row g-3">
-          <div class="col-md-4">
+          <div class="col-lg col-md-6">
             <div class="stat-card">
               <div class="stat-header">
                 <h6>Média de Uso</h6>
@@ -79,9 +80,10 @@
                 </button>
               </div>
               <h2 class="stat-value" id="mediaUso">62.5%</h2>
+              <p class="stat-description">Uso típico do componente</p>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-lg col-md-6">
             <div class="stat-card">
               <div class="stat-header">
                 <h6>Desvio Padrão</h6>
@@ -98,9 +100,10 @@
                 </button>
               </div>
               <h2 class="stat-value" id="desvioPadrao">15.2%</h2>
+              <p class="stat-description">Variação dos dados</p>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-lg col-md-6">
             <div class="stat-card">
               <div class="stat-header">
                 <h6>Mediana</h6>
@@ -117,6 +120,53 @@
                 </button>
               </div>
               <h2 class="stat-value" id="mediana">60.0%</h2>
+              <p class="stat-description">Valor central observado</p>
+            </div>
+          </div>
+          <div class="col-lg col-md-6">
+            <div class="stat-card">
+              <div class="stat-header">
+                <h6>Total de Alertas no Mês</h6>
+                <button
+                  type="button"
+                  class="info-btn btn btn-link p-0"
+                  data-bs-toggle="popover"
+                  data-bs-placement="right"
+                  data-bs-trigger="focus"
+                  data-bs-title="Total de Alertas"
+                  data-bs-content="Quantidade total de alertas gerados pelo componente selecionado durante o mês atual."
+                >
+                  <img src="../assets/svg/saber.svg" alt="Info" style="width: 18px; height: 18px" />
+                </button>
+              </div>
+              <h2 class="stat-value" id="totalAlertas">142</h2>
+              <p class="stat-comparison text-danger">
+                <i class="bi bi-arrow-up"></i> +18% vs mês anterior
+              </p>
+              <p class="stat-description">Alertas registrados este mês</p>
+            </div>
+          </div>
+          <div class="col-lg col-md-6">
+            <div class="stat-card">
+              <div class="stat-header">
+                <h6>Máquinas Críticas/Ociosas</h6>
+                <button
+                  type="button"
+                  class="info-btn btn btn-link p-0"
+                  data-bs-toggle="popover"
+                  data-bs-placement="right"
+                  data-bs-trigger="focus"
+                  data-bs-title="Máquinas Críticas/Ociosas"
+                  data-bs-content="Percentual de máquinas que apresentaram alertas de nível Crítico ou Ocioso durante o mês."
+                >
+                  <img src="../assets/svg/saber.svg" alt="Info" style="width: 18px; height: 18px" />
+                </button>
+              </div>
+              <h2 class="stat-value" id="percMaquinasCriticas">24%</h2>
+              <p class="stat-comparison text-success">
+                <i class="bi bi-arrow-down"></i> -5% vs mês anterior
+              </p>
+              <p class="stat-description">Requerem atenção imediata</p>
             </div>
           </div>
         </div>
@@ -124,7 +174,7 @@
       <section class="main-grid-section">
         <div class="row g-3">
           <div class="col-lg-8">
-            <div class="chart-card">
+            <div class="chart-card mb-3">
               <div class="chart-header-with-info">
                 <h5 id="tituloBoxPlot">Box Plot do Uso Típico de CPU</h5>
                 <button
@@ -141,6 +191,24 @@
               </div>
               <div class="chart-container-boxplot">
                 <canvas id="boxPlotChart"></canvas>
+              </div>
+
+              <div class="chart-header-with-info">
+                <h5>Distribuição de Alertas por Severidade (Últimos 6 Meses)</h5>
+                <button
+                  type="button"
+                  class="info-btn btn btn-link p-0"
+                  data-bs-toggle="popover"
+                  data-bs-placement="left"
+                  data-bs-trigger="focus"
+                  data-bs-title="Distribuição de Alertas"
+                  data-bs-content="Gráfico de barras empilhadas que mostra como os alertas de diferentes severidades evoluíram ao longo dos meses. Útil para identificar tendências e padrões sazonais."
+                >
+                  <img src="../assets/svg/saber.svg" alt="Info" style="width: 18px; height: 18px" />
+                </button>
+              </div>
+              <div class="chart-container-distribution">
+                <canvas id="distributionChart"></canvas>
               </div>
             </div>
           </div>

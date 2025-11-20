@@ -72,6 +72,23 @@
   margin: 0;
 }
 
+.stat-comparison {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 5px 0 0 0;
+}
+
+.stat-comparison i {
+  font-size: 0.8rem;
+}
+
+.stat-description {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin: 3px 0 0 0;
+  font-style: italic;
+}
+
 .info-btn {
   padding: 0;
   border: none;
@@ -109,19 +126,36 @@
   margin: 0;
 }
 
+/* Container do Box Plot */
 .chart-container-boxplot {
   position: relative;
-  height: 450px;
-  max-height: 450px;
-  min-height: 450px;
+  height: 250px;
+  max-height: 250px;
+  min-height: 250px;
   width: 100%;
   overflow: hidden;
 }
 
 .chart-container-boxplot canvas {
   width: 100% !important;
-  height: 450px !important;
-  max-height: 450px !important;
+  height: 250px !important;
+  max-height: 250px !important;
+  display: block;
+}
+
+.chart-container-distribution {
+  position: relative;
+  height: 275px;
+  max-height: 275px;
+  min-height: 275px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.chart-container-distribution canvas {
+  width: 100% !important;
+  height: 275px !important;
+  max-height: 275px !important;
   display: block;
 }
 
@@ -193,44 +227,6 @@
 .param-label {
   font-size: 0.85rem;
   color: #6c757d;
-}
-
-@media (max-width: 991px) {
-  .chart-container-boxplot {
-    height: 350px;
-    max-height: 350px;
-    min-height: 350px;
-  }
-
-  .chart-container-boxplot canvas {
-    height: 350px !important;
-    max-height: 350px !important;
-  }
-
-  .sidebar-card {
-    margin-bottom: 1rem;
-  }
-}
-
-@media (max-width: 767px) {
-  .dashboard-main {
-    padding: 10px;
-  }
-
-  .stat-value {
-    font-size: 1.5rem;
-  }
-
-  .chart-container-boxplot {
-    height: 300px;
-    max-height: 300px;
-    min-height: 300px;
-  }
-
-  .chart-container-boxplot canvas {
-    height: 300px !important;
-    max-height: 300px !important;
-  }
 }
 
 .text-black {
