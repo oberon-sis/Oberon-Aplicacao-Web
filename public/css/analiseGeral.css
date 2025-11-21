@@ -24,294 +24,111 @@ body {
   padding: 0;
 }
 
-/* HEADER PRINCIPAL
-.header-top {
-  padding: 0;
-  margin-bottom: 5px;
+.dashboard-main {
+  padding: 20px;
+}
+
+/* Estilo dos Cards KPIs (Padrão) */
+.kpi-card-geral {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 15px;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.kpi-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
+  margin-bottom: 5px;
 }
 
-.header-top h2 {
-  font-size: 1.5rem;
-} */
-
-/* FILTROS DETALHADOS (Inputs/Selects) - MOVIDO PARA O HEADER-TOP */
-.dynamic-filters-container {
-  display: flex;
-  gap: 10px;
-  padding: 10px 0;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
-
-.filter-group {
-  display: none;
-  align-items: center;
-  gap: 5px;
-}
-
-.dynamic-filters-container select {
-  width: 120px;
-}
-
-/* STATUS BAR */
-#filter-status {
+.kpi-title-geral {
   font-size: 0.9rem;
   color: #495057;
-  margin-top: 5px;
-  margin-bottom: 15px;
-  padding-top: 10px;
   font-weight: 500;
 }
 
-.period-filter .btn {
+.kpi-content {
+  display: flex;
+  align-items: flex-end;
+
+}
+
+.kpi-value-geral {
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.kpi-variation {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.kpi-small-text {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-top: 10px;
+}
+
+/* Estilos dos blocos de Gráfico/Tabela (Padrão) */
+.content-box {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 15px;
+}
+
+/* Estilo para a Tabela e KPIs de Informações Complementares */
+.table td,
+.table th {
+  vertical-align: middle;
   font-size: 0.9rem;
 }
 
-.period-filter .btn-outline-primary {
-  border-color: var(--primary-color);
-  color: var(--primary-color);
-}
-
-.period-filter .btn-outline-primary.active,
-.period-filter .btn-outline-primary:hover {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-/* ROW 1: KPIs e Relatório */
-.kpi-row {
-  margin-bottom: 20px;
-}
-
-/* Acomoda 4 KPIs em 9 colunas */
-.kpi-container-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-
-.kpi-card {
-  background-color: var(--kpi-bg);
-  padding: 15px;
+.info-complementar-card {
+  background-color: #fff;
   border-radius: 8px;
+  padding: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-left: 3px solid #0d6efd;
+  /* Linha azul para destaque */
 }
 
-
-.kpi-icon-group {
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  gap: 5px;
-}
-
-.kpi-icon-group i {
+.kpi-icon-wrapper i {
   font-size: 1.2rem;
-  margin-left: 5px;
-  cursor: pointer;
-
+  color: #adb5bd;
 }
 
-.kpi-card h3 {
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin: 10px 0 0 0;
-  justify-self: start;
-  width: 100%;
+/* Estilo para o Filtro (Collapsible/Escondido) */
+.card-filter {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 15px;
 }
 
-.kpi-icon-group .bi-info-circle {
-  color: var(--primary-color);
-}
-
-.kpi-icon-group .bi-lightning-charge-fill {
-  color: orange;
-}
-
-/* Botão de Relatório - Coluna 3 */
-.report-button-area {
+/* Estilo Skeleton para o Gráfico (Vazio) */
+.chart-skeleton {
+  height: 300px;
+  background-color: #e9ecef;
+  /* Cor cinza claro */
+  border: 1px dashed #ced4da;
+  border-radius: 4px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  height: 100%;
-  padding: 15px;
-}
-
-.report-button-area button {
-  background-color: var(--success-color);
-  border-color: var(--success-color);
+  color: #6c757d;
+  font-size: 1.1rem;
   font-weight: 500;
-}
-
-/* ROW 2: GRÁFICOS, TABELA E INSIGHTS */
-/* .charts-and-table-area {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-Definição estática da grid (anteriormente 2fr 1fr ou 1fr 1.5fr) */
-/* .charts-and-table-area {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr; 
-    gap: 20px;
-    margin-bottom: 20px;
-} */
-
-.chart-box {
-  background-color: var(--kpi-bg);
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.table-card {
-  grid-column: 1 / 3;
-  background-color: var(--kpi-bg);
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-/* Heatmap Container */
-#heatmap-container {
-  /* overflow-x: auto; */
-  position: relative;
-  padding-bottom: 10px;
-}
-
-#alertFlowChart {
-  min-height: 300px;
-  width: 100% !important;
-  max-width: none !important;
-}
-
-#alertTypeFilterContainer {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-/* Insights Coluna */
-.insights-col {
-  padding: 0;
-}
-
-.insight-card {
-  background-color: var(--kpi-bg);
-  padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-#currentInsightPlaceholder {
-  background-color: #e9ecef;
-  border: 1px solid #ced4da;
-  padding: 15px;
-  border-radius: 4px;
-  border-left: 4px solid orange;
-}
-
-.insight-tags {
-  display: flex;
-  gap: 5px;
-  margin-bottom: 8px;
-  background-color: #dee2e6;
-}
-
-.tag-source {
-  background-color: #17a2b8;
-}
-
-.tag-period {
-  background-color: #6c757d;
-}
-
-/* Histórico - Estilo do Cabeçalho ajustado */
-.insight-history {
-  overflow-y: auto;
-  max-height: 100%;
-}
-
-.insight-history h6 {
-  font-size: 0.95rem;
-  font-weight: bold;
-  color: #343a40;
-  padding-bottom: 5px;
-  border-bottom: 2px solid #dee2e6;
-  margin-bottom: 10px !important;
-}
-
-.insight-history .history-item {
-  padding: 10px;
-  border-left: 4px solid var(--primary-color);
-  background-color: #f8f9fa;
-  border-radius: 4px;
-  margin-bottom: 10px;
-}
-
-.charts-and-table-area {
-  display: grid;
-  /* FORÇA A PROPORÇÃO: 40% (Mapa de Calor) para 60% (Uptime Chart) */
-  grid-template-columns: 4fr 6fr;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-/* Garante que os gráficos ocupem 100% de sua coluna, sem esticar o contêiner */
-#alert-flow-box {
-  width: 100%;
-}
-
-.chart-box {
-  width: 100%;
-}
-
-/* Responsividade */
-@media (max-width: 1200px) {
-  .kpi-container-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  /* Garante que o relatório fique abaixo dos KPIs */
-  .charts-and-table-area {
-    grid-template-columns: 1fr;
-  }
-
-  .table-card {
-    grid-column: 1;
-  }
-}
-
-@media (max-width: 768px) {
-  .kpi-container-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .charts-and-table-area,
-  .insights-col {
-    grid-column: 1 / -1 !important;
-  }
-}
-
-.icon-insight {
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  margin-left: 5px;
-}
-.card_inse{
-  border: solid black 2px;
-  background-color: white;
-  right: 0;
-  top: 75px;
-  height: 105vh;
 }
