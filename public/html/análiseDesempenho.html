@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Análise de Desempenho e Tendências - OBERON</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/body.css" />
+    <link rel="stylesheet" href="../component/menu/Menu.css" />
+    <link rel="stylesheet" href="../component/notificao/Notificaocao.css" />
+    <link rel="stylesheet" href="../component/tour/TourGuide.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
+    <link rel="stylesheet" href="../css/analiseGeral.css">
+</head>
+
+<body class="d-flex w-100 h-100">
+    <div id="menu-container">
+    </div>
+
+    <main class="content flex-grow-1 padding_main dashboard-main">
+        <header class="header-top d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-black mb-0" style="font-size: 1.5rem;">
+                Análise de Desempenho e Tendências -<span class="text-secondary" id="razao_social">- nome da
+                    empresa</span>
+            </h2>
+
+            <div class="d-flex align-items-center">
+                <div class="dropdown me-3" id="machine-filter-group">
+                    <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" id="machineFilterDropdown">
+                        Todas as Máquinas
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="machineFilterDropdown">
+                        <li><a class="dropdown-item" href="#"
+                                onclick="selecionarFiltroMaquina('Todas as Máquinas')">Todas as Máquinas</a></li>
+                        <li><a class="dropdown-item" href="#"
+                                onclick="selecionarFiltroMaquina('Máquina Específica')">Máquina Específica</a></li>
+                    </ul>
+                </div>
+
+                <div class="dropdown me-3" id="specific-machine-dropdown-group" style="display: none;">
+                    <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" id="machineFilterDropdown">
+                        Todas as Máquinas
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="machineFilterDropdown">
+                        <li><a class="dropdown-item" href="#"
+                                onclick="filtrar_maquina('Maquina-001', 1)">Maquina-001</a></li>
+                        <li><a class="dropdown-item" href="#"
+                                onclick="filtrar_maquina('Maquina-002', 2)">Maquina-002</a></li>
+                        <li><a class="dropdown-item" href="#"
+                                onclick="filtrar_maquina('Maquina-003', 3)">Maquina-003</a></li>
+                    </ul>
+                </div>
+
+                <div id="notificacao-container" class="position-relative">
+                </div>
+            </div>
+        </header>
+
+        <div class="mb-4">
+            <a class="d-block text-decoration-none text-dark" data-bs-toggle="collapse" href="#filterCollapse"
+                role="button" aria-expanded="false" aria-controls="filterCollapse" onclick="toggleFilterArrow(this)">
+                <h4 style="font-size: 1.2rem; margin-bottom: 0;">
+                    Filtrar dados | Filtro atual: Análise de previsão da taxa de uptime, agrupado por mês, no período de
+                    30/10/2025 até 09/03/3409. <i class="bi bi-caret-down-fill ms-2 float-end"></i>
+                </h4>
+            </a>
+        </div>
+
+
+        <div class="collapse card-filter" id="filterCollapse">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Tipo de Gráfico</label>
+                    <select class="form-select form-select-sm" id="selectTipoGrafico"
+                        onchange="toggleCorrelationFields()">
+                        <option value="Previsões" selected>Previsões – use para prever dados futuros
+                            relacionadas.</option>
+                        <option value="Tendência">Tendência – ótimo para ver se está aumentando ou diminuindo.
+                        </option>
+
+                        <option value="Correlação">Correlação – use para comparar duas variáveis e entender se estão
+                            relacionadas.</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Métrica a analisar</label>
+                    <select class="form-select form-select-sm" id="selectMetricaPrincipal">
+                        <option value="Downtime" selected>Downtime</option>
+                        <option value="Uptime">Uptime</option>
+                        <option value="Todos os alertas">Todos os alertas</option>
+                        <option value="Alertas Criticos">Alertas Criticos</option>
+                        <option value="Alertas Atenção">Alertas Atenção</option>
+                        <option value="Alertas Ocioso">Alertas Ocioso</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4" id="divVariavelRelacionada" style="display: none;">
+                    <label class="form-label">Variável relacionada</label>
+                    <select class="form-select form-select-sm" id="selectVariavelRelacionada">
+                        <option value="Alertas Criticos" selected>Alertas Críticos</option>
+                        <option value="Uptime">Uptime</option>
+                        <option value="Todos os alertas">Todos os alertas</option>
+                        <option value="Alertas Atenção">Alertas Atenção</option>
+                        <option value="Alertas Ocioso">Alertas Ocioso</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Agrupar dados por</label>
+                    <select class="form-select form-select-sm" id="selectAgrupamento" onchange="atualizarLimiteTempo()">
+                        <option value="Mês" selected>Mês</option>
+                        <option value="Semana">Semana</option>
+                        <option value="Dia">Dia</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">De </label>
+                    <input required type="date" class="form-control form-control-sm" id="inputDataDe" />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Até <span id="limite_tempo"></span></label>
+                    <input required type="date" class="form-control form-control-sm" id="inputDataAte" />
+                </div>
+
+                <div class="col-12 text-end">
+                    <button class="btn btn-info btn-sm" onclick="aplicarFiltro()">
+                        <i class="bi bi-funnel-fill me-1"></i> Aplicar Filtro
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-3 row" id="specific-machine-dropdown" style="display: none;">
+                <div class="col-4">
+                    <label class="form-label">Selecione a Máquina</label>
+                    <select class="form-select form-select-sm">
+                        <option>Máquina-001</option>
+                        <option>Máquina-002</option>
+                        <option>Máquina-003</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <section class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-3 mb-4">
+
+            <div class="col">
+                <div class="kpi-card-geral">
+                    <div class="kpi-header">
+                        <span class="kpi-title-geral" id="kpi_uptime_titulo">Taxa de disponibilidade (Uptime)</span>
+                        <div class="kpi-icon-wrapper"><i class="bi bi-pc-display"></i></div>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-value-geral" id="kpi_uptime_valor">placeholder</span>
+                        <span class="kpi-variation text-success" id="kpi_uptime_variacao">placeholder</span>
+                    </div>
+                    <p class="kpi-small-text mb-0" id="kpi_uptime_passado">passado: placeholder</p>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="kpi-card-geral">
+                    <div class="kpi-header">
+                        <span class="kpi-title-geral" id="kpi_alertas_totais_titulo">Total de Alertas</span>
+                        <div class="kpi-icon-wrapper"><i class="bi bi-bar-chart-fill"></i></div>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-value-geral" id="kpi_alertas_totais_valor">placeholder</span>
+                        <span class="kpi-variation text-danger" id="kpi_alertas_totais_variacao">placeholder</span>
+                    </div>
+                    <p class="kpi-small-text mb-0" id="kpi_alertas_totais_passado">passado: placeholder</p>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="kpi-card-geral">
+                    <div class="kpi-header">
+                        <span class="kpi-title-geral" id="kpi_criticos_titulo">Total de Alertas Críticos</span>
+                        <div class="kpi-icon-wrapper"><i class="bi bi-exclamation-triangle-fill text-warning"></i></div>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-value-geral" id="kpi_criticos_valor">placeholder</span>
+                        <span class="kpi-variation text-success" id="kpi_criticos_variacao">placeholder</span>
+                    </div>
+                    <p class="kpi-small-text mb-0" id="kpi_criticos_passado">Mês Passado: placeholder</p>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="kpi-card-geral">
+                    <div class="kpi-header">
+                        <span class="kpi-title-geral" id="kpi_frequente_titulo">Métrica Mais Frequente de Alerta</span>
+                        <div class="kpi-icon-wrapper"><i class="bi bi-cpu"></i></div>
+                    </div>
+                    <div class="kpi-content">
+                        <span class="kpi-value-geral" style="font-size: 1.5rem;"
+                            id="kpi_frequente_nome">Cplaceholder</span>
+                    </div>
+                    <p class="kpi-small-text mb-0" id="kpi_frequente_detalhe">placeholder</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="row g-4 mb-4">
+
+            <div class="col-lg-8">
+                <div class="content-box">
+                    <h5 class="mb-3" style="font-size: 1.1rem;">Previsões e Correlação</h5>
+                    <div class="chart-skeleton">
+                        procurando dados....
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="content-box">
+                    <h5 class="mb-3" style="font-size: 1.1rem;">Informações Complementares</h5>
+
+                    <div class="info-complementar-card mb-3">
+                        <small class="text-muted d-block mb-1">Variação Linear</small>
+                        <h6 class="mb-0">placeholder</h6>
+                    </div>
+
+                    <div class="info-complementar-card mb-3">
+                        <small class="text-muted d-block mb-1">Desvio Padrão</small>
+                        <h6 class="mb-0">placeholder</h6>
+                    </div>
+
+                    <div class="info-complementar-card mb-3">
+                        <small class="text-muted d-block mb-1">Índice de erro</small>
+                        <h6 class="mb-0">placeholder</h6>
+                    </div>
+
+                    <div class="info-complementar-card">
+                        <small class="text-muted d-block mb-1">Fórmula</small>
+                        <h6 class="mb-0">placeholder</h6>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="row g-4">
+            <div class="col-lg-12">
+                <div class="content-box">
+                    <h5 class="mb-3" style="font-size: 1.1rem;">Top 3 Máquinas com maior taxa de downtime</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Uptime(%)</th>
+                                    <th>Downtime(%)</th>
+                                    <th>Dif. Mês Passado</th>
+                                    <th>Top1 Alerta da Máquina</th>
+                                    <th>Top2 Alerta da Máquina</th>
+                                    <th>Top3 Alerta da Máquina</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Máquina-001</td>
+                                    <td>91%</td>
+                                    <td class="text-danger">9%</td>
+                                    <td class="text-success">+10%</td>
+                                    <td>CPU - Crítico (150)</td>
+                                    <td>CPU - Atenção (200)</td>
+                                    <td>RAM - Crítico (200)</td>
+                                    <td>
+                                        <button class="btn btn-info btn-sm me-1"
+                                            onclick="analisarMaquina('Máquina-001')">Analisar Máquina</button>
+                                        <button class="btn btn-primary btn-sm"
+                                            onclick="verHistorico('Máquina-001')">Histórico</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@2.0.0/dist/chartjs-chart-matrix.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <script src="../component/menu/Menu.js"></script>
+    <script src="../component/notificao/Notificacao.js"></script>
+    <script src="../component/tour/TourGuide.js"></script>
+    <!-- <script src="../js/dash_analise_desempenho/index.js"></script> -->
+
+    <script src="../js/dash_analise_desempenho/01_config.js"></script>
+    <script src="../js/dash_analise_desempenho/03_render.js"></script>
+    <script src="../js/dash_analise_desempenho/02_filters.js"></script>
+</body>
+
+</html>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        carregarListaDeMaquinas(); // Esta função estará no 02_filters.js
+        setDatasIniciais(); // Esta função estará no 02_filters.js
+        renderizarGraficoMock(); // Esta função estará no 03_render.js
+    });
+</script>
