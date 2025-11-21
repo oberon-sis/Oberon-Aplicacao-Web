@@ -11,7 +11,8 @@
   <link rel="stylesheet" href="../component/menu/Menu.css" />
   <link rel="stylesheet" href="../css/maquinas.css" />
   <link rel="stylesheet" href="../css/painelEspecifico.css" />
-  <link rel="stylesheet" href="../component/tour/TourGuide.css" /> <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
+  <link rel="stylesheet" href="../component/tour/TourGuide.css" /> 
+  <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
   <link rel="stylesheet" href="../component/notificao/Notificaocao.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
@@ -21,7 +22,8 @@
 </head>
 
 <body class="d-flex w-100 h-100">
-  <div id="menu-container"></div> <main class="content flex-grow-1 padding_main dashboard-main">
+  <div id="menu-container"></div> 
+  <main class="content flex-grow-1 padding_main dashboard-main">
     <button class="btn btn-secondary d-md-none mb-4" type="button" data-bs-toggle="offcanvas"
       data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
       <i class="bi bi-list"></i>
@@ -62,7 +64,7 @@
           <div class="icone-kpi"><i class="bi bi-display"></i></div>
         </div>
         <div class="baixo-kpi">
-          <div><span id="txt_total_maquinas">60</span><p>Máquinas ativas no sistema</p></div>
+          <div><span id="txt_total_maquinas">--</span><p>Máquinas ativas no sistema</p></div>
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Total de Máquinas" data-bs-content="Número total de computadores CFTV ativos sendo monitorados pelo Oberon.">
             <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
           </button>
@@ -71,7 +73,7 @@
       <div class="kpi-card" id="kpi-maquinas-sobrecarga">
         <div class="topo-kpi"><h6>Máquinas em Sobrecarga</h6><div class="icone-kpi"><i class="bi bi-reception-4"></i></div></div>
         <div class="baixo-kpi">
-          <div><span id="txt_maquinas_sobrecarga" class="text-danger">11</span><p>Média de CPU ou RAM > 85%</p></div>
+          <div><span id="txt_maquinas_sobrecarga" class="text-danger">--</span><p>Média de CPU ou RAM > 85%</p></div>
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Máquinas em Sobrecarga" data-bs-content="Contagem de máquinas que operaram com média de CPU ou RAM acima de 85% no período, indicando necessidade de upgrade.">
             <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
           </button>
@@ -80,7 +82,7 @@
       <div class="kpi-card" id="kpi-risco-disco">
         <div class="topo-kpi"><h6>Máquinas em Risco de Disco</h6><div class="icone-kpi"><i class="bi bi-hdd-fill"></i></div></div>
         <div class="baixo-kpi">
-          <div><span id="txt_risco_disco" class="text-warning">11</span><p>Uso de Disco > 90%</p></div>
+          <div><span id="txt_risco_disco" class="text-warning">--</span><p>Uso de Disco > 90%</p></div>
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Risco de Disco" data-bs-content="Contagem de máquinas com uso de disco acima de 90%. Elas correm o risco de parar de gravar as imagens de vigilância.">
             <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
           </button>
@@ -89,7 +91,7 @@
       <div class="kpi-card" id="kpi-maquinas-ociosas">
         <div class="topo-kpi"><h6>Máquinas Ociosas</h6><div class="icone-kpi"><i class="bi bi-battery"></i></div></div>
         <div class="baixo-kpi">
-          <div><span id="txt_maquinas_ociosas" class="text-success">11</span><p>Média CPU/RAM < 20%</p></div>
+          <div><span id="txt_maquinas_ociosas" class="text-success">--</span><p>Média CPU/RAM < 20%</p></div>
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Máquinas Ociosas" data-bs-content="Contagem de máquinas operando com média de CPU e RAM abaixo de 20%, indicando potencial para remanejamento de recursos.">
             <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
           </button>
@@ -98,7 +100,7 @@
       <div class="kpi-card" id="kpi-total-incidentes">
         <div class="topo-kpi"><h6>Total de Incidentes (Bimestre)</h6><div class="icone-kpi"><i class="bi bi-cone-striped"></i></div></div>
         <div class="baixo-kpi">
-          <div><span id="txt_total_incidentes" class="text-danger">32</span><p>Incidentes abertos no período</p></div>
+          <div><span id="txt_total_incidentes" class="text-danger">--</span><p>Incidentes abertos no período</p></div>
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Total de Incidentes" data-bs-content="Número total de incidentes formais (baseado em Alertas) que foram abertos no bimestre.">
             <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
           </button>
@@ -108,31 +110,31 @@
 
     <section class="charts-container" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px">
       
-      <div class="chart-item-wrapper" id="chart-incidentes-categoria">
+      <div class="chart-item-wrapper" id="chart-tendencia-estabilidade">
         <h3 style="font-size: 1.1rem; margin-bottom: 15px">
-          Análise de Incidentes por Categoria
+          Evolução de Alertas Críticos por Componente
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
-            data-bs-trigger="focus" data-bs-title="Incidentes por Categoria"
-            data-bs-content="Mostra a contagem de incidentes agrupados por sua categoria (ex: Falha de Hardware, Desempenho), ajudando a identificar a natureza dos problemas.">
+            data-bs-trigger="focus" data-bs-title="Evolução por Componente"
+            data-bs-content="Mostra qual componente de hardware (CPU, RAM ou Disco) está gerando mais problemas ao longo das semanas.">
             <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
           </button>
         </h3>
         <div style="height: 300px">
-          <canvas id="incidentesCategoriaChart"></canvas>
+          <canvas id="evolucaoComponentesChart"></canvas>
         </div>
       </div>
 
-      <div class="chart-item-wrapper" id="chart-severidade-incidentes">
+      <div class="chart-item-wrapper" id="chart-saude-ativos">
         <h3 style="font-size: 1.1rem; margin-bottom: 15px">
-          Análise de Severidade dos Incidentes
+          Matriz de Otimização (CPU vs RAM)
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
-            data-bs-trigger="focus" data-bs-title="Severidade dos Incidentes"
-            data-bs-content="Distribuição dos incidentes do período pela sua severidade (Crítico, Atenção, etc), mostrando o nível de risco operacional.">
+            data-bs-trigger="focus" data-bs-title="Matriz de Otimização"
+            data-bs-content="Cada ponto é uma máquina. Pontos no topo/direita indicam sobrecarga. Pontos na base/esquerda indicam ociosidade.">
             <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
           </button>
         </h3>
         <div style="height: 300px">
-          <canvas id="severidadeIncidentesChart"></canvas>
+          <canvas id="matrizOtimizacaoChart"></canvas>
         </div>
       </div>
     </section>
@@ -140,7 +142,7 @@
     <section class="details-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px">
       
       <div class="chart-item-wrapper" id="list-sobrecarga">
-        <h3 style="font-size: 1.1rem; margin-bottom: 15px">
+        <h3 style="font-size: 1.1rem; margin-bottom: 10px">
           Top 5 - Máquinas em Sobrecarga (Média > 85%)
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
             data-bs-trigger="focus" data-bs-title="Máquinas em Sobrecarga"
@@ -149,7 +151,7 @@
           </button>
         </h3>
         <div>
-          <table class="table table-striped table-hover">
+          <table class="table table-striped table-hover table-sm">
             <thead>
               <tr>
                 <th>Máquina</th>
@@ -158,18 +160,13 @@
               </tr>
             </thead>
             <tbody id="tbody-sobrecarga">
-              <tr><td>Maquina-0001</td><td><span class="text-danger">92%</span></td><td>75%</td></tr>
-              <tr><td>Maquina-0015</td><td>80%</td><td><span class="text-danger">89%</span></td></tr>
-              <tr><td>Maquina-0003</td><td><span class="text-danger">88%</span></td><td>80%</td></tr>
-              <tr><td>Maquina-0010</td><td><span class="text-danger">87%</span></td><td>70%</td></tr>
-              <tr><td>Maquina-0012</td><td><span class="text-danger">86%</span></td><td>78%</td></tr>
-            </tbody>
+              </tbody>
           </table>
         </div>
       </div>
 
       <div class="chart-item-wrapper" id="list-ociosas">
-        <h3 style="font-size: 1.1rem; margin-bottom: 15px">
+        <h3 style="font-size: 1.1rem; margin-bottom: 10px">
           Top 5 - Máquinas Ociosas (Média < 20%)
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
             data-bs-trigger="focus" data-bs-title="Máquinas Ociosas"
@@ -178,7 +175,7 @@
           </button>
         </h3>
         <div>
-          <table class="table table-striped table-hover">
+          <table class="table table-striped table-hover table-sm">
             <thead>
               <tr>
                 <th>Máquina</th>
@@ -187,12 +184,7 @@
               </tr>
             </thead>
             <tbody id="tbody-ociosas">
-              <tr><td>Maquina-0022</td><td><span class="text-success">15%</span></td><td><span class="text-success">18%</span></td></tr>
-              <tr><td>Maquina-0007</td><td><span class="text-success">12%</span></td><td><span class="text-success">22%</span></td></tr>
-              <tr><td>Maquina-0030</td><td><span class="text-success">18%</span></td><td><span class="text-success">19%</span></td></tr>
-              <tr><td>Maquina-0025</td><td><span class="text-success">19%</span></td><td><span class="text-success">19%</span></td></tr>
-              <tr><td>Maquina-0040</td><td><span class="text-success">14%</span></td><td><span class="text-success">17%</span></td></tr>
-            </tbody>
+              </tbody>
           </table>
         </div>
       </div>
@@ -203,97 +195,9 @@
   
   <script src="../component/menu/Menu.js"></script>
   <script src="../component/notificao/Notificacao.js"></script>
-  
   <script src="../component/tour/TourGuide.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Inicializa os popovers do Bootstrap
-      const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-      popoverTriggerList.map(function (popoverTriggerEl) {
-        return new bootstrap.Popover(popoverTriggerEl);
-      });
-
-      // Inicia os novos gráficos
-      initIncidentesCategoriaChart(); 
-      initSeveridadeIncidentesChart();
-    });
-
-    /**
-     * Gráfico de Incidentes por Categoria
-     */
-    function initIncidentesCategoriaChart() {
-      const ctx = document.getElementById('incidentesCategoriaChart').getContext('2d');
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Desempenho (RAM)', 'Desempenho (CPU)', 'Disco (Armazenamento)', 'Falha (Offline)'],
-          datasets: [{
-            label: 'Nº de Incidentes',
-            data: [12, 8, 7, 5], // Total 32 (bate com o KPI)
-            backgroundColor: 'rgba(217, 83, 79, 0.5)', 
-            borderColor: 'rgba(217, 83, 79, 1)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
-        }
-      });
-    }
-
-    /**
-     * Gráfico de Severidade dos Incidentes
-     */
-    function initSeveridadeIncidentesChart() {
-      const ctx = document.getElementById('severidadeIncidentesChart').getContext('2d');
-      new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Crítico', 'Atenção', 'Ocioso'], // Labels de Severidade
-          datasets: [{
-            label: 'Nº de Incidentes',
-            data: [10, 15, 7], // Total 32 (bate com o KPI)
-            backgroundColor: [
-              'rgba(217, 83, 79, 0.7)', // Vermelho (Crítico)
-              'rgba(240, 173, 78, 0.7)', // Amarelo (Atenção)
-              'rgba(92, 184, 92, 0.7)'  // Verde (Ocioso/Normal)
-            ],
-            borderColor: [
-              'rgba(217, 83, 79, 1)',
-              'rgba(240, 173, 78, 1)',
-              'rgba(92, 184, 92, 1)'
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'bottom' }
-          }
-        }
-      });
-    }
-
-    /**
-     * Lógica para o filtro de período
-     */
-    function filtrarPeriodo(bimestre) {
-      console.log(`TODO: Recarregar todos os dados do painel para o Bimestre ${bimestre}`);
-      document.getElementById('valor_pesquisa_periodo').innerText = `2025 - Bimestre ${bimestre}`;
-    }
-
-    /**
-     * Nova função para o Tour deste painel
-     */
-    function iniciarTourGestor() {
-        console.log("TODO: Iniciar o Tour do Painel de Gestão de Ativos.");
-    }
-  </script>
+  
+  <script src="../js/dashboard/dashboardGestor.js"></script>
 
 </body>
 </html>

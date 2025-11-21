@@ -1,7 +1,6 @@
-var ambiente_processo = 'producao';
-// var ambiente_processo = "desenvolvimento";
+var ambiente_processo = 'desenvolvimento';
 
-var caminho_env = ambiente_processo === 'producao' ? '.env' : '.env.dev';
+var caminho_env = ambiente_processo === 'desenvolvimento' ? '.env' : '.env.dev';
 
 require('dotenv').config({ path: caminho_env });
 
@@ -24,6 +23,7 @@ var gerenciamentoUsuarioRouter = require('./src/routes/gerenciamentoUsuario');
 var empresaRouter = require('./src/routes/empresas');
 var authRouter = require('./src/routes/email');
 var alertasRouter = require('./src/routes/alertas');
+var dashboardRouter = require("./src/routes/dashboard");
 const downloadRoutes = require('./src/routes/appInstalacao');
 const painelRoutes = require('./src/routes/painel');
 const homeRouter = require('./src/routes/home');
@@ -35,10 +35,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public', 'html')));
 app.use(cors());
 
+
 // --- REGISTRO DAS ROTAS ---
 app.use('/', indexRouter);
 app.use('/usuarios', usuarioRouter);
 app.use('/gerenciamentoUsuario', gerenciamentoUsuarioRouter);
+app.use("/dashboard", dashboardRouter);
 // CORRIGIDO: O prefixo agora está no plural para corresponder ao front-end
 app.use('/empresas', empresaRouter);
 app.use('/edicaoEmpresa', edicaoEmpresaRouter);
