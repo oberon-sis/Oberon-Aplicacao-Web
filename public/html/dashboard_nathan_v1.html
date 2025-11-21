@@ -1,131 +1,187 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Título do Dashboard</title>
-    
-    <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg"/>
-    <link rel="stylesheet" href="../css/body.css"/>
-    <link rel="stylesheet" href="../component/menu/Menu.css"/>
-    <link rel="stylesheet" href="../css/analiseGeral.css"> 
+
+    <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
+    <link rel="stylesheet" href="../css/body.css" />
+    <link rel="stylesheet" href="../component/menu/Menu.css" />
+    <link rel="stylesheet" href="../css/analiseGeral.css">
     <link rel="stylesheet" href="../component/notificao/Notificaocao.css">
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-
-    <style>
-        /* DEFINIÇÕES DE ESTILO DE DASHBOARD PROFISSIONAL */
-        :root {
-            --kpi-bg: #fff;
-            --main-bg: #f0f2f5;
-            --text-muted: #6c757d;
-        }
-
-        body { background-color: var(--main-bg); }
-        .content { padding-left: 20px; padding-right: 20px; }
-
-        /* Estrutura Principal da Área de Conteúdo */
-        .main-structure { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 20px; 
-            padding: 20px 0; 
-        }
-        
-        /* Contêineres de Dados e Gráficos */
-        .data-card {
-            background-color: var(--kpi-bg);
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Sombra suave */
-            min-height: 150px; /* Garante que os blocos sejam visíveis */
-        }
-        
-        /* Bloco 4 (KPIs) e Bloco 2 (Largura Total) */
-        .kpi-container-grid { 
-            display: grid; 
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 15px; 
-            margin-top: 15px; 
-        }
-        .kpi-card h3 { 
-            font-size: 2.2em; 
-            font-weight: 600; 
-            margin-top: 5px; 
-            color: #343a40; 
-        }
-        .kpi-header span { 
-            font-size: 0.9em; 
-            color: var(--text-muted); 
-        }
-
-        /* Estilo do Header da Aplicação */
-        .header-top {
-            padding: 10px 0 !important;
-            border-bottom: 1px solid #dee2e6;
-        }
-        .header-top h2 {
-            font-weight: 400;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/dashboard_nathan.css">
 </head>
 
 <body class="d-flex w-100 h-100">
-    <div id="menu-container"></div> 
+    <div id="menu-container"></div>
 
     <main class="content flex-grow-1 padding_main main dashboard-main">
-        
+
         <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
-            <h2 class="text-black me-3">Título do Dashboard</h2>
-            
-            <div class="d-flex align-items-center">
-                <select class="form-select form-select-sm me-2" style="width: 150px;">
-                    <option selected>Selecionar Máquina</option>
-                </select>
-                <button class="btn btn-sm btn-outline-primary me-3"><i class="bi bi-gear"></i> Configurar</button>
-                
-                <div id="notificacao-container">
-                     <i class="bi bi-bell fs-5 text-muted"></i>
-                </div> 
+            <h2 class="text-black me-3">
+                Análise Histórica de Desempenho: &nbsp;&nbsp; <span id="tituloDoPainel">Máquina-002</span>
+            </h2>
+            <div class="d-flex align-items-center me-3 mb-2 mb-md-0">
+          <div class="search-autocomplete-container me-3" style="position: relative;">
+
+            <div class="input-group input-group-sm" style="width: 200px">
+              <input type="text" class="form-control" id="inputBusca" placeholder="Buscar pelo nome da máquina"
+                oninput="filtrarSugestoes(this.value)" autocomplete="off" /> <span class="input-group-text"><i
+                  class="bi bi-search"></i></span>
             </div>
+
+            <ul id="listaSugestoes" class="autocomplete-list dropdown-menu"
+              style="position: absolute; top: 100%; left: 0; width: 100%; display: none;">
+            </ul>
+          </div>
+
+          <p class="mx-2 mb-0 d-flex align-items-center">OU</p>
+
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <span id="valor_pesquisa_maquina">Selecionar</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end hover_verde">
+            <li>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(1)">Máquina-0021</a>
+            </li>
+
+            <li>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(2)">Máquina-0022</a>
+            </li>
+
+            <li>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(3)">Máquina-0001</a>
+            </li>
+
+            <li>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(4)">Máquina-0002</a>
+            </li>
+                        <li>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(5)">Máquina-0015</a>
+            </li>
+                        <li>
+              <a class="dropdown-item" onclick="atualizar_painelEspecifico(6)">Máquina-0030</a>
+            </li>
+          </ul>
+        </div>
         </header>
+              <div class="d-flex align-items-center ms-auto"></div>
+
 
         <div class="main-structure">
 
-            <div class="row">
-                <div class="col-12">
-                    <div class="data-card">
-                        <h4 class="mb-3">4 - Título (KPIs)</h4>
-                        
-                        <div class="kpi-container-grid">
-                            <div class="kpi-card">
-                                <div class="kpi-header"><span>Taxa de disponibilidade</span></div>
-                                <h3>97%</h3>
-                            </div>
-                            <div class="kpi-card">
-                                <div class="kpi-header"><span>Total de Alertas</span></div>
-                                <h3>20000</h3>
-                            </div>
-                            <div class="kpi-card">
-                                <div class="kpi-header"><span>Total de Alertas Críticos</span></div>
-                                <h3>3000</h3>
-                            </div>
-                            <div class="kpi-card">
-                                <div class="kpi-header"><span>Máquina com maior criticidade</span></div>
-                                <h3>000432</h3>
-                            </div>
+            <section class="kpi-container" id="kpi-section">
+                <div class="kpi-card" id="kpi-disponibilidade">
+                    <div class="topo-kpi">
+                        <h6>Taxa De Disponibilidade Do Sistema</h6>
+                        <div class="icone-kpi"><i class="bi bi-box-arrow-in-up"></i></div>
+                    </div>
+
+                    <div class="baixo-kpi">
+                        <div>
+                            <span id="txt_disponibilidade" class="text-danger"> 97.8% <i class="bi bi-arrow-down"
+                                    style="scale: 1.2"></i> </span>
+                            <p>Bimestre Passado: 99.5%</p>
                         </div>
+                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
+                            data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que é Disponibilidade?"
+                            data-bs-content="A porcentagem de tempo que o sistema ou máquina está operacional e acessível aos usuários durante o período de referência.">
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+                        </button>
                     </div>
                 </div>
-            </div>
+
+                <div class="kpi-card" id="kpi-total-alertas">
+                    <div class="topo-kpi">
+                        <h6>Quantidade Total De Alertas</h6>
+                        <div class="icone-kpi"><i class="bi bi-bell"></i></div>
+                    </div>
+                    <div class="baixo-kpi">
+                        <div>
+                            <span id="txt_total_alertas" class="text-danger"> 450 <i class="bi bi-arrow-up"
+                                    style="scale: 1.2"></i> </span>
+                            <p>Bimestre Passado: 380</p>
+                        </div>
+                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
+                            data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que são Alertas?"
+                            data-bs-content="Total de notificações geradas por exceder limites configurados de uso de recursos (CPU, RAM, etc.) ou falhas no sistema durante o bimestre.">
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+                        </button>
+                    </div>
+                </div>
+
+                <div class="kpi-card" id="kpi-percentual-critico">
+                    <div class="topo-kpi">
+                        <h6>Percentual De alertas Críticos</h6>
+                        <div class="icone-kpi">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                        </div>
+                    </div>
+                    <div class="baixo-kpi">
+                        <div>
+                            <span id="txt_percentual_critico" class="text-danger"> 15% <i class="bi bi-arrow-up"
+                                    style="scale: 1.2"></i> </span>
+                            <p>Bimestre Passado: 8%</p>
+                        </div>
+                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
+                            data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que é Alerta Crítico?"
+                            data-bs-content="A proporção de alertas que atingiram o nível de maior gravidade ('Crítico'), indicando falhas graves ou iminentes que exigem ação imediata.">
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+                        </button>
+                    </div>
+                </div>
+                <div class="kpi-card" id="kpi-componente-critico">
+                    <div class="topo-kpi">
+                        <h6>Componente Com Mais Alertas Criticos</h6>
+                        <div class="icone-kpi"><i class="bi bi-memory"></i></div>
+                    </div>
+
+                    <div class="baixo-kpi">
+                        <div>
+                            <span id="txt_componente_critico"> RAM </span>
+                            <p>Bimestre Passado: CPU</p>
+                        </div>
+                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
+                            data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Componente Crítico"
+                            data-bs-content="O recurso (CPU, RAM, DISCO, etc.) que gerou o maior número de alertas no nível 'Crítico' durante o bimestre analisado.">
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+                        </button>
+                    </div>
+                </div>
+
+                <div class="kpi-card" id="kpi-tempo-alertas">
+                    <div class="topo-kpi">
+                        <h6>Tempo Médio Entre Alertas</h6>
+                        <div class="icone-kpi"><i class="bi bi-stopwatch"></i></div>
+                    </div>
+                    <div class="baixo-kpi">
+                        <div>
+                            <span id="txt_tempo_medio_alerta" class="text-danger"> 30 min <i class="bi bi-arrow-down"
+                                    style="scale: 1.2"></i> </span>
+                            <p>Bimestre Passado: 90 min</p>
+                        </div>
+                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
+                            data-bs-placement="right" data-bs-trigger="focus"
+                            data-bs-title="O que é MTBA (Tempo Médio Entre Alertas)?"
+                            data-bs-content="O tempo médio que decorre entre a geração de um alerta e o próximo, refletindo a frequência dos problemas de desempenho ou falhas no sistema.">
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+                        </button>
+                    </div>
+                </div>
+            </section>
 
             <div class="row">
                 <div class="col-12">
                     <div class="data-card">
-                        <h4 class="mb-3">2 - Título (Gráfico Principal)</h4>
-                        <div style="min-height: 400px; border: 1px dashed #ddd;">
-                             <canvas id="mainChart"></canvas>
+                        <h4 class="mb-3">2 - Utilização Média de Recursos (CPU, RAM, DISCO)</h4>
+                        <div style="min-height: 300px; border: 1px dashed #ddd;">
+                            <canvas id="mainChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -134,18 +190,43 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="data-card">
-                        <h4 class="mb-3">6 - Título (Secundário Esquerdo)</h4>
-                        <div style="min-height: 250px; border: 1px dashed #ddd;">
-                             Conteúdo Bloco 6
+                        <h4 class="mb-3">6 - Estatísticas de Variação de Uso (%)</h4>
+                        <div style="min-height: 250px; border: 1px dashed #ddd; padding: 15px;">
+                            <table class="stats-table">
+                                <thead>
+                                    <tr>
+                                        <th>Componente</th>
+                                        <th>Desvio Padrão ($\sigma$)</th>
+                                        <th>Variância ($\sigma^2$)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>**CPU**</td>
+                                        <td>8.37</td>
+                                        <td>70.0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>**RAM**</td>
+                                        <td>7.91</td>
+                                        <td>62.5</td>
+                                    </tr>
+                                    <tr>
+                                        <td>**DISCO**</td>
+                                        <td>8.37</td>
+                                        <td>70.0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-8">
                     <div class="data-card">
-                         <h4 class="mb-3">7 - Título (Secundário Direito)</h4>
+                        <h4 class="mb-3">7 - Total de Alertas por Componente (30 Dias)</h4>
                         <div style="min-height: 250px; border: 1px dashed #ddd;">
-                            Conteúdo Bloco 7
+                            <canvas id="componentAlertsChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -159,5 +240,150 @@
     <script src="../component/menu/Menu.js"></script>
     <script src="../component/tour/TourGuide.js"></script>
     <script src="../component/notificao/Notificacao.js"></script>
-    </body>
+</body>
+
 </html>
+<script>
+    // --- Inicialização de Popovers do Bootstrap (necessário para os botões "Saiba Mais" das KPIs) ---
+    document.addEventListener('DOMContentLoaded', function () {
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl);
+        });
+
+        // ---------------------------------------------------------------------------------------------
+
+        // --- Configuração do Gráfico de Linhas (Chart.js) para CPU, RAM e DISCO (Gráfico Principal) ---
+        const ctx = document.getElementById('mainChart');
+
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan/Fev', 'Mar/Abr', 'Mai/Jun', 'Jul/Ago', 'Set/Out', 'Nov/Dez'],
+                    datasets: [
+                        {
+                            label: 'CPU (%)',
+                            data: [65, 70, 75, 80, 85, 90],
+                            borderColor: '#dc3545',
+                            backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                            tension: 0.4,
+                            fill: false,
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                        },
+                        {
+                            label: 'RAM (%)',
+                            data: [50, 55, 60, 65, 70, 75],
+                            borderColor: '#007bff',
+                            backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                            tension: 0.4,
+                            fill: false,
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                        },
+                        {
+                            label: 'DISCO (%)',
+                            data: [30, 35, 40, 45, 50, 55],
+                            borderColor: '#28a745',
+                            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                            tension: 0.4,
+                            fill: false,
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Utilização Média de Recursos (CPU, RAM, DISCO) ao Longo do Tempo',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Utilização Média (%)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Bimestre'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- Configuração do Gráfico de Barras (Chart.js) para Alertas por Componente ---
+        const ctx2 = document.getElementById('componentAlertsChart');
+
+        if (ctx2) {
+            new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['RAM', 'CPU', 'DISCO'],
+                    datasets: [{
+                        label: 'Total de Alertas',
+                        data: [220, 150, 80],
+                        backgroundColor: [
+                            'rgba(0, 123, 255, 0.7)',
+                            'rgba(220, 53, 69, 0.7)',
+                            'rgba(40, 167, 69, 0.7)'
+                        ],
+                        borderColor: [
+                            '#007bff',
+                            '#dc3545',
+                            '#28a745'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: 'Total de Alertas por Componente (30 Dias)',
+                            font: { size: 14 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Número de Alertas'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Componente'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
