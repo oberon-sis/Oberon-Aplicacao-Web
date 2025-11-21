@@ -42,7 +42,7 @@ body {
   flex-wrap: wrap;
   gap: 15px;
   padding: 0;
-  margin-top: 20px;
+  margin-top: 0px;
 }
 
 .kpi-card {
@@ -130,7 +130,6 @@ body {
   background-color: #f8f9fa;
 }
 
-/* === FIX HEADER (evitar quebra) === */
 .header-top {
   display: flex;
   flex-wrap: nowrap !important;
