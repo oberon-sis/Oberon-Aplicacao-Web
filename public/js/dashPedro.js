@@ -1,268 +1,326 @@
 document.addEventListener('DOMContentLoaded', function () {
+  if (typeof Chart !== 'undefined') {
+    console.log('Chart.js carregado com sucesso.');
+    console.log('Controladores disponíveis:', Object.keys(Chart.registry.controllers.items));
+  } else {
+    console.error('Chart.js não foi carregado!');
+  }
   const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
   popoverTriggerList.map(function (popoverTriggerEl) {
     return new bootstrap.Popover(popoverTriggerEl);
   });
+  const idEmpresa = 6;
+  let componenteAtual = document
+    .getElementById('valor_pesquisa_componente')
+    .textContent.toUpperCase();
+  let boxPlotChartInstance = null;
+  let distributionChartInstance = null;
+  const mediaUsoEl = document.getElementById('mediaUso');
+  const desvioPadraoEl = document.getElementById('desvioPadrao');
+  const medianaEl = document.getElementById('mediana');
+  const totalAlertasEl = document.getElementById('totalAlertas');
+  const percCriticasEl = document.getElementById('percMaquinasCriticas');
+  const quartil1El = document.getElementById('quartil1');
+  const quartil3El = document.getElementById('quartil3');
+  const percentil90El = document.getElementById('percentil90');
+  const paramCriticoEl = document.getElementById('paramCritico');
+  const paramAtencaoEl = document.getElementById('paramAtencao');
+  const paramNormalEl = document.getElementById('paramNormal');
+  const paramOciosoEl = document.getElementById('paramOcioso');
+  const tituloBoxPlotEl = document.getElementById('tituloBoxPlot');
 
-  const dadosCPU = [
-    45, 48, 52, 55, 58, 60, 62, 65, 68, 70, 72, 75, 78, 80, 82, 85, 88, 90, 35, 40, 50, 54, 57, 61,
-    64, 67, 71, 74, 77, 83,
-  ];
-
-  function calcularBoxPlot(dados) {
-    const sorted = [...dados].sort((a, b) => a - b);
-    const min = sorted[0];
-    const max = sorted[sorted.length - 1];
-    const q1 = sorted[Math.floor(sorted.length * 0.25)];
-    const median = sorted[Math.floor(sorted.length * 0.5)];
-    const q3 = sorted[Math.floor(sorted.length * 0.75)];
-    return { min, q1, median, q3, max };
+  function calcularEstatisticas(dadosBrutos) {
+    if (!dadosBrutos || dadosBrutos.length === 0) {
+      return { mediana: null, q1: null, q3: null, p90: null, min: null, max: null };
+    }
+    const sorted = [...dadosBrutos].sort((a, b) => a - b);
+    const n = sorted.length;
+    const quantile = (arr, p) => {
+      if (n === 0) return null;
+      if (n === 1) return arr[0];
+      const index = p * (n - 1);
+      const lower = Math.floor(index);
+      const upper = Math.ceil(index);
+      const weight = index - lower;
+      if (lower === upper) return arr[lower];
+      return arr[lower] * (1 - weight) + arr[upper] * weight;
+    };
+    return {
+      q1: quantile(sorted, 0.25),
+      mediana: quantile(sorted, 0.5),
+      q3: quantile(sorted, 0.75),
+      p90: quantile(sorted, 0.9),
+      min: sorted[0],
+      max: sorted[n - 1],
+    };
   }
 
-  const ctx = document.getElementById('boxPlotChart');
-  const boxPlotData = calcularBoxPlot(dadosCPU);
+  function atualizarKpis(kpisAgregados, estatisticas) {
+    const media = parseFloat(kpisAgregados.media);
+    const desvioPadrao = parseFloat(kpisAgregados.desvioPadrao);
+    const percCriticoOcioso = parseFloat(kpisAgregados.percCriticoOcioso);
+    const unidade = componenteAtual === 'REDE' ? 'MB/s' : '%';
+    mediaUsoEl.textContent = `${media || 0}${unidade}`;
+    desvioPadraoEl.textContent = `${desvioPadrao || 0}${unidade}`;
+    totalAlertasEl.textContent =
+    kpisAgregados.totalAlertas !== null ? kpisAgregados.totalAlertas : 'N/A';
+    percCriticasEl.textContent = `${percCriticoOcioso ? percCriticoOcioso.toFixed(1) : 'N/A'}%`;
+    medianaEl.textContent = `${estatisticas.mediana ? estatisticas.mediana.toFixed(2) : 'N/A'}${unidade}`;
+    quartil1El.textContent = `${estatisticas.q1 ? estatisticas.q1.toFixed(2) : 'N/A'}${unidade}`;
+    quartil3El.textContent = `${estatisticas.q3 ? estatisticas.q3.toFixed(2) : 'N/A'}${unidade}`;
+    percentil90El.textContent = `${estatisticas.p90 ? estatisticas.p90.toFixed(2) : 'N/A'}${unidade}`;
+  }
 
-  const chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: [''],
-      datasets: [
-        {
-          label: 'Box Plot',
-          data: [0],
-          backgroundColor: 'transparent',
-          borderColor: 'transparent',
-        },
-      ],
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        title: { display: false },
-        tooltip: {
-          enabled: true,
-          callbacks: {
-            title: () => 'Estatísticas de CPU',
-            label: function (context) {
-              return [
-                `Mínimo: ${boxPlotData.min}%`,
-                `Q1: ${boxPlotData.q1}%`,
-                `Mediana: ${boxPlotData.median}%`,
-                `Q3: ${boxPlotData.q3}%`,
-                `Máximo: ${boxPlotData.max}%`,
-              ];
-            },
-          },
-        },
-      },
-      scales: {
-        x: {
-          min: 0,
-          max: 100,
-          title: {
-            display: true,
-            text: 'Uso de CPU (%)',
-            font: { size: 14 },
-          },
-          grid: { display: true, color: '#e0e0e0' },
-          ticks: {
-            stepSize: 10,
-            callback: function (value) {
-              return value + '%';
-            },
-          },
-        },
-        y: {
-          display: false,
-          grid: { display: false },
-        },
-      },
-      layout: {
-        padding: { top: 30, bottom: 30, left: 20, right: 20 },
-      },
-    },
-    plugins: [
-      {
-        id: 'boxPlotDrawer',
-        afterDatasetsDraw(chart) {
-          const ctx = chart.ctx;
-          const xScale = chart.scales.x;
-          const chartArea = chart.chartArea;
-
-          const yCenter = (chartArea.top + chartArea.bottom) / 2;
-          const boxHeight = 60;
-
-          const xMin = xScale.getPixelForValue(boxPlotData.min);
-          const xQ1 = xScale.getPixelForValue(boxPlotData.q1);
-          const xMedian = xScale.getPixelForValue(boxPlotData.median);
-          const xQ3 = xScale.getPixelForValue(boxPlotData.q3);
-          const xMax = xScale.getPixelForValue(boxPlotData.max);
-
-          ctx.save();
-
-          ctx.strokeStyle = '#2c3e50';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.moveTo(xMin, yCenter);
-          ctx.lineTo(xQ1, yCenter);
-          ctx.stroke();
-
-          ctx.beginPath();
-          ctx.moveTo(xQ3, yCenter);
-          ctx.lineTo(xMax, yCenter);
-          ctx.stroke();
-
-          ctx.beginPath();
-          ctx.moveTo(xMin, yCenter - boxHeight / 3);
-          ctx.lineTo(xMin, yCenter + boxHeight / 3);
-          ctx.stroke();
-
-          ctx.beginPath();
-          ctx.moveTo(xMax, yCenter - boxHeight / 3);
-          ctx.lineTo(xMax, yCenter + boxHeight / 3);
-          ctx.stroke();
-
-          const boxWidth = xQ3 - xQ1;
-          ctx.fillStyle = 'rgba(186, 220, 218, 0.6)';
-          ctx.strokeStyle = '#2c3e50';
-          ctx.lineWidth = 2.5;
-          ctx.fillRect(xQ1, yCenter - boxHeight / 2, boxWidth, boxHeight);
-          ctx.strokeRect(xQ1, yCenter - boxHeight / 2, boxWidth, boxHeight);
-
-          ctx.strokeStyle = '#e74c3c';
-          ctx.lineWidth = 3.5;
-          ctx.beginPath();
-          ctx.moveTo(xMedian, yCenter - boxHeight / 2);
-          ctx.lineTo(xMedian, yCenter + boxHeight / 2);
-          ctx.stroke();
-
-          const iqr = boxPlotData.q3 - boxPlotData.q1;
-          const lowerFence = boxPlotData.q1 - 1.5 * iqr;
-          const upperFence = boxPlotData.q3 + 1.5 * iqr;
-
-          ctx.fillStyle = '#34495e';
-          dadosCPU.forEach((val) => {
-            if (val < lowerFence || val > upperFence) {
-              const xOutlier = xScale.getPixelForValue(val);
-              ctx.beginPath();
-              ctx.arc(xOutlier, yCenter, 5, 0, Math.PI * 2);
-              ctx.fill();
-            }
-          });
-
-          ctx.fillStyle = '#2c3e50';
-          ctx.font = 'bold 11px Arial';
-          ctx.textAlign = 'center';
-          ctx.fillText(`Min: ${boxPlotData.min}%`, xMin, yCenter - boxHeight / 2 - 10);
-          ctx.fillText(`Q1: ${boxPlotData.q1}%`, xQ1, yCenter + boxHeight / 2 + 20);
-          ctx.fillText(`Med: ${boxPlotData.median}%`, xMedian, yCenter - boxHeight / 2 - 10);
-          ctx.fillText(`Q3: ${boxPlotData.q3}%`, xQ3, yCenter + boxHeight / 2 + 20);
-          ctx.fillText(`Max: ${boxPlotData.max}%`, xMax, yCenter - boxHeight / 2 - 10);
-
-          ctx.restore();
-        },
-      },
-    ],
-  });
-
-  const ctxDistribution = document.getElementById('distributionChart');
-
-  if (ctxDistribution) {
-    const distributionChart = new Chart(ctxDistribution, {
-      type: 'bar',
+  function atualizarBoxPlot(estatisticas) {
+    tituloBoxPlotEl.textContent = `Box Plot do Uso Típico de ${componenteAtual}`;
+    if (!estatisticas.q1 || !estatisticas.q3 || estatisticas.min === null) {
+      if (boxPlotChartInstance) {
+        boxPlotChartInstance.destroy();
+      }
+      const canvas = document.getElementById('boxPlotChart');
+      if (canvas) {
+        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+      }
+      console.warn('Dados insuficientes para o BoxPlot.');
+      return;
+    }
+    if (boxPlotChartInstance) {
+      boxPlotChartInstance.destroy();
+    }
+    const ctx = document.getElementById('boxPlotChart').getContext('2d');
+    const isRede = componenteAtual === 'REDE';
+    const maxScale = isRede ? Math.ceil(estatisticas.max * 1.1) : 100;
+    const unidade = isRede ? 'MB/s' : '%';
+    boxPlotChartInstance = new Chart(ctx, {
+      type: 'boxplot',
       data: {
-        labels: ['Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov'],
+        labels: [componenteAtual],
         datasets: [
           {
-            label: 'Crítico',
-            data: [12, 19, 15, 25, 22, 30],
-            backgroundColor: '#e74c3c',
-            borderColor: '#c0392b',
-            borderWidth: 1,
-          },
-          {
-            label: 'Atenção',
-            data: [25, 30, 28, 35, 32, 38],
-            backgroundColor: '#f39c12',
-            borderColor: '#d68910',
-            borderWidth: 1,
-          },
-          {
-            label: 'Ocioso',
-            data: [18, 15, 20, 12, 16, 14],
-            backgroundColor: '#3498db',
-            borderColor: '#2980b9',
-            borderWidth: 1,
+            label: `Distribuição de ${componenteAtual}`,
+            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+            borderColor: 'rgb(75, 192, 192)',
+            borderWidth: 2,
+            outlierColor: '#e74c3c',
+            outlierBackgroundColor: '#e74c3c',
+            outlierRadius: 4,
+            itemRadius: 0,
+            itemStyle: 'circle',
+            itemBackgroundColor: '#2c3e50',
+            data: [
+              {
+                min: estatisticas.min,
+                q1: estatisticas.q1,
+                median: estatisticas.mediana,
+                q3: estatisticas.q3,
+                max: estatisticas.max,
+                outliers: [],
+              },
+            ],
+            minStats: 'min',
+            maxStats: 'max',
+            coef: 1.5,
           },
         ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        interaction: {
-          mode: 'index',
-          intersect: false,
-        },
         plugins: {
           legend: {
-            display: true,
-            position: 'top',
-            labels: {
-              boxWidth: 12,
-              padding: 15,
-              font: { size: 11 },
+            display: false,
+          },
+          tooltip: {
+            enabled: true,
+            callbacks: {
+              title: () => `Estatísticas de ${componenteAtual}`,
+              label: function (context) {
+                const datapoint = context.raw;
+                return [
+                  `Mínimo: ${datapoint.min.toFixed(2)}${unidade}`,
+                  `Q1 (25%): ${datapoint.q1.toFixed(2)}${unidade}`,
+                  `Mediana: ${datapoint.median.toFixed(2)}${unidade}`,
+                  `Q3 (75%): ${datapoint.q3.toFixed(2)}${unidade}`,
+                  `Máximo: ${datapoint.max.toFixed(2)}${unidade}`,
+                  `IQR: ${(datapoint.q3 - datapoint.q1).toFixed(2)}${unidade}`,
+                ];
+              },
             },
           },
-          title: { display: false },
-          tooltip: {
-            callbacks: {
-              label: function (context) {
-                let label = context.dataset.label || '';
-                if (label) {
-                  label += ': ';
-                }
-                label += context.parsed.y + ' alertas';
-                return label;
-              },
+          title: {
+            display: true,
+            text: 'Distribuição Estatística dos Dados',
+            font: {
+              size: 14,
+              weight: 'bold',
             },
           },
         },
         scales: {
-          x: {
-            stacked: true,
-            grid: { display: false },
+          y: {
+            beginAtZero: true,
+            max: maxScale,
             title: {
               display: true,
-              text: 'Mês',
-              font: { size: 12 },
+              text: `Uso de ${componenteAtual} (${unidade})`,
+              font: {
+                size: 13,
+                weight: 'bold',
+              },
+            },
+            grid: {
+              display: true,
+              color: 'rgba(0, 0, 0, 0.1)',
+            },
+            ticks: {
+              stepSize: isRede ? Math.ceil(maxScale / 10) : 10,
+              callback: function (value) {
+                return value + unidade;
+              },
             },
           },
-          y: {
-            stacked: true,
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Quantidade de Alertas',
-              font: { size: 12 },
+          x: {
+            grid: {
+              display: false,
             },
-            ticks: { stepSize: 20 },
+            ticks: {
+              font: {
+                size: 12,
+                weight: 'bold',
+              },
+            },
           },
         },
       },
     });
-  } else {
-    console.error('Canvas distributionChart não encontrado!');
+  }
+
+  function atualizarDistribuicaoAlertas(data) {
+    const labels = data.map((item) => item.label);
+    const criticoData = data.map((item) => item.critico);
+    const atencaoData = data.map((item) => item.atencao);
+    const ociosoData = data.map((item) => item.ocioso);
+    if (distributionChartInstance) {
+      distributionChartInstance.destroy();
+    }
+    const ctxDistribution = document.getElementById('distributionChart');
+    if (ctxDistribution) {
+      distributionChartInstance = new Chart(ctxDistribution, {
+        type: 'bar',
+        data: {
+          labels: labels.length ? labels : ['N/A'],
+          datasets: [
+            {
+              label: 'Crítico',
+              data: criticoData,
+              backgroundColor: '#e74c3c',
+              borderColor: '#c0392b',
+              borderWidth: 1,
+            },
+            {
+              label: 'Atenção',
+              data: atencaoData,
+              backgroundColor: '#f39c12',
+              borderColor: '#d68910',
+              borderWidth: 1,
+            },
+            {
+              label: 'Ocioso',
+              data: ociosoData,
+              backgroundColor: '#3498db',
+              borderColor: '#2980b9',
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { stacked: true },
+            y: { stacked: true, beginAtZero: true },
+          },
+        },
+      });
+    }
+  }
+
+  function atualizarParametros(parametros) {
+    let limiteCritico = 'N/A';
+    let limiteAtencao = 'N/A';
+    let limiteAceitavel = 'N/A';
+    parametros.forEach((param) => {
+      const limiteNum = parseFloat(param.limite_atual);
+      const unidade = componenteAtual === 'REDE' ? 'MB/s' : '%';
+      const limiteFormatado = `${limiteNum}${unidade}`;
+      if (param.identificador === 'CRITICO') {
+        limiteCritico = `≥ ${limiteFormatado}`;
+      } else if (param.identificador === 'ATENÇÃO') {
+        limiteAtencao = `≥ ${limiteFormatado}`;
+      } else if (param.identificador === 'ACEITÁVEL') {
+        limiteAceitavel = limiteFormatado;
+      }
+    });
+    const limiteAtencaoNum = parseFloat(limiteAtencao.replace(/[^\d.]/g, ''));
+    const limiteAceitavelNum = parseFloat(limiteAceitavel.replace(/[^\d.]/g, ''));
+    const unidade = componenteAtual === 'REDE' ? 'MB/s' : '%';
+    const paramNormalText =
+      limiteAceitavelNum && limiteAtencaoNum
+        ? `${limiteAceitavelNum}${unidade} - ${limiteAtencaoNum}${unidade}`
+        : 'N/A';
+    const paramOciosoText = limiteAceitavelNum ? `< ${limiteAceitavelNum}${unidade}` : 'N/A';
+    paramCriticoEl.textContent = limiteCritico;
+    paramAtencaoEl.textContent = limiteAtencao;
+    paramNormalEl.textContent = paramNormalText;
+    paramOciosoEl.textContent = paramOciosoText;
+    document.querySelector(`#containerDefinicaoParametros h6.small`).textContent =
+      `Parâmetros Atuais - ${componenteAtual}:`;
+  }
+
+  function buscarERenderizarDados(componente) {
+    componenteAtual = componente.toUpperCase();
+    const url = `/dashboardParametros/dados/${idEmpresa}/${componenteAtual}`;
+    mediaUsoEl.textContent = '...';
+    desvioPadraoEl.textContent = '...';
+    medianaEl.textContent = '...';
+    totalAlertasEl.textContent = '...';
+    percCriticasEl.textContent = '...';
+    quartil1El.textContent = '...';
+    quartil3El.textContent = '...';
+    percentil90El.textContent = '...';
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Erro de rede: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Dados recebidos da API:', data);
+
+        const valores = data.dadosBrutos || [];
+        const estatisticasCalculadas = calcularEstatisticas(valores);
+
+        atualizarKpis(data.kpisAgregados, estatisticasCalculadas);
+        atualizarBoxPlot(estatisticasCalculadas);
+        atualizarDistribuicaoAlertas(data.distAlertas || []);
+        atualizarParametros(data.parametros || []);
+      })
+      .catch((error) => {
+        console.error('Erro ao carregar dados do dashboard:', error);
+        alert(`Erro ao carregar dados: ${error.message}`);
+      });
   }
 
   document.querySelectorAll('.componente-item').forEach((item) => {
     item.addEventListener('click', function (e) {
       e.preventDefault();
-      const componente = this.getAttribute('data-componente');
-      document.getElementById('valor_pesquisa_componente').textContent = this.textContent;
-      console.log('Componente selecionado:', componente);
+      const novoComponente = this.getAttribute('data-componente');
+      document.getElementById('valor_pesquisa_componente').textContent =
+        novoComponente.toUpperCase();
+      buscarERenderizarDados(novoComponente);
     });
   });
+
+  buscarERenderizarDados(componenteAtual);
 });

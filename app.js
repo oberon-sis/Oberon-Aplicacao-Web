@@ -24,9 +24,10 @@ var empresaRouter = require('./src/routes/empresas');
 var authRouter = require('./src/routes/email');
 var alertasRouter = require('./src/routes/alertas');
 var dashboardRouter = require("./src/routes/dashboard");
-const downloadRoutes = require('./src/routes/appInstalacao');
-const painelRoutes = require('./src/routes/painel');
-const homeRouter = require('./src/routes/home');
+var downloadRoutes = require('./src/routes/appInstalacao');
+var painelRoutes = require('./src/routes/painel');
+var homeRouter = require('./src/routes/home');
+var dashboardParametrosRouter = require('./src/routes/dashboardParametros')
 
 // --- CONFIGURAÇÃO DOS MIDDLEWARES ---
 app.use(express.json());
@@ -41,7 +42,6 @@ app.use('/', indexRouter);
 app.use('/usuarios', usuarioRouter);
 app.use('/gerenciamentoUsuario', gerenciamentoUsuarioRouter);
 app.use("/dashboard", dashboardRouter);
-// CORRIGIDO: O prefixo agora está no plural para corresponder ao front-end
 app.use('/empresas', empresaRouter);
 app.use('/edicaoEmpresa', edicaoEmpresaRouter);
 app.use('/edicaoUsuario', edicaoUsuarioRouter);
@@ -51,6 +51,7 @@ app.use('/alertas', alertasRouter);
 app.use('/api/download', downloadRoutes);
 app.use('/painel', painelRoutes);
 app.use('/api/maquinas', homeRouter);
+app.use('/dashboardParametros', dashboardParametrosRouter)
 
 app.listen(PORTA_APP, function () {
   console.log(`                                                                            
