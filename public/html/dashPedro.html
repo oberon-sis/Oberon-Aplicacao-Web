@@ -19,6 +19,16 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
+    <style>
+      .stat-value {
+        font-weight: bold;
+        font-size: 2rem;
+        transition: color 0.3s ease;
+      }
+      .stat-value[style*='color'] {
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+    </style>
   </head>
 
   <body class="d-flex w-100 h-100">
@@ -158,7 +168,6 @@
                 </button>
               </div>
               <h2 class="stat-value" id="percMaquinasCriticas">24%</h2>
-              <p class="stat-comparison text-success">
               <p class="stat-description">Requerem atenção imediata</p>
             </div>
           </div>
@@ -295,6 +304,171 @@
         </div>
       </section>
     </main>
+    <div
+      class="modal fade"
+      id="modalDefinirParametros"
+      tabindex="-1"
+      aria-labelledby="modalParametrosLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title" id="modalParametrosLabel">
+              <i class="bi bi-gear-fill me-2"></i>Definir Parâmetros -
+              <span id="modalComponenteNome">CPU</span>
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p class="text-muted small mb-4">
+              Configure os limites de alerta para <strong id="modalComponenteTexto">CPU</strong>. Os
+              valores devem estar em <strong id="modalUnidade">porcentagem (%)</strong>.
+            </p>
+            <div id="alertaFeedback" class="alert d-none" role="alert"></div>
+            <form id="formParametros">
+              <div class="mb-3">
+                <label for="inputAceitavel" class="form-label">
+                  <i class="bi bi-arrow-up-circle text-success"></i>
+                  Limite Aceitável (Mínimo)
+                </label>
+                <div class="input-group">
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="inputAceitavel"
+                    placeholder="Ex: 40"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    required
+                  />
+                  <span class="input-group-text" id="unidadeAceitavel">%</span>
+                </div>
+                <small class="form-text text-muted">
+                  Valores <strong>abaixo</strong> deste limite são considerados
+                  <span class="badge bg-info">OCIOSOS</span>
+                </small>
+              </div>
+              <div class="mb-3">
+                <label for="inputAtencao" class="form-label">
+                  <i class="bi bi-exclamation-triangle text-warning"></i>
+                  Limite de Atenção
+                </label>
+                <div class="input-group">
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="inputAtencao"
+                    placeholder="Ex: 75"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    required
+                  />
+                  <span class="input-group-text" id="unidadeAtencao">%</span>
+                </div>
+                <small class="form-text text-muted">
+                  Valores entre Aceitável e este limite são
+                  <span class="badge bg-success">NORMAIS</span>
+                </small>
+              </div>
+              <div class="mb-3">
+                <label for="inputCritico" class="form-label">
+                  <i class="bi bi-x-octagon text-danger"></i>
+                  Limite Crítico
+                </label>
+                <div class="input-group">
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="inputCritico"
+                    placeholder="Ex: 90"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    required
+                  />
+                  <span class="input-group-text" id="unidadeCritico">%</span>
+                </div>
+                <small class="form-text text-muted">
+                  Valores entre Atenção e este limite requerem
+                  <span class="badge bg-warning text-dark">ATENÇÃO</span>
+                </small>
+              </div>
+              <div class="card bg-light">
+                <div class="card-body">
+                  <h6 class="card-title mb-3">
+                    <i class="bi bi-info-circle me-1"></i>Resumo da Configuração
+                  </h6>
+                  <div class="d-flex flex-column gap-2">
+                    <div class="d-flex align-items-center">
+                      <span class="badge bg-info me-2" style="width: 80px">OCIOSO</span>
+                      <small class="text-muted"
+                        >0 até <strong id="resumoAceitavel">--</strong></small
+                      >
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <span class="badge bg-success me-2" style="width: 80px">NORMAL</span>
+                      <small class="text-muted"
+                        ><strong id="resumoAceitavel2">--</strong> até
+                        <strong id="resumoAtencao">--</strong></small
+                      >
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <span class="badge bg-warning text-dark me-2" style="width: 80px"
+                        >ATENÇÃO</span
+                      >
+                      <small class="text-muted"
+                        ><strong id="resumoAtencao2">--</strong> até
+                        <strong id="resumoCritico">--</strong></small
+                      >
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <span class="badge bg-danger me-2" style="width: 80px">CRÍTICO</span>
+                      <small class="text-muted"
+                        >Acima de <strong id="resumoCritico2">--</strong></small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4">
+                <label class="form-label fw-bold">Aplicar para:</label>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="tipoAplicacao"
+                    id="radioEmpresa"
+                    value="EMPRESA"
+                    checked
+                  />
+                  <label class="form-check-label" for="radioEmpresa">
+                    <strong>Todas as máquinas da empresa</strong>
+                    <br />
+                    <small class="text-muted">Parâmetros padrão para toda a empresa</small>
+                  </label>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <i class="bi bi-x-circle me-1"></i>Cancelar
+            </button>
+            <button type="button" class="btn btn-success" id="btnSalvarParametros">
+              <i class="bi bi-check-circle me-1"></i>Salvar Parâmetros
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://unpkg.com/@sgratzl/chartjs-chart-boxplot@4"></script>

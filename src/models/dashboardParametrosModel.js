@@ -11,7 +11,7 @@ function getDadosBrutos(idEmpresa, tipoComponente) {
         WHERE 
             CPE.fkEmpresa = ${idEmpresa}
             AND CPE.tipoComponente = '${tipoComponente}'
-            AND R.horario >= DATE_SUB(NOW(), INTERVAL 30 DAY) -- Últimos 30 dias
+            AND R.horario >= DATE_SUB(NOW(), INTERVAL 30 DAY)
         ORDER BY 
             R.valor ASC;
     `;
@@ -24,7 +24,6 @@ function getKpisAgregados(idEmpresa, tipoComponente) {
             CAST(COALESCE(AVG(R.valor), 0) AS DECIMAL(10, 2)) AS media,
             CAST(COALESCE(STDDEV(R.valor), 0) AS DECIMAL(10, 2)) AS desvioPadrao,
             
-            -- Total de Alertas (Último mês)
             (
                 SELECT COUNT(A.idAlerta)
                 FROM Alerta A
@@ -112,9 +111,49 @@ function getParametros(idEmpresa, tipoComponente) {
   return database.executar(instrucaoSql);
 }
 
+function atualizarParametros(
+  idEmpresa,
+  tipoComponente,
+  limiteAceitavel,
+  limiteAtencao,
+  limiteCritico,
+  tipoAplicacao,
+) {
+  var sqlTipoComponente = `
+    SELECT idTipoComponente 
+    FROM TipoComponente 
+    WHERE tipoComponete = '${tipoComponente}'
+    LIMIT 1;
+  `;
+  return database.executar(sqlTipoComponente).then((resultado) => {
+    if (!resultado || resultado.length === 0) {
+      throw new Error('Tipo de componente não encontrado.');
+    }
+    var idTipoComponente = resultado[0].idTipoComponente;
+    var sqlDelete = `
+        DELETE FROM Parametro 
+        WHERE fkEmpresa = ${idEmpresa} 
+          AND fkTipoComponente = ${idTipoComponente}
+          AND origemParametro = '${tipoAplicacao}'
+          AND fkComponente IS NULL;
+      `;
+    return database.executar(sqlDelete).then(() => {
+      var sqlInsert = `
+          INSERT INTO Parametro (fkTipoComponente, fkEmpresa, limite, identificador, origemParametro, fkCriadoPor) 
+          VALUES
+            (${idTipoComponente}, ${idEmpresa}, ${limiteAceitavel}, 'ACEITÁVEL', '${tipoAplicacao}', 1),
+            (${idTipoComponente}, ${idEmpresa}, ${limiteAtencao}, 'ATENÇÃO', '${tipoAplicacao}', 1),
+            (${idTipoComponente}, ${idEmpresa}, ${limiteCritico}, 'CRITICO', '${tipoAplicacao}', 1);
+        `;
+      return database.executar(sqlInsert);
+    });
+  });
+}
+
 module.exports = {
   getDadosBrutos,
   getKpisAgregados,
   getDistribuicaoAlertas,
   getParametros,
+  atualizarParametros,
 };

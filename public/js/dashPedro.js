@@ -5,16 +5,52 @@ document.addEventListener('DOMContentLoaded', function () {
   } else {
     console.error('Chart.js não foi carregado!');
   }
+
   const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
   popoverTriggerList.map(function (popoverTriggerEl) {
     return new bootstrap.Popover(popoverTriggerEl);
   });
-  const idEmpresa = 6;
-  let componenteAtual = document
+
+  var idEmpresa = null;
+  
+  try {
+    const usuarioJson = sessionStorage.getItem('usuario');
+    if (!usuarioJson) {
+      console.error('ERRO: Nenhum usuário encontrado no sessionStorage!');
+      alert('Erro: Você não está logado. Redirecionando para o login...');
+      window.location.href = '/login.html';
+      return;
+    }
+    const usuario = JSON.parse(usuarioJson);
+    idEmpresa = usuario.fkEmpresa || usuario.idEmpresa || usuario.ID_EMPRESA || usuario.empresa?.id;
+    if (!idEmpresa) {
+      console.error('ERRO: ID da empresa não encontrado no objeto usuario!');
+      console.log('Objeto usuario compvaro:', usuario);
+      alert('Erro: Não foi possível identificar sua empresa. Entre em contato com o suporte.');
+      return;
+    }
+    console.log('ID da Empresa encontrado:', idEmpresa);
+    console.log('Dados do usuário:', usuario);
+  } catch (error) {
+    console.error('ERRO ao processar dados do usuário:', error);
+    alert('Erro ao processar login. Faça login novamente.');
+    window.location.href = '/login.html';
+    return;
+  }
+
+  var componenteAtual = document
     .getElementById('valor_pesquisa_componente')
     .textContent.toUpperCase();
-  let boxPlotChartInstance = null;
-  let distributionChartInstance = null;
+
+  var parametrosAtuais = {
+    aceitavel: null,
+    atencao: null,
+    critico: null
+  };
+
+  var boxPlotChartInstance = null;
+  var distributionChartInstance = null;
+
   const mediaUsoEl = document.getElementById('mediaUso');
   const desvioPadraoEl = document.getElementById('desvioPadrao');
   const medianaEl = document.getElementById('mediana');
@@ -59,11 +95,29 @@ document.addEventListener('DOMContentLoaded', function () {
     const media = parseFloat(kpisAgregados.media);
     const desvioPadrao = parseFloat(kpisAgregados.desvioPadrao);
     const percCriticoOcioso = parseFloat(kpisAgregados.percCriticoOcioso);
+    const totalAlertas = kpisAgregados.totalAlertas !== null ? kpisAgregados.totalAlertas : 0;
     const unidade = componenteAtual === 'REDE' ? 'MB/s' : '%';
+    var corMedia = 'inherit';
+    if (media < parametrosAtuais.aceitavel) {
+      corMedia = '#3498db';
+    } else if (media >= parametrosAtuais.aceitavel && media < parametrosAtuais.atencao) {
+      corMedia = '#27ae60';
+    } else if (media >= parametrosAtuais.atencao && media < parametrosAtuais.critico) {
+      corMedia = '#f39c12';
+    } else if (media >= parametrosAtuais.critico) {
+      corMedia = '#e74c3c';
+    }
     mediaUsoEl.textContent = `${media || 0}${unidade}`;
+    mediaUsoEl.style.color = corMedia;
+    var corAlertas = 'inherit';
+    if (totalAlertas > 25) {
+      corAlertas = '#e74c3c';
+    } else if (totalAlertas > 15) {
+      corAlertas = '#f39c12';
+    }
     desvioPadraoEl.textContent = `${desvioPadrao || 0}${unidade}`;
-    totalAlertasEl.textContent =
-    kpisAgregados.totalAlertas !== null ? kpisAgregados.totalAlertas : 'N/A';
+    totalAlertasEl.textContent = totalAlertas;
+    totalAlertasEl.style.color = corAlertas;
     percCriticasEl.textContent = `${percCriticoOcioso ? percCriticoOcioso.toFixed(1) : 'N/A'}%`;
     medianaEl.textContent = `${estatisticas.mediana ? estatisticas.mediana.toFixed(2) : 'N/A'}${unidade}`;
     quartil1El.textContent = `${estatisticas.q1 ? estatisticas.q1.toFixed(2) : 'N/A'}${unidade}`;
@@ -95,46 +149,42 @@ document.addEventListener('DOMContentLoaded', function () {
       type: 'boxplot',
       data: {
         labels: [componenteAtual],
-        datasets: [
-          {
-            label: `Distribuição de ${componenteAtual}`,
-            backgroundColor: 'rgba(75, 192, 192, 0.5)',
-            borderColor: 'rgb(75, 192, 192)',
-            borderWidth: 2,
-            outlierColor: '#e74c3c',
-            outlierBackgroundColor: '#e74c3c',
-            outlierRadius: 4,
-            itemRadius: 0,
-            itemStyle: 'circle',
-            itemBackgroundColor: '#2c3e50',
-            data: [
-              {
-                min: estatisticas.min,
-                q1: estatisticas.q1,
-                median: estatisticas.mediana,
-                q3: estatisticas.q3,
-                max: estatisticas.max,
-                outliers: [],
-              },
-            ],
-            minStats: 'min',
-            maxStats: 'max',
-            coef: 1.5,
-          },
-        ],
+        datasets: [{
+          label: `Distribuição de ${componenteAtual}`,
+          backgroundColor: 'rgba(75, 192, 192, 0.5)',
+          borderColor: 'rgb(75, 192, 192)',
+          borderWidth: 2,
+          outlierColor: '#e74c3c',
+          outlierBackgroundColor: '#e74c3c',
+          outlierRadius: 4,
+          itemRadius: 0,
+          itemStyle: 'circle',
+          itemBackgroundColor: '#2c3e50',
+          data: [{
+            min: estatisticas.min,
+            q1: estatisticas.q1,
+            median: estatisticas.mediana,
+            q3: estatisticas.q3,
+            max: estatisticas.max,
+            outliers: []
+          }],
+          minStats: 'min',
+          maxStats: 'max',
+          coef: 1.5,
+        }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
           legend: {
-            display: false,
+            display: false
           },
           tooltip: {
             enabled: true,
             callbacks: {
               title: () => `Estatísticas de ${componenteAtual}`,
-              label: function (context) {
+              label: function(context) {
                 const datapoint = context.raw;
                 return [
                   `Mínimo: ${datapoint.min.toFixed(2)}${unidade}`,
@@ -142,19 +192,19 @@ document.addEventListener('DOMContentLoaded', function () {
                   `Mediana: ${datapoint.median.toFixed(2)}${unidade}`,
                   `Q3 (75%): ${datapoint.q3.toFixed(2)}${unidade}`,
                   `Máximo: ${datapoint.max.toFixed(2)}${unidade}`,
-                  `IQR: ${(datapoint.q3 - datapoint.q1).toFixed(2)}${unidade}`,
+                  `IQR: ${(datapoint.q3 - datapoint.q1).toFixed(2)}${unidade}`
                 ];
-              },
-            },
+              }
+            }
           },
           title: {
             display: true,
             text: 'Distribuição Estatística dos Dados',
             font: {
               size: 14,
-              weight: 'bold',
-            },
-          },
+              weight: 'bold'
+            }
+          }
         },
         scales: {
           y: {
@@ -165,33 +215,33 @@ document.addEventListener('DOMContentLoaded', function () {
               text: `Uso de ${componenteAtual} (${unidade})`,
               font: {
                 size: 13,
-                weight: 'bold',
-              },
+                weight: 'bold'
+              }
             },
             grid: {
               display: true,
-              color: 'rgba(0, 0, 0, 0.1)',
+              color: 'rgba(0, 0, 0, 0.1)'
             },
             ticks: {
               stepSize: isRede ? Math.ceil(maxScale / 10) : 10,
-              callback: function (value) {
+              callback: function(value) {
                 return value + unidade;
-              },
-            },
+              }
+            }
           },
           x: {
             grid: {
-              display: false,
+              display: false
             },
             ticks: {
               font: {
                 size: 12,
-                weight: 'bold',
-              },
-            },
-          },
-        },
-      },
+                weight: 'bold'
+              }
+            }
+          }
+        }
+      }
     });
   }
 
@@ -236,9 +286,9 @@ document.addEventListener('DOMContentLoaded', function () {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          scales: {
-            x: { stacked: true },
-            y: { stacked: true, beginAtZero: true },
+          scales: { 
+            x: { stacked: true }, 
+            y: { stacked: true, beginAtZero: true } 
           },
         },
       });
@@ -246,28 +296,30 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function atualizarParametros(parametros) {
-    let limiteCritico = 'N/A';
-    let limiteAtencao = 'N/A';
-    let limiteAceitavel = 'N/A';
+    var limiteCritico = 'N/A';
+    var limiteAtencao = 'N/A';
+    var limiteAceitavel = 'N/A';
     parametros.forEach((param) => {
       const limiteNum = parseFloat(param.limite_atual);
       const unidade = componenteAtual === 'REDE' ? 'MB/s' : '%';
       const limiteFormatado = `${limiteNum}${unidade}`;
       if (param.identificador === 'CRITICO') {
         limiteCritico = `≥ ${limiteFormatado}`;
+        parametrosAtuais.critico = limiteNum;
       } else if (param.identificador === 'ATENÇÃO') {
         limiteAtencao = `≥ ${limiteFormatado}`;
+        parametrosAtuais.atencao = limiteNum;
       } else if (param.identificador === 'ACEITÁVEL') {
         limiteAceitavel = limiteFormatado;
+        parametrosAtuais.aceitavel = limiteNum;
       }
     });
     const limiteAtencaoNum = parseFloat(limiteAtencao.replace(/[^\d.]/g, ''));
     const limiteAceitavelNum = parseFloat(limiteAceitavel.replace(/[^\d.]/g, ''));
     const unidade = componenteAtual === 'REDE' ? 'MB/s' : '%';
-    const paramNormalText =
-      limiteAceitavelNum && limiteAtencaoNum
-        ? `${limiteAceitavelNum}${unidade} - ${limiteAtencaoNum}${unidade}`
-        : 'N/A';
+    const paramNormalText = limiteAceitavelNum && limiteAtencaoNum
+      ? `${limiteAceitavelNum}${unidade} - ${limiteAtencaoNum}${unidade}`
+      : 'N/A';
     const paramOciosoText = limiteAceitavelNum ? `< ${limiteAceitavelNum}${unidade}` : 'N/A';
     paramCriticoEl.textContent = limiteCritico;
     paramAtencaoEl.textContent = limiteAtencao;
@@ -288,6 +340,7 @@ document.addEventListener('DOMContentLoaded', function () {
     quartil1El.textContent = '...';
     quartil3El.textContent = '...';
     percentil90El.textContent = '...';
+
     fetch(url)
       .then((response) => {
         if (!response.ok) {
@@ -316,10 +369,132 @@ document.addEventListener('DOMContentLoaded', function () {
     item.addEventListener('click', function (e) {
       e.preventDefault();
       const novoComponente = this.getAttribute('data-componente');
-      document.getElementById('valor_pesquisa_componente').textContent =
-        novoComponente.toUpperCase();
+      document.getElementById('valor_pesquisa_componente').textContent = novoComponente.toUpperCase();
       buscarERenderizarDados(novoComponente);
     });
+  });
+
+  const modalParametros = new bootstrap.Modal(document.getElementById('modalDefinirParametros'));
+  const btnDefinirParametros = document.getElementById('btnDefinirParametros');
+  const btnSalvarParametros = document.getElementById('btnSalvarParametros');
+  const formParametros = document.getElementById('formParametros');
+  const alertaFeedback = document.getElementById('alertaFeedback');
+  const modalComponenteNome = document.getElementById('modalComponenteNome');
+  const modalComponenteTexto = document.getElementById('modalComponenteTexto');
+  const modalUnidade = document.getElementById('modalUnidade');
+  const inputAceitavel = document.getElementById('inputAceitavel');
+  const inputAtencao = document.getElementById('inputAtencao');
+  const inputCritico = document.getElementById('inputCritico');
+  const unidadeAceitavel = document.getElementById('unidadeAceitavel');
+  const unidadeAtencao = document.getElementById('unidadeAtencao');
+  const unidadeCritico = document.getElementById('unidadeCritico');
+  const resumoAceitavel = document.getElementById('resumoAceitavel');
+  const resumoAceitavel2 = document.getElementById('resumoAceitavel2');
+  const resumoAtencao = document.getElementById('resumoAtencao');
+  const resumoAtencao2 = document.getElementById('resumoAtencao2');
+  const resumoCritico = document.getElementById('resumoCritico');
+  const resumoCritico2 = document.getElementById('resumoCritico2');
+  function atualizarResumo() {
+    const unidade = componenteAtual === 'REDE' ? 'MB/s' : '%';
+    const aceitavel = inputAceitavel.value || '--';
+    const atencao = inputAtencao.value || '--';
+    const critico = inputCritico.value || '--';
+    resumoAceitavel.textContent = aceitavel + unidade;
+    resumoAceitavel2.textContent = aceitavel + unidade;
+    resumoAtencao.textContent = atencao + unidade;
+    resumoAtencao2.textContent = atencao + unidade;
+    resumoCritico.textContent = critico + unidade;
+    resumoCritico2.textContent = critico + unidade;
+  }
+  inputAceitavel.addEventListener('input', atualizarResumo);
+  inputAtencao.addEventListener('input', atualizarResumo);
+  inputCritico.addEventListener('input', atualizarResumo);
+  btnDefinirParametros.addEventListener('click', function() {
+    modalComponenteNome.textContent = componenteAtual;
+    modalComponenteTexto.textContent = componenteAtual;
+    const isRede = componenteAtual === 'REDE';
+    const unidade = isRede ? 'MB/s' : '%';
+    const maxValue = isRede ? 1000 : 100;
+    modalUnidade.textContent = unidade;
+    unidadeAceitavel.textContent = unidade;
+    unidadeAtencao.textContent = unidade;
+    unidadeCritico.textContent = unidade;
+    inputAceitavel.max = maxValue;
+    inputAtencao.max = maxValue;
+    inputCritico.max = maxValue;
+    const paramAceitavelText = paramNormalEl.textContent.split('-')[0].trim();
+    const paramAtencaoText = paramAtencaoEl.textContent.replace('≥', '').trim();
+    const paramCriticoText = paramCriticoEl.textContent.replace('≥', '').trim();
+    inputAceitavel.value = parseFloat(paramAceitavelText) || '';
+    inputAtencao.value = parseFloat(paramAtencaoText) || '';
+    inputCritico.value = parseFloat(paramCriticoText) || '';
+    atualizarResumo();
+    alertaFeedback.classList.add('d-none');
+    alertaFeedback.classList.remove('alert-success', 'alert-danger');
+    modalParametros.show();
+  });
+  btnSalvarParametros.addEventListener('click', async function() {
+    if (!formParametros.checkValidity()) {
+      formParametros.reportValidity();
+      return;
+    }
+    const aceitavel = parseFloat(inputAceitavel.value);
+    const atencao = parseFloat(inputAtencao.value);
+    const critico = parseFloat(inputCritico.value);
+    if (aceitavel >= atencao) {
+      mostrarAlerta('Erro: O limite Aceitável deve ser menor que o limite de Atenção.', 'danger');
+      return;
+    }
+    if (atencao >= critico) {
+      mostrarAlerta('Erro: O limite de Atenção deve ser menor que o limite Crítico.', 'danger');
+      return;
+    }
+    btnSalvarParametros.disabled = true;
+    btnSalvarParametros.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Salvando...';
+    try {
+      const response = await fetch('/dashboardParametros/atualizar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          idEmpresa: idEmpresa,
+          componente: componenteAtual,
+          limiteAceitavel: aceitavel,
+          limiteAtencao: atencao,
+          limiteCritico: critico,
+          tipoAplicacao: document.querySelector('input[name="tipoAplicacao"]:checked').value
+        })
+      });
+      const data = await response.json();
+      if (response.ok) {
+        mostrarAlerta('Parâmetros atualizados com sucesso!', 'success');
+        setTimeout(() => {
+          modalParametros.hide();
+          buscarERenderizarDados(componenteAtual);
+        }, 1000);
+      } else {
+        mostrarAlerta(`Erro: ${data.message || 'Não foi possível salvar os parâmetros.'}`, 'danger');
+        btnSalvarParametros.disabled = false;
+        btnSalvarParametros.innerHTML = '<i class="bi bi-check-circle me-1"></i>Salvar Parâmetros';
+      }
+    } catch (error) {
+      console.error('Erro ao salvar parâmetros:', error);
+      mostrarAlerta('Erro de conexão. Tente novamente.', 'danger');
+      btnSalvarParametros.disabled = false;
+      btnSalvarParametros.innerHTML = '<i class="bi bi-check-circle me-1"></i>Salvar Parâmetros';
+    }
+  });
+
+  function mostrarAlerta(mensagem, tipo) {
+    alertaFeedback.textContent = mensagem;
+    alertaFeedback.classList.remove('d-none', 'alert-success', 'alert-danger');
+    alertaFeedback.classList.add(`alert-${tipo}`);
+  }
+
+  document.getElementById('modalDefinirParametros').addEventListener('hidden.bs.modal', function() {
+    btnSalvarParametros.disabled = false;
+    btnSalvarParametros.innerHTML = '<i class="bi bi-check-circle me-1"></i>Salvar Parâmetros';
   });
 
   buscarERenderizarDados(componenteAtual);
