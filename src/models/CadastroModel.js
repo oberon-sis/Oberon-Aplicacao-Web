@@ -48,7 +48,7 @@ function buscarPorEmail(email) {
   // ATENÇÃO: A query usa o nome da sua tabela, que é 'funcionario'
   // Seleciona TUDO do funcionário (incluindo a senha criptografada)
   var instrucaoSql = `
-        SELECT * FROM Funcionario WHERE email = '${email}';
+        SELECT f.*, DATE_FORMAT(e.dataCriacao, '%Y-%m-%d') AS DataCriacaoEmpresa FROM Funcionario as f join Empresa as e on f.fkEmpresa = e.idEmpresa WHERE email = '${email}';
     `;
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
   return database.executar(instrucaoSql);
