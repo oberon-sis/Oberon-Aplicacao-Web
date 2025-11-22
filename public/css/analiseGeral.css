@@ -121,7 +121,7 @@ body {
 /* Estilo Skeleton para o Gráfico (Vazio) */
 .chart-skeleton {
   height: 300px;
-  background-color: #e9ecef;
+  background-color: #ffffff;
   /* Cor cinza claro */
   border: 1px dashed #ced4da;
   border-radius: 4px;
@@ -131,4 +131,18 @@ body {
   color: #6c757d;
   font-size: 1.1rem;
   font-weight: 500;
+}
+
+canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 300px;
+}
+.filtragem{
+  background-color: #009ab4;
+  color: white;
+  font-size: 1.2rem; 
+  margin-bottom: 0;
+  padding: 5px 10px;
+  border-radius: 5px;
 }

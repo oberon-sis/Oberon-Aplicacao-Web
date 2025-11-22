@@ -14,6 +14,19 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
     <link rel="stylesheet" href="../css/analiseGeral.css">
+    <style>
+        .saber_mais {
+            /* Ajustado para ser mais compacto e não ter altura/largura fixa na div */
+            padding: 0;
+            margin-left: 5px;
+            line-height: 1;
+        }
+
+        .icone-info {
+            height: 16px;
+            width: 16px;
+        }
+    </style>
 </head>
 
 <body class="d-flex w-100 h-100">
@@ -23,8 +36,7 @@
     <main class="content flex-grow-1 padding_main dashboard-main">
         <header class="header-top d-flex justify-content-between align-items-center mb-4">
             <h2 class="text-black mb-0" style="font-size: 1.5rem;">
-                Análise de Desempenho e Tendências -<span class="text-secondary" id="razao_social">- nome da
-                    empresa</span>
+                Análise de Desempenho e Tendências
             </h2>
 
             <div class="d-flex align-items-center">
@@ -44,7 +56,7 @@
                 <div class="dropdown me-3" id="specific-machine-dropdown-group" style="display: none;">
                     <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button"
                         data-bs-toggle="dropdown" aria-expanded="false" id="machineFilterDropdown">
-                        Todas as Máquinas
+                        placeholder
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="machineFilterDropdown">
                         <li><a class="dropdown-item" href="#"
@@ -61,16 +73,22 @@
             </div>
         </header>
 
-        <div class="mb-4">
+        <div class="mb-3">
             <a class="d-block text-decoration-none text-dark" data-bs-toggle="collapse" href="#filterCollapse"
                 role="button" aria-expanded="false" aria-controls="filterCollapse" onclick="toggleFilterArrow(this)">
-                <h4 style="font-size: 1.2rem; margin-bottom: 0;">
-                    Filtrar dados | Filtro atual: Análise de previsão da taxa de uptime, agrupado por mês, no período de
-                    30/10/2025 até 09/03/3409. <i class="bi bi-caret-down-fill ms-2 float-end"></i>
-                </h4>
+                <div class="d-flex gap-4 align-content-center">
+
+                    <h4 class="filtragem">
+                        Filtragem de dados
+                        <i class="bi bi-caret-down-fill ms-2 float-end"></i>
+                    </h4>
+                    <h4 style="font-size: 1.2rem; margin-bottom: 0; display: flex; align-items: center;">
+                        Filtro atual: Análise de previsão da taxa de uptime, agrupado por mês, no período de
+                        30/10/2025 até 09/03/3409.
+                    </h4>
+                </div>
             </a>
         </div>
-
 
         <div class="collapse card-filter" id="filterCollapse">
             <div class="row g-3">
@@ -161,7 +179,15 @@
                         <span class="kpi-value-geral" id="kpi_uptime_valor">placeholder</span>
                         <span class="kpi-variation text-success" id="kpi_uptime_variacao">placeholder</span>
                     </div>
-                    <p class="kpi-small-text mb-0" id="kpi_uptime_passado">passado: placeholder</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="kpi-small-text mb-0 " id="kpi_uptime_passado">passado: placeholder</p>
+                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
+                            data-bs-placement="right" data-bs-trigger="focus"
+                            data-bs-title="Taxa de Disponibilidade (Uptime)"
+                            data-bs-content="Porcentagem de tempo em que a(s) máquina(s) esteve(ram) operacional(is) no período.">
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -175,7 +201,14 @@
                         <span class="kpi-value-geral" id="kpi_alertas_totais_valor">placeholder</span>
                         <span class="kpi-variation text-danger" id="kpi_alertas_totais_variacao">placeholder</span>
                     </div>
-                    <p class="kpi-small-text mb-0" id="kpi_alertas_totais_passado">passado: placeholder</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="kpi-small-text mb-0" id="kpi_alertas_totais_passado">passado: placeholder</p>
+                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
+                            data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Total de Alertas"
+                            data-bs-content="Contagem total de notificações (Crítico, Atenção, Ocioso) geradas no período analisado.">
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -189,7 +222,14 @@
                         <span class="kpi-value-geral" id="kpi_criticos_valor">placeholder</span>
                         <span class="kpi-variation text-success" id="kpi_criticos_variacao">placeholder</span>
                     </div>
-                    <p class="kpi-small-text mb-0" id="kpi_criticos_passado">Mês Passado: placeholder</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="kpi-small-text mb-0" id="kpi_criticos_passado">Mês Passado: placeholder</p>
+                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
+                            data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Total de Alertas Críticos"
+                            data-bs-content="Contagem total de alertas no nível máximo de severidade (Crítico) no período.">
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -203,45 +243,119 @@
                         <span class="kpi-value-geral" style="font-size: 1.5rem;"
                             id="kpi_frequente_nome">Cplaceholder</span>
                     </div>
-                    <p class="kpi-small-text mb-0" id="kpi_frequente_detalhe">placeholder</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="kpi-small-text mb-0" id="kpi_frequente_detalhe">placeholder</p>
+                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
+                            data-bs-placement="right" data-bs-trigger="focus"
+                            data-bs-title="Métrica de Alerta Frequente"
+                            data-bs-content="O recurso (CPU, RAM, Disco) que gerou o maior volume de alertas Críticos no período.">
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="row g-4 mb-4">
+        <section class="row g-4 mb-4 align-items-stretch">
 
-            <div class="col-lg-8">
-                <div class="content-box">
-                    <h5 class="mb-3" style="font-size: 1.1rem;">Previsões e Correlação</h5>
-                    <div class="chart-skeleton">
+            <div class="col-lg-9 h-100 ">
+                <div class="content-box h-100">
+                    <h5 class="mb-3" style="font-size: 1.1rem;">Previsões e Correlação
+                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
+                            data-bs-placement="right" data-bs-trigger="focus"
+                            data-bs-title="Análise de Tendência e Correlação"
+                            data-bs-content="Gráfico utilizado para visualizar a progressão de uma métrica no tempo (Tendência/Previsão) ou a relação entre duas variáveis (Correlação).">
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
+                        </button>
+                    </h5>
+
+                    <div class="chart-skeleton d-flex">
                         procurando dados....
                     </div>
+                    <canvas id="alertTrendChart" class="d-none"></canvas>
                 </div>
             </div>
 
-            <div class="col-lg-4">
-                <div class="content-box">
-                    <h5 class="mb-3" style="font-size: 1.1rem;">Informações Complementares</h5>
+            <div class="col-lg-3 h-100 d-flex">
+                <div class="content-box w-100 p-0">
 
-                    <div class="info-complementar-card mb-3">
-                        <small class="text-muted d-block mb-1">Variação Linear</small>
-                        <h6 class="mb-0">placeholder</h6>
+                    <div class="d-flex justify-content-between text-center border-bottom" id="info-tabs"
+                        style="height: 40px;">
+                        <button class="btn btn-sm flex-fill rounded-0 toggle-button active" data-target="interpretacoes"
+                            onclick="toggleInfoPanel(this)"
+                            style="border-bottom: 2px solid #000; font-weight: 600; color: #000; background-color: transparent;">
+                            Interpretações
+                        </button>
+                        <button class="btn btn-sm flex-fill rounded-0 toggle-button" data-target="metricas"
+                            onclick="toggleInfoPanel(this)"
+                            style="border-bottom: 2px solid transparent; font-weight: 600; color: #6c757d; background-color: transparent;">
+                            Métricas
+                        </button>
+                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
+                            data-bs-placement="right" data-bs-trigger="focus"
+                            data-bs-title="Análise Preditiva e Métricas"
+                            data-bs-content="Resultados de modelos de Machine Learning (Regressão Linear) usados para gerar previsões e interpretações automáticas.">
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
+                        </button>
                     </div>
 
-                    <div class="info-complementar-card mb-3">
-                        <small class="text-muted d-block mb-1">Desvio Padrão</small>
-                        <h6 class="mb-0">placeholder</h6>
+                    <div class="p-3 content-area overflow-auto flex-grow-1" style="height: calc(100% - 40px);">
+
+                        <div id="interpretacoes-content">
+                            <p class="mb-4">
+                                "Após o pico de Abril, o **Downtime** estabilizou-se em torno de 55. A projeção (Mock)
+                                indica um aumento gradual para 65 até Setembro, **sugerindo atenção imediata**."
+                            </p>
+
+                            <p class="mb-0">
+                                "A análise desta tendência de alertas foi realizada utilizando **Regressão Linear**
+                                sobre o histórico semanal de dados. O **Índice de Confiabilidade** do modelo é de
+                                **85%**, indicando alta aderência da projeção à variação real observada."
+                            </p>
+                        </div>
+
+                        <div id="metricas-content" class="d-none">
+
+                            <div
+                                class="info-metric-card d-flex align-items-center justify-content-between p-3 mb-3 border rounded">
+                                <div>
+                                    <h6 class="mb-0">Coeficiente de Correlação (R)</h6>
+                                    <p class="mb-0">10%</p>
+                                </div>
+                                <i class="bi bi-graph-up-arrow text-primary" style="font-size: 1.2rem;"></i>
+                            </div>
+
+                            <div
+                                class="info-metric-card d-flex align-items-center justify-content-between p-3 mb-3 border rounded">
+                                <div>
+                                    <h6 class="mb-0">Coeficiente de Determinação (R²)</h6>
+                                    <p class="mb-0">10%</p>
+                                </div>
+                                <i class="bi bi-graph-up-arrow text-primary" style="font-size: 1.2rem;"></i>
+                            </div>
+
+                            <div
+                                class="info-metric-card d-flex align-items-center justify-content-between p-3 mb-3 border rounded">
+                                <div>
+                                    <h6 class="mb-0">Erro Padrão Residual (RSE)</h6>
+                                    <p class="mb-0">10%</p>
+                                </div>
+                                <i class="bi bi-graph-up-arrow text-primary" style="font-size: 1.2rem;"></i>
+                            </div>
+
+                            <div
+                                class="info-metric-card d-flex align-items-center justify-content-between p-3 border rounded">
+                                <div>
+                                    <h6 class="mb-0">Índice de Confiabilidade da Projeção</h6>
+                                    <p class="mb-0">10%</p>
+                                </div>
+                                <i class="bi bi-graph-up-arrow text-primary" style="font-size: 1.2rem;"></i>
+                            </div>
+
+                        </div>
+
                     </div>
 
-                    <div class="info-complementar-card mb-3">
-                        <small class="text-muted d-block mb-1">Índice de erro</small>
-                        <h6 class="mb-0">placeholder</h6>
-                    </div>
-
-                    <div class="info-complementar-card">
-                        <small class="text-muted d-block mb-1">Fórmula</small>
-                        <h6 class="mb-0">placeholder</h6>
-                    </div>
                 </div>
             </div>
         </section>
@@ -249,7 +363,13 @@
         <section class="row g-4">
             <div class="col-lg-12">
                 <div class="content-box">
-                    <h5 class="mb-3" style="font-size: 1.1rem;">Top 3 Máquinas com maior taxa de downtime</h5>
+                    <h5 class="mb-3" style="font-size: 1.1rem;">Top 3 Máquinas com maior taxa de downtime
+                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
+                            data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Top Máquinas com Downtime"
+                            data-bs-content="Exibe as máquinas que tiveram a maior porcentagem de inatividade no período selecionado, priorizando aquelas com a maior variação negativa.">
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
+                        </button>
+                    </h5>
                     <div class="table-responsive">
                         <table class="table table-hover table-sm">
                             <thead class="table-light">
@@ -296,18 +416,47 @@
     <script src="../component/menu/Menu.js"></script>
     <script src="../component/notificao/Notificacao.js"></script>
     <script src="../component/tour/TourGuide.js"></script>
-    <!-- <script src="../js/dash_analise_desempenho/index.js"></script> -->
-
     <script src="../js/dash_analise_desempenho/01_config.js"></script>
     <script src="../js/dash_analise_desempenho/03_render.js"></script>
     <script src="../js/dash_analise_desempenho/02_filters.js"></script>
-</body>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            carregarListaDeMaquinas(); // Esta função estará no 02_filters.js
+            setDatasIniciais(); // Esta função estará no 02_filters.js
+            renderizarDados(mockData); // Esta função estará no 03_render.js
+        });
+
+        // --- CHAMADA DE INICIALIZAÇÃO GERAL (Mantida) ---
+        document.addEventListener('DOMContentLoaded', function () {
+            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl, {
+                    trigger: 'focus',
+                    html: true,
+                });
+            });
+        });
+        function toggleInfoPanel(clickedButton) {
+            const target = clickedButton.getAttribute('data-target');
+            const contentContainers = ['interpretacoes-content', 'metricas-content'];
+            const buttons = document.querySelectorAll('#info-tabs .toggle-button');
+            contentContainers.forEach(id => {
+                document.getElementById(id).classList.add('d-none');
+            });
+
+            buttons.forEach(button => {
+                button.classList.remove('active');
+                button.style.borderBottom = '2px solid transparent';
+                button.style.color = '#6c757d';
+            });
+
+            document.getElementById(target + '-content').classList.remove('d-none');
+
+            clickedButton.classList.add('active');
+            clickedButton.style.borderBottom = '2px solid #000'; 
+            clickedButton.style.color = '#000'; 
+        }
+    </script>
+</body>
 </html>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        carregarListaDeMaquinas(); // Esta função estará no 02_filters.js
-        setDatasIniciais(); // Esta função estará no 02_filters.js
-        renderizarGraficoMock(); // Esta função estará no 03_render.js
-    });
-</script>
