@@ -1,18 +1,16 @@
-// dash_analise_desemPENHO/01_config.js 
-
 let maquinaSelecionada = { nome: 'Todas as Máquinas', id: null };
 let listaDeMaquinas = [];
 let componenteSelecionado = null;
 
 const usuarioString = sessionStorage.getItem('usuario');
 const usuarioObjeto = usuarioString ? JSON.parse(usuarioString) : null;
+let ID_EMPRESA = usuarioObjeto ? usuarioObjeto.fkEmpresa : 6; 
 
 const HOJE = new Date();
 const DATA_CRIACAO_EMPRESA = usuarioObjeto
   ? new Date(usuarioObjeto.DataCriacaoEmpresa)
   : new Date('2024-01-01');
 
-let ID_EMPRESA;
 const TEMPO_OPCOES_ORIGINAL = {
     Tendencia: [
         { value: 'HOJE', label: 'Hoje vs Ontem' },
@@ -44,7 +42,7 @@ const getCompanyAgeInDays = (creationDate) => {
     return Math.ceil(diffTime / MS_POR_DIA);
 };
 
-const idadeEmpresaEmDias = getCompanyAgeInDays(DATA_CRIACAO_EMPRESA);
+const idadeEmpresaEmDays = getCompanyAgeInDays(DATA_CRIACAO_EMPRESA);
 
 const MIN_IDADE_REQUERIDA_DIAS = {
     'HOJE': 2, 'SEMANA': 14, 'MES': 61, 'TRIMESTRE': 183, 'SEMESTRE': 365, 'ANO': 730,
@@ -100,8 +98,8 @@ const getOptionValue = (periodValue, category) => {
     }
     
     switch (periodValue) {
-        // CORRELACAO
         case '24H':
+        case 'HOJE':
             dataInicio.setDate(HOJE.getDate() - 1);
             return formatToDateOnly(dataInicio);
         case 'SEMANA':
@@ -111,26 +109,16 @@ const getOptionValue = (periodValue, category) => {
             dataInicio.setMonth(HOJE.getMonth() - 1);
             return formatToDateOnly(dataInicio);
         case '3MESES':
-            dataInicio.setMonth(HOJE.getMonth() - 3);
-            return formatToDateOnly(dataInicio);
-        case '6MESES':
-            dataInicio.setMonth(HOJE.getMonth() - 6);
-            return formatToDateOnly(dataInicio);
-
-        // TENDENCIA
-        case 'HOJE':
-            dataInicio.setDate(HOJE.getDate() - 1);
-            return formatToDateOnly(dataInicio);
         case 'TRIMESTRE':
             dataInicio.setMonth(HOJE.getMonth() - 3);
             return formatToDateOnly(dataInicio);
+        case '6MESES':
         case 'SEMESTRE':
             dataInicio.setMonth(HOJE.getMonth() - 6);
             return formatToDateOnly(dataInicio);
         case 'ANO':
             dataInicio.setFullYear(HOJE.getFullYear() - 1);
             return formatToDateOnly(dataInicio);
-            
         default:
             return '';
     }
@@ -138,7 +126,7 @@ const getOptionValue = (periodValue, category) => {
 
 const shouldBeVisible = (optionValue) => { 
     const requiredDays = MIN_IDADE_REQUERIDA_DIAS[optionValue];
-    return requiredDays === undefined || idadeEmpresaEmDias >= requiredDays;
+    return requiredDays === undefined || idadeEmpresaEmDays >= requiredDays;
 };
 
 const TEMPO_OPCOES = {};
@@ -149,11 +137,7 @@ for (const categoria in TEMPO_OPCOES_ORIGINAL) {
             .filter(opcao => shouldBeVisible(opcao.value)) 
             .map(opcao => { 
                 const optionValue = getOptionValue(opcao.value, categoria);
-                
-                return {
-                    label: opcao.label,
-                    value: optionValue
-                };
+                return { label: opcao.label, value: optionValue };
             });
     }
 }
@@ -184,39 +168,58 @@ const CORRELACAO_VARS = [
 const mockData = {
   kpis: {},
   topMaquinas: [],
-  iaMetricas: {
-    interpretacao: [
-      'Após o pico de Abril, o Downtime estabilizou-se em torno de 55. A projeção (Mock) indica um aumento gradual para 65 até Setembro, sugerindo atenção imediata.',
-      'A análise desta tendência de alertas foi realizada utilizando Regressão Linear sobre o histórico semanal de dados. O Índice de Confiabilidade do modelo é de 85%, indicando alta aderência da projeção à variação real observada.',
-    ],
-    metricasRegressao: { R: '0.92', R2: '0.85', RSE: '5.2%', indiceConfiabilidade: '85%' },
-  },
+  agrupamento: null,
+  analise_tipo: null,
   graficoData: {
-    labels_Dia: ['1 Nov', '2 Nov', '3 Nov', '4 Nov', '5 Nov', '6 Nov', '7 Nov'],
-    labels_Semana: ['Sem 44', 'Sem 45', 'Sem 46', 'Sem 47', 'Sem 48', 'Sem 49'],
-    labels_Mês: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-    dataAtual: [65, 59, 80, 81, 56, 55],
-    dataAnterior: [50, 45, 70, 75, 40, 42],
+    dataAnterior: [],
+    dataAtual: [],
+    dataFutura: [],
+    labels_Data: [],
+    labels_Data_Antiga: [],
   },
+  iaMetricas: {
+    interpretacao: [],
+    chave_metricas: [],
+  },
+  tipo_de_modelo: null
 };
 
 
-async function buscar_dados_kpi_tabela(ID_EMPRESA, dataInicio, idMaquina) {
-  const resposta = await fetch('/api/desempenho/procurar_dados_pagina', {
-    method: 'GET',
-    headers: {
-      'data-inicio': dataInicio,
-      'id-empresa': ID_EMPRESA,
-      'id-maquina': idMaquina || null,
-    },
-  });
-  const dados = await resposta.json();
+    document.addEventListener("DOMContentLoaded", async () => {
+        iniciarDashboard();
 
-  return dados;
-}
+        try {
+            const payloadGraficoInicial = {
+                tipoAnalise: "comparacao",
+                dataInicio: "2025-10-23",
+                dataPrevisao: "2025-11-23", 
+                metricaAnalisar: "Total de Alertas",
+                variavelRelacionada: null,
+                fkEmpresa: ID_EMPRESA, 
+                fkMaquina: null,
+                componente: null,
+            };
+
+            const [dadosKpi, dadosGrafico] = await Promise.all([
+                buscar_dados_kpi_tabela(ID_EMPRESA, '2025-10-23', null),
+                buscar_dados_grafico(payloadGraficoInicial)
+            ]);
+            renderizarDados(mockData);
+
+        } catch (erro) {
+            console.error('Erro na inicialização do Dashboard:', erro);
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+        popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl, { trigger: 'focus', html: true });
+        });
+    });
 
 
-
+    
 function toggleInfoPanel(clickedButton) {
   const target = clickedButton.getAttribute('data-target');
   const contentContainers = ['interpretacoes-content', 'metricas-content'];
@@ -241,8 +244,7 @@ function toggleInfoPanel(clickedButton) {
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    // ID_EMPRESA = usuarioObjeto? usuarioObjeto.fkEmpresa: 6;
-    ID_EMPRESA = 6;
+    ID_EMPRESA = usuarioObjeto? usuarioObjeto.fkEmpresa: 6;
     const dados = await buscar_dados_kpi_tabela(ID_EMPRESA, '2025-10-01', null);
     mockData.kpis = dados.dados_kpis.kpis;
     mockData.topMaquinas = dados.dados_ranking;
