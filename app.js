@@ -1,4 +1,4 @@
-var ambiente_processo = 'desenvolvimento';
+var ambiente_processo = 'producao';
 
 var caminho_env = ambiente_processo === 'desenvolvimento' ? '.env' : '.env.dev';
 
@@ -28,6 +28,7 @@ var downloadRoutes = require('./src/routes/appInstalacao');
 var painelRoutes = require('./src/routes/painel');
 var homeRouter = require('./src/routes/home');
 var dashboardParametrosRouter = require('./src/routes/dashboardParametros')
+var dashboardEstrategicaRoutes = require('./src/routes/dashboardEstrategicaRoutes');
 
 // --- CONFIGURAÇÃO DOS MIDDLEWARES ---
 app.use(express.json());
@@ -51,7 +52,8 @@ app.use('/alertas', alertasRouter);
 app.use('/api/download', downloadRoutes);
 app.use('/painel', painelRoutes);
 app.use('/api/maquinas', homeRouter);
-app.use('/dashboardParametros', dashboardParametrosRouter)
+app.use('/api/dashboard-estrategica', dashboardEstrategicaRoutes);
+app.use('/dashboardEstrategica', dashboardEstrategicaRoutes);
 
 app.listen(PORTA_APP, function () {
   console.log(`                                                                            
