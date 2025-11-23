@@ -4,9 +4,9 @@ const PYTHON_API_URL = process.env.PYTHON_HOST
 async function buscarDadosGrafico(req, res) {
     const { tipoAnalise } = req.body; 
     const rotasPython = {
-        'previsao': '/previsao',
-        'comparacao': '/comparar', 
-        'correlacao': '/correlacao'
+        'previsao': '/ai/previsao',
+        'comparacao': '/ai/comparar', 
+        'correlacao': '/ai/correlacao'
     };
 
     if (!tipoAnalise || !rotasPython[tipoAnalise]) {
