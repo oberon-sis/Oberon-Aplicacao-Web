@@ -52,6 +52,7 @@ app.use('/alertas', alertasRouter);
 app.use('/api/download', downloadRoutes);
 app.use('/painel', painelRoutes);
 app.use('/api/maquinas', homeRouter);
+app.use('/dashboardParametros', dashboardParametrosRouter)
 app.use('/api/dashboard-estrategica', dashboardEstrategicaRoutes);
 app.use('/dashboardEstrategica', dashboardEstrategicaRoutes);
 
