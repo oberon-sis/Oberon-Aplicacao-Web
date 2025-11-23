@@ -2,9 +2,7 @@
 .kpi-card {
     min-height: 100px; 
     height: 100px; 
-    padding: 10px 15px; 
-    
-    /* Mantém o layout flexível */
+    padding: 10px 15px;     
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -93,14 +91,6 @@ body {
     padding: 10px 0;
 }
 
-.data-card {
-    background-color: var(--kpi-bg);
-    padding: 5px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    min-height: 100px;
-}
-
 .kpi-container {
     display: flex;
     flex-wrap: wrap;
@@ -110,8 +100,6 @@ body {
 }
 
 .kpi-card {
-    flex: 1 1 calc(50% - 15px);
-    background-color: var(--kpi-bg);
     padding: 10px 15px;   
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     display: flex;
@@ -206,7 +194,7 @@ body {
 
 .header-top {
     display: flex;
-    flex-wrap: nowrap !important;
+    flex-wrap: nowrap;
     align-items: center;
     gap: 20px;
     white-space: nowrap;
@@ -217,12 +205,12 @@ body {
 }
 
 .header-top > .d-flex.align-items-center.flex-wrap.flex-grow-1.me-3 {
-    flex-wrap: nowrap !important;
+    flex-wrap: nowrap;
     gap: 20px;
 }
 
 .header-top .input-group {
-    width: 220px !important;
+    width: 220px;
 }
 
 .header-top button.btn {
@@ -230,5 +218,59 @@ body {
 }
 
 #start-tour-btn {
-    flex-shrink: 0 !important;
+    flex-shrink: 0;
+}
+
+/* aqui começa o grafico */
+.data-card {
+    background-color: var(--kpi-bg);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+canvas {
+    width: 100% !important;
+    height: 260px !important;
+}
+
+.col-md-6 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.stats-table {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+.stats-table th, .stats-table td {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.compact-alert-table td, .compact-alert-table th {
+    padding: 6px !important;
+}
+
+.header-top {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 20px;
+    white-space: nowrap;
+}
+
+.header-top h2 {
+    flex-shrink: 0;
+}
+
+#mainChart {
+    width: 100% !important;
+    height: 260px !important;
 }

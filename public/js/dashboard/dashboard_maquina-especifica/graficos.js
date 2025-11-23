@@ -57,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         },
                         title: {
                             display: true,
-                            text: 'Utilização Média de Recursos (CPU, RAM, DISCO) ao Longo do Tempo',
                             font: {
                                 size: 16
                             }
@@ -116,7 +115,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         },
                         title: {
                             display: true,
-                            text: 'Total de Alertas por Componente (30 Dias)',
                             font: { size: 14 }
                         }
                     },
@@ -139,3 +137,5 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
+
+    

@@ -38,57 +38,33 @@ const dashboardTourSteps = [
     position: 'bottom',
   },
   {
-    id: 'kpi-tempo-alertas',
-    title: 'Passo 6/11: Tempo Médio Entre Alertas (MTTA)',
-    content:
-      'Mede a frequência dos problemas. Um tempo baixo (ex: 10min) significa que os alertas estão vindo muito rápido, indicando instabilidade grave.',
-    position: 'bottom',
-  },
-  {
-    id: 'chart-comparativo-recurso',
-    title: 'Passo 7/11: Comparativo Detalhado de Recurso',
+    id: 'mainChart',
+    title: 'Passo 6/11: Comparativo Detalhado de Recurso',
     content:
       'O gráfico de barras mostra a distribuição dos alertas por recurso (CPU, RAM, DISCO, REDE), comparando a situação atual (cor) com o bimestre anterior (cinza).',
     position: 'left',
   },
   {
-    id: 'chart-uptime-downtime',
+    id: 'tabela-estatistica',
     title: 'Passo 8/11: Histórico de Uptime/Downtime',
     content:
       'Gráfico semanal que visualiza o tempo exato de inatividade (Downtime). O objetivo é que as barras vermelhas sejam inexistentes e o Uptime seja sempre 100%.',
     position: 'top',
   },
   {
-    id: 'select-variacao-alertas',
+    id: 'componentAlertsChart',
     title: 'Passo 9/11: Filtro de Visualização',
     content:
       'Use este menu para refinar a análise. Você pode mudar o foco dos dados, visualizando apenas Alertas Críticos, de Manutenção ou Informativos.',
     position: 'bottom',
   },
   {
-    id: 'kpi-previsao-valor',
+    id: 'tabela-alertas',
     title: 'Passo 10/11: Previsão e Tendência',
     content:
       'O painel preditivo estima a quantidade de alertas esperados para o Próximo Bimestre (27), comparado com a meta. Use esta informação para planejamento.',
     position: 'top',
-  },
-  {
-    id: 'kpi-variacao',
-
-    title: 'Passo 11/11: Taxa de Variação (Tendência)',
-
-    content:
-      'Mostra a inclinação geral da linha de tendência de alertas. Um valor positivo (ex: 3%) indica que o volume de alertas está crescendo ao longo do tempo.',
-
-    position: 'top',
-  },
-  {
-    id: 'chart-tendencia',
-    title: 'Passo 12/12: Trajetória dos Alertas',
-    content:
-      'O gráfico de linha mostra a trajetória histórica dos problemas. A linha tracejada azul (Previsão) mostra a tendência futura. Se estiver subindo, o risco aumenta.',
-    position: 'top',
-  },
+  }
 ];
 document.addEventListener('DOMContentLoaded', () => {
   const dashboardTour = new TourGuide(dashboardTourSteps);
