@@ -2,14 +2,14 @@ const geralModel = require('../models/analise-tendenciaModel');
 
 async function procurar_dados_pagina(req, res) {
     const dataInicio = req.headers["data-inicio"];
-    const dataFim = req.headers["data-fim"];
     const idEmpresa = req.headers["id-empresa"];
     const idMaquina = req.headers["id-maquina"];
     const limite_raning = 3;
 
-    if (!idEmpresa || !dataFim || !dataInicio || !idMaquina) {
+    if (!idEmpresa || !dataInicio || !idMaquina) {
         return res.status(400).send('dado não fornecido.');
     }
+    
     try {
         const [
             uptime_atual_e_passado,
@@ -17,10 +17,10 @@ async function procurar_dados_pagina(req, res) {
             alerta_moda_e_total,
             resultado_ranking_bruto
         ] = await Promise.all([
-            geralModel.buscar_uptime_atual_e_passado(dataInicio, dataFim, idEmpresa, idMaquina),
-            geralModel.buscar_total_alertas_e_criticos_atual_e_passado(dataInicio, dataFim, idEmpresa, idMaquina),
-            geralModel.buscar_alerta_moda_e_total(dataInicio, dataFim, idEmpresa, idMaquina),
-            geralModel.buscar_ranking_tabelas_desempenho(dataInicio, dataFim, idEmpresa, limite_raning),
+            geralModel.buscar_uptime_atual_e_passado(dataInicio, idEmpresa, idMaquina),
+            geralModel.buscar_total_alertas_e_criticos_atual_e_passado(dataInicio, idEmpresa, idMaquina),
+            geralModel.buscar_alerta_moda_e_total(dataInicio, idEmpresa, idMaquina),
+            geralModel.buscar_ranking_tabelas_desempenho(dataInicio, idEmpresa, limite_raning),
         ]);
         const ranking_maquinas_bruto = resultado_ranking_bruto[0];
         const top_alertas_bruto = resultado_ranking_bruto[1];
@@ -50,7 +50,6 @@ async function procurar_maquinas(req, res) {
         const maquinas = await geralModel.buscar_maquinas(idEmpresa)
 
         res.status(200).json(maquinas);
-
     } catch (erro) {
         res.status(500).json({
             mensagem: 'Erro interno ao buscar dados das máquinas.',

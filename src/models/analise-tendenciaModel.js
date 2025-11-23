@@ -1,27 +1,27 @@
 var database = require('../database/config');
 
-function buscar_total_alertas_e_criticos_atual_e_passado(dataInicio, dataFim, idEmpresa, idMaquina) {
-  console.log('[MODEL] - Buscando total de alertas e total criticos dados atuais e passados:', dataInicio, dataFim, idEmpresa, idMaquina);
+function buscar_total_alertas_e_criticos_atual_e_passado(dataInicio, idEmpresa, idMaquina) {
+  console.log('[MODEL] - Buscando total de alertas e total criticos dados atuais e passados:', dataInicio, idEmpresa, idMaquina);
 
-  var instrucaoSql = ` CALL sp_kpi_alertas('2025-10-01 00:00:00', NOW(), 6, NULL);`;
+  var instrucaoSql = ` CALL sp_kpi_alertas('${dataInicio}', NOW(), ${idEmpresa}, ${idMaquina});`;
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
 
   return database.executar(instrucaoSql);
 }
 
-function buscar_uptime_atual_e_passado(dataInicio, dataFim, idEmpresa, idMaquina) {
-  console.log('[MODEL] - Buscando uptime total atual e passado:', dataInicio, dataFim, idEmpresa, idMaquina);
+function buscar_uptime_atual_e_passado(dataInicio, idEmpresa, idMaquina) {
+  console.log('[MODEL] - Buscando uptime total atual e passado:', dataInicio, idEmpresa, idMaquina);
 
-  var instrucaoSql = `CALL sp_uptime_intervalo('2025-10-06 00:00:00', NOW(), 6, NULL);`;
+  var instrucaoSql = `CALL sp_uptime_intervalo('${dataInicio}', NOW(), ${idEmpresa}, ${idMaquina});`;
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
 
   return database.executar(instrucaoSql);
 }
 
-function buscar_alerta_moda_e_total(dataInicio, dataFim, idEmpresa, idMaquina) {
-  console.log('[MODEL] - Buscando a metrica moda ou seja a mais frequente:', dataInicio, dataFim, idEmpresa, idMaquina);
+function buscar_alerta_moda_e_total(dataInicio, idEmpresa, idMaquina) {
+  console.log('[MODEL] - Buscando a metrica moda ou seja a mais frequente:', dataInicio, idEmpresa, idMaquina);
 
-  var instrucaoSql = `CALL sp_kpi_metrica_alerta('2025-10-01 00:00:00', NOW(), 6, NULL);`;
+  var instrucaoSql = `CALL sp_kpi_metrica_alerta('${dataInicio}', NOW(), ${idEmpresa}, ${idMaquina});`;
     
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
 
@@ -39,8 +39,8 @@ function buscar_maquinas(idEmpresa) {
 }
 
 
-function buscar_dados_brutos_atual_e_passado(dataInicio, dataFim, idEmpresa, idMaquina) {
-  console.log('[MODEL] - Buscando maquina mais critica:', dataInicio, dataFim, idEmpresa, idMaquina);
+function buscar_dados_brutos_atual_e_passado(dataInicio, idEmpresa, idMaquina) {
+  console.log('[MODEL] - Buscando maquina mais critica:', dataInicio, idEmpresa, idMaquina);
 
   var instrucaoSql = ``;
     
@@ -49,10 +49,10 @@ function buscar_dados_brutos_atual_e_passado(dataInicio, dataFim, idEmpresa, idM
   return database.executar(instrucaoSql);
 }
 
-function buscar_ranking_tabelas_desempenho(dataInicio, dataFim, idEmpresa, limite) {
-  console.log('[MODEL] - Buscando maquina mais critica:', dataInicio, dataFim, idEmpresa, limite);
+function buscar_ranking_tabelas_desempenho(dataInicio, idEmpresa, limite_de_dados) {
+  console.log('[MODEL] - Buscando maquina mais critica:', dataInicio, idEmpresa, limite_de_dados);
 
-  var instrucaoSql = `CALL sp_dados_tabela('2025-11-10 00:00:00', NOW(), 6, 3);`;
+  var instrucaoSql = `CALL sp_dados_tabela('${dataInicio}', NOW(), ${idEmpresa}, ${limite_de_dados});`;
     
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
 
