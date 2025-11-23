@@ -185,7 +185,7 @@
         </div>
 
         <div class="col-md-4" id="divAgrupamento">
-            <label class="form-label">Agrupar dados por <span id="regra_agrupamento_span"></span></label>
+            <label class="form-label d-none">Agrupar dados por <span id="regra_agrupamento_span"></span></label>
             <select class="form-select form-select-sm" id="selectAgrupamento" onchange="toggleFilterFields()">
                 </select>
         </div>
@@ -330,6 +330,9 @@
             <div class="col-lg-9 h-100 ">
                 <div class="content-box h-100">
                     <h5 class="mb-3" style="font-size: 1.1rem;">Previsões e Correlação
+
+                        <p class="text-muted small mb-3" id="modelInfoDisplay"></p>
+
                         <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
                             data-bs-placement="right" data-bs-trigger="focus"
                             data-bs-title="Análise de Tendência e Correlação"

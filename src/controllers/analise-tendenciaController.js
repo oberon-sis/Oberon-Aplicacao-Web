@@ -3,10 +3,9 @@ const geralModel = require('../models/analise-tendenciaModel');
 async function procurar_dados_pagina(req, res) {
     const dataInicio = req.headers["data-inicio"];
     const idEmpresa = req.headers["id-empresa"];
-    const idMaquina = req.headers["id-maquina"];
+    const idMaquina = req.headers["id-maquina"] == ''? null: req.headers["id-maquina"];
     const limite_raning = 3;
-
-    if (!idEmpresa || !dataInicio || !idMaquina) {
+    if (!idEmpresa || !dataInicio) {
         return res.status(400).send('dado não fornecido.');
     }
     
@@ -27,7 +26,6 @@ async function procurar_dados_pagina(req, res) {
 
         const dados_tratados_kpis = await tratar_dados_brutos(uptime_atual_e_passado, total_alertas_e_criticos_atual_e_passado, alerta_moda_e_total);
         const ranking_tabela_tratado = await tratar_dados_tabela_ranking(ranking_maquinas_bruto, top_alertas_bruto);
-
         res.status(200).json({
             dados_kpis: dados_tratados_kpis,
             dados_ranking: ranking_tabela_tratado
