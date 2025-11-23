@@ -56,7 +56,7 @@
                 <div class="dropdown me-3" id="specific-machine-dropdown-group" style="display: none;">
                     <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button"
                         data-bs-toggle="dropdown" aria-expanded="false" id="machineFilterDropdown">
-                        placeholder
+                        Selecionar Máquina
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="machineFilterDropdown">
                         <li><a class="dropdown-item" href="#"
@@ -90,7 +90,7 @@
             </a>
         </div>
 
-        <div class="collapse card-filter" id="filterCollapse">
+        <!-- <div class="collapse card-filter" id="filterCollapse">
             <div class="row g-3">
                 <div class="col-md-4">
                     <label class="form-label">Tipo de Gráfico</label>
@@ -165,8 +165,77 @@
                     </select>
                 </div>
             </div>
+        </div> -->
+<div class="collapse card-filter" id="filterCollapse">
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label">Tipo de Gráfico</label>
+            <select class="form-select form-select-sm" id="selectTipoGrafico" onchange="toggleFilterFields()">
+                <option value="Tendencia" selected>Tendência – ótimo para ver se está aumentando ou diminuindo.</option>
+                <option value="Previsoes">Previsões – use para prever dados futuros relacionadas.</option>
+                <option value="Correlacao">Correlação – use para comparar duas variáveis e entender se estão
+                    relacionadas.</option>
+            </select>
         </div>
 
+        <div class="col-md-4" id="divTempo">
+            <label class="form-label">Período de Análise</label>
+            <select class="form-select form-select-sm" id="selectTempo" onchange="toggleFilterFields()">
+                </select>
+        </div>
+
+        <div class="col-md-4" id="divAgrupamento">
+            <label class="form-label">Agrupar dados por <span id="regra_agrupamento_span"></span></label>
+            <select class="form-select form-select-sm" id="selectAgrupamento" onchange="toggleFilterFields()">
+                </select>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label" id="labelMetricaPrincipal">Métrica a analisar</label>
+            <select class="form-select form-select-sm" id="selectMetricaPrincipal" onchange="toggleFilterFields()">
+                </select>
+        </div>
+
+        <div class="col-md-4" id="divComponente" style="display: none;">
+            <label class="form-label">Componente</label>
+            <select class="form-select form-select-sm" id="selectComponente" onchange="toggleFilterFields()">
+                </select>
+        </div>
+
+        <div class="col-md-4" id="divVariavelRelacionada" style="display: none;">
+            <label class="form-label">Variável relacionada</label>
+            <select class="form-select form-select-sm" id="selectVariavelRelacionada">
+                </select>
+        </div>
+
+        <div class="col-md-12" id="divDetalhesPrevisao" style="display: none;">
+            <hr>
+            <h6 class="text-secondary">(Selecionado automaticamente pelo sistema)</h6>
+            <p class="mb-0">
+                <i class="bi bi-clock-history me-1"></i>
+                Histórico Usado: <span id="periodoHistorico"></span>
+            </p>
+            <h5 class="mt-2 mb-0" style="color: #0c8186;">
+                <i class="bi bi-magic me-1"></i>
+                Período Previsto: <span id="periodoPrevisto"></span>
+            </h5>
+        </div>
+
+        <div class="col-12 text-end">
+            <button class="btn btn-info btn-sm" onclick="aplicarFiltro()">
+                <i class="bi bi-funnel-fill me-1"></i> Aplicar Filtro
+            </button>
+        </div>
+    </div>
+
+    <div class="mt-3 row" id="specific-machine-dropdown" style="display: none;">
+        <div class="col-4">
+            <label class="form-label">Selecione a Máquina</label>
+            <select class="form-select form-select-sm">
+            </select>
+        </div>
+    </div>
+</div>
         <section class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-3 mb-4">
 
             <div class="col">
@@ -375,9 +444,10 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Nome</th>
-                                    <th>Uptime(%)</th>
                                     <th>Downtime(%)</th>
-                                    <th>Dif. Mês Passado</th>
+                                    <th>Dif. P. Passado</th>
+                                    <th>Total de Alertas</th>
+                                    <th>Dif. P. Passado</th>
                                     <th>Top1 Alerta da Máquina</th>
                                     <th>Top2 Alerta da Máquina</th>
                                     <th>Top3 Alerta da Máquina</th>
@@ -419,44 +489,5 @@
     <script src="../js/dash_analise_desempenho/01_config.js"></script>
     <script src="../js/dash_analise_desempenho/03_render.js"></script>
     <script src="../js/dash_analise_desempenho/02_filters.js"></script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            carregarListaDeMaquinas(); // Esta função estará no 02_filters.js
-            setDatasIniciais(); // Esta função estará no 02_filters.js
-            renderizarDados(mockData); // Esta função estará no 03_render.js
-        });
-
-        // --- CHAMADA DE INICIALIZAÇÃO GERAL (Mantida) ---
-        document.addEventListener('DOMContentLoaded', function () {
-            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-                return new bootstrap.Popover(popoverTriggerEl, {
-                    trigger: 'focus',
-                    html: true,
-                });
-            });
-        });
-        function toggleInfoPanel(clickedButton) {
-            const target = clickedButton.getAttribute('data-target');
-            const contentContainers = ['interpretacoes-content', 'metricas-content'];
-            const buttons = document.querySelectorAll('#info-tabs .toggle-button');
-            contentContainers.forEach(id => {
-                document.getElementById(id).classList.add('d-none');
-            });
-
-            buttons.forEach(button => {
-                button.classList.remove('active');
-                button.style.borderBottom = '2px solid transparent';
-                button.style.color = '#6c757d';
-            });
-
-            document.getElementById(target + '-content').classList.remove('d-none');
-
-            clickedButton.classList.add('active');
-            clickedButton.style.borderBottom = '2px solid #000'; 
-            clickedButton.style.color = '#000'; 
-        }
-    </script>
 </body>
 </html>
