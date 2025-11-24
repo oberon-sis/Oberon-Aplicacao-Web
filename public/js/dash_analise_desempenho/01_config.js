@@ -11,6 +11,7 @@ const DATA_CRIACAO_EMPRESA = usuarioObjeto
   ? new Date(usuarioObjeto.DataCriacaoEmpresa)
   : new Date('2024-01-01');
 
+
 const TEMPO_OPCOES_ORIGINAL = {
     comparar: [
         { value: 'HOJE', label: 'Hoje vs Ontem' },
@@ -187,7 +188,6 @@ const mockData = {
     document.addEventListener("DOMContentLoaded", async () => {
         iniciarDashboard();
 
-        try {
             /*
             const payloadGraficoInicial = {
                 tipoAnalise: "comparar",
@@ -199,7 +199,10 @@ const mockData = {
                 fkMaquina: null,
                 componente: null,
             };*/
-                const payloadGraficoInicial = {
+        toggleSkeleton(true); 
+
+        try {
+            const payloadGraficoInicial = {
                 tipoAnalise: "comparar",
                 dataInicio: "2025-10-23",
                 dataPrevisao: "2025-11-23", 
@@ -214,10 +217,14 @@ const mockData = {
                 buscar_dados_kpi_tabela(ID_EMPRESA, '2025-10-23', null),
                 buscar_dados_grafico(payloadGraficoInicial)
             ]);
+            
             renderizarDados(mockData);
 
         } catch (erro) {
             console.error('Erro na inicialização do Dashboard:', erro);
+        } finally {
+            // DESLIGA O SKELETON (Seja sucesso ou erro)
+            toggleSkeleton(false);
         }
     });
 

@@ -108,7 +108,8 @@ function popularDropdownMaquinas(maquinas) {
     dropdownUl.innerHTML = ''; 
 
     maquinas.forEach(maq => {
-        const li = `<li><a class="dropdown-item" href="#" onclick="filtrar_maquina('${maq.nome}', ${maq.id})">${maq.nome}</a></li>`;
+        console.log("===filtro maquina")
+        const li = `<li><a class="dropdown-item" href="#" onclick="filtrar_maquina('${maq.nome}', ${maq.idMaquina})">${maq.nome}</a></li>`;
         dropdownUl.insertAdjacentHTML('beforeend', li);
     });
 
@@ -127,6 +128,7 @@ function selecionarFiltroMaquina(filtro) {
 
     if (filtro === 'Máquina Específica') {
         dropdownMaquinaEspecifica.style.display = 'block';
+
         if(!maquinaSelecionada.id && listaDeMaquinas.length > 0) {
              maquinaSelecionada.nome = listaDeMaquinas[0].nome;
              maquinaSelecionada.id = listaDeMaquinas[0].id;
@@ -136,12 +138,14 @@ function selecionarFiltroMaquina(filtro) {
         maquinaSelecionada = { nome: 'Todas as Máquinas', id: null };
     }
     updateDynamicFilterDisplay();
+    renderizarDados
 }
 
 function filtrar_maquina(nome, id) {
     document.querySelector('#specific-machine-dropdown-group button').innerText = nome;
     maquinaSelecionada = { nome, id };
     updateDynamicFilterDisplay();
+    aplicarFiltro()
 }
 
 function toggleFilterArrow(element) {
@@ -225,6 +229,12 @@ function updateDynamicFilterDisplay() {
         displayElement.innerHTML = `Filtro atual: ${displayText}`;
     }
 }
+const titulosGrafico = {
+    comparacao: "Evolução Temporal de Desempenho",
+    previsao:   "Análise Preditiva (Próximos Períodos)",
+    correlacao: "Correlação Cruzada de Métricas"
+};
+
 
 async function aplicarFiltro() {
     const tipoGrafico = document.getElementById('selectTipoGrafico').value;
@@ -232,6 +242,9 @@ async function aplicarFiltro() {
     const tempoSelecionado = document.getElementById('selectTempo').value; 
     const variavelRelacionada = document.getElementById('selectVariavelRelacionada')?.value;
     const componente = document.getElementById('selectComponente')?.value;
+    const elementoTitulo = document.getElementById("titulo_grafico")
+
+    elementoTitulo.innerText = titulosGrafico[tipoGrafico];
     
     if (tipoGrafico === 'correlacao' && metricaPrincipal === variavelRelacionada) {
         alert("Para Correlação, as métricas devem ser diferentes.");
@@ -263,7 +276,9 @@ async function aplicarFiltro() {
     };
 
     console.log(payloadGrafico)
-    console.log("===============")
+
+    toggleSkeleton(true);
+
     try {
         await buscar_dados_grafico(payloadGrafico);
         
@@ -278,6 +293,8 @@ async function aplicarFiltro() {
     } catch (e) {
         console.error('Falha ao aplicar filtro:', e);
         alert('Erro ao buscar dados. Verifique o console.');
+    } finally {
+        toggleSkeleton(false);
     }
 }
 
