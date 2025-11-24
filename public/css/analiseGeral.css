@@ -146,3 +146,41 @@ canvas {
   padding: 5px 10px;
   border-radius: 5px;
 }
+
+/* --- ADICIONE ISTO DENTRO DA TAG <style> --- */
+
+/* Animação de pulso */
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 0.3; }
+    100% { opacity: 0.6; }
+}
+
+/* Classe base do Skeleton */
+.skeleton {
+    background-color: #e2e5e7 !important;
+    color: transparent !important; /* Esconde o texto real */
+    border-radius: 4px;
+    cursor: wait;
+    animation: pulse 1.5s infinite ease-in-out;
+    pointer-events: none;
+    user-select: none;
+    display: inline-block;
+    min-height: 1em; 
+}
+
+/* Ajuste específico para o Gráfico (substitui o canvas) */
+.chart-skeleton {
+    width: 100%;
+    height: 100%; /* ou 300px fixo se preferir */
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+/* Estado ativo do skeleton no gráfico */
+.chart-skeleton.skeleton {
+    background-color: #f8f9fa; /* Fundo mais claro para o container do gráfico */
+}

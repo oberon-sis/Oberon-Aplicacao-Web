@@ -204,9 +204,10 @@ function renderizarTabela(maquinas) {
         const row = `
             <tr>
                 <td>${maq.nome}</td>
-                <td>${maq.uptime}</td>
                 <td class="${maq.downtimeClasse}">${maq.downtime}</td>
                 <td class="${maq.difMesPassadoClasse}">${maq.difMesPassado}</td>
+                <td class="${maq.alertaClasse}">${maq.totalAlertas}</td>
+                <td class="${maq.difMesPassadoClasseAlerta}">${maq.difMesPassadoAlerta}</td>
                 <td>${maq.top1}</td>
                 <td>${maq.top2}</td>
                 <td>${maq.top3}</td>
@@ -218,4 +219,79 @@ function renderizarTabela(maquinas) {
         `;
         tableBody.insertAdjacentHTML('beforeend', row);
     });
+}
+
+
+
+const elementsToLoad = [
+    "kpi_uptime_valor", "kpi_uptime_variacao",
+    "kpi_alertas_totais_valor", "kpi_alertas_totais_variacao",
+    "kpi_criticos_valor", "kpi_criticos_variacao",
+    "kpi_frequente_nome", "kpi_frequente_detalhe", 
+];
+
+function toggleSkeleton(isLoading) {
+    elementsToLoad.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            if (isLoading) {
+                el.classList.add('skeleton');
+                el.dataset.originalText = el.innerText; 
+                el.innerText = "0000"; 
+            } else {
+                el.classList.remove('skeleton');
+            }
+        }
+    });
+
+    // 2. Aplica no Gráfico
+    const chartCanvas = document.getElementById('alertTrendChart');
+    const chartSkeleton = document.querySelector('.chart-skeleton');
+    const texto_1 = document.getElementById('interpretacoes-content');
+    const texto_2 = document.getElementById('metricas-content')
+    if (chartCanvas && chartSkeleton) {
+        if (isLoading) {
+            chartCanvas.classList.add('d-none');     
+            chartCanvas.classList.remove('d-flex');
+            chartSkeleton.classList.remove('d-none');
+            chartSkeleton.classList.add('d-flex', 'skeleton');
+            chartSkeleton.innerHTML = ""; // Remove texto "procurando..."
+            texto_1.classList.add('skeleton');
+            texto_2.classList.add('skeleton')
+
+        } else {
+            chartCanvas.classList.remove('d-none');
+            chartCanvas.classList.add('d-flex');
+            chartSkeleton.classList.add('d-none');
+            chartSkeleton.classList.remove('d-flex', 'skeleton');
+            texto_1.classList.remove('skeleton');
+            texto_2.classList.remove('skeleton')
+        }
+    }
+
+    // 3. Aplica na Tabela
+    toggleTableSkeleton(isLoading);
+}
+
+function toggleTableSkeleton(isLoading) {
+    const tbody = document.querySelector("table tbody");
+    if (!tbody) return;
+
+    if (isLoading) {
+        // Cria linhas falsas para a tabela
+        const skeletonRow = `
+            <tr>
+                <td><div class="skeleton" style="width: 100px;">-</div></td>
+                <td><div class="skeleton" style="width: 50px;">-</div></td>
+                <td><div class="skeleton" style="width: 50px;">-</div></td>
+                <td><div class="skeleton" style="width: 50px;">-</div></td>
+                <td><div class="skeleton" style="width: 120px;">-</div></td>
+                <td><div class="skeleton" style="width: 120px;">-</div></td>
+                <td><div class="skeleton" style="width: 120px;">-</div></td>
+                <td><div class="skeleton" style="width: 120px;">-</div></td>
+                <td><div class="skeleton" style="width: 150px;">-</div></td>
+            </tr>
+        `;
+        tbody.innerHTML = skeletonRow.repeat(3); // Repete 5 vezes
+    }
 }
