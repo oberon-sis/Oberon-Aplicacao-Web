@@ -12,7 +12,7 @@ const DATA_CRIACAO_EMPRESA = usuarioObjeto
   : new Date('2024-01-01');
 
 const TEMPO_OPCOES_ORIGINAL = {
-    Tendencia: [
+    comparar: [
         { value: 'HOJE', label: 'Hoje vs Ontem' },
         { value: 'SEMANA', label: 'Última semana vs Semana atual' },
         { value: 'MES', label: 'Último mês vs Mês atual' },
@@ -20,14 +20,14 @@ const TEMPO_OPCOES_ORIGINAL = {
         { value: 'SEMESTRE', label: 'Últimos Semestre vs Semestre atual' },
         { value: 'ANO', label: 'Último Ano vs Ano atual' },
     ],
-    Previsoes: [
+    previsao: [
         { value: 'SEMANA_PROX', label: 'Próxima semana' },
         { value: 'MES_PROX', label: 'Último mês real vs Próximo mês previsto' },
         { value: 'TRIMESTRE_PROX', label: 'Próximos 3 meses' },
         { value: 'SEMESTRE_PROX', label: 'Próximos 6 meses' },
         { value: 'ANO_PROX', label: 'Próximo ano' },
     ],
-    Correlacao: [
+    correlacao: [
         { value: '24H', label: 'Últimas 24 horas' },
         { value: 'SEMANA', label: 'Última semana' },
         { value: 'MES', label: 'Último mês' },
@@ -63,7 +63,7 @@ const getOptionValue = (periodValue, category) => {
     const dataFimPrevisao = new Date(HOJE); 
     const dataInicio = new Date(HOJE); 
     
-    if (category === 'Previsoes') {
+    if (category === 'previsao') {
         const dataInicioHistorico = new Date(HOJE);
         const periodoPrevisao = periodValue.split('_')[0]; 
         switch (periodoPrevisao) {
@@ -189,13 +189,24 @@ const mockData = {
         iniciarDashboard();
 
         try {
+            /*
             const payloadGraficoInicial = {
-                tipoAnalise: "comparacao",
+                tipoAnalise: "comparar",
                 dataInicio: "2025-10-23",
                 dataPrevisao: "2025-11-23", 
                 metricaAnalisar: "Total de Alertas",
                 variavelRelacionada: null,
                 fkEmpresa: ID_EMPRESA, 
+                fkMaquina: null,
+                componente: null,
+            };*/
+                const payloadGraficoInicial = {
+                tipoAnalise: "comparar",
+                dataInicio: "2025-10-23",
+                dataPrevisao: "2025-11-23", 
+                metricaAnalisar: "DownTime",
+                variavelRelacionada: null,
+                fkEmpresa: 1, 
                 fkMaquina: null,
                 componente: null,
             };

@@ -75,9 +75,9 @@ function popularSelect(id, options) {
 
 function popularTempoSelect(tipo) {
     let chaveTempo = tipo;
-    if (tipo === 'Correlação' || tipo === 'Correlacao') chaveTempo = 'Correlacao';
-    else if (tipo === 'Previsões' || tipo === 'Previsoes') chaveTempo = 'Previsoes';
-    else if (tipo === 'Tendência' || tipo === 'Tendencia') chaveTempo = 'Tendencia';
+    if (tipo === 'Correlação' || tipo === 'correlacao') chaveTempo = 'correlacao';
+    else if (tipo === 'Previsões' || tipo === 'previsao') chaveTempo = 'previsao';
+    else if (tipo === 'Comparar' || tipo === 'comparar') chaveTempo = 'comparar';
 
     const options = TEMPO_OPCOES[chaveTempo]; 
     
@@ -162,7 +162,7 @@ function toggleFilterFields() {
     divVariavelRelacionada.style.display = 'none';
     divDetalhesPrevisao.style.display = 'none';
 
-    if (tipoGrafico === 'Correlacao') {
+    if (tipoGrafico === 'correlacao') {
         popularSelect('selectMetricaPrincipal', METRICAS.filter(m => ['Uptime', 'DownTime'].includes(m.value)));
         popularSelect('selectVariavelRelacionada', CORRELACAO_VARS);
         labelMetrica.innerText = 'Métrica Principal (Eixo Y)';
@@ -171,9 +171,9 @@ function toggleFilterFields() {
         labelMetrica.innerText = 'Métrica a analisar';
     }
     
-    if (tipoGrafico === 'Previsoes') {
+    if (tipoGrafico === 'previsao') {
         divDetalhesPrevisao.style.display = 'block';
-    } else if (tipoGrafico === 'Correlacao') {
+    } else if (tipoGrafico === 'correlacao') {
         divVariavelRelacionada.style.display = 'block';
     }
     
@@ -198,18 +198,18 @@ function updateDynamicFilterDisplay() {
 
     let textoTipo = '', textoTempo = '', textoAgrupamento = '', textoDetalhe = '';
 
-    if (tipoGrafico === 'Tendencia') {
-        const tempoLabel = TEMPO_OPCOES.Tendencia.find(o => o.value === tempo)?.label || 'Período';
+    if (tipoGrafico === 'comparar') {
+        const tempoLabel = TEMPO_OPCOES.comparar.find(o => o.value === tempo)?.label || 'Período';
         textoTipo = `Análise de Tendência de ${metrica}`;
         textoTempo = `Comparando: ${tempoLabel}`;
         textoAgrupamento = `agrupado por [Automático]`; 
-    } else if (tipoGrafico === 'Previsoes') {
-        const tempoLabel = TEMPO_OPCOES.Previsoes.find(o => o.value === tempo)?.label || 'Período';
+    } else if (tipoGrafico === 'previsao') {
+        const tempoLabel = TEMPO_OPCOES.previsao.find(o => o.value === tempo)?.label || 'Período';
         textoTipo = `Previsão de ${metrica}`;
         textoTempo = `Projeção: ${tempoLabel}`;
         textoAgrupamento = `(Histórico auto)`;
-    } else if (tipoGrafico === 'Correlacao') {
-        const tempoLabel = TEMPO_OPCOES.Correlacao.find(o => o.value === tempo)?.label || 'Período';
+    } else if (tipoGrafico === 'correlacao') {
+        const tempoLabel = TEMPO_OPCOES.correlacao.find(o => o.value === tempo)?.label || 'Período';
         const variavelLabel = CORRELACAO_VARS.find(v => v.value === variavelRelacionada)?.label || 'Variável X';
         textoTipo = `Correlação entre ${metrica} e ${variavelLabel}`;
         textoTempo = `Período: ${tempoLabel}`;
@@ -233,13 +233,13 @@ async function aplicarFiltro() {
     const variavelRelacionada = document.getElementById('selectVariavelRelacionada')?.value;
     const componente = document.getElementById('selectComponente')?.value;
     
-    if (tipoGrafico === 'Correlacao' && metricaPrincipal === variavelRelacionada) {
+    if (tipoGrafico === 'correlacao' && metricaPrincipal === variavelRelacionada) {
         alert("Para Correlação, as métricas devem ser diferentes.");
         return;
     }
 
     let dataInicioConsulta = tempoSelecionado;
-    if (tipoGrafico === 'Previsoes') {
+    if (tipoGrafico === 'previsao') {
         try {
              const jsonDate = JSON.parse(tempoSelecionado);
              dataInicioConsulta = tempoSelecionado; 
@@ -247,23 +247,26 @@ async function aplicarFiltro() {
              dataInicioConsulta = tempoSelecionado;
         }
     }
-
+    console.log(tipoGrafico)
+    console.log("-===========")
     const payloadGrafico = {
         tipoAnalise: tipoGrafico,
         dataInicio: dataInicioConsulta, 
         metricaAnalisar: metricaPrincipal,
-        variavelRelacionada: (tipoGrafico === 'Correlacao' ? variavelRelacionada : null),
+        variavelRelacionada: (tipoGrafico === 'correlacao' ? variavelRelacionada : null),
         fkEmpresa: ID_EMPRESA, 
         fkMaquina: maquinaSelecionada.id,
-        componente: (componente && componente !== 'TODOS' ? componente : null),
-        dataPrevisao: (tipoGrafico === 'Previsoes' ? tempoSelecionado : null), 
+        componente: (tipoGrafico === 'correlacao'? componenteSelecionado: null),
+        dataPrevisao: (tipoGrafico === 'comparar' ? null: tempoSelecionado), 
     };
 
+    console.log(payloadGrafico)
+    console.log("===============")
     try {
         await buscar_dados_grafico(payloadGrafico);
         
         let dataTabela = dataInicioConsulta;
-        if(tipoGrafico === 'Previsoes') dataTabela = getOptionValue('MES', 'Tendencia'); 
+        if(tipoGrafico === 'previsao') dataTabela = getOptionValue('MES', 'comparar'); 
 
         await buscar_dados_kpi_tabela(ID_EMPRESA, dataTabela, maquinaSelecionada.id);
 
@@ -278,9 +281,9 @@ async function aplicarFiltro() {
 
 function iniciarDashboard() {
     popularSelect('selectTipoGrafico', [
-        { value: 'Tendencia', label: 'Tendência – ótimo para ver se está aumentando ou diminuindo.' },
-        { value: 'Previsoes', label: 'Previsões – use para prever dados futuros relacionadas.' },
-        { value: 'Correlacao', label: 'Correlação – use para comparar duas variáveis e entender se estão relacionadas.' }
+        { value: 'comparar', label: 'Comparação – ótimo para ver se está aumentando ou diminuindo.' },
+        { value: 'previsao', label: 'Previsões – use para prever dados futuros relacionadas.' },
+        { value: 'correlacao', label: 'Correlação – use para comparar duas variáveis e entender se estão relacionadas.' }
     ]);
     
     setDatasIniciais(); 

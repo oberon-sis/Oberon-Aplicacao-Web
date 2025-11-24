@@ -89,89 +89,12 @@
                 </div>
             </a>
         </div>
-
-        <!-- <div class="collapse card-filter" id="filterCollapse">
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <label class="form-label">Tipo de Gráfico</label>
-                    <select class="form-select form-select-sm" id="selectTipoGrafico"
-                        onchange="toggleCorrelationFields()">
-                        <option value="Previsões" selected>Previsões – use para prever dados futuros
-                            relacionadas.</option>
-                        <option value="Tendência">Tendência – ótimo para ver se está aumentando ou diminuindo.
-                        </option>
-
-                        <option value="Correlação">Correlação – use para comparar duas variáveis e entender se estão
-                            relacionadas.</option>
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Métrica a analisar</label>
-                    <select class="form-select form-select-sm" id="selectMetricaPrincipal">
-                        <option value="Downtime" selected>Downtime</option>
-                        <option value="Uptime">Uptime</option>
-                        <option value="Todos os alertas">Todos os alertas</option>
-                        <option value="Alertas Criticos">Alertas Criticos</option>
-                        <option value="Alertas Atenção">Alertas Atenção</option>
-                        <option value="Alertas Ocioso">Alertas Ocioso</option>
-                    </select>
-                </div>
-
-                <div class="col-md-4" id="divVariavelRelacionada" style="display: none;">
-                    <label class="form-label">Variável relacionada</label>
-                    <select class="form-select form-select-sm" id="selectVariavelRelacionada">
-                        <option value="Alertas Criticos" selected>Alertas Críticos</option>
-                        <option value="Uptime">Uptime</option>
-                        <option value="Todos os alertas">Todos os alertas</option>
-                        <option value="Alertas Atenção">Alertas Atenção</option>
-                        <option value="Alertas Ocioso">Alertas Ocioso</option>
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Agrupar dados por</label>
-                    <select class="form-select form-select-sm" id="selectAgrupamento" onchange="atualizarLimiteTempo()">
-                        <option value="Mês" selected>Mês</option>
-                        <option value="Semana">Semana</option>
-                        <option value="Dia">Dia</option>
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">De </label>
-                    <input required type="date" class="form-control form-control-sm" id="inputDataDe" />
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Até <span id="limite_tempo"></span></label>
-                    <input required type="date" class="form-control form-control-sm" id="inputDataAte" />
-                </div>
-
-                <div class="col-12 text-end">
-                    <button class="btn btn-info btn-sm" onclick="aplicarFiltro()">
-                        <i class="bi bi-funnel-fill me-1"></i> Aplicar Filtro
-                    </button>
-                </div>
-            </div>
-
-            <div class="mt-3 row" id="specific-machine-dropdown" style="display: none;">
-                <div class="col-4">
-                    <label class="form-label">Selecione a Máquina</label>
-                    <select class="form-select form-select-sm">
-                        <option>Máquina-001</option>
-                        <option>Máquina-002</option>
-                        <option>Máquina-003</option>
-                    </select>
-                </div>
-            </div>
-        </div> -->
 <div class="collapse card-filter" id="filterCollapse">
     <div class="row g-3">
         <div class="col-md-4">
             <label class="form-label">Tipo de Gráfico</label>
             <select class="form-select form-select-sm" id="selectTipoGrafico" onchange="toggleFilterFields()">
-                <option value="Tendencia" selected>Tendência – ótimo para ver se está aumentando ou diminuindo.</option>
+                <option value="comparar" selected>Tendência – ótimo para ver se está aumentando ou diminuindo.</option>
                 <option value="Previsoes">Previsões – use para prever dados futuros relacionadas.</option>
                 <option value="Correlacao">Correlação – use para comparar duas variáveis e entender se estão
                     relacionadas.</option>
@@ -181,12 +104,6 @@
         <div class="col-md-4" id="divTempo">
             <label class="form-label">Período de Análise</label>
             <select class="form-select form-select-sm" id="selectTempo" onchange="toggleFilterFields()">
-                </select>
-        </div>
-
-        <div class="col-md-4" id="divAgrupamento">
-            <label class="form-label d-none">Agrupar dados por <span id="regra_agrupamento_span"></span></label>
-            <select class="form-select form-select-sm" id="selectAgrupamento" onchange="toggleFilterFields()">
                 </select>
         </div>
 

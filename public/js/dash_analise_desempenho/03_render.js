@@ -15,7 +15,7 @@ function renderizarGraficoMock(tipoGrafico, data = mockData) {
     if (chartInstance) chartInstance.destroy();
 
     const ctx = chartCanvas.getContext('2d');
-    const tipoGraficoAjustado = tipoGrafico || 'Tendencia'; 
+    const tipoGraficoAjustado = tipoGrafico || 'comparar'; 
     const agrupamento = data.agrupamento || 'Mês'; 
     const metrica = document.getElementById('selectMetricaPrincipal')?.value || 'Métrica';
     const variavelRelacionada = document.getElementById('selectVariavelRelacionada')?.value || 'Variável';
@@ -23,7 +23,7 @@ function renderizarGraficoMock(tipoGrafico, data = mockData) {
     let config = {};
     const labelsDoGrafico = data.graficoData.labels_Data || [];
 
-    if (tipoGraficoAjustado === 'Tendencia' || data.analise_tipo === 'comparacao') {
+    if (tipoGraficoAjustado === 'comparar' || data.analise_tipo === 'comparacao') {
         config = {
             type: 'line',
             data: {
@@ -53,7 +53,7 @@ function renderizarGraficoMock(tipoGrafico, data = mockData) {
                 }
             }
         };
-    } else if (tipoGraficoAjustado === 'Correlacao' || data.analise_tipo === 'correlacao') {
+    } else if (tipoGraficoAjustado === 'correlacao' || data.analise_tipo === 'correlacao') {
         const scatterData = data.graficoData.dataAtual.map((y, i) => ({ 
             x: data.graficoData.dataAnterior[i] || 0, 
             y: y 
@@ -77,7 +77,7 @@ function renderizarGraficoMock(tipoGrafico, data = mockData) {
                 }
             }
         };
-    } else if (tipoGraficoAjustado === 'Previsoes' || data.analise_tipo === 'previsao') {
+    } else if (tipoGraficoAjustado === 'previsao' || data.analise_tipo === 'previsao') {
         const atual = data.graficoData.dataAtual;
         const futuro = data.graficoData.dataFutura;
         

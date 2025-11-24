@@ -5,7 +5,7 @@ async function buscarDadosGrafico(req, res) {
     const { tipoAnalise } = req.body; 
     const rotasPython = {
         'previsao': '/ai/previsao',
-        'comparacao': '/ai/comparar', 
+        'comparar': '/ai/comparar', 
         'correlacao': '/ai/correlacao'
     };
 
