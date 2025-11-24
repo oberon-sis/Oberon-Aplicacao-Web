@@ -1,42 +1,53 @@
-var mysql = require("mysql2");
+// Este arquivo configura a conexão com o MySQL para o ambiente Node.js,
+// utilizando as variáveis de ambiente carregadas pelo dotenv.
 
-// --- DEBUG DE AMBIENTE (Pode remover depois que funcionar) ---
-console.log("--- DEBUG DE AMBIENTE ---");
-console.log("Usuário:", process.env.DB_USER);
-console.log("Senha:", process.env.DB_PASS); 
-console.log("Banco:", process.env.DB_NAME);
-console.log("Host:", process.env.DB_HOST);
-console.log("-----------------------");
-// -----------------------------------------------------------
+const mysql = require('mysql2');
 
-var mySqlConfig = {
+// Configurações lendo diretamente do process.env
+// Atenção: O dotenv deve ser carregado no app.js antes de importar este módulo!
+const config = {
     host: process.env.DB_HOST,
-    database: process.env.DB_NAME,  // Usa DB_NAME (do seu .env)
     user: process.env.DB_USER,
-    password: process.env.DB_PASS,  // Usa DB_PASS (do seu .env)
-    port: process.env.DB_PORT
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT,
+    connectionLimit: 10,
+    waitForConnections: true
 };
 
-function executar(instrucao) {
+// Log de Debug para confirmar que as variáveis foram lidas
+console.log("--- Configuração MySQL Carregada ---");
+console.log(`Host: ${config.host} | Usuário: ${config.user} | Banco: ${config.database}`);
+console.log("------------------------------------");
 
-    if (process.env.AMBIENTE_PROCESSO !== "producao" && process.env.AMBIENTE_PROCESSO !== "desenvolvimento") {
-        console.log("\nO AMBIENTE (producao OU desenvolvimento) NÃO FOI DEFINIDO EM .env OU dev.env OU app.js\n");
-        return Promise.reject("AMBIENTE NÃO CONFIGURADO EM .env");
-    }
 
-    return new Promise(function (resolve, reject) {
-        var conexao = mysql.createConnection(mySqlConfig);
-        conexao.connect();
-        conexao.query(instrucao, function (erro, resultados) {
-            conexao.end();
-            if (erro) {
-                reject(erro);
+const pool = mysql.createPool(config);
+
+/**
+ * Função responsável por executar instruções SQL.
+ * @param {string} instrucaoSql - A instrução SQL a ser executada.
+ * @returns {Promise<any>}
+ */
+function executar(instrucaoSql) {
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.error("❌ Erro ao obter conexão do pool: " + err.stack);
+                return reject({ message: "Erro de conexão com o Banco de Dados. Verifique as variáveis de ambiente.", error: err });
             }
-            console.log(resultados);
-            resolve(resultados);
-        });
-        conexao.on('error', function (erro) {
-            return("ERRO NO MySQL SERVER: ", erro.sqlMessage);
+
+            connection.query(instrucaoSql, (error, results) => {
+                connection.release(); 
+
+                if (error) {
+                    console.error("❌ ERRO AO EXECUTAR A QUERY: " + error.sqlMessage);
+                    return reject({ message: "Erro ao executar a query SQL.", sqlMessage: error.sqlMessage, error: error });
+                }
+
+                resolve(results);
+            });
         });
     });
 }

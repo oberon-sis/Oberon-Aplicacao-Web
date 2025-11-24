@@ -15,20 +15,24 @@ var app = express();
 // --- IMPORTAÇÃO DAS ROTAS (agrupadas) ---
 var indexRouter = require('./src/routes/index');
 var usuarioRouter = require('./src/routes/usuarios');
-var empresaRouter = require('./src/routes/empresas'); // Corrigido o nome do arquivo para 'empresas'
+var empresaRouter = require('./src/routes/empresas');
 var edicaoEmpresaRouter = require('./src/routes/edicaoEmpresa');
 var edicaoUsuarioRouter = require('./src/routes/edicaoUsuario');
 var maquinasRouter = require('./src/routes/maquinas');
 var gerenciamentoUsuarioRouter = require('./src/routes/gerenciamentoUsuario');
-var empresaRouter = require('./src/routes/empresas');
 var authRouter = require('./src/routes/email');
 var alertasRouter = require('./src/routes/alertas');
-var dashboardRouter = require("./src/routes/dashboard");
 var downloadRoutes = require('./src/routes/appInstalacao');
 var painelRoutes = require('./src/routes/painel');
 var homeRouter = require('./src/routes/home');
 var dashboardParametrosRouter = require('./src/routes/dashboardParametros')
-var dashboardEstrategicaRoutes = require('./src/routes/dashboardEstrategicaRoutes');
+
+// ROTEADOR ESTRATÉGICO: Contém a rota /risco/:idEmpresa
+var dashboardEstrategicaRouter = require("./src/routes/dashboardEstrategicaRoutes"); 
+
+// ROTEADOR GERAL: Mantido para outras páginas de dashboard que não sejam de risco.
+var dashboardRouter = require("./src/routes/dashboard"); 
+
 
 // --- CONFIGURAÇÃO DOS MIDDLEWARES ---
 app.use(express.json());
@@ -42,7 +46,6 @@ app.use(cors());
 app.use('/', indexRouter);
 app.use('/usuarios', usuarioRouter);
 app.use('/gerenciamentoUsuario', gerenciamentoUsuarioRouter);
-app.use("/dashboard", dashboardRouter);
 app.use('/empresas', empresaRouter);
 app.use('/edicaoEmpresa', edicaoEmpresaRouter);
 app.use('/edicaoUsuario', edicaoUsuarioRouter);
@@ -53,8 +56,13 @@ app.use('/api/download', downloadRoutes);
 app.use('/painel', painelRoutes);
 app.use('/api/maquinas', homeRouter);
 app.use('/dashboardParametros', dashboardParametrosRouter)
-app.use('/api/dashboard-estrategica', dashboardEstrategicaRoutes);
-app.use('/dashboardEstrategica', dashboardEstrategicaRoutes);
+
+// CORREÇÃO: Mapeia o roteador específico para o prefixo /dashboard.
+// O frontend chama /dashboard/risco/6
+app.use("/dashboard", dashboardEstrategicaRouter); 
+
+// O roteador geral dashboardRouter (se tiver outras rotas)
+// app.use("/dashboardGeral", dashboardRouter); 
 
 app.listen(PORTA_APP, function () {
   console.log(`                                                                            
