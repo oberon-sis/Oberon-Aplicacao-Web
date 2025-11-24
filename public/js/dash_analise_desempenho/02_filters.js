@@ -239,25 +239,27 @@ async function aplicarFiltro() {
     }
 
     let dataInicioConsulta = tempoSelecionado;
-    if (tipoGrafico === 'previsao') {
-        try {
+    let dataFinalConsulta = null;
+    if (tipoGrafico === 'previsao' || tipoGrafico === 'correlacao') {
              const jsonDate = JSON.parse(tempoSelecionado);
-             dataInicioConsulta = tempoSelecionado; 
-        } catch(e) {
-             dataInicioConsulta = tempoSelecionado;
-        }
+             console.log("json aqui")
+             console.log(jsonDate)
+             dataInicioConsulta = jsonDate.data_inicio_historico; 
+             dataFinalConsulta = jsonDate.data_fim_previsao; 
+             console.log(dataFinalConsulta)
+             console.log(dataFinalConsulta)
     }
     console.log(tipoGrafico)
     console.log("-===========")
     const payloadGrafico = {
         tipoAnalise: tipoGrafico,
         dataInicio: dataInicioConsulta, 
-        metricaAnalisar: metricaPrincipal,
+        metricaAnalisar: metricaPrincipal, 
         variavelRelacionada: (tipoGrafico === 'correlacao' ? variavelRelacionada : null),
         fkEmpresa: ID_EMPRESA, 
         fkMaquina: maquinaSelecionada.id,
         componente: (tipoGrafico === 'correlacao'? componenteSelecionado: null),
-        dataPrevisao: (tipoGrafico === 'comparar' ? null: tempoSelecionado), 
+        dataPrevisao: (tipoGrafico === 'comparar' ? null: dataFinalConsulta), 
     };
 
     console.log(payloadGrafico)

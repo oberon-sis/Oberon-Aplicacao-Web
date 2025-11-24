@@ -63,7 +63,7 @@ const getOptionValue = (periodValue, category) => {
     const dataFimPrevisao = new Date(HOJE); 
     const dataInicio = new Date(HOJE); 
     
-    if (category === 'previsao') {
+    if (category === 'previsao' || category === "correlacao") {
         const dataInicioHistorico = new Date(HOJE);
         const periodoPrevisao = periodValue.split('_')[0]; 
         switch (periodoPrevisao) {
@@ -91,7 +91,6 @@ const getOptionValue = (periodValue, category) => {
 
         const dadosPrevisao = {
             data_inicio_historico: formatToDateOnly(dataInicioHistorico),
-            data_fim_historico: 'NOW()', 
             data_fim_previsao: formatToDateOnly(dataFimPrevisao)
         };
         return JSON.stringify(dadosPrevisao);
@@ -145,7 +144,7 @@ for (const categoria in TEMPO_OPCOES_ORIGINAL) {
 const METRICAS = [
   { value: 'Uptime', label: 'Uptime', isAlert: false },
   { value: 'DownTime', label: 'DownTime', isAlert: false },
-  { value: 'Todos os alertas', label: 'Todos os alertas', isAlert: true },
+  { value: 'Total de Alertas', label: 'Todos os alertas', isAlert: true },
   { value: 'Alertas Criticos', label: 'Alertas Críticos', isAlert: true },
   { value: 'Alertas Atenção', label: 'Alertas Atenção', isAlert: true },
   { value: 'Alertas Osciosos', label: 'Alertas Ocioso', isAlert: true },
@@ -159,7 +158,7 @@ const COMPONENTES = [
 ];
 
 const CORRELACAO_VARS = [
-  { value: 'Todos os alertas', label: 'Todos os alertas', isAlert: true },
+  { value: 'Total de Alertas', label: 'Todos os alertas', isAlert: true },
   { value: 'Alertas Criticos', label: 'Alertas Críticos', isAlert: true },
   { value: 'Alertas Atenção', label: 'Alertas Atenção', isAlert: true },
   { value: 'Alertas Osciosos', label: 'Alertas Ocioso', isAlert: true },
