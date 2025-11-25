@@ -26,9 +26,7 @@ var downloadRoutes = require('./src/routes/appInstalacao');
 var painelRoutes = require('./src/routes/painel');
 var homeRouter = require('./src/routes/home');
 var dashboardParametrosRouter = require('./src/routes/dashboardParametros')
-
-// ROTEADOR ESTRATÉGICO: Contém a rota /risco/:idEmpresa
-var dashboardEstrategicaRouter = require("./src/routes/dashboardEstrategicaRoutes"); 
+var dashboardEstrategicaRouter = require("./src/routes/dashboardEstrategica"); 
 
 // ROTEADOR GERAL: Mantido para outras páginas de dashboard que não sejam de risco.
 var dashboardRouter = require("./src/routes/dashboard"); 

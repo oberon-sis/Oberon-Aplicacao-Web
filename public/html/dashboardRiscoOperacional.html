@@ -31,7 +31,7 @@
 
     <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
       <h2 class="text-black me-3">
-        Gestão de Risco e Tendência Operacional
+        Gestão de Risco e Tendência Operacional (Bimestral)
       </h2>
 
       <div class="d-flex align-items-center flex-wrap flex-grow-1 me-3">
@@ -59,85 +59,97 @@
 
     <section class="kpi-container" id="kpi-section">
 
-      <div class="kpi-card" id="kpi-total-maquinas">
+      <div class="kpi-card" id="kpi-tempo-critico">
         <div class="topo-kpi">
-          <h6>Taxa de Crescimento de Alertas Críticos</h6>
-          <div class="icone-kpi text-red-500"><i class="bi bi-graph-up-arrow"></i></div>
+          <h6>Média Diária de Máquinas em Alerta</h6>
+          <div class="icone-kpi text-custom-yellow"><i class="bi bi-bell-fill"></i></div>
         </div>
         <div class="baixo-kpi">
-          <div><span id="txt_taxa_crescimento" class="text-secondary">Carregando...</span>
-            <p>Comparado ao bimestre anterior</p>
+          <div><span id="txt_media_maquinas_alerta" class="text-secondary">0.0</span>
+            <p>Máquinas em risco por dia</p>
           </div>
         </div>
       </div>
 
-      <div class="kpi-card" id="kpi-maquinas-sobrecarga">
+      <div class="kpi-card" id="kpi-crescimento-uso-taxa">
         <div class="topo-kpi">
-          <h6>Tempo Médio Entre Alertas Críticos</h6>
-          <div class="icone-kpi text-green-500"><i class="bi bi-stopwatch"></i></div>
+          <h6>Taxa de Crescimento de Uso (Mensal)</h6>
+          <div class="icone-kpi text-custom-purple"><i class="bi bi-graph-up"></i></div>
         </div>
         <div class="baixo-kpi">
-          <div><span id="txt_tempo_medio_alerta" class="text-secondary">Carregando...</span>
-            <p>Frequência média de risco</p>
+          <div><span id="txt_crescimento_uso_taxa" class="text-secondary">0%</span>
+            <p>Pressão sobre recursos (RAM/CPU)</p>
           </div>
         </div>
       </div>
 
-      <div class="kpi-card" id="kpi-risco-disco">
+      <div class="kpi-card" id="kpi-severidade-maxima">
         <div class="topo-kpi">
-          <h6>Componente Mais Crítico</h6>
-          <div class="icone-kpi text-red-500"><i class="bi bi-cpu"></i></div>
+          <h6>% Incidentes Críticos/Altos</h6>
+          <div class="icone-kpi text-custom-red"><i class="bi bi-cone-striped"></i></div>
         </div>
         <div class="baixo-kpi">
-          <div><span id="txt_componente_critico" class="text-secondary">Carregando...</span>
-            <p>Mais alertas no período</p>
+          <div><span id="txt_perc_incidentes_alto_risco" class="text-secondary">0%</span>
+            <p>Total de problemas com severidade Alta ou Crítica</p>
           </div>
         </div>
       </div>
 
-      <div class="kpi-card" id="kpi-maquinas-ociosas">
+      <div class="kpi-card" id="kpi-saturacao-ram">
         <div class="topo-kpi">
-          <h6>Previsão de Alertas (Próximo Bimestre)</h6>
-          <div class="icone-kpi text-blue-500"><i class="bi bi-activity"></i></div>
+          <h6>Taxa de Máquinas Próximas à Saturação</h6>
+          <div class="icone-kpi text-custom-blue"><i class="bi bi-percent"></i></div>
         </div>
         <div class="baixo-kpi">
-          <div><span id="txt_previsao_alerta" class="text-secondary">Carregando...</span>
-            <p>Estimativa baseada em tendência</p>
+          <div><span id="txt_taxa_saturacao" class="text-secondary">0%</span>
+            <p>Risco de capacidade (Planejamento)</p>
           </div>
         </div>
       </div>
 
-      <div class="kpi-card" id="kpi-total-incidentes">
+      <div class="kpi-card" id="kpi-integridade-logs">
         <div class="topo-kpi">
-          <h6>Máquinas com Comportamento Suspeito</h6>
-          <div class="icone-kpi text-yellow-500"><i class="bi bi-exclamation-triangle"></i></div>
+          <h6>Integridade de Logs (7 dias)</h6>
+          <div class="icone-kpi text-custom-green"><i class="bi bi-shield-lock-fill"></i></div>
         </div>
         <div class="baixo-kpi">
-          <div><span id="txt_maquinas_suspeitas" class="text-secondary">Carregando...</span>
-            <p>Detectadas neste bimestre</p>
+          <div><span id="txt_perc_integridade_logs" class="text-secondary">0%</span>
+            <p>Risco de sabotagem/falha de agente</p>
           </div>
         </div>
       </div>
 
     </section>
 
-    <section class="charts-container" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px">
+    <section class="charts-container">
 
-      <div class="chart-item-wrapper" id="chart-tendencia-estabilidade">
+      <div class="chart-item-wrapper" id="chart-tendencia-risco-critico">
         <h3 class="text-lg font-medium mb-3 text-gray-700">
-          Tendência de Desgaste por Componente
+          Tendência de Risco (Alertas Crítico vs. Atenção)
         </h3>
         <div style="height: 300px">
-          <canvas id="tendenciaDesgasteChart"></canvas>
+          <canvas id="riscoCriticoTendenciaChart"></canvas>
         </div>
       </div>
 
-      <div class="chart-item-wrapper" id="chart-saude-ativos">
+      <div class="chart-item-wrapper" id="chart-comparativo-demanda">
+        <h3 class="text-lg font-medium mb-2 text-gray-700">
+          Comparativo de Demanda de Recursos (Média Mês Passado vs. Atual)
+        </h3>
+        <div style="height: 300px">
+          <canvas id="comparativoDemandaChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="details-container">
+
+      <div class="chart-item-wrapper" id="chart-ranking-prioridade">
         <h3 class="text-lg font-medium mb-2 text-gray-700">
           Ranking de Máquinas por Prioridade de Intervenção
         </h3>
-        <div class="overflow-x-auto max-h-[300px]">
-          <table class="table">
+        <div class="overflow-x-auto max-h-[250px]">
+          <table class="table table-striped table-hover table-sm">
             <thead>
               <tr>
                 <th>Máquina</th>
@@ -146,38 +158,21 @@
               </tr>
             </thead>
             <tbody id="tbody-ranking-prioridade">
-              <!-- Dados de Máquinas Críticas serão inseridos dinamicamente -->
             </tbody>
           </table>
         </div>
-
-    </section>
-
-    <section class="details-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px">
-
-      <div class="chart-item-wrapper" id="list-sobrecarga">
-        <h3 class="text-lg font-medium mb-2 text-gray-700">
-          Progressão Acumulada de Alertas no Bimestre
-        </h3>
-        <div style="height: 250px">
-          <canvas id="progressaoAcumuladaChart"></canvas>
-        </div>
       </div>
 
-      <div class="chart-item-wrapper" id="list-ociosas">
-
-      </div>
-
+      <div class="chart-item-wrapper" style="border: none;"></div>
     </section>
-  </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script src="../component/menu/Menu.js"></script>
-  <script src="../component/notificao/Notificacao.js"></script>
-  <script src="../component/tour/TourGuide.js"></script>
+    <script src="../component/menu/Menu.js"></script>
+    <script src="../component/notificao/Notificacao.js"></script>
+    <script src="../component/tour/TourGuide.js"></script>
 
-  <script src="../js/dashboard/dashboardGestor.js"></script>
+    <script src="../js/dashboard/riscoOperacional.js"></script>
 
 </body>
 
