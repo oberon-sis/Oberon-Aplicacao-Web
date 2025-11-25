@@ -61,61 +61,86 @@
 
       <div class="kpi-card" id="kpi-tempo-critico">
         <div class="topo-kpi">
-          <h6>Média Diária de Máquinas em Alerta</h6>
+          <h6>Poncentagem de Incidentes Críticos/Altos</h6>
           <div class="icone-kpi text-custom-yellow"><i class="bi bi-bell-fill"></i></div>
         </div>
         <div class="baixo-kpi">
-          <div><span id="txt_media_maquinas_alerta" class="text-secondary">0.0</span>
-            <p>Máquinas em risco por dia</p>
+          <div><span id="txt_perc_integridade_logs" class="text-secondary">0%</span>
+            <p>Bimestre Passado</p>
           </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+                data-bs-trigger="focus" data-bs-title="Máquinas Ociosas"
+                data-bs-content="Lista as 5 máquinas que estão sendo subutilizadas. Elas podem ser remanejadas ou ter seus recursos re-alocados.">
+                <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+              </button>
         </div>
       </div>
 
       <div class="kpi-card" id="kpi-crescimento-uso-taxa">
         <div class="topo-kpi">
-          <h6>Taxa de Crescimento de Uso (Mensal)</h6>
+          <h6>Quantidade de Máquinas Próximas à Saturação</h6>
           <div class="icone-kpi text-custom-purple"><i class="bi bi-graph-up"></i></div>
         </div>
         <div class="baixo-kpi">
-          <div><span id="txt_crescimento_uso_taxa" class="text-secondary">0%</span>
-            <p>Pressão sobre recursos (RAM/CPU)</p>
+          <div><span id="txt_perc_integridade_logs" class="text-secondary">0%</span>
+            <p>Bimestre Passado</p>
           </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+                data-bs-trigger="focus" data-bs-title="Máquinas Ociosas"
+                data-bs-content="Lista as 5 máquinas que estão sendo subutilizadas. Elas podem ser remanejadas ou ter seus recursos re-alocados.">
+                <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+              </button>
         </div>
       </div>
 
       <div class="kpi-card" id="kpi-severidade-maxima">
         <div class="topo-kpi">
-          <h6>% Incidentes Críticos/Altos</h6>
+          <h6>Taxa de Comunicação Estável (Agentes Java/Python)</h6>
           <div class="icone-kpi text-custom-red"><i class="bi bi-cone-striped"></i></div>
         </div>
         <div class="baixo-kpi">
-          <div><span id="txt_perc_incidentes_alto_risco" class="text-secondary">0%</span>
-            <p>Total de problemas com severidade Alta ou Crítica</p>
+          <div><span id="txt_perc_integridade_logs" class="text-secondary">0%</span>
+            <p>Bimestre Passado</p>
           </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+                data-bs-trigger="focus" data-bs-title="Máquinas Ociosas"
+                data-bs-content="Lista as 5 máquinas que estão sendo subutilizadas. Elas podem ser remanejadas ou ter seus recursos re-alocados.">
+                <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+              </button>
         </div>
       </div>
 
       <div class="kpi-card" id="kpi-saturacao-ram">
         <div class="topo-kpi">
-          <h6>Taxa de Máquinas Próximas à Saturação</h6>
+          <h6>Integridade de Logs (Bimestral)</h6>
           <div class="icone-kpi text-custom-blue"><i class="bi bi-percent"></i></div>
         </div>
-        <div class="baixo-kpi">
-          <div><span id="txt_taxa_saturacao" class="text-secondary">0%</span>
-            <p>Risco de capacidade (Planejamento)</p>
+       <div class="baixo-kpi">
+          <div><span id="txt_perc_integridade_logs" class="text-secondary">0%</span>
+            <p>Bimestre Passado</p>
           </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+                data-bs-trigger="focus" data-bs-title="Máquinas Ociosas"
+                data-bs-content="Lista as 5 máquinas que estão sendo subutilizadas. Elas podem ser remanejadas ou ter seus recursos re-alocados.">
+                <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+              </button>
         </div>
       </div>
 
       <div class="kpi-card" id="kpi-integridade-logs">
         <div class="topo-kpi">
-          <h6>Integridade de Logs (7 dias)</h6>
+          <h6>Score Consolidado de Risco Operacional</h6>
           <div class="icone-kpi text-custom-green"><i class="bi bi-shield-lock-fill"></i></div>
         </div>
         <div class="baixo-kpi">
           <div><span id="txt_perc_integridade_logs" class="text-secondary">0%</span>
-            <p>Risco de sabotagem/falha de agente</p>
+            <p>Bimestre Passado</p>
           </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+                data-bs-trigger="focus" data-bs-title="Máquinas Ociosas"
+                data-bs-content="Lista as 5 máquinas que estão sendo subutilizadas. Elas podem ser remanejadas ou ter seus recursos re-alocados.">
+                <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+              </button>
         </div>
       </div>
 
@@ -126,6 +151,11 @@
       <div class="chart-item-wrapper" id="chart-tendencia-risco-critico">
         <h3 class="text-lg font-medium mb-3 text-gray-700">
           Tendência de Risco (Alertas Crítico vs. Atenção)
+          <button type="button" class="saber_mais btn btn-link"
+            data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Máquinas Ociosas"
+            data-bs-content="Lista as 5 máquinas que estão sendo subutilizadas. Elas podem ser remanejadas ou ter seus recursos re-alocados.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+            </button>
         </h3>
         <div style="height: 300px">
           <canvas id="riscoCriticoTendenciaChart"></canvas>
@@ -134,7 +164,12 @@
 
       <div class="chart-item-wrapper" id="chart-comparativo-demanda">
         <h3 class="text-lg font-medium mb-2 text-gray-700">
-          Comparativo de Demanda de Recursos (Média Mês Passado vs. Atual)
+          Distribuição de Severidade dos Incidentes (Critica, Alta, Média, Baixa)
+          <button type="button" class="saber_mais btn btn-link"
+            data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Máquinas Ociosas"
+            data-bs-content="Lista as 5 máquinas que estão sendo subutilizadas. Elas podem ser remanejadas ou ter seus recursos re-alocados.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+            </button>
         </h3>
         <div style="height: 300px">
           <canvas id="comparativoDemandaChart"></canvas>
@@ -147,6 +182,11 @@
       <div class="chart-item-wrapper" id="chart-ranking-prioridade">
         <h3 class="text-lg font-medium mb-2 text-gray-700">
           Ranking de Máquinas por Prioridade de Intervenção
+          <button type="button" class="saber_mais btn btn-link"
+            data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Máquinas Ociosas"
+            data-bs-content="Lista as 5 máquinas que estão sendo subutilizadas. Elas podem ser remanejadas ou ter seus recursos re-alocados.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+            </button>
         </h3>
         <div class="overflow-x-auto max-h-[250px]">
           <table class="table table-striped table-hover table-sm">
@@ -160,6 +200,20 @@
             <tbody id="tbody-ranking-prioridade">
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <div class="chart-item-wrapper" id="chart-comparativo-demanda">
+        <h3 class="text-lg font-medium mb-2 text-gray-700">
+         Comparativo de Saturação de Componentes (CPU, RAM, Disco)
+         <button type="button" class="saber_mais btn btn-link"
+            data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Máquinas Ociosas"
+            data-bs-content="Lista as 5 máquinas que estão sendo subutilizadas. Elas podem ser remanejadas ou ter seus recursos re-alocados.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+            </button>
+        </h3>
+        <div style="height: 300px">
+          <canvas id="comparativoDemandaChart"></canvas>
         </div>
       </div>
 
