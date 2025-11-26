@@ -58,15 +58,27 @@ function renderizarGraficoMock(tipoGrafico, data = mockData) {
             x: data.graficoData.dataAnterior[i] || 0, 
             y: y 
         }));
-
+        const datasetsCorrelacao = [{
+            label: `Relação (${metrica} vs ${variavelRelacionada})`,
+            data: scatterData,
+            backgroundColor: '#dc3545', 
+        }];
+        if (data.linha_regressao && data.linha_regressao.length === 2) {
+            datasetsCorrelacao.push({
+                type: 'line', 
+                label: 'Linha de Regressão',
+                data: data.linha_regressao, 
+                borderColor: '#176864ff', 
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false,
+                tension: 0 
+            });
+        }
         config = {
             type: 'scatter',
             data: {
-                datasets: [{
-                    label: `Relação (${metrica} vs ${variavelRelacionada})`,
-                    data: scatterData,
-                    backgroundColor: '#dc3545'
-                }]
+                datasets: datasetsCorrelacao 
             },
             options: {
                 responsive: true,
@@ -196,6 +208,7 @@ function renderizarDados(data) {
 }
 
 function renderizarTabela(maquinas) {
+    console.log(maquinas)
     const tableBody = document.querySelector('.table-responsive tbody');
     if (!tableBody || !maquinas) return;
     tableBody.innerHTML = ''; 
@@ -212,15 +225,49 @@ function renderizarTabela(maquinas) {
                 <td>${maq.top2}</td>
                 <td>${maq.top3}</td>
                 <td>
-                    <button class="btn btn-info btn-sm me-1" onclick="analisarMaquina('${maq.nome}')">Analisar</button>
-                    <button class="btn btn-primary btn-sm" onclick="verHistorico('${maq.nome}')">Histórico</button>
+                    <button class="btn btn-info btn-sm me-1" onclick="analise_tabela('${maq.nome}', ${maq.idMaquina})">Analisar</button>
+                    <button class="btn btn-primary btn-sm" onclick="analise_tabela('${maq.nome}', ${maq.idMaquina})">Histórico</button>
                 </td>
             </tr>
         `;
         tableBody.insertAdjacentHTML('beforeend', row);
     });
 }
+function renderizarTabela2(elemento, numero) {
+    const tableBody = document.querySelector('.table-responsive tbody');
+    if (!tableBody || !numero) return;
+    tableBody.innerHTML = ''; 
 
+    elemento.checked
+
+    let maquinas = mockData.topMaquinas
+
+    for (let i = 0; i < numero; i++) {
+        let maq = maquinas[i]
+        const row = `
+            <tr>
+                <td>${maq.nome}</td>
+                <td class="${maq.downtimeClasse}">${maq.downtime}</td>
+                <td class="${maq.difMesPassadoClasse}">${maq.difMesPassado}</td>
+                <td class="${maq.alertaClasse}">${maq.totalAlertas}</td>
+                <td class="${maq.difMesPassadoClasseAlerta}">${maq.difMesPassadoAlerta}</td>
+                <td>${maq.top1}</td>
+                <td>${maq.top2}</td>
+                <td>${maq.top3}</td>
+                <td>
+                    <button class="btn btn-info btn-sm me-1" onclick="analise_tabela('${maq.nome}', ${maq.idMaquina})">Analisar</button>
+                    <button class="btn btn-primary btn-sm" onclick="analise_tabela('${maq.nome}', ${maq.idMaquina})">Histórico</button>
+                </td>
+            </tr>
+        `;
+        tableBody.insertAdjacentHTML('beforeend', row);
+    }
+}
+
+function analise_tabela(nome, idMaquina) {
+    selecionarFiltroMaquina('Máquina Específica')
+    filtrar_maquina(nome, idMaquina)
+}
 
 
 const elementsToLoad = [

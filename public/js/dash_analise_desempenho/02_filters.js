@@ -32,13 +32,14 @@ async function buscar_dados_grafico(payload) {
   }
   
   const dados_grafico = await resposta.json();
-
+  console.log(dados_grafico)
   mockData.agrupamento = dados_grafico.agrupamento;
   mockData.analise_tipo = dados_grafico.analise_tipo;
   mockData.graficoData = dados_grafico.graficoData;
   mockData.iaMetricas = dados_grafico.iaMetricas;
   mockData.tipo_de_modelo = dados_grafico.tipo_de_modelo;
-
+  mockData.linha_regressao= dados_grafico.linha_regressao;
+  
   return dados_grafico;
 }
 
@@ -50,6 +51,7 @@ function setDatasIniciais() {
 }
 
 function popularSelect(id, options) {
+    console.log(id, options)
     const select = document.getElementById(id);
     if (!select) return;
 
@@ -182,7 +184,11 @@ function toggleFilterFields() {
     }
     
     const metrica = document.getElementById('selectMetricaPrincipal').value;
-    const isAlertMetric = METRICAS.find(m => m.value === metrica)?.isAlert;
+    let isAlertMetric = METRICAS.find(m => m.value === metrica)?.isAlert;
+    
+    if (tipoGrafico === 'correlacao') {
+        isAlertMetric = true
+    }
     divComponente.style.display = isAlertMetric ? 'block' : 'none';
     
     if (isAlertMetric) {
@@ -206,7 +212,7 @@ function updateDynamicFilterDisplay() {
         const tempoLabel = TEMPO_OPCOES.comparar.find(o => o.value === tempo)?.label || 'Período';
         textoTipo = `Análise de Tendência de ${metrica}`;
         textoTempo = `Comparando: ${tempoLabel}`;
-        textoAgrupamento = `agrupado por [Automático]`; 
+        textoAgrupamento = `agrupado automaticamente`; 
     } else if (tipoGrafico === 'previsao') {
         const tempoLabel = TEMPO_OPCOES.previsao.find(o => o.value === tempo)?.label || 'Período';
         textoTipo = `Previsão de ${metrica}`;
@@ -230,7 +236,7 @@ function updateDynamicFilterDisplay() {
     }
 }
 const titulosGrafico = {
-    comparacao: "Evolução Temporal de Desempenho",
+    comparar: "Evolução Temporal de Desempenho",
     previsao:   "Análise Preditiva (Próximos Períodos)",
     correlacao: "Correlação Cruzada de Métricas"
 };
@@ -262,7 +268,9 @@ async function aplicarFiltro() {
              console.log(dataFinalConsulta)
              console.log(dataFinalConsulta)
     }
+    console.log("-===========")
     console.log(tipoGrafico)
+    console.log(variavelRelacionada)
     console.log("-===========")
     const payloadGrafico = {
         tipoAnalise: tipoGrafico,
@@ -271,7 +279,7 @@ async function aplicarFiltro() {
         variavelRelacionada: (tipoGrafico === 'correlacao' ? variavelRelacionada : null),
         fkEmpresa: ID_EMPRESA, 
         fkMaquina: maquinaSelecionada.id,
-        componente: (tipoGrafico === 'correlacao'? componenteSelecionado: null),
+        componente: componente != 'TODOS'? componente : null,
         dataPrevisao: (tipoGrafico === 'comparar' ? null: dataFinalConsulta), 
     };
 
