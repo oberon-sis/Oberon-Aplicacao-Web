@@ -4,7 +4,7 @@ async function procurar_dados_pagina(req, res) {
     const dataInicio = req.headers["data-inicio"];
     const idEmpresa = req.headers["id-empresa"];
     const idMaquina = req.headers["id-maquina"] == ''? null: req.headers["id-maquina"];
-    const limite_raning = 3;
+    const limite_raning = 5;
     if (!idEmpresa || !dataInicio) {
         return res.status(400).send('dado não fornecido.');
     }
@@ -56,14 +56,18 @@ async function procurar_maquinas(req, res) {
     }
 }
 
-function calcularVariacao(valorAtual, valorAnterior) {
+function calcularVariacao(valorAtual, valorAnterior, tipo) {
     if (valorAnterior === 0 || valorAnterior === null || valorAnterior === undefined) {
         return { variacao: 'N/A', classe: 'text-secondary' };
     }
     const variacao = valorAtual - valorAnterior;
     const variacaoRelativa = (variacao / valorAnterior) * 100;
+    console.log("aqui")
+    console.log(valorAtual)
+    console.log("aqui")
 
-    if (valorAtual === 'ALERTAS') {
+
+    if (tipo === 'ALERTAS') {
         const classe = variacao < 0 ? 'text-success' : (variacao > 0 ? 'text-danger' : 'text-secondary');
         return { variacao: variacao > 0 ? `+${variacao}` : `${variacao}`, classe: classe };
     }
@@ -92,7 +96,7 @@ async function tratar_dados_brutos(kpi_uptime, kpi_alertas, kpi_alerta_moda) {
     const totalCriticosPrincipal = parseInt(alertasData.total_criticos_principal) || 0;
     const totalCriticosAnterior = parseInt(alertasData.total_criticos_anterior) || 0;
 
-    const variacaoUptime = calcularVariacao(uptimePctPrincipal, uptimePctAnterior);
+    const variacaoUptime = calcularVariacao(uptimePctPrincipal, uptimePctAnterior, 'UPTIME');
 
     const variacaoTotalAlertas = calcularVariacao(totalAlertasPrincipal, totalAlertasAnterior, 'ALERTAS');
 

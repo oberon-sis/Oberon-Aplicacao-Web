@@ -6,11 +6,12 @@ const usuarioString = sessionStorage.getItem('usuario');
 const usuarioObjeto = usuarioString ? JSON.parse(usuarioString) : null;
 let ID_EMPRESA = usuarioObjeto ? usuarioObjeto.fkEmpresa : 6; 
 
-const HOJE = new Date();
+const HOJE = new Date;
 const DATA_CRIACAO_EMPRESA = usuarioObjeto
   ? new Date(usuarioObjeto.DataCriacaoEmpresa)
   : new Date('2024-01-01');
 
+console.log("empresa data: ",DATA_CRIACAO_EMPRESA)
 
 const TEMPO_OPCOES_ORIGINAL = {
     comparar: [
@@ -29,11 +30,11 @@ const TEMPO_OPCOES_ORIGINAL = {
         { value: 'ANO_PROX', label: 'Próximo ano' },
     ],
     correlacao: [
-        { value: '24H', label: 'Últimas 24 horas' },
-        { value: 'SEMANA', label: 'Última semana' },
-        { value: 'MES', label: 'Último mês' },
-        { value: '3MESES', label: 'Últimos 3 meses' },
-        { value: '6MESES', label: 'Últimos 6 meses' },
+        { value: '24HCor', label: 'Últimas 24 horas' },
+        { value: 'SEMANACor', label: 'Última semana' },
+        { value: 'MESCor', label: 'Último mês' },
+        { value: '3MESESCor', label: 'Últimos 3 meses' },
+        { value: '6MESESCor', label: 'Últimos 6 meses' },
     ],
 };
 
@@ -67,7 +68,29 @@ const getOptionValue = (periodValue, category) => {
     if (category === 'previsao' || category === "correlacao") {
         const dataInicioHistorico = new Date(HOJE);
         const periodoPrevisao = periodValue.split('_')[0]; 
+        console.log(category)
+        console.log(periodoPrevisao)
         switch (periodoPrevisao) {
+           case '24HCor':
+                dataInicioHistorico.setDate(HOJE.getDate() - 1);
+                dataFimPrevisao.setDate(HOJE.getDate() + 7);
+                break;
+            case '3MESESCor':
+                dataInicioHistorico.setMonth(HOJE.getMonth() - 3);
+                dataFimPrevisao.setDate(HOJE.getDate() + 7);
+                break;
+            case 'MESCor':
+                dataInicioHistorico.setMonth(HOJE.getMonth() - 1);
+                dataFimPrevisao.setDate(HOJE.getDate() + 7);
+                break;
+           case '6MESESCor':
+                dataInicioHistorico.setMonth(HOJE.getMonth() - 6);
+                dataFimPrevisao.setDate(HOJE.getDate() + 7);
+                break;
+            case 'SEMANACor':
+                dataInicioHistorico.setDate(HOJE.getDate() - 7);
+                dataFimPrevisao.setDate(HOJE.getDate() + 7);
+                break;
             case 'SEMANA':
                 dataInicioHistorico.setMonth(HOJE.getMonth() - 1);
                 dataFimPrevisao.setDate(HOJE.getDate() + 7);
@@ -97,6 +120,7 @@ const getOptionValue = (periodValue, category) => {
         return JSON.stringify(dadosPrevisao);
     }
     
+    console.log(category)
     switch (periodValue) {
         case '24H':
         case 'HOJE':
@@ -181,7 +205,8 @@ const mockData = {
     interpretacao: [],
     chave_metricas: [],
   },
-  tipo_de_modelo: null
+  tipo_de_modelo: null,
+  linha_regressao:[]
 };
 
 
@@ -191,30 +216,44 @@ const mockData = {
             /*
             const payloadGraficoInicial = {
                 tipoAnalise: "comparar",
-                dataInicio: "2025-10-23",
-                dataPrevisao: "2025-11-23", 
+                dataInicio: "2025-09-23",
+                dataPrevisao: "2025-11-25", 
                 metricaAnalisar: "Total de Alertas",
                 variavelRelacionada: null,
-                fkEmpresa: ID_EMPRESA, 
+                fkEmpresa: 2, 
                 fkMaquina: null,
                 componente: null,
+            };
             };*/
         toggleSkeleton(true); 
+        const dataInicioObjeto = new Date(HOJE);
+        const dataFinalObjeto = new Date(HOJE);
+
+        dataInicioObjeto.setMonth(HOJE.getMonth() - 1);
+        dataFinalObjeto.setMonth(HOJE.getMonth() + 1);
+
+        const data_inicio = formatToDateOnly(dataInicioObjeto);
+        const data_final = formatToDateOnly(dataFinalObjeto);
 
         try {
             const payloadGraficoInicial = {
                 tipoAnalise: "comparar",
-                dataInicio: "2025-10-23",
-                dataPrevisao: "2025-11-23", 
-                metricaAnalisar: "DownTime",
+                dataInicio: data_inicio,
+                dataPrevisao: data_final, 
+                metricaAnalisar: "Total de Alertas",
                 variavelRelacionada: null,
-                fkEmpresa: 1, 
+                fkEmpresa: 2, 
                 fkMaquina: null,
                 componente: null,
             };
+            document.getElementById('selectTipoGrafico').value = "comparar";
+            document.getElementById('selectMetricaPrincipal').value = "Total de Alertas";
+            document.getElementById('selectTempo').value = data_inicio;
+
+            console.log(payloadGraficoInicial)
 
             const [dadosKpi, dadosGrafico] = await Promise.all([
-                buscar_dados_kpi_tabela(ID_EMPRESA, '2025-10-23', null),
+                buscar_dados_kpi_tabela(ID_EMPRESA, data_inicio, null),
                 buscar_dados_grafico(payloadGraficoInicial)
             ]);
             
@@ -223,7 +262,6 @@ const mockData = {
         } catch (erro) {
             console.error('Erro na inicialização do Dashboard:', erro);
         } finally {
-            // DESLIGA O SKELETON (Seja sucesso ou erro)
             toggleSkeleton(false);
         }
     });
