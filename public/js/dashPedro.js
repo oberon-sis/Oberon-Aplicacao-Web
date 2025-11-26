@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const limiteNum = parseFloat(param.limite_atual);
       const unidade = componenteAtual === 'REDE' ? '%' : '%';
       const limiteFormatado = `${limiteNum}${unidade}`;
-      if (param.identificador === 'CRITICO') {
+      if (param.identificador === 'CRÍTICO') {
         limiteCritico = `≥ ${limiteFormatado}`;
         parametrosAtuais.critico = limiteNum;
       } else if (param.identificador === 'ATENÇÃO') {
