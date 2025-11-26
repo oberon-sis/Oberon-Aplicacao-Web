@@ -26,6 +26,7 @@
             height: 16px;
             width: 16px;
         }
+        
     </style>
 </head>
 
@@ -73,9 +74,9 @@
             </div>
         </header>
 
-        <div class="mb-3">
-            <a class="d-block text-decoration-none text-dark" data-bs-toggle="collapse" href="#filterCollapse"
-                role="button" aria-expanded="false" aria-controls="filterCollapse" onclick="toggleFilterArrow(this)">
+        <div class="mb-3 ">
+            <a class="d-block text-decoration-none text-dark bg-fundo" data-bs-toggle="collapse" href="#filterCollapse"
+                role="button" aria-expanded="false" aria-controls="filterCollapse" onclick="toggleFilterArrow(this)" id="filtro-toggler">
                 <div class="d-flex gap-4 align-content-center">
 
                     <h4 class="filtragem">
@@ -89,11 +90,11 @@
                 </div>
             </a>
         </div>
-<div class="collapse card-filter" id="filterCollapse">
+<div class="collapse card-filter" id="filterCollapse" id="filtro-area-detalhe">
     <div class="row g-3">
         <div class="col-md-4">
             <label class="form-label">Tipo de Gráfico</label>
-            <select class="form-select form-select-sm" id="selectTipoGrafico" onchange="toggleFilterFields()">
+            <select class="form-select form-select-sm" id="selectTipoGrafico" onchange="toggleFilterFields()" id="filtro-tipo-grafico">
                 <option value="comparar" selected>Tendência – ótimo para ver se está aumentando ou diminuindo.</option>
                 <option value="Previsoes">Previsões – use para prever dados futuros relacionadas.</option>
                 <option value="Correlacao">Correlação – use para comparar duas variáveis e entender se estão
@@ -109,19 +110,21 @@
 
         <div class="col-md-4">
             <label class="form-label" id="labelMetricaPrincipal">Métrica a analisar</label>
-            <select class="form-select form-select-sm" id="selectMetricaPrincipal" onchange="toggleFilterFields()">
+            <select class="form-select form-select-sm" id="selectMetricaPrincipal" onchange="toggleFilterFields()" id="filtro-metrica-principal">
                 </select>
         </div>
 
-        <div class="col-md-4" id="divComponente" style="display: none;">
-            <label class="form-label">Componente</label>
-            <select class="form-select form-select-sm" id="selectComponente" onchange="toggleFilterFields()">
-                </select>
-        </div>
+
 
         <div class="col-md-4" id="divVariavelRelacionada" style="display: none;">
             <label class="form-label">Variável relacionada</label>
             <select class="form-select form-select-sm" id="selectVariavelRelacionada">
+                </select>
+        </div>
+
+                <div class="col-md-4" id="divComponente" style="display: none;">
+            <label class="form-label">Componente</label>
+            <select class="form-select form-select-sm" id="selectComponente" onchange="toggleFilterFields()">
                 </select>
         </div>
 
@@ -153,10 +156,10 @@
         </div>
     </div>
 </div>
-        <section class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-3 mb-4">
+        <section class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-3 mb-4" id="kpi-row">
 
             <div class="col">
-                <div class="kpi-card-geral">
+                <div class="kpi-card-geral" id="kpi-uptime-card">
                     <div class="kpi-header">
                         <span class="kpi-title-geral" id="kpi_uptime_titulo">Taxa de disponibilidade (Uptime)</span>
                         <div class="kpi-icon-wrapper"><i class="bi bi-pc-display"></i></div>
@@ -178,7 +181,7 @@
             </div>
 
             <div class="col">
-                <div class="kpi-card-geral">
+                <div class="kpi-card-geral" id="kpi-alertas-card">
                     <div class="kpi-header">
                         <span class="kpi-title-geral" id="kpi_alertas_totais_titulo">Total de Alertas</span>
                         <div class="kpi-icon-wrapper"><i class="bi bi-bar-chart-fill"></i></div>
@@ -199,7 +202,7 @@
             </div>
 
             <div class="col">
-                <div class="kpi-card-geral">
+                <div class="kpi-card-geral" id="kpi-criticos-card">
                     <div class="kpi-header">
                         <span class="kpi-title-geral" id="kpi_criticos_titulo">Total de Alertas Críticos</span>
                         <div class="kpi-icon-wrapper"><i class="bi bi-exclamation-triangle-fill text-warning"></i></div>
@@ -220,7 +223,7 @@
             </div>
 
             <div class="col">
-                <div class="kpi-card-geral">
+                <div class="kpi-card-geral" id="kpi-frequente-card">
                     <div class="kpi-header">
                         <span class="kpi-title-geral" id="kpi_frequente_titulo">Métrica Mais Frequente de Alerta</span>
                         <div class="kpi-icon-wrapper"><i class="bi bi-cpu"></i></div>
@@ -242,7 +245,7 @@
             </div>
         </section>
 
-        <section class="row g-4 mb-4 align-items-stretch">
+        <section class="row g-4 mb-4 align-items-stretch bg-fundo" id="chart-area">
 
             <div class="col-lg-9 h-100 ">
                 <div class="content-box h-100">
@@ -290,16 +293,16 @@
 
                     <div class="p-3 content-area overflow-auto flex-grow-1" style="height: calc(100% - 40px);">
 
-                        <div id="interpretacoes-content">
+                        <div id="interpretacoes-content" id="interpretacoes-panel">
                             <p class="mb-4" >
-                                "Após o pico de Abril, o **Downtime** estabilizou-se em torno de 55. A projeção (Mock)
-                                indica um aumento gradual para 65 até Setembro, **sugerindo atenção imediata**."
+                                "Após o pico de Abril, o Downtime estabilizou-se em torno de 55. A projeção (Mock)
+                                indica um aumento gradual para 65 até Setembro, sugerindo atenção imediata."
                             </p>
 
                             <p class="mb-0">
-                                "A análise desta tendência de alertas foi realizada utilizando **Regressão Linear**
-                                sobre o histórico semanal de dados. O **Índice de Confiabilidade** do modelo é de
-                                **85%**, indicando alta aderência da projeção à variação real observada."
+                                "A análise desta tendência de alertas foi realizada utilizando Regressão Linear
+                                sobre o histórico semanal de dados. O Índice de Confiabilidade do modelo é de
+                                85%, indicando alta aderência da projeção à variação real observada."
                             </p>
                         </div>
 
@@ -349,16 +352,32 @@
             </div>
         </section>
 
-        <section class="row g-4">
+        <section class="row g-4" id="ranking-table">
             <div class="col-lg-12">
                 <div class="content-box">
-                    <h5 class="mb-3" style="font-size: 1.1rem;">Ranking de Indisponibilidade
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0" style="font-size: 1.1rem;">
+                            Ranking de Indisponibilidade
+                        </h5>
+
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Filtro de Ranking">
+                            <input type="radio" class="btn-check" name="ranking-limit" id="top3" autocomplete="off" checked onclick="renderizarTabela2(this, 3)">
+                            <label class="btn btn-outline-info" for="top5">Top 3</label>
+
+                            <input type="radio" class="btn-check" name="ranking-limit" id="top5" autocomplete="off" onclick="renderizarTabela2(this, 6)">
+                            <label class="btn btn-outline-info" for="top5">Top 5</label>
+
+                            <input type="radio" class="btn-check" name="ranking-limit" id="top10" autocomplete="off" onclick="renderizarTabela2(this, 11)">
+                            <label class="btn btn-outline-info" for="top10">Top 10</label>
+
+                        </div>
+
                         <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                            data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Top Máquinas com Downtime"
-                            data-bs-content="Exibe as máquinas que tiveram a maior porcentagem de inatividade no período selecionado, priorizando aquelas com a maior variação negativa.">
-                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
+                                data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Top Máquinas com Downtime"
+                                data-bs-content="Exibe as máquinas que tiveram a maior porcentagem de inatividade no período selecionado, priorizando aquelas com a maior variação negativa.">
+                                <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
                         </button>
-                    </h5>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-hover table-sm">
                             <thead class="table-light">
@@ -409,5 +428,6 @@
     <script src="../js/dash_analise_desempenho/01_config.js"></script>
     <script src="../js/dash_analise_desempenho/03_render.js"></script>
     <script src="../js/dash_analise_desempenho/02_filters.js"></script>
+    <script src="../js/tour/analiseDesempenhoTour.js"></script>
 </body>
 </html>
