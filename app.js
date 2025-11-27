@@ -23,7 +23,6 @@ var gerenciamentoUsuarioRouter = require('./src/routes/gerenciamentoUsuario');
 var authRouter = require('./src/routes/email');
 var alertasRouter = require('./src/routes/alertas');
 
-const downloadRoutes = require('./src/routes/appInstalacao');
 
 const dashboardEspecificaRouter = require('./src/routes/dashboardEspecifica'); 
 

@@ -61,7 +61,9 @@ function calcular_taxa_disponibilidade(idMaquina) {
     )) AS tempoLigadoSemanaPassada
 
 FROM LogSistema
-GROUP BY fkMaquina where fkMaquina = ${idMaquina};
+ where fkMaquina = ${idMaquina}
+GROUP BY fkMaquina;
+
     `;
 
     return database.executar(instrucaoSql, [idMaquina]);
@@ -83,7 +85,7 @@ function buscar_kpi_alertas_30_dias(idMaquina) {
         JOIN Registro r ON c.idComponente = r.fkComponente
         LEFT JOIN Alerta a ON r.idRegistro = a.fkRegistro
         WHERE m.idMaquina = ${idMaquina}
-          AND r.horario >= DATE_SUB(NOW(), INTERVAL 7 DAY);
+          AND r.horario >= DATE_SUB(NOW(), INTERVAL 300 DAY);
     `;
 
     return database.executar(instrucaoSql, [idMaquina]);
@@ -96,7 +98,7 @@ function buscar_kpi_alertas_30_dias(idMaquina) {
 function buscar_dados_kpi(idMaquina) {
     console.log('[MODEL] KPI Pico 24h - Máquina:', idMaquina);
 
-    const instrucaoSql = `
+    let instrucaoSql = `
                   SELECT
     DATE_FORMAT(R.horario, '%d/%m %H:%i') AS Hora,
     TC.tipoComponete AS Componente,
@@ -110,6 +112,21 @@ WHERE R.horario >= DATE_SUB(NOW(), INTERVAL 300 HOUR )
   AND C.fkMaquina = ${idMaquina}
 ORDER BY R.horario DESC;
     `;
+    instrucaoSql = `
+    SELECT
+    TC.tipoComponete AS tipoRecurso,
+    COUNT(A.idAlerta) AS totalAlertas24h
+FROM Componente C
+INNER JOIN TipoComponente TC 
+        ON C.fkTipoComponente = TC.idTipoComponente
+LEFT JOIN Registro R 
+        ON R.fkComponente = C.idComponente
+       AND R.horario >= DATE_SUB(NOW(), INTERVAL 3000 HOUR)
+LEFT JOIN Alerta A 
+        ON A.fkRegistro = R.idRegistro
+WHERE C.fkMaquina = ${idMaquina}
+GROUP BY TC.tipoComponete
+ORDER BY totalAlertas24h DESC;`
 
     return database.executar(instrucaoSql, [idMaquina]);
 }
