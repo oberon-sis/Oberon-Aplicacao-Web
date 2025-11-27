@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../css/body.css" />
     <link rel="stylesheet" href="../component/menu/Menu.css" />
     <link rel="stylesheet" href="../component/notificao/Notificaocao.css">
-    <script src="../component/tour/TourGuide.css"></script>
+    <link rel="stylesheet" href="../component/tour/TourGuide.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="../css/dashboard_nathan.css">
@@ -20,55 +20,56 @@
     <div id="menu-container"></div>
 
     <main class="content flex-grow-1 padding_main main dashboard-main">
-        
+
         <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
-  <h2 class="text-black me-3">
-    Análise Histórica de Desempenho: &nbsp;&nbsp; <span id="tituloDoPainel">Máquina-002</span>
-  </h2>
+            <h2 class="text-black me-3">
+                Análise Histórica de Desempenho: &nbsp;&nbsp; <span id="tituloDoPainel">Máquina-003</span>
+            </h2>
 
-  <div class="d-flex align-items-center flex-wrap flex-grow-1 me-3">
-    <div class="d-flex align-items-center me-3 mb-2 mb-md-0">
-      <div class="search-autocomplete-container me-3" style="position: relative;">
+            <div class="d-flex align-items-center flex-wrap flex-grow-1 me-3">
+                <div class="d-flex align-items-center me-3 mb-2 mb-md-0">
+                    <div class="search-autocomplete-container me-3" style="position: relative;">
 
-        <div class="input-group input-group-sm" style="width: 200px">
-          <input type="text" class="form-control" id="inputBusca" placeholder="Buscar pelo nome da máquina"
-            oninput="filtrarSugestoes(this.value)" autocomplete="off" />
-          <span class="input-group-text"><i class="bi bi-search"></i></span>
-        </div>
+                        <div class="input-group input-group-sm" style="width: 200px">
+                            <input type="text" class="form-control" id="inputBusca"
+                                placeholder="Buscar pelo nome da máquina" oninput="filtrarSugestoes(this.value)"
+                                autocomplete="off" />
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        </div>
 
-        <ul id="listaSugestoes" class="autocomplete-list dropdown-menu"
-          style="position: absolute; top: 100%; left: 0; width: 100%; display: none;">
-        </ul>
-      </div>
+                        <ul id="listaSugestoes" class="autocomplete-list dropdown-menu"
+                            style="position: absolute; top: 100%; left: 0; width: 100%; display: none;">
+                        </ul>
+                    </div>
 
-      <p class="mx-2 mb-0 d-flex align-items-center">OU</p>
+                    <p class="mx-2 mb-0 d-flex align-items-center">OU</p>
 
-      <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-        aria-expanded="false">
-        <span id="valor_pesquisa_maquina">Selecionar</span>
-      </button>
-      <ul class="dropdown-menu dropdown-menu-end hover_verde">
-        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(1)">Máquina-0021</a></li>
-        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(2)">Máquina-0022</a></li>
-        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(3)">Máquina-0001</a></li>
-        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(4)">Máquina-0002</a></li>
-        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(5)">Máquina-0015</a></li>
-        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(6)">Máquina-0030</a></li>
-      </ul>
-    </div>
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <span id="valor_pesquisa_maquina">Selecionar</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end hover_verde">
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(1)">Máquina-0021</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(2)">Máquina-0022</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(3)">Máquina-0001</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(4)">Máquina-0002</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(5)">Máquina-0015</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(6)">Máquina-0030</a></li>
+                    </ul>
+                </div>
 
-    <div class="d-flex align-items-center">
-      <ul class="dropdown-menu dropdown-menu-end hover_verde">
-        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(1)">2025 - Bimestre 6</a></li>
-        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(2)">2025 - Bimestre 4</a></li>
-        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(3)">2025 - Bimestre 3</a></li>
-        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(4)">2025 - Bimestre 2</a></li>
-      </ul>
-    </div>
-  </div>
+                <div class="d-flex align-items-center">
+                    <ul class="dropdown-menu dropdown-menu-end hover_verde">
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(1)">2025 - Bimestre 6</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(2)">2025 - Bimestre 4</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(3)">2025 - Bimestre 3</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(4)">2025 - Bimestre 2</a></li>
+                    </ul>
+                </div>
+            </div>
 
-  
-</header>
+
+        </header>
 
 
         <div class="main-structure">
@@ -83,12 +84,12 @@
                         <div>
                             <span id="txt_disponibilidade" class="text-danger"> 97.8% <i class="bi bi-arrow-down"
                                     style="scale: 1.2"></i> </span>
-                            <p>Bimestre Passado: 99.5%</p>
+                            <p>Mês passado: 99.5%</p>
                         </div>
                         <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
                             data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que é Disponibilidade?"
                             data-bs-content="A porcentagem de tempo que o sistema ou máquina está operacional e acessível aos usuários durante o período de referência.">
-                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info"  />
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
                         </button>
                     </div>
                 </div>
@@ -102,12 +103,12 @@
                         <div>
                             <span id="txt_total_alertas" class="text-danger"> 450 <i class="bi bi-arrow-up"
                                     style="scale: 1.2"></i> </span>
-                            <p>Bimestre Passado: 380</p>
+                            <p>Mês passado: 380</p>
                         </div>
                         <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
                             data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que são Alertas?"
                             data-bs-content="Total de notificações geradas por exceder limites configurados de uso de recursos (CPU, RAM, etc.) ou falhas no sistema durante o bimestre.">
-                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info"  />
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
                         </button>
                     </div>
                 </div>
@@ -123,7 +124,7 @@
                         <div>
                             <span id="txt_percentual_critico" class="text-danger"> 15% <i class="bi bi-arrow-up"
                                     style="scale: 1.2"></i> </span>
-                            <p>Bimestre Passado: 8%</p>
+                            <p>Mês passado: 8%</p>
                         </div>
                         <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
                             data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que é Alerta Crítico?"
@@ -142,7 +143,7 @@
                     <div class="baixo-kpi">
                         <div>
                             <span id="txt_componente_critico"> RAM </span>
-                            <p>Bimestre Passado: CPU</p>
+                            <p>Mês passado: CPU</p>
                         </div>
                         <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
                             data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Componente Crítico"
@@ -153,88 +154,61 @@
                 </div>
             </section>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="data-card">
-            <h4 class="mb-3">Utilização Média de Recursos (CPU, RAM, DISCO)</h4>
-            <canvas id="mainChart"></canvas>
-        </div>
-    </div>
-    
-    <div class="col-md-6">
-        <div class="data-card">
-            <h4 class="mb-3">Estatísticas de Variação de Uso (%)</h4>
-            <table class="stats-table" id="tabela-estatistica">
-                </table>
-        </div>
-    </div>
-</div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="data-card">
+                        <h4 class="mb-3">Utilização Média de Recursos (CPU, RAM, DISCO)</h4>
+                        <canvas id="mainChart"></canvas>
+                    </div>
+                </div>
 
-<div class="row">
-    <div class="col-md-6"> 
-        <div class="data-card">
-            <h4 class="mb-3">Total de Alertas por Componente (30 Dias)</h4>
-            <canvas id="componentAlertsChart"></canvas>
-        </div>
-    </div>
-    
-    <div class="col-md-6"> 
-        <div class="data-card alert-events-card">
-            <h4 class="mb-3">Últimos Eventos de Alerta (24h)</h4>
-            <div class="table-responsive" id="tabela-alertas">
-                <table class="table table-sm compact-alert-table">
-                    <thead>
-                        <tr>
-                            <th>Hora</th>
-                            <th>Componente</th>
-                            <th>Alerta</th>
-                            <th>Valor</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="alert-critical">
-                            <td>14:05:30</td>
-                            <td>CPU</td>
-                            <td>Crítico</td>
-                            <td>98.5%</td>
-                        </tr>
-                        <tr class="alert-warning">
-                            <td>14:00:15</td>
-                            <td>RAM</td>
-                            <td>Aviso</td>
-                            <td>91.2%</td>
-                        </tr>
-                        <tr class="alert-info">
-                            <td>13:55:00</td>
-                            <td>DISCO</td>
-                            <td>Aviso</td>
-                            <td>85.0%</td>
-                        </tr>
-                        <tr class="alert-warning">
-                            <td>13:40:45</td>
-                            <td>CPU</td>
-                            <td>Aviso</td>
-                            <td>90.1%</td>
-                        </tr>
-                        <tr class="alert-critical">
-                            <td>13:30:20</td>
-                            <td>RAM</td>
-                            <td>Crítico</td>
-                            <td>95.5%</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="col-md-6">
+                    <div class="data-card">
+                        <h4 class="mb-3">Estatísticas de Variação de Uso (%)</h4>
+                        <table class="stats-table" id="tabela-estatistica">
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="data-card">
+                        <h4 class="mb-3">Total de Alertas por Componente (30 Dias)</h4>
+                        <canvas id="componentAlertsChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="data-card alert-events-card">
+                        <h4 class="mb-3">Últimos Eventos de Alerta (24h)</h4>
+                        <div class="table-responsive">
+                            <table class="table table-sm compact-alert-table">
+                                <thead>
+                                    <tr>
+                                        <th>Hora</th>
+                                        <th>Componente</th>
+                                        <th>Alerta</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabela-alertas">
+                                    <!-- JS IRÁ PREENCHER AQUI -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="../component/menu/Menu.js"></script>
     <script src="../component/tour/TourGuide.js"></script>
-    <script src="../js/dashboard/dashboard_maquina-especifica/tour_especifica.js"></script>
+    <script src="../js/dashboard/dashboard_maquina_especifica/tour_especifica.js"></script>
     <script src="../component/notificao/Notificacao.js"></script>
-    <script src="../js/dashboard/dashboard_maquina-especifica/graficos.js"></script>
+    <script src="../js/dashboard/dashboard_maquina_especifica/graficos.js"></script>
+    <script src="../js/dashboard/dashboard_maquina_especifica/dashboardEspecifica.js"></script>
 </body>
+
 </html>
