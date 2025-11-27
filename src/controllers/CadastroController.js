@@ -1,6 +1,60 @@
 const usuarioModel = require('../models/CadastroModel');
 const bcrypt = require('bcryptjs');
+const axios = require('axios'); 
 
+const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN ;
+
+function formatarNomeCanal(razaoSocial) {
+  let nomeFormatado = razaoSocial
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/[\s-]+/g, '-');
+
+  const PREFIXO = 'alertas-';
+  const MAX_LENGTH = 80 - PREFIXO.length;
+
+  if (nomeFormatado.length > MAX_LENGTH) {
+    nomeFormatado = nomeFormatado.substring(0, MAX_LENGTH);
+  }
+
+  return `${PREFIXO}${nomeFormatado}`;
+}
+
+async function criarCanalSlack(nomeCanal) {
+  const url = 'https://slack.com/api/conversations.create';
+  try {
+    const response = await axios.post(
+      url,
+      {
+        name: nomeCanal,
+        is_private: false,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${SLACK_BOT_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (response.data.ok) {
+      const canal = response.data.channel;
+      const linkCanal = `https://app.slack.com/client/TID_DO_WORKSPACE/${canal.id}`;
+
+      return {
+        idCanalSlack: canal.id,
+        linkCanalSlack: linkCanal,
+      };
+    } else {
+      console.error('Erro ao criar canal no Slack:', response.data.error);
+      throw new Error(`Slack API Error: ${response.data.error}`);
+    }
+  } catch (error) {
+    console.error('Erro de requisição ao Slack:', error.message);
+    throw new Error('Falha ao comunicar com a API do Slack.');
+  }
+}
 
 const usuarioController = {
   async autenticar(req, res) {
@@ -28,7 +82,7 @@ const usuarioController = {
     }
   },
 
-  finalizarCadastro(req, res) {
+  async finalizarCadastro(req, res) {
     const { empresa, usuario } = req.body;
 
     if (
@@ -48,60 +102,36 @@ const usuarioController = {
     const senhaHash = bcrypt.hashSync(usuario.senha, salt);
     usuario.senha = senhaHash;
 
-    usuarioModel
-      .cadastrar(empresa, usuario)
-      .then((resultado) => {
-        res.status(201).json({ mensagem: 'Cadastro realizado com sucesso!' });
-      })
-      .catch((erro) => {
-        console.error('Houve um erro ao realizar o cadastro:', erro);
-        if (erro.code === 'ER_DUP_ENTRY') {
-          return res.status(400).json({ mensagem: 'Erro: CNPJ, CPF ou E-mail já cadastrado.' });
-        }
-        res.status(500).json({ mensagem: 'Erro interno do servidor.', erro: erro.message });
-      });
-  },
+    let idEmpresaCadastrada;
 
-  getMenu(req, res) {
-    const idUsuario = req.params.idUsuario;
-    if (idUsuario == undefined) {
-      return res.status(400).send('Seu idUsuario está undefined!');
-    }
-    usuarioModel
-      .getMenu(idUsuario)
-      .then((resultado) => {
-        if (resultado.length === 0) {
-          return res.status(404).json({ mensagem: 'Usuário não encontrado.' });
-        }
-        const permissoesDoBanco = resultado[0].permissoes;
-        const permissoesArray = permissoesDoBanco.split(';');
-        const menu = {
-          alertaSuportePC:
-            gerarLinkHTML(modulos.home) +
-            (permissoesArray.includes('ver_alertas') ? gerarLinkHTML(modulos.alertas) : '') +
-            (permissoesArray.includes('ver_suporte') ? gerarLinkHTML(modulos.suporte) : ''),
-          painelPC: permissoesArray.includes('ver_paineis')
-            ? gerarDropdownHTML(modulos.paineis, false)
-            : '',
-          gestaoAreaPC: gerarSecaoGestaoHTML(permissoesArray, false),
-          alertaSuporteMobile:
-            gerarLinkHTML(modulos.home) +
-            (permissoesArray.includes('ver_alertas') ? gerarLinkHTML(modulos.alertas) : '') +
-            (permissoesArray.includes('ver_suporte') ? gerarLinkHTML(modulos.suporte) : ''),
-          painelMobile: permissoesArray.includes('ver_paineis')
-            ? gerarDropdownHTML(modulos.paineis, true)
-            : '',
-          gestaoAreaMobile: gerarSecaoGestaoHTML(permissoesArray, true),
-        };
-        res.status(200).json(menu);
-      })
-      .catch((erro) => {
-        console.error(
-          'Houve um erro ao realizar a procura de permissões! Erro:',
-          erro.sqlMessage || erro,
-        );
-        res.status(500).json(erro.sqlMessage || 'Erro interno do servidor.');
+    try {
+      const resultadoCadastro = await usuarioModel.cadastrar(empresa, usuario);
+
+      idEmpresaCadastrada = resultadoCadastro.insertId;
+
+      const nomeCanal = formatarNomeCanal(empresa.razaoSocial);
+
+      const canalSlack = await criarCanalSlack(nomeCanal);
+
+      await usuarioModel.atualizarCanalSlack(
+        idEmpresaCadastrada,
+        canalSlack.idCanalSlack,
+        canalSlack.linkCanalSlack,
+      );
+
+      res.status(201).json({
+        mensagem: 'Cadastro realizado com sucesso e canal Slack criado!',
+        nomeCanal: `#${nomeCanal}`,
       });
+    } catch (erro) {
+      console.error('Houve um erro no processo de cadastro/slack:', erro);
+
+      if (erro.code === 'ER_DUP_ENTRY') {
+        return res.status(400).json({ mensagem: 'Erro: CNPJ, CPF ou E-mail já cadastrado.' });
+      }
+
+      res.status(500).json({ mensagem: 'Erro interno do servidor.', erro: erro.message });
+    }
   },
 };
 
