@@ -1,8 +1,18 @@
 const usuarioModel = require('../models/CadastroModel');
 const bcrypt = require('bcryptjs');
-const axios = require('axios'); 
+const axios = require('axios');
 
-const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN ;
+const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN;
+
+const BOT_USER_IDS = (process.env.BOT_PADRAO_IDS || '')
+  .split(',')
+  .map((id) => id.trim())
+  .filter((id) => id.length > 0);
+
+const ADMINS_PADRAO_EMAILS = (process.env.ADMINS_PADRAO_EMAILS || '')
+  .split(';')
+  .map((email) => email.trim())
+  .filter((email) => email.length > 0);
 
 function formatarNomeCanal(razaoSocial) {
   let nomeFormatado = razaoSocial
@@ -21,14 +31,72 @@ function formatarNomeCanal(razaoSocial) {
   return `${PREFIXO}${nomeFormatado}`;
 }
 
-async function criarCanalSlack(nomeCanal) {
+async function convidarMembrosParaCanal(idCanalSlack) {
+  const urlInvite = 'https://slack.com/api/conversations.invite'; 
+
+  let idsParaConvidar = [...BOT_USER_IDS]; 
+
+  const buscarIdSlackPorEmail = async (email) => {
+    try {
+      const urlLookup = 'https://slack.com/api/users.lookupByEmail';
+      const responseLookup = await axios.get(urlLookup, {
+        params: { email: email },
+        headers: { Authorization: `Bearer ${SLACK_BOT_TOKEN}` },
+      });
+      if (responseLookup.data.ok && responseLookup.data.user) {
+        return responseLookup.data.user.id;
+      } else {
+        console.warn(`Aviso: Usuário Slack não encontrado para o e-mail: ${email}`);
+        return null;
+      }
+    } catch (e) {
+      console.error(`Erro ao buscar ID Slack para ${email}:`, e.message);
+      return null;
+    }
+  }; 
+  console.log(`Iniciando busca por ${ADMINS_PADRAO_EMAILS.length} Admins Padrão...`); 
+  const idsAdminsPadrao = await Promise.all(ADMINS_PADRAO_EMAILS.map(buscarIdSlackPorEmail)); 
+  idsParaConvidar = idsParaConvidar.concat(idsAdminsPadrao.filter((id) => id !== null));
+
+  let todosOsMembros = [...new Set(idsParaConvidar)].filter((id) => id.length > 0);
+
+  if (todosOsMembros.length === 0) {
+    console.log('Nenhum membro (bot ou admin) para convidar. Finalizando processo de convite.');
+    return;
+  }
+
+  console.log(`Convidando IDs: ${todosOsMembros.join(', ')} para o canal ${idCanalSlack}`); 
+
+  try {
+    const responseInvite = await axios.post(
+      urlInvite,
+      {
+        channel: idCanalSlack,
+        users: todosOsMembros.join(','),
+      },
+      {
+        headers: { Authorization: `Bearer ${SLACK_BOT_TOKEN}`, 'Content-Type': 'application/json' },
+      },
+    );
+
+    if (responseInvite.data.ok) {
+      console.log(`Sucesso! ${todosOsMembros.length} membros convidados para o canal.`);
+    } else {
+      console.error('Erro ao convidar membros:', responseInvite.data.error);
+    }
+  } catch (e) {
+    console.error('Erro na requisição de convite:', e.message);
+  }
+}
+
+async function gerenciarCanalSlack(nomeCanal) {
   const url = 'https://slack.com/api/conversations.create';
   try {
     const response = await axios.post(
       url,
       {
         name: nomeCanal,
-        is_private: false,
+        is_private: true,
       },
       {
         headers: {
@@ -38,18 +106,23 @@ async function criarCanalSlack(nomeCanal) {
       },
     );
 
-    if (response.data.ok) {
-      const canal = response.data.channel;
-      const linkCanal = `https://app.slack.com/client/TID_DO_WORKSPACE/${canal.id}`;
-
-      return {
-        idCanalSlack: canal.id,
-        linkCanalSlack: linkCanal,
-      };
-    } else {
+    if (!response.data.ok) {
       console.error('Erro ao criar canal no Slack:', response.data.error);
       throw new Error(`Slack API Error: ${response.data.error}`);
     }
+
+    const canal = response.data.channel;
+    const idCanalSlack = canal.id;
+    const linkCanalSlack = `https://app.slack.com/client/${canal.shared_team_ids[0] || 'TID_DO_WORKSPACE'}/${idCanalSlack}`;
+
+    console.log(`Canal criado com sucesso. ID: ${idCanalSlack}`); 
+
+    await convidarMembrosParaCanal(idCanalSlack);
+
+    return {
+      idCanalSlack: idCanalSlack,
+      linkCanalSlack: linkCanalSlack,
+    };
   } catch (error) {
     console.error('Erro de requisição ao Slack:', error.message);
     throw new Error('Falha ao comunicar com a API do Slack.');
@@ -111,7 +184,7 @@ const usuarioController = {
 
       const nomeCanal = formatarNomeCanal(empresa.razaoSocial);
 
-      const canalSlack = await criarCanalSlack(nomeCanal);
+      const canalSlack = await gerenciarCanalSlack(nomeCanal);
 
       await usuarioModel.atualizarCanalSlack(
         idEmpresaCadastrada,
