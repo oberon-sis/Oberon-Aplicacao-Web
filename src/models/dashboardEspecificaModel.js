@@ -11,7 +11,7 @@ function ultimo_eventos_maquina_especifica(idMaquina) {
     const instrucaoSql = `
         SELECT
             R.horario AS hora,
-            TC.tipoComponente AS componente,
+            TC.tipoComponete AS componente,
             A.nivel AS nivel,
             CONCAT(R.valor, '%') AS valor
         FROM Alerta A
@@ -19,7 +19,7 @@ function ultimo_eventos_maquina_especifica(idMaquina) {
         JOIN Componente C ON R.fkComponente = C.idComponente
         JOIN TipoComponente TC ON C.fkTipoComponente = TC.idTipoComponente
         WHERE C.fkMaquina = ${idMaquina}
-          AND R.horario >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+          AND R.horario >= DATE_SUB(NOW(), INTERVAL 300 HOUR)
         ORDER BY R.horario DESC
         LIMIT 5;
     `;
@@ -35,15 +35,33 @@ function calcular_taxa_disponibilidade(idMaquina) {
     console.log('[MODEL] Disponibilidade 30 dias - Máquina:', idMaquina);
 
     const instrucaoSql = `
-        SELECT
-            SUM(TIMESTAMPDIFF(MINUTE, i.dataCriacao, i.dataFim)) AS tempoTotalIndisponibilidadeMinutos,
-            (30 * 24 * 60) AS tempoTotalPeriodoMinutos
-        FROM Maquina m
-        JOIN LogSistema ls ON m.idMaquina = ls.fkMaquina
-        JOIN LogDetalheEvento lde ON ls.idLogSistema = lde.fkLogSistema
-        LEFT JOIN Incidente i ON lde.idLogDetalheEvento = i.fkLogDetalheEvento
-        WHERE m.idMaquina = ${idMaquina}
-          AND i.dataCriacao >= DATE_SUB(NOW(), INTERVAL 30 DAY);
+       SELECT
+    fkMaquina,
+    
+    -- Tempo total da última semana (semana atual)
+    SEC_TO_TIME(SUM(
+        CASE
+            WHEN tipoAcesso = 'AgenteJava'
+             AND WEEK(horarioInicio, 1) = WEEK(NOW(), 1)
+             AND YEAR(horarioInicio) = YEAR(NOW())
+            THEN TIMESTAMPDIFF(SECOND, horarioInicio, COALESCE(horarioFinal, NOW()))
+            ELSE 0
+        END
+    )) AS tempoLigadoUltimaSemana,
+    
+    -- Tempo total da semana passada
+    SEC_TO_TIME(SUM(
+        CASE
+            WHEN tipoAcesso = 'AgenteJava'
+             AND WEEK(horarioInicio, 1) = WEEK(NOW(), 1) - 1
+             AND YEAR(horarioInicio) = YEAR(NOW())
+            THEN TIMESTAMPDIFF(SECOND, horarioInicio, COALESCE(horarioFinal, horarioInicio)) -- se ainda estiver aberta, ignora
+            ELSE 0
+        END
+    )) AS tempoLigadoSemanaPassada
+
+FROM LogSistema
+GROUP BY fkMaquina where fkMaquina = ${idMaquina};
     `;
 
     return database.executar(instrucaoSql, [idMaquina]);
@@ -65,7 +83,7 @@ function buscar_kpi_alertas_30_dias(idMaquina) {
         JOIN Registro r ON c.idComponente = r.fkComponente
         LEFT JOIN Alerta a ON r.idRegistro = a.fkRegistro
         WHERE m.idMaquina = ${idMaquina}
-          AND r.horario >= DATE_SUB(NOW(), INTERVAL 30 DAY);
+          AND r.horario >= DATE_SUB(NOW(), INTERVAL 7 DAY);
     `;
 
     return database.executar(instrucaoSql, [idMaquina]);
@@ -79,27 +97,18 @@ function buscar_dados_kpi(idMaquina) {
     console.log('[MODEL] KPI Pico 24h - Máquina:', idMaquina);
 
     const instrucaoSql = `
-        SELECT
-            TC.tipoComponente AS tipoRecurso,
-            COUNT(A.idAlerta) AS totalAlertas24h,
-            CONCAT(
-                MAX(R.valor), '% - ',
-                DATE_FORMAT(
-                    SUBSTRING_INDEX(
-                        GROUP_CONCAT(R.horario ORDER BY R.valor DESC SEPARATOR ','),
-                        ',', 1
-                    ),
-                    '%H:%i'
-                )
-            ) AS maiorPicoUso
-        FROM vw_ComponentesParaAtualizar AS TC
-        LEFT JOIN Registro R 
-                ON R.fkComponente = TC.idComponente
-             AND R.horario >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
-        LEFT JOIN Alerta A 
-                ON A.fkRegistro = R.idRegistro
-        WHERE TC.fkMaquina = ${idMaquina}
-        GROUP BY TC.tipoComponente;
+                  SELECT
+    DATE_FORMAT(R.horario, '%d/%m %H:%i') AS Hora,
+    TC.tipoComponete AS Componente,
+    A.nivel AS Alerta,
+    CONCAT(R.valor, '%') AS Valor
+FROM Alerta A
+INNER JOIN Registro R ON A.fkRegistro = R.idRegistro
+INNER JOIN Componente C ON R.fkComponente = C.idComponente
+INNER JOIN TipoComponente TC ON C.fkTipoComponente = TC.idTipoComponente
+WHERE R.horario >= DATE_SUB(NOW(), INTERVAL 300 HOUR )
+  AND C.fkMaquina = ${idMaquina}
+ORDER BY R.horario DESC;
     `;
 
     return database.executar(instrucaoSql, [idMaquina]);
@@ -146,7 +155,7 @@ function buscar_parametros(idMaquina) {
 
     const instrucaoSql = `
         SELECT
-            CONCAT(TC.tipoComponente, '_', P.identificador) AS nomeParametro,
+            CONCAT(TC.tipoComponete, '_', P.identificador) AS nomeParametro,
             P.limite
         FROM Parametro P
         LEFT JOIN Componente C 
@@ -172,20 +181,20 @@ function buscar_info_24_horas_coleta(idMaquina) {
     console.log('[MODEL] Gráfico 24h - Máquina:', idMaquina);
 
     const instrucaoSql = `
-        SELECT
+               SELECT
             AVG(r.valor) AS valor_medio,
             DATE_FORMAT(
                 FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(r.horario) / (30 * 60)) * (30 * 60)), 
                 '%H:%i'
             ) AS intervaloTempo,
-            TC.tipoComponente AS tipoRecurso
+            TC.tipoComponete AS tipoRecurso
         FROM Registro r
         JOIN Componente C ON r.fkComponente = C.idComponente
         JOIN TipoComponente TC ON C.fkTipoComponente = TC.idTipoComponente
         WHERE C.fkMaquina = ${idMaquina}
-          AND r.horario >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
-        GROUP BY intervaloTempo, TC.tipoComponente
-        ORDER BY intervaloTempo ASC, TC.tipoComponente ASC;
+          AND r.horario >= DATE_SUB(NOW(), INTERVAL 300 HOUR)
+        GROUP BY intervaloTempo, TC.tipoComponete
+        ORDER BY intervaloTempo ASC, TC.tipoComponete ASC;
     `;
 
     return database.executar(instrucaoSql, [idMaquina]);
