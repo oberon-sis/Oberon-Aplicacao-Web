@@ -1,0 +1,191 @@
+:root {
+  --primary-color: #007bff;
+  --danger-color: #dc3545;
+  --success-color: #28a745;
+  --kpi-bg: #fff;
+  --main-bg: #f0f2f5;
+  --text-muted: #6c757d;
+}
+
+.content {
+  padding: 20px;
+  padding-top: 10px;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  width: 100%;
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  min-height: 100dvh;
+  background-color: #1a1a1a !important;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard-main {
+  padding: 20px;
+}
+
+/* Estilo dos Cards KPIs (Padrão) */
+.kpi-card-geral {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 15px;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.kpi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.kpi-title-geral {
+  font-size: 0.9rem;
+  color: #495057;
+  font-weight: 500;
+}
+
+.kpi-content {
+  display: flex;
+  align-items: flex-end;
+}
+
+.kpi-value-geral {
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.kpi-variation {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.kpi-small-text {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-top: 10px;
+}
+
+/* Estilos dos blocos de Gráfico/Tabela (Padrão) */
+.content-box {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 15px;
+}
+
+/* Estilo para a Tabela e KPIs de Informações Complementares */
+.table td,
+.table th {
+  vertical-align: middle;
+  font-size: 0.9rem;
+}
+
+.info-complementar-card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-left: 3px solid #0d6efd;
+  /* Linha azul para destaque */
+}
+
+.kpi-icon-wrapper i {
+  font-size: 1.2rem;
+  color: #adb5bd;
+}
+
+/* Estilo para o Filtro (Collapsible/Escondido) */
+.card-filter {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 15px;
+}
+
+/* Estilo Skeleton para o Gráfico (Vazio) */
+.chart-skeleton {
+  height: 300px;
+  background-color: #ffffff;
+  /* Cor cinza claro */
+  border: 1px dashed #ced4da;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 300px;
+}
+.filtragem {
+  background-color: #009ab4;
+  color: white;
+  font-size: 1.2rem;
+  margin-bottom: 0;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+/* --- ADICIONE ISTO DENTRO DA TAG <style> --- */
+
+/* Animação de pulso */
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* Classe base do Skeleton */
+.skeleton {
+  background-color: #e2e5e7 !important;
+  color: transparent !important; /* Esconde o texto real */
+  border-radius: 4px;
+  cursor: wait;
+  animation: pulse 1.5s infinite ease-in-out;
+  pointer-events: none;
+  user-select: none;
+  display: inline-block;
+  min-height: 1em;
+}
+
+/* Ajuste específico para o Gráfico (substitui o canvas) */
+.chart-skeleton {
+  width: 100%;
+  height: 100%; /* ou 300px fixo se preferir */
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+/* Estado ativo do skeleton no gráfico */
+.chart-skeleton.skeleton {
+  background-color: #f8f9fa; /* Fundo mais claro para o container do gráfico */
+}
