@@ -1,44 +1,53 @@
-// Arquivo: src/controllers/riscoTendenciaController.js
+// /controllers/dashboardEstrategicaController.js
+var riscoModel = require("../models/dashboardEstrategicaModel");
 
-const riscoTendenciaModel = require('../models/dashboardEstrategicaModel'); // Certifique-se de que o caminho está correto!
+function getDadosGerais(req, res) {
+    const idEmpresa = req.params.idEmpresa;
 
-async function buscarDadosRiscoTendencia(req, res) {
-    try {
-        const kpis = await riscoTendenciaModel.getKpisEstrategicos();
-        const kpiData = kpis[0]; 
+    if (!idEmpresa) {
+        return res.status(400).send("idEmpresa undefined");
+    }
 
-        const [
-            tendenciaRisco,
-            comparativoDemanda,
-            evolucaoIndisponibilidade,
-            integridadeEvolucao,
-            rankingPrioridade
-        ] = await riscoTendenciaModel.getGraficosEstrategicos();
+    Promise.all([
+        riscoModel.buscarKpis(idEmpresa),
+        riscoModel.buscarTendencia(idEmpresa),
+        riscoModel.buscarComparativo(idEmpresa),
+        riscoModel.buscarRanking(idEmpresa)
+    ])
+    .then(([kpisResult, tendencia, comparativo, ranking]) => {
 
-        // Formatar e enviar a resposta
+        const kpisRow = (kpisResult && kpisResult[0]) ? kpisResult[0] : {};
+
         res.json({
             kpis: {
-                mediaDiariaMaquinasAlerta: kpiData.mediaDiariaMaquinasAlerta || 0,
-                taxaCrescimentoUso: kpiData.taxaCrescimentoUso || 0,
-                percIncidentesAltoRisco: kpiData.percIncidentesAltoRisco || 0,
-                taxaMediaIndisponibilidade: kpiData.taxaMediaIndisponibilidade || 0,
-                percIntegridadeLogs: kpiData.percIntegridadeLogs || 0,
+                kpi_incidentes_criticos: kpisRow.kpi_incidentes_criticos || 0,
+                kpi_maquinas_saturacao: kpisRow.kpi_maquinas_saturacao || 0,
+                kpi_comunicacao_estavel: kpisRow.kpi_comunicacao_estavel || 0,
+                kpi_integridade_logs: kpisRow.kpi_integridade_logs || 0,
+                kpi_score_risco: kpisRow.kpi_score_risco || 0
             },
             graficos: {
-                tendenciaRisco,
-                comparativoDemanda,
-                evolucaoIndisponibilidade,
-                integridadeEvolucao,
-                rankingPrioridade
+                tendencia: {
+                    labels: tendencia.map(l => l.periodo),
+                    data: tendencia.map(l => l.valor)
+                },
+                demanda: {
+                    labels: comparativo.map(c => c.componente),
+                    data: comparativo.map(c => c.quantidade)
+                },
+                ranking: {
+                    labels: ranking.map(r => r.maquina),
+                    data: ranking.map(r => r.total_alertas)
+                }
             }
         });
-
-    } catch (erro) {
-        console.error("Erro ao buscar dados do dashboard de Risco e Tendência:", erro);
-        res.status(500).json({ erro: "Erro interno do servidor ao carregar dados." });
-    }
+    })
+    .catch(err => {
+        console.error("Erro no controller (dashboardEstrategica):", err.sqlMessage || err.message || err);
+        res.status(500).json({ erro: err.sqlMessage || err.message || "Erro interno" });
+    });
 }
 
 module.exports = {
-    buscarDadosRiscoTendencia
+    getDadosGerais
 };

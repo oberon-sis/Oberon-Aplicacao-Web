@@ -1,10 +1,10 @@
-// Arquivo: src/routes/riscoTendenciaRoute.js
+// /routes/dashboardEstrategica.js
+var express = require("express");
+var router = express.Router();
+var controller = require("../controllers/dashboardEstrategicaController");
 
-const express = require('express');
-const router = express.Router();
-const riscoTendenciaController = require('../controllers/dashboardEstrategicaController');
-
-// Rota para buscar todos os dados do dashboard de Risco e Tendência
-router.get('/dados-bimestrais', riscoTendenciaController.buscarDadosRiscoTendencia);
+router.get("/geral/:idEmpresa", function (req, res) {
+    controller.getDadosGerais(req, res);
+});
 
 module.exports = router;

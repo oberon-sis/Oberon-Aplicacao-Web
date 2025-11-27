@@ -1,189 +1,127 @@
-// Arquivo: src/models/riscoTendenciaModel.js
+var database = require("../database/config");
 
-const database = require('../database/config'); 
-
-// Constantes de Filtro e Cálculo
-const DIAS_BIMESTRE = 60;
-const DIAS_MENSAIS = 30;
-const DIAS_SEMANA = 7;
-const TOTAL_MAQUINAS_MONITORADAS = 30;
-const REGISTROS_ESPERADOS = 30 * 3 * 1440 * DIAS_SEMANA; // 30 máquinas * 3 comp * 1440 reg/dia * 7 dias
-
-function getKpisEstrategicos() {
-    const consultaKpis = `
-    -- ===================================================================================
-    -- CTEs Auxiliares (Para Taxas)
-    -- ===================================================================================
-    WITH UltimoRegistro AS (
-        SELECT C.fkMaquina, MAX(R.horario) AS UltimoHorario
-        FROM Registro R JOIN Componente C ON R.fkComponente = C.idComponente
-        GROUP BY C.fkMaquina
-    ),
-    UsoRAMAtual AS (
-        SELECT C.fkMaquina
-        FROM Registro R
-        JOIN Componente C ON R.fkComponente = C.idComponente
-        JOIN TipoComponente TC ON C.fkTipoComponente = TC.idTipoComponente
-        JOIN UltimoRegistro UR ON C.fkMaquina = UR.fkMaquina AND R.horario = UR.UltimoHorario
-        WHERE TC.tipoComponete = 'RAM' AND R.valor > 75 
-        GROUP BY C.fkMaquina
-    ),
-    AlertasPorMaquinaDia AS (
-        SELECT AVG(T.MaquinasEmAlerta) AS Media
-        FROM (
-            SELECT 
-                DATE(A.horario) AS Dia,
-                COUNT(DISTINCT C.fkMaquina) AS MaquinasEmAlerta
-            FROM Alerta A
-            JOIN Registro R ON A.fkRegistro = R.idRegistro
-            JOIN Componente C ON R.fkComponente = C.idComponente
-            WHERE A.nivel IN ('ATENÇÃO', 'CRITICO') AND A.horario >= DATE_SUB(NOW(), INTERVAL ${DIAS_BIMESTRE} DAY)
-            GROUP BY Dia
-        ) AS T
-    ),
-    TotalIncidentesBimestre AS (
-        SELECT COUNT(idIncidente) AS Total
-        FROM Incidente WHERE dataCriacao >= DATE_SUB(NOW(), INTERVAL ${DIAS_BIMESTRE} DAY)
-    ),
-    MediaUsoMensal AS (
+function buscarKpis(idEmpresa) {
+    const query = `
         SELECT
-            AVG(R.valor) AS Media_Uso,
-            CASE WHEN R.horario >= DATE_SUB(NOW(), INTERVAL ${DIAS_MENSAIS} DAY) THEN 'MesAtual' ELSE 'MesAnterior' END AS Periodo
-        FROM Registro R
-        JOIN Componente C ON R.fkComponente = C.idComponente
-        WHERE C.fkTipoComponente IN (1, 2) AND R.horario >= DATE_SUB(NOW(), INTERVAL ${DIAS_BIMESTRE} DAY)
-        GROUP BY Periodo
-    ),
-    MediaDuracaoSessao AS (
-        SELECT 
-            AVG(TIMESTAMPDIFF(MINUTE, horarioInicio, horarioFinal)) AS Media_Minutos
-        FROM LogSistema
-        WHERE horarioInicio >= DATE_SUB(NOW(), INTERVAL ${DIAS_BIMESTRE} DAY)
-    )
-    
-    -- ===================================================================================
-    -- Seleção Final dos KPIs
-    -- ===================================================================================
-    SELECT
-        -- KPI 1: Média Diária de Máquinas em Alerta
-        (SELECT Media FROM AlertasPorMaquinaDia) AS mediaDiariaMaquinasAlerta,
+            (SELECT COUNT(*) FROM Incidente i
+             JOIN LogDetalheEvento lde ON lde.idLogDetalheEvento = i.fkLogDetalheEvento
+             JOIN LogSistema ls ON lde.fkLogSistema = ls.idLogSistema
+             JOIN Maquina m ON ls.fkMaquina = m.idMaquina
+             WHERE m.fkEmpresa = ${idEmpresa}
+               AND i.severidade = 'Critica'
+               AND i.dataCriacao >= DATE_SUB(NOW(), INTERVAL 60 DAY)
+            ) AS kpi_incidentes_criticos,
 
-        -- KPI 2: Taxa de Crescimento de Uso
-        (SELECT ((MA.Media_Uso - MB.Media_Uso) / NULLIF(MB.Media_Uso, 0)) * 100
-        FROM MediaUsoMensal MA, MediaUsoMensal MB
-        WHERE MA.Periodo = 'MesAtual' AND MB.Periodo = 'MesAnterior'
-        ) AS taxaCrescimentoUso,
+            (SELECT COUNT(DISTINCT m.idMaquina)
+             FROM Maquina m
+             JOIN Componente c ON c.fkMaquina = m.idMaquina
+             JOIN TipoComponente tc ON c.fkTipoComponente = tc.idTipoComponente
+             JOIN Registro r ON r.fkComponente = c.idComponente
+             WHERE m.fkEmpresa = ${idEmpresa}
+               AND tc.tipoComponete IN ('CPU','RAM')
+               AND r.horario >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+               AND r.valor > 85
+            ) AS kpi_maquinas_saturacao,
 
-        -- KPI 3: % Incidentes Críticos/Altos
-        (SELECT (COUNT(idIncidente) / NULLIF(TIB.Total, 0)) * 100
-        FROM Incidente
-        JOIN TotalIncidentesBimestre TIB
-        WHERE severidade IN ('Critica', 'Alta') AND dataCriacao >= DATE_SUB(NOW(), INTERVAL ${DIAS_BIMESTRE} DAY)
-        ) AS percIncidentesAltoRisco,
-        
-        -- KPI 4 (NOVO): Taxa Média de Indisponibilidade de Agentes (Proxy)
-        (SELECT (5 - Media_Minutos) / 5 * 100 
-         FROM MediaDuracaoSessao) AS taxaMediaIndisponibilidade, 
-         -- Assumindo que 5 minutos é a duração ideal de uma sessão de log. Se for menor, a indisponibilidade é alta.
+            (SELECT 
+                CASE WHEN total = 0 THEN 0 ELSE ROUND(stable / total * 100,2) END
+             FROM (
+                SELECT 
+                    (SELECT COUNT(*) FROM LogSistema ls2 
+                     JOIN Maquina m2 ON ls2.fkMaquina = m2.idMaquina
+                     WHERE m2.fkEmpresa = ${idEmpresa}
+                       AND ls2.horarioInicio >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+                    ) AS total,
+                    (SELECT COUNT(*) FROM LogSistema ls3 
+                     JOIN Maquina m3 ON ls3.fkMaquina = m3.idMaquina
+                     WHERE m3.fkEmpresa = ${idEmpresa}
+                       AND ls3.horarioInicio >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+                       AND ls3.horarioFinal IS NOT NULL
+                    ) AS stable
+             ) q
+            ) AS kpi_comunicacao_estavel,
 
-        -- KPI 5: Integridade de Logs (Últimos 7 dias)
-        (SELECT (COUNT(idRegistro) / ${REGISTROS_ESPERADOS}) * 100
-        FROM Registro
-        WHERE horario >= DATE_SUB(NOW(), INTERVAL ${DIAS_SEMANA} DAY)
-        ) AS percIntegridadeLogs;
+            (SELECT COUNT(*) FROM LogDetalheEvento lde
+             JOIN LogSistema ls ON lde.fkLogSistema = ls.idLogSistema
+             JOIN Maquina m ON ls.fkMaquina = m.idMaquina
+             WHERE m.fkEmpresa = ${idEmpresa}
+               AND lde.horario >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+            ) AS kpi_integridade_logs,
+
+            (SELECT ROUND(AVG(cnt),2) FROM (
+                SELECT COUNT(*) AS cnt
+                FROM Alerta a
+                JOIN Registro r ON a.fkRegistro = r.idRegistro
+                JOIN Componente c ON r.fkComponente = c.idComponente
+                JOIN Maquina m ON c.fkMaquina = m.idMaquina
+                WHERE m.fkEmpresa = ${idEmpresa}
+                  AND r.horario >= DATE_SUB(NOW(), INTERVAL 60 DAY)
+                GROUP BY m.idMaquina
+            ) t
+            ) AS kpi_score_risco;
     `;
-    return database.executar(consultaKpis);
+    return database.executar(query);
 }
 
-function getGraficosEstrategicos() {
-    // G1. Tendência de Risco (Colunas Empilhadas)
-    const tendenciaRisco = `
-        SELECT
-            DATE_FORMAT(A.horario, '%Y-%m') AS Mes,
-            A.nivel AS Nivel,
-            COUNT(A.idAlerta) AS Contagem
-        FROM Alerta A
-        WHERE A.nivel IN ('ATENÇÃO', 'CRITICO') 
-            AND A.horario >= DATE_SUB(NOW(), INTERVAL ${DIAS_BIMESTRE} DAY)
-        GROUP BY Mes, Nivel
-        ORDER BY Mes, Nivel;
+// 📌 Tendência — gráfico 1
+function buscarTendencia(idEmpresa) {
+    const query = `
+        SELECT 
+            DATE_FORMAT(r.horario, '%d/%m') AS periodo,
+            COUNT(*) AS valor
+        FROM Alerta a
+        JOIN Registro r ON a.fkRegistro = r.idRegistro
+        JOIN Componente c ON r.fkComponente = c.idComponente
+        JOIN Maquina m ON c.fkMaquina = m.idMaquina
+        WHERE m.fkEmpresa = ${idEmpresa}
+          AND a.nivel = 'CRÍTICO'
+          AND r.horario >= DATE_SUB(NOW(), INTERVAL 120 DAY)
+        GROUP BY periodo
+        ORDER BY MIN(r.horario);
     `;
+    return database.executar(query);
+}
 
-    // G2. Comparativo de Demanda de Recursos (Colunas Agrupadas)
-    const comparativoDemanda = `
-        SELECT
-            AVG(CASE WHEN TC.tipoComponete = 'CPU' THEN R.valor END) AS media_cpu,
-            AVG(CASE WHEN TC.tipoComponete = 'RAM' THEN R.valor END) AS media_ram,
-            CASE
-                WHEN R.horario >= DATE_SUB(NOW(), INTERVAL ${DIAS_MENSAIS} DAY) THEN 'MesAtual'
-                ELSE 'MesAnterior'
-            END AS Periodo
-        FROM Registro R
-        JOIN Componente C ON R.fkComponente = C.idComponente
-        JOIN TipoComponente TC ON C.fkTipoComponente = TC.idTipoComponente
-        WHERE TC.tipoComponete IN ('CPU', 'RAM')
-            AND R.horario >= DATE_SUB(NOW(), INTERVAL ${DIAS_BIMESTRE} DAY)
-        GROUP BY Periodo;
+// 📌 Comparativo — gráfico 2
+function buscarComparativo(idEmpresa) {
+    const query = `
+        SELECT 
+            tc.tipoComponete AS componente,
+            ROUND(AVG(r.valor),2) AS quantidade
+        FROM Registro r
+        JOIN Componente c ON r.fkComponente = c.idComponente
+        JOIN TipoComponente tc ON c.fkTipoComponente = tc.idTipoComponente
+        JOIN Maquina m ON c.fkMaquina = m.idMaquina
+        WHERE m.fkEmpresa = ${idEmpresa}
+          AND r.horario >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+          AND tc.tipoComponete IN ('CPU','RAM','DISCO')
+        GROUP BY tc.tipoComponete;
     `;
+    return database.executar(query);
+}
 
-    // G3 (NOVO): Evolução Semanal da Indisponibilidade
-    const evolucaoIndisponibilidade = `
-        SELECT
-            DATE_FORMAT(horarioInicio, '%Y-%u') AS Semana,
-            AVG(TIMESTAMPDIFF(MINUTE, horarioInicio, horarioFinal)) AS Media_Duracao_Min
-        FROM LogSistema
-        WHERE horarioInicio >= DATE_SUB(NOW(), INTERVAL ${DIAS_BIMESTRE} DAY)
-        GROUP BY Semana
-        ORDER BY Semana;
+// 📌 Ranking — gráfico 3
+function buscarRanking(idEmpresa) {
+    const query = `
+        SELECT 
+            m.nome AS maquina,
+            COUNT(a.idAlerta) AS total_alertas
+        FROM Alerta a
+        JOIN Registro r ON a.fkRegistro = r.idRegistro
+        JOIN Componente c ON r.fkComponente = c.idComponente
+        JOIN Maquina m ON c.fkMaquina = m.idMaquina
+        WHERE m.fkEmpresa = ${idEmpresa}
+          AND r.horario >= DATE_SUB(NOW(), INTERVAL 60 DAY)
+        GROUP BY m.idMaquina
+        ORDER BY total_alertas DESC
+        LIMIT 10;
     `;
-
-    // G4. Evolução da Integridade da Coleta (Linha - Registros Semanais)
-    const integridadeEvolucao = `
-        SELECT
-            DATE_FORMAT(horario, '%Y-%u') AS Semana,
-            COUNT(idRegistro) AS RegistrosColetados
-        FROM Registro
-        WHERE horario >= DATE_SUB(NOW(), INTERVAL ${DIAS_BIMESTRE} DAY)
-        GROUP BY Semana
-        ORDER BY Semana;
-    `;
-
-    // G5. Ranking de Máquinas por Prioridade de Intervenção (Tabela)
-    const rankingPrioridade = `
-        SELECT
-            M.nome AS Maquina,
-            MAX(I.severidade) AS Severidade_Max,
-            COUNT(A.idAlerta) AS Alertas_Bimestre
-        FROM Maquina M
-        LEFT JOIN Componente C ON M.idMaquina = C.fkMaquina
-        LEFT JOIN Registro R ON C.idComponente = R.fkComponente
-        LEFT JOIN Alerta A ON R.idRegistro = A.fkRegistro
-        LEFT JOIN LogDetalheEvento LDE ON LDE.horario = R.horario
-        LEFT JOIN Incidente I ON LDE.idLogDetalheEvento = I.fkLogDetalheEvento AND I.dataCriacao >= DATE_SUB(NOW(), INTERVAL ${DIAS_BIMESTRE} DAY)
-        WHERE A.horario >= DATE_SUB(NOW(), INTERVAL ${DIAS_BIMESTRE} DAY) OR I.idIncidente IS NOT NULL
-        GROUP BY M.nome
-        HAVING COUNT(A.idAlerta) > 0 OR MAX(I.severidade) IS NOT NULL
-        ORDER BY
-            CASE MAX(I.severidade)
-                WHEN 'Critica' THEN 1
-                WHEN 'Alta' THEN 2
-                WHEN 'Média' THEN 3
-                ELSE 4
-            END,
-            Alertas_Bimestre DESC
-        LIMIT 5;
-    `;
-
-    return Promise.all([
-        database.executar(tendenciaRisco),
-        database.executar(comparativoDemanda),
-        database.executar(evolucaoIndisponibilidade),
-        database.executar(integridadeEvolucao),
-        database.executar(rankingPrioridade)
-    ]);
+    return database.executar(query);
 }
 
 module.exports = {
-    getKpisEstrategicos,
-    getGraficosEstrategicos
+    buscarKpis,
+    buscarTendencia,
+    buscarComparativo,
+    buscarRanking
 };

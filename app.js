@@ -29,10 +29,6 @@ var homeRouter = require('./src/routes/home');
 var dashboardParametrosRouter = require('./src/routes/dashboardParametros')
 var dashboardEstrategicaRouter = require("./src/routes/dashboardEstrategica"); 
 
-// ROTEADOR GERAL: Mantido para outras páginas de dashboard que não sejam de risco.
-var dashboardRouter = require("./src/routes/dashboard"); 
-
-
 // --- CONFIGURAÇÃO DOS MIDDLEWARES ---
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -56,13 +52,8 @@ app.use('/painel', painelRoutes);
 app.use('/api/desempenho', analiseGeralRoutes);
 app.use('/api/maquinas', homeRouter);
 app.use('/dashboardParametros', dashboardParametrosRouter)
+app.use("/dashboardEstrategica", dashboardEstrategicaRouter); 
 
-// CORREÇÃO: Mapeia o roteador específico para o prefixo /dashboard.
-// O frontend chama /dashboard/risco/6
-app.use("/dashboard", dashboardEstrategicaRouter); 
-
-// O roteador geral dashboardRouter (se tiver outras rotas)
-// app.use("/dashboardGeral", dashboardRouter); 
 
 app.listen(PORTA_APP, function () {
   console.log(`                                                                            
