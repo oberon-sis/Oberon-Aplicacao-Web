@@ -28,6 +28,7 @@ var painelRoutes = require('./src/routes/painel');
 var homeRouter = require('./src/routes/home');
 var dashboardParametrosRouter = require('./src/routes/dashboardParametros')
 var dashboardEstrategicaRouter = require("./src/routes/dashboardEstrategica"); 
+var logAuditoriaRouter = require('./src/routes/logAuditoria');
 
 // --- CONFIGURAÇÃO DOS MIDDLEWARES ---
 app.use(express.json());
@@ -51,9 +52,9 @@ app.use('/api/download', downloadRoutes);
 app.use('/painel', painelRoutes);
 app.use('/api/desempenho', analiseGeralRoutes);
 app.use('/api/maquinas', homeRouter);
-app.use('/dashboardParametros', dashboardParametrosRouter)
+app.use('/dashboardParametros', dashboardParametrosRouter);
 app.use("/dashboardEstrategica", dashboardEstrategicaRouter); 
-
+app.use("/logAuditoria", logAuditoriaRouter);
 
 app.listen(PORTA_APP, function () {
   console.log(`                                                                            
