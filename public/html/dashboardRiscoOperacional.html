@@ -31,7 +31,7 @@
 
     <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
       <h2 class="text-black me-3">
-        Gestão de Risco e Tendência Operacional (Bimestral)
+        Gestão de Risco e Tendência Operacional
       </h2>
 
       <div class="d-flex align-items-center flex-wrap flex-grow-1 me-3">
@@ -139,12 +139,15 @@
 
       <div class="chart-item-wrapper" id="chart-tendencia-risco-critico">
         <h3 class="text-lg font-medium mb-3 text-gray-700">
-          Tendência de Risco (Alertas Crítico vs Atenção)
+          Tendência de Risco por Tipo de Alertas
         </h3>
         <div style="height: 300px">
           <canvas id="riscoCriticoTendenciaChart"></canvas>
         </div>
       </div>
+
+
+
 
       <div class="chart-item-wrapper" id="chart-distribuicao-severidade">
         <h3 class="text-lg font-medium mb-2 text-gray-700">
@@ -170,7 +173,6 @@
             <thead>
               <tr>
                 <th>Máquina</th>
-                <th>Severidade (Max)</th>
                 <th>Alertas (Bimestre)</th>
               </tr>
             </thead>
@@ -180,14 +182,15 @@
         </div>
       </div>
 
-      <div class="chart-item-wrapper" id="chart-comparativo-saturacao">
-        <h3 class="text-lg font-medium mb-2 text-gray-700">
-          Comparativo de Saturação (CPU, RAM, Disco)
+      <div class="chart-item-wrapper" id="chart-severidade-comparativa">
+        <h3 class="text-lg font-medium mb-3 text-gray-700">
+          Distribuição de Severidade dos Incidentes (Comparativo Bimestral)
         </h3>
         <div style="height: 300px">
-          <canvas id="comparativoSaturacaoChart"></canvas>
+          <canvas id="graficoSeveridadeComparativa"></canvas>
         </div>
       </div>
+
 
       <div class="chart-item-wrapper" style="border:none;"></div>
     </section>
@@ -197,7 +200,7 @@
     <script src="../component/menu/Menu.js"></script>
     <script src="../component/notificao/Notificacao.js"></script>
     <script src="../component/tour/TourGuide.js"></script>
-    
+
     <script src="../js/dashboard/riscoOperacional.js"></script>
 
 </body>
