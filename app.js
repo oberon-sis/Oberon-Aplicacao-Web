@@ -28,7 +28,6 @@ const downloadRoutes = require('./src/routes/appInstalacao');
 const dashboardEspecificaRouter = require('./src/routes/dashboardEspecifica'); 
 
 const analiseGeralRoutes = require('./src/routes/analise-tendencia');
-var downloadRoutes = require('./src/routes/appInstalacao');
 var painelRoutes = require('./src/routes/painel');
 var homeRouter = require('./src/routes/home');
 var dashboardParametrosRouter = require('./src/routes/dashboardParametros')
