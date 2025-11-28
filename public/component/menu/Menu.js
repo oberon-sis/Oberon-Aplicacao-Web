@@ -2,11 +2,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const DASHBOARD_MAP = {
     ver_dash_monitoramento: { nome: 'Monitoramento Ativo', url: 'painel.html' },
     ver_dash_nathan: { nome: 'Análise Historica', url: 'analiseHistorica.html' },
+    ver_dash_bruna: { nome: 'Análise de rede', url: 'analiseRede.html' },
     ver_dash_pedro: { nome: 'Análise de Parâmetros', url: 'dashPedro.html' },
     ver_dash_jhoel: { nome: 'Análise de Desempenho', url: 'análiseDesempenho.html' },
     ver_dash_dandara: { nome: 'Gestão de Risco', url: 'dashboardRiscoOperacional.html' },
     ver_dash_miguel: { nome: 'Gestão de Ativos', url: 'DashboardMiguel.html' },
-    ver_dash_bruna: { nome: 'Risco de Componentes', url: 'riscoComponente.html' },
   };
 
   function ocultarElementoSeNaoPermitido(id, isPermitido) {
