@@ -45,7 +45,7 @@ function executar(instrucaoSql) {
                     console.error("❌ ERRO AO EXECUTAR A QUERY: " + error.sqlMessage);
                     return reject({ message: "Erro ao executar a query SQL.", sqlMessage: error.sqlMessage, error: error });
                 }
-
+                console.log(results)
                 resolve(results);
             });
         });
