@@ -26,7 +26,10 @@ document.addEventListener("DOMContentLoaded", function() {
  * Agora recebe o bimestre como parâmetro
  */
 function carregarDadosDashboard(bimestre) {
-    const idEmpresa = sessionStorage.getItem("ID_EMPRESA") || 1; 
+      const usuarioString = sessionStorage.getItem('usuario');
+    const usuarioObjeto = JSON.parse(usuarioString);
+
+    const idEmpresa = usuarioObjeto.fkEmpresa
 
     console.log(`Buscando dados da empresa ${idEmpresa} para o Bimestre ${bimestre}...`);
 
