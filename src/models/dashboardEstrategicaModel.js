@@ -1,5 +1,6 @@
 var database = require("../database/config");
 
+// KPIs
 function buscarKpis(idEmpresa) {
     const query = `
         SELECT
@@ -63,7 +64,7 @@ function buscarKpis(idEmpresa) {
     return database.executar(query);
 }
 
-// Função de Tendência (preservada)
+// Tendência
 function buscarTendencia(idEmpresa) {
     const query = `
        SELECT 
@@ -82,30 +83,27 @@ function buscarTendencia(idEmpresa) {
     return database.executar(query);
 }
 
-// 📌 Comparativo por Nível - NOVO GRÁFICO
+// Comparativo por Nível
 function buscarComparativoPorNivel(idEmpresa) {
     const query = `
         SELECT
             a.nivel AS nivel_alerta,
-            -- Contagem de alertas no Bimestre Atual (últimos 60 dias)
             SUM(CASE WHEN r.horario >= DATE_SUB(CURDATE(), INTERVAL 60 DAY) THEN 1 ELSE 0 END) AS atual,
-            -- Contagem de alertas no Bimestre Passado (dias 61 a 120 atrás)
-            SUM(CASE WHEN r.horario < DATE_SUB(CURDATE(), INTERVAL 60 DAY) AND r.horario >= DATE_SUB(CURDATE(), INTERVAL 120 DAY) THEN 1 ELSE 0 END) AS passado
+            SUM(CASE WHEN r.horario < DATE_SUB(CURDATE(), INTERVAL 60 DAY) 
+                     AND r.horario >= DATE_SUB(CURDATE(), INTERVAL 120 DAY) THEN 1 ELSE 0 END) AS passado
         FROM Alerta a
         JOIN Registro r ON a.fkRegistro = r.idRegistro
         JOIN Componente c ON r.fkComponente = c.idComponente
         JOIN Maquina m ON c.fkMaquina = m.idMaquina
         WHERE m.fkEmpresa = ${idEmpresa}
-        -- Filtra apenas registros dentro dos últimos 4 meses (para cobrir ambos os bimestres)
-        AND r.horario >= DATE_SUB(CURDATE(), INTERVAL 120 DAY)
+          AND r.horario >= DATE_SUB(CURDATE(), INTERVAL 120 DAY)
         GROUP BY a.nivel;
     `;
     return database.executar(query);
 }
 
-
-// 📌 Comparativo — gráfico de Demanda (preservado)
-function buscarComparativo(idEmpresa) {
+// Comparativo de Demanda
+function buscarComparativoDemanda(idEmpresa) {
     const query = `
         SELECT 
             tc.tipoComponete AS componente,
@@ -122,7 +120,29 @@ function buscarComparativo(idEmpresa) {
     return database.executar(query);
 }
 
-// 📌 Ranking (preservado)
+// Comparativo Severidade por Componente
+function buscarComparativoSeveridadePorComponente(idEmpresa) {
+    const query = `
+        SELECT 
+            tc.tipoComponete AS componente,
+            i.severidade,
+            SUM(CASE WHEN i.dataCriacao >= DATE_SUB(CURDATE(), INTERVAL 60 DAY) THEN 1 ELSE 0 END) AS atual,
+            SUM(CASE WHEN i.dataCriacao < DATE_SUB(CURDATE(), INTERVAL 60 DAY) 
+                     AND i.dataCriacao >= DATE_SUB(CURDATE(), INTERVAL 120 DAY) THEN 1 ELSE 0 END) AS passado
+        FROM Incidente i
+        JOIN LogDetalheEvento lde ON i.fkLogDetalheEvento = lde.idLogDetalheEvento
+        JOIN LogSistema ls ON lde.fkLogSistema = ls.idLogSistema
+        JOIN Maquina m ON ls.fkMaquina = m.idMaquina
+        JOIN Componente c ON m.idMaquina = c.fkMaquina
+        JOIN TipoComponente tc ON c.fkTipoComponente = tc.idTipoComponente
+        WHERE m.fkEmpresa = ${idEmpresa}
+          AND i.dataCriacao >= DATE_SUB(CURDATE(), INTERVAL 120 DAY)
+        GROUP BY tc.tipoComponete, i.severidade;
+    `;
+    return database.executar(query);
+}
+
+// Ranking
 function buscarRanking(idEmpresa) {
     const query = `
         SELECT 
@@ -144,7 +164,8 @@ function buscarRanking(idEmpresa) {
 module.exports = {
     buscarKpis,
     buscarTendencia,
-    buscarComparativo,
-    buscarRanking,
-    buscarComparativoPorNivel // <--- NOVA FUNÇÃO EXPORTADA
+    buscarComparativoPorNivel,
+    buscarComparativoDemanda,
+    buscarComparativoSeveridadePorComponente,
+    buscarRanking
 };

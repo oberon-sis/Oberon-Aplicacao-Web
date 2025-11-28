@@ -1,5 +1,4 @@
-// Certifique-se de que a variável 'riscoModel' está definida e contém as funções necessárias
-var riscoModel = require("../models/dashboardEstrategicaModel");
+const riscoModel = require("../models/dashboardEstrategicaModel");
 
 function getDadosGerais(req, res) {
     const idEmpresa = req.params.idEmpresa;
@@ -11,21 +10,18 @@ function getDadosGerais(req, res) {
     Promise.all([
         riscoModel.buscarKpis(idEmpresa),
         riscoModel.buscarTendencia(idEmpresa),
-        riscoModel.buscarComparativo(idEmpresa), // Comparativo de Componentes (original)
+        riscoModel.buscarComparativoDemanda(idEmpresa),
         riscoModel.buscarRanking(idEmpresa),
-        riscoModel.buscarComparativoPorNivel(idEmpresa) // <--- NOVA CHAMADA
+        riscoModel.buscarComparativoPorNivel(idEmpresa),
+        riscoModel.buscarComparativoSeveridadePorComponente(idEmpresa)
     ])
-    .then(([kpisResult, tendencia, comparativo, ranking, comparativoNivelResult]) => {
-
+    .then(([kpisResult, tendencia, comparativoDemanda, ranking, comparativoNivelResult, severidadePorComponente]) => {
         const kpisRow = (kpisResult && kpisResult[0]) ? kpisResult[0] : {};
 
-        // --- Processamento de Dados (Comparativo por Nível) ---
-        // Garante que a ordem dos níveis seja consistente
+        // Comparativo por nível
         const niveis = ['CRÍTICO', 'ATENÇÃO', 'OCIOSO'];
-        
         const comparativoNivelFormatado = {
             labels: niveis,
-            // Mapeia os dados, garantindo que se um nível não tiver alertas, retorne 0
             atual: niveis.map(n => {
                 const item = comparativoNivelResult.find(r => r.nivel_alerta === n);
                 return item ? item.atual : 0;
@@ -35,8 +31,26 @@ function getDadosGerais(req, res) {
                 return item ? item.passado : 0;
             })
         };
-        // -----------------------------------------------------------
 
+        // Severidade por componente
+        const componentes = [...new Set(severidadePorComponente.map(r => r.componente))];
+        const severidades = [...new Set(severidadePorComponente.map(r => r.severidade))];
+
+        const severidadeComparativa = {
+            labels: severidades,
+            porComponente: componentes.map(componente => ({
+                componente,
+                atual: severidades.map(s => {
+                    const item = severidadePorComponente.find(r => r.componente === componente && r.severidade === s);
+                    return item ? item.atual : 0;
+                }),
+                passado: severidades.map(s => {
+                    const item = severidadePorComponente.find(r => r.componente === componente && r.severidade === s);
+                    return item ? item.passado : 0;
+                })
+            })),
+            dadosBrutos: severidadePorComponente // ✅ usado pelo gráfico com filtro
+        };
 
         res.json({
             kpis: {
@@ -56,9 +70,9 @@ function getDadosGerais(req, res) {
                         tendencia.map(l => l.ocioso)
                     ]
                 },
-                demanda: { // O gráfico de Comparativo de Componentes
-                    labels: comparativo.map(c => c.componente),
-                    data: comparativo.map(c => c.quantidade)
+                demanda: {
+                    labels: comparativoDemanda.map(c => c.componente),
+                    data: comparativoDemanda.map(c => c.quantidade)
                 },
                 ranking: {
                     labels: ranking.map(r => r.maquina),
@@ -68,8 +82,8 @@ function getDadosGerais(req, res) {
                         alertasBimestre: r.total_alertas
                     }))
                 },
-                // ENVIANDO O NOVO GRÁFICO PARA O FRONT-END
-                comparativoNivel: comparativoNivelFormatado
+                comparativoNivel: comparativoNivelFormatado,
+                severidadeComparativa
             }
         });
     })

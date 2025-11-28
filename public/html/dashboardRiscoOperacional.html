@@ -16,11 +16,10 @@
   <link rel="stylesheet" href="../component/notificao/Notificaocao.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
+  <!-- Chart.js e plugins (uma vez só) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script
     src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap@4.3.0/dist/chartjs-chart-treemap.min.js"></script>
-
 </head>
 
 <body class="d-flex w-100 h-100">
@@ -32,9 +31,7 @@
     </button>
 
     <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
-      <h2 class="text-black me-3">
-        Gestão de Risco e Tendência Operacional
-      </h2>
+      <h2 class="text-black me-3">Gestão de Risco e Tendência Operacional</h2>
 
       <div class="d-flex align-items-center flex-wrap flex-grow-1 me-3">
         <div class="d-flex align-items-center">
@@ -60,9 +57,7 @@
     </header>
 
     <!-- ============================= KPIs ============================= -->
-
     <section class="kpi-container" id="kpi-section">
-
       <div class="kpi-card" id="kpi-tempo-critico">
         <div class="topo-kpi">
           <h6>Porcentagem de Incidentes Críticos/Altos</h6>
@@ -132,36 +127,41 @@
           </div>
         </div>
       </div>
-
     </section>
 
     <!-- ============================= GRÁFICOS 1 ============================= -->
-
     <section class="charts-container">
-
       <div class="chart-item-wrapper" id="chart-comparativo-bimestres-nivel">
-        <h3 class="text-xl font-semibold mb-3 text-gray-700">
-          Comparativo de Alertas por Nível
-        </h3>
+        <h3 class="text-xl font-semibold mb-3 text-gray-700">Comparativo de Alertas por Nível</h3>
         <div class="h-80 w-full">
           <canvas id="comparativoBimestreChartNivel"></canvas>
         </div>
         <p id="loading-message" class="text-center text-blue-500 mt-4">Carregando dados...</p>
       </div>
 
-     
-      
+      <div class="chart-item-wrapper" id="chart-distribuicao-severidade">
+        <h3 class="text-lg font-medium mb-4 text-gray-700">Distribuição de Severidade dos Incidentes por Componente</h3>
+        <div class="mb-4">
+          <label for="filtro-severidade" class="block text-sm font-medium text-gray-600 mb-1">Filtrar
+            Severidade:
+            <select id="filtro-severidade" class="border rounded px-3 py-2 w-full max-w-xs">
+              <option value="Média">Média</option>
+              <option value="Alta">Alta</option>
+              <option value="Crítica">Crítica</option>
+            </select>
+          </label>
 
+          <div style="height: 300px">
+            <canvas id="graficoSeveridadeUnico"></canvas>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ============================= GRÁFICOS 2 ============================= -->
-
     <section class="details-container">
-
       <div class="chart-item-wrapper" id="chart-ranking-prioridade">
-        <h3 class="text-lg font-medium mb-2 text-gray-700">
-          Ranking de Máquinas por Prioridade de Intervenção
-        </h3>
+        <h3 class="text-lg font-medium mb-2 text-gray-700">Ranking de Máquinas por Prioridade de Intervenção</h3>
         <div class="overflow-x-auto max-h-[250px]">
           <table class="table table-striped table-hover table-sm">
             <thead>
@@ -170,33 +170,36 @@
                 <th>Alertas (Bimestre)</th>
               </tr>
             </thead>
-            <tbody id="tbody-ranking-prioridade">
-            </tbody>
+            <tbody id="tbody-ranking-prioridade"></tbody>
           </table>
         </div>
       </div>
 
-      <div class="chart-item-wrapper" id="chart-distribuicao-severidade">
-        <h3 class="text-lg font-medium mb-2 text-gray-700">
-          Distribuição de Severidade dos Incidentes
-        </h3>
-        <div style="height: 300px">
-          <canvas id="treemapSeveridadeChart"></canvas>
+      <div class="chart-item-wrapper" id="chart-ranking-prioridade">
+        <h3 class="text-lg font-medium mb-2 text-gray-700">Ranking de Máquinas por Prioridade de Intervenção</h3>
+        <div class="overflow-x-auto max-h-[250px]">
+          <table class="table table-striped table-hover table-sm">
+            <thead>
+              <tr>
+                <th>Máquina</th>
+                <th>Alertas (Bimestre)</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-ranking-prioridade"></tbody>
+          </table>
         </div>
       </div>
 
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="../component/menu/Menu.js"></script>
     <script src="../component/notificao/Notificacao.js"></script>
     <script src="../component/tour/TourGuide.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap"></script>
+    <!-- Removidos scripts duplicados de Chart.js/treemap -->
     <script src="../js/dashboard/riscoOperacional.js"></script>
-
+  </main>
 </body>
 
 </html>
