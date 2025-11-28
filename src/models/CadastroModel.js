@@ -31,8 +31,8 @@ function cadastrarEmpresaEFuncionario(empresa, usuario) {
       throw new Error('Falha ao obter o ID da nova empresa. Cadastro cancelado.');
     }
     var instrucaoSqlFuncionario = `
-            INSERT INTO Funcionario (nome, cpf, email, senha, fkTipoUsuario, fkEmpresa) 
-            VALUES ('${usuario.nome}', '${usuario.cpf}', '${usuario.email}', '${usuario.senha}',1000,${idNovaEmpresa});
+            INSERT INTO Funcionario (nome, cpf, email, senha, fkTipoUsuario, fkEmpresa, fkCriadoPor) 
+            VALUES ('${usuario.nome}', '${usuario.cpf}', '${usuario.email}', '${usuario.senha}',1000,${idNovaEmpresa}, 1);
         `;
     console.log('Executando SQL para Funcionário: \n' + instrucaoSqlFuncionario);
     return database.executar(instrucaoSqlFuncionario);
@@ -48,16 +48,27 @@ function buscarPorEmail(email) {
   // ATENÇÃO: A query usa o nome da sua tabela, que é 'funcionario'
   // Seleciona TUDO do funcionário (incluindo a senha criptografada)
   var instrucaoSql = `
-        SELECT * FROM Funcionario WHERE email = '${email}';
+        SELECT f.*, DATE_FORMAT(e.dataCriacao, '%Y-%m-%d') AS DataCriacaoEmpresa FROM Funcionario as f join Empresa as e on f.fkEmpresa = e.idEmpresa WHERE email = '${email}';
+    `;
+  console.log('Executando a instrução SQL: \n' + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+function atualizarCanalSlack(idEmpresa, idCanalSlack, linkCanalSlack) {
+  console.log('ACESSEI O USUARIO MODEL para atualizar slcak:', idEmpresa, idCanalSlack, linkCanalSlack);
+
+  var instrucaoSql = `
+        UPDATE Empresa SET idCanalSlack = '${idCanalSlack}', LinkCanalSlack = '${linkCanalSlack}', fkEditadoPor = 1 WHERE idEmpresa = ${idEmpresa} ;
     `;
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
   return database.executar(instrucaoSql);
 }
 
-// Não se esqueça de adicionar a nova função ao module.exports
+
+
 module.exports = {
   autenticar,
   cadastrar: cadastrarEmpresaEFuncionario,
   verificarDuplicidade,
   buscarPorEmail,
+  atualizarCanalSlack
 };

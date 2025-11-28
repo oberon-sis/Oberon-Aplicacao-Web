@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestão de Ativos - OBERON</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/body.css" />
+  <link rel="stylesheet" href="../component/menu/Menu.css" />
+  <link rel="stylesheet" href="../css/maquinas.css" />
+  <link rel="stylesheet" href="../css/painelEspecifico.css" />
+  <link rel="stylesheet" href="../component/tour/TourGuide.css" />
+  <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
+  <link rel="stylesheet" href="../component/notificao/Notificaocao.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js">
+  </script>
+</head>
+
+<body class="d-flex w-100 h-100">
+  <div id="menu-container"></div>
+  <main class="content flex-grow-1 padding_main dashboard-main">
+    <button class="btn btn-secondary d-md-none mb-4" type="button" data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
+      <h2 class="text-black me-3">
+        Gestão de Ativos e Planejamento Orçamentário:
+      </h2>
+
+      <div class="d-flex align-items-center flex-wrap flex-grow-1 me-3">
+        <div class="d-flex align-items-center">
+          <h2 class="text-black mb-0 me-2 fs-5">2025 - Bimestre 5</h2>
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <span id="valor_pesquisa_periodo">Selecionar</span>
+          </button>
+         <ul class="dropdown-menu dropdown-menu-end hover_verde">
+  <li><a class="dropdown-item" onclick="filtrarPeriodo(6)">2025 - Bimestre 6</a></li>
+  <li><a class="dropdown-item" onclick="filtrarPeriodo(5)">2025 - Bimestre 5</a></li>
+  <li><a class="dropdown-item" onclick="filtrarPeriodo(4)">2025 - Bimestre 4</a></li>
+  <li><a class="dropdown-item" onclick="filtrarPeriodo(3)">2025 - Bimestre 3</a></li>
+  <li><a class="dropdown-item" onclick="filtrarPeriodo(2)">2025 - Bimestre 2</a></li>
+</ul>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center ms-auto">
+        <button class="btn btn-primary d-none d-md-inline-block" onclick="iniciarTourGestor()">
+          <i class="bi bi-compass-fill me-2"></i> Primeiros Passos
+        </button>
+      </div>
+    </header>
+
+    <section class="kpi-container" id="kpi-section">
+      <div class="kpi-card" id="kpi-total-maquinas">
+        <div class="topo-kpi">
+          <h6>Total de Máquinas Monitoradas</h6>
+          <div class="icone-kpi"><i class="bi bi-display"></i></div>
+        </div>
+        <div class="baixo-kpi">
+          <div><span id="txt_total_maquinas">--</span>
+            <p>Máquinas ativas no sistema</p>
+          </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="Total de Máquinas"
+            data-bs-content="Número total de computadores CFTV ativos sendo monitorados pelo Oberon.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </div>
+      </div>
+      <div class="kpi-card" id="kpi-maquinas-sobrecarga">
+        <div class="topo-kpi">
+          <h6>Máquinas em Sobrecarga</h6>
+          <div class="icone-kpi"><i class="bi bi-reception-4"></i></div>
+        </div>
+        <div class="baixo-kpi">
+          <div><span id="txt_maquinas_sobrecarga" class="text-danger">--</span>
+            <p>Média de CPU ou RAM > 85%</p>
+          </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="Máquinas em Sobrecarga"
+            data-bs-content="Contagem de máquinas que operaram com média de CPU ou RAM acima de 85% no período, indicando necessidade de upgrade.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </div>
+      </div>
+      <div class="kpi-card" id="kpi-risco-disco">
+        <div class="topo-kpi">
+          <h6>Máquinas em Risco de Disco</h6>
+          <div class="icone-kpi"><i class="bi bi-hdd-fill"></i></div>
+        </div>
+        <div class="baixo-kpi">
+          <div><span id="txt_risco_disco" class="text-warning">--</span>
+            <p>Uso de Disco > 90%</p>
+          </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="Risco de Disco"
+            data-bs-content="Contagem de máquinas com uso de disco acima de 90%. Elas correm o risco de parar de gravar as imagens de vigilância.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </div>
+      </div>
+      <div class="kpi-card" id="kpi-maquinas-ociosas">
+        <div class="topo-kpi">
+          <h6>Máquinas Ociosas</h6>
+          <div class="icone-kpi"><i class="bi bi-battery"></i></div>
+        </div>
+        <div class="baixo-kpi">
+          <div><span id="txt_maquinas_ociosas" class="text-success">--</span>
+            <p>Média CPU/RAM < 20%</p>
+          </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="Máquinas Ociosas"
+            data-bs-content="Contagem de máquinas operando com média de CPU e RAM abaixo de 20%, indicando potencial para remanejamento de recursos.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </div>
+      </div>
+      <div class="kpi-card" id="kpi-total-incidentes">
+        <div class="topo-kpi">
+          <h6>Total de Incidentes (Bimestre)</h6>
+          <div class="icone-kpi"><i class="bi bi-cone-striped"></i></div>
+        </div>
+        <div class="baixo-kpi">
+          <div><span id="txt_total_incidentes" class="text-danger">--</span>
+            <p>Incidentes abertos no período</p>
+          </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="Total de Incidentes"
+            data-bs-content="Número total de incidentes formais (baseado em Alertas) que foram abertos no bimestre.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="charts-container" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px">
+
+      <div class="chart-item-wrapper" id="chart-tendencia-estabilidade">
+        <h3 style="font-size: 1.1rem; margin-bottom: 15px">
+          Evolução de Alertas Críticos por Componente
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="Evolução por Componente"
+            data-bs-content="Mostra qual componente de hardware (CPU, RAM ou Disco) está gerando mais problemas ao longo das semanas.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </h3>
+        <div style="height: 300px">
+          <canvas id="evolucaoComponentesChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-item-wrapper" id="chart-saude-ativos">
+        <h3 style="font-size: 1.1rem; margin-bottom: 15px">
+          Matriz de Otimização (CPU vs RAM)
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="Matriz de Otimização"
+            data-bs-content="Cada ponto é uma máquina. Pontos no topo/direita indicam sobrecarga. Pontos na base/esquerda indicam ociosidade.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </h3>
+        <div style="height: 300px">
+          <canvas id="matrizOtimizacaoChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="details-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px">
+
+      <div class="chart-item-wrapper" id="list-sobrecarga">
+        <h3 style="font-size: 1.1rem; margin-bottom: 10px">
+          Top 5 - Máquinas em Sobrecarga (Média > 85%)
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="Máquinas em Sobrecarga"
+            data-bs-content="Lista as 5 máquinas que mais precisam de um upgrade, com base na média de uso de CPU ou RAM no período.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </h3>
+        <div>
+          <table class="table table-striped table-hover table-sm">
+            <thead>
+              <tr>
+                <th>Máquina</th>
+                <th>Média CPU</th>
+                <th>Média RAM</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-sobrecarga">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="chart-item-wrapper" id="list-ociosas">
+        <h3 style="font-size: 1.1rem; margin-bottom: 10px">
+          Top 5 - Máquinas Ociosas (Média < 20%) <button type="button" class="saber_mais btn btn-link"
+            data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Máquinas Ociosas"
+            data-bs-content="Lista as 5 máquinas que estão sendo subutilizadas. Elas podem ser remanejadas ou ter seus recursos re-alocados.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+            </button>
+        </h3>
+        <div>
+          <table class="table table-striped table-hover table-sm">
+            <thead>
+              <tr>
+                <th>Máquina</th>
+                <th>Média CPU</th>
+                <th>Média RAM</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-ociosas">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="../component/menu/Menu.js"></script>
+  <script src="../component/notificao/Notificacao.js"></script>
+  <script src="../component/tour/TourGuide.js"></script>
+
+  <script src="../js/dashboard/dashboardGestor.js"></script>
+
+</body>
+
+</html>

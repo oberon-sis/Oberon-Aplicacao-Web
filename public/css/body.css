@@ -121,6 +121,9 @@ main {
   border-radius: 10px;
   padding-top: 0 !important;
 }
+.bg-fundo {
+  background-color: rgb(250, 250, 250);
+}
 
 header h2 {
   font-size: 1.4rem;

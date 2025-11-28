@@ -13,30 +13,14 @@
       </a>
 
       <div class="nav-item-accordion" id="menu_paineis_container">
-        <a
-          class="nav-link-accordion-toggle"
-          data-bs-toggle="collapse"
-          href="#submenuPainel"
-          role="button"
-          id="menu_paineis"
-          aria-expanded="false"
-          aria-controls="submenuPainel"
-        >
+        <a class="nav-link-accordion-toggle" data-bs-toggle="collapse" href="#submenuPainel" role="button"
+          id="menu_paineis" aria-expanded="false" aria-controls="submenuPainel">
           <img src="../assets/svg/painel_white.svg" alt="Painéis" class="nav-icon-fixed" />
           <span class="nav-text-fixed">Painéis</span>
 
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="accordion-arrow"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="accordion-arrow">
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
         </a>
@@ -46,6 +30,12 @@
           </a>
           <a class="submenu-item" href="painelEspecifico.html" id="painelHistorico">
             <span class="nav-text-fixed">Análise Histórica</span>
+          </a>
+          <a class="submenu-item" href="DashboardMiguel.html" id="painelGestaoAtivos">
+            <span class="nav-text-fixed">Gestão de Ativos</span>
+          </a>
+           <a class="submenu-item" href="dashboardRiscoOperacional.html" id="painelEstrategico">
+            <span class="nav-text-fixed">Gestão de Risco</span>
           </a>
         </div>
       </div>
@@ -92,45 +82,28 @@
 
       <p class="support-description">Fale com nossos agentes</p>
 
-      <a
-        href="https://oberon-sis.atlassian.net/servicedesk/customer/portal/34/user/login?destination=portal%2F34"
-        class="btn-contact-fixed"
-      >
+      <a href="https://oberon-sis.atlassian.net/servicedesk/customer/portal/34/user/login?destination=portal%2F34"
+        class="btn-contact-fixed">
         Contate-nos
       </a>
     </div>
 
-    <div
-      class="profile-footer-area dropup"
-      style="position: relative; height: auto"
-      id="menu_usuarios"
-    >
-      <a
-        href="#"
-        class="profile-footer-link dropdown-toggle"
-        role="button"
-        id="profileDropdown"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
+    <div class="profile-footer-area dropup" style="position: relative; height: auto" id="menu_usuarios">
+      <a href="#" class="profile-footer-link dropdown-toggle" role="button" id="profileDropdown"
+        data-bs-toggle="dropdown" aria-expanded="false">
         <img src="../assets/svg/user_white.svg" alt="User Profile" class="profile-footer-img" />
         <div class="profile-info">
           <span class="profile-name" id="nome_de_usuario">Fernanda Caramico</span>
           <span class="profile-name" id="email_de_usaurio">fernanda@sptech.school</span>
         </div>
       </a>
-      <ul
-        class="dropdown-menu dropdown-menu-dark mini_menu_completo"
-        aria-labelledby="profileDropdown"
-        style="top: 0 !important"
-      >
+      <ul class="dropdown-menu dropdown-menu-dark mini_menu_completo" aria-labelledby="profileDropdown"
+        style="top: 0 !important">
         <li>
           <a class="dropdown-item mini-menu" href="gerenciamentoDadosUsuarios.html">Meu Perfil</a>
         </li>
         <li>
-          <a class="dropdown-item mini-menu" href="https://slack.com/" target="_blank"
-            >Acesso Rápido Slack</a
-          >
+          <a class="dropdown-item mini-menu" href="https://slack.com/" target="_blank">Acesso Rápido Slack</a>
         </li>
         <li>
           <hr class="dropdown-divider" />
@@ -140,20 +113,11 @@
     </div>
   </div>
 </aside>
-<div
-  class="offcanvas offcanvas-start sidebar"
-  tabindex="-1"
-  id="offcanvasSidebar"
-  aria-labelledby="offcanvasSidebarLabel"
->
+<div class="offcanvas offcanvas-start sidebar" tabindex="-1" id="offcanvasSidebar"
+  aria-labelledby="offcanvasSidebarLabel">
   <div class="offcanvas-header border-bottom border-secondary">
     <h5 class="offcanvas-title text-white" id="offcanvasSidebarLabel">Menu</h5>
-    <button
-      type="button"
-      class="btn-close btn-close-white"
-      data-bs-dismiss="offcanvas"
-      aria-label="Close"
-    ></button>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body p-4 d-flex flex-column">
     <div class="mb-4 text-center">
@@ -168,25 +132,15 @@
       </a>
 
       <div class="nav-item-accordion mb-1" id="menu_paineis_container_mobile">
-        <a
-          class="nav-link offcanvas-accordion-toggle"
-          data-bs-toggle="collapse"
-          href="#submenuPainelMobile"
-          role="button"
-          aria-expanded="false"
-          aria-controls="submenuPainelMobile"
-          id="menu_paineis_mobile"
-        >
+        <a class="nav-link offcanvas-accordion-toggle" data-bs-toggle="collapse" href="#submenuPainelMobile"
+          role="button" aria-expanded="false" aria-controls="submenuPainelMobile" id="menu_paineis_mobile">
           <img src="../assets/svg/painel_white.svg" alt="Painéis" class="icone_nav" /> Painéis
           <img src="../assets/svg/arrow_down_white.svg" alt="Toggle" class="accordion-arrow" />
         </a>
         <div class="collapse" id="submenuPainelMobile">
-          <a class="offcanvas-submenu-item" href="painel.html" id="painelMonitoramento_mobile"
-            >Monitoramento Ativo</a
-          >
-          <a class="offcanvas-submenu-item" href="painelEspecifico.html" id="painelHistorico_mobile"
-            >Análise Histórica</a
-          >
+          <a class="offcanvas-submenu-item" href="painel.html" id="painelMonitoramento_mobile">Monitoramento Ativo</a>
+          <a class="offcanvas-submenu-item" href="painelEspecifico.html" id="painelHistorico_mobile">Análise
+            Histórica</a>
         </div>
       </div>
 
@@ -204,18 +158,10 @@
       <div class="mt-4" id="gestaoAreaMobile">
         <h6 class="text-uppercase text-secondary mb-3 small" id="menu_gestao_mobile">Gestão</h6>
         <div class="nav flex-column">
-          <a
-            class="nav-link offcanvas-link"
-            href="gerenciamentoUsuarios.html"
-            id="menu_usuarios_mobile"
-          >
+          <a class="nav-link offcanvas-link" href="gerenciamentoUsuarios.html" id="menu_usuarios_mobile">
             <img src="../assets/svg/users_white.svg" alt="Usuários" class="icone_nav" /> Usuários
           </a>
-          <a
-            class="nav-link offcanvas-link"
-            href="gerenciamentoMaquinas.html"
-            id="menu_maquinas_mobile"
-          >
+          <a class="nav-link offcanvas-link" href="gerenciamentoMaquinas.html" id="menu_maquinas_mobile">
             <img src="../assets/svg/maquinas_white.svg" alt="Máquinas" class="icone_nav" /> Máquinas
           </a>
           <a class="nav-link offcanvas-link" href="auditoria.html" id="nmenu_auditoria_mobile">
@@ -240,11 +186,7 @@
     <div class="mt-auto pt-3">
       <div class="profile-footer-area-mobile">
         <a href="gerenciamentoDadosUsuarios.html" class="profile-link-mobile">
-          <img
-            src="../assets/img/profile-placeholder.png"
-            alt="User Profile"
-            class="profile-footer-img"
-          />
+          <img src="../assets/img/profile-placeholder.png" alt="User Profile" class="profile-footer-img" />
           <div class="profile-info-mobile">
             <span class="profile-name">Fernanda Caramico</span>
             <span class="profile-email">fernanda.caramico@sptech.school</span>

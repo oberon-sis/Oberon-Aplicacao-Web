@@ -17,7 +17,9 @@ async function getParametrosPadrao(req, res) {
 
     const resultadosParametros = await maquinasModel.getParametrosPadrao(fkEmpresa);
 
-    res.status(200).json(resultadosParametros);
+    const dadosReestruturados = processarParametros(resultadosParametros);
+
+    res.status(200).json(dadosReestruturados);
   } catch (erro) {
     console.error(`Houve um erro ao buscar os parâmetros padrão. Erro: ${erro.message}`);
     res.status(500).json({
@@ -25,6 +27,33 @@ async function getParametrosPadrao(req, res) {
       detalhe: erro.message,
     });
   }
+}
+
+function processarParametros(resultadosDB) {
+  const dados = {
+    oberon: {},
+    empresa: {},
+  };
+
+  resultadosDB.forEach((parametro) => {
+    const origem = parametro.origemParametro.toLowerCase();
+
+    const chaveInterna = `${parametro.tipoComponete}_${parametro.identificador}`
+      .toUpperCase()
+      .replace(/\s+/g, '_');
+
+    if (dados.hasOwnProperty(origem)) {
+      dados[origem][chaveInterna] = {
+        limite: parametro.limite,
+        idParametro: parametro.idParametro,
+        fkEmpresa: parametro.fkEmpresa,
+        tipoComponete: parametro.tipoComponete,
+        identificador: parametro.identificador,
+      };
+    }
+  });
+
+  return dados;
 }
 
 async function salvarPadrao(req, res) {
@@ -79,74 +108,41 @@ async function cadastrarMaquina(req, res) {
   const {
     idFuncionario: idFuncionario,
     nome: nome,
-    modelo: modelo,
     macAddress: macAddress,
     origemParametro: origemParametro,
-    limites: limites,
+    cpu_parametros: cpu_parametros,
+    ram_parametros: ram_parametros,
+    disco_parametros: disco_parametros,
+    rede_parametros: rede_parametros,
   } = req.body;
 
   try {
     const resultadoBusca = await maquinasModel.getFkEmpresa(idFuncionario);
+
     if (resultadoBusca.length === 0) {
       return res.status(404).send('Empresa não encontrada para o funcionário informado.');
     }
     const fkEmpresa = resultadoBusca[0].fkEmpresa;
-
-    const resultadoMaquina = await maquinasModel.cadastrarMaquina(
-      nome,
-      modelo,
-      macAddress,
-      fkEmpresa,
-    );
-    const fkMaquina = resultadoMaquina.insertId;
-
-    const COMPONENTES_MAP = {
-      CPU: 1,
-      RAM: 2,
-      'Disco Duro': 3,
-      PlacaRede: 4,
-    };
-    const componentesDoFront = limites.map((l) => l.tipo);
-
-    const componentesParaCadastro = [
-      COMPONENTES_MAP['CPU'],
-      COMPONENTES_MAP['RAM'],
-      COMPONENTES_MAP['Disco Duro'],
-      COMPONENTES_MAP['PlacaRede'],
-    ];
-
-    let componentesCadastrados = [];
-
-    for (const fkComponente of componentesParaCadastro) {
-      const resultadoMC = await maquinasModel.cadastrarMaquinaComponente(
-        fkMaquina,
-        fkComponente,
+    if (origemParametro === 'ESPECÍFICO') {
+      const resultadoMaquina = await maquinasModel.cadastrarMaquinaEspecifica(
+        fkEmpresa,
+        idFuncionario,
+        nome,
+        macAddress,
+        cpu_parametros,
+        ram_parametros,
+        disco_parametros,
+        rede_parametros,
+      );
+    } else {
+      const resultadoMaquina = await maquinasModel.cadastrarMaquinaPadrao(
+        fkEmpresa,
+        idFuncionario,
+        nome,
+        macAddress,
         origemParametro,
       );
-      componentesCadastrados.push({
-        fkComponente: fkComponente,
-        fkMaquinaComponente: resultadoMC.insertId,
-      });
     }
-
-    if (origemParametro === 'ESPECIFICO' && limites.length > 0) {
-      const promisesLimites = limites.map((limiteFront) => {
-        const fkComponenteId = COMPONENTES_MAP[limiteFront.tipo];
-        const componenteCadastrado = componentesCadastrados.find(
-          (c) => c.fkComponente === fkComponenteId,
-        );
-
-        if (componenteCadastrado) {
-          return maquinasModel.cadastrarParametroEspecifico(
-            limiteFront.limite,
-            componenteCadastrado.fkMaquinaComponente,
-          );
-        }
-        return Promise.resolve();
-      });
-      await Promise.all(promisesLimites);
-    }
-
     res.status(201).json({
       mensagem: 'Máquina, componentes e parâmetros cadastrados com sucesso!',
     });
@@ -196,34 +192,7 @@ async function excluirMaquina(req, res) {
       return res.status(401).send('Credenciais inválidas.');
     }
 
-    const maquinasComponentes = await maquinasModel.getFkMaquinaComponente(idMaquinaServer);
-
-    const promisesExclusao = [];
-
-    const promisesBuscaParametros = maquinasComponentes.map(async (ID) => {
-      const parametroEspecifico = await maquinasModel.getParametrosEspecificos(
-        ID.idMaquinaComponente,
-      );
-
-      promisesExclusao.push(maquinasModel.eliminarRegistros(ID.idMaquinaComponente));
-      promisesExclusao.push(maquinasModel.eliminarAlertas(ID.idMaquinaComponente));
-
-      if (parametroEspecifico && parametroEspecifico.length > 0) {
-        promisesExclusao.push(maquinasModel.excluirParametroEspecifico(ID.idMaquinaComponente));
-      }
-    });
-
-    await Promise.all(promisesBuscaParametros);
-
-    await Promise.all(promisesExclusao);
-    const resultadoExclusaoComponentes =
-      await maquinasModel.eliminarMaquinaComponente(idMaquinaServer);
-
-    const resultadoExclusao = await maquinasModel.eliminarMaquina(idMaquinaServer);
-
-    if (resultadoExclusao.affectedRows === 0) {
-      return res.status(500).send('A máquina não foi excluída, mas os dados relacionados foram.');
-    }
+    const resultadoExclusao = await maquinasModel.eliminarMaquina(idMaquinaServer, idGerenteServer);
 
     return res.status(200).send(`Máquina de ID ${idMaquinaServer} excluída com sucesso!`);
   } catch (erro) {
@@ -299,9 +268,11 @@ async function buscarDadosParaEdicao(req, res) {
       return res.status(404).send('Máquina não encontrada.');
     }
 
+    const parametrosComponentesProcessados = processarComponentes(componentes);
+
     res.status(200).json({
-      maquina: maquina[0],
-      componentes: componentes,
+      maquina: maquina[0], // Dados da máquina
+      parametros_por_componente: parametrosComponentesProcessados, // Parâmetros agrupados
     });
   } catch (erro) {
     console.error(`Erro ao buscar dados para edição: ${erro.message}`);
@@ -312,67 +283,93 @@ async function buscarDadosParaEdicao(req, res) {
   }
 }
 
-async function atualizarMaquina(req, res) {
-  const idMaquina = req.params.idMaquina;
-  const { nome, macAddress, origemParametro, limites } = req.body;
-  if (!nome || !macAddress || !idMaquina) {
-    return res.status(400).send('Nome, Mac Address e ID da Máquina são obrigatórios.');
-  }
+function processarComponentes(componentes) {
+  const parametrosAgrupados = {};
 
-  if (origemParametro === 'ESPECIFICO' && (!limites || limites.length !== 4)) {
+  componentes.forEach((componente) => {
+    const tipoComponenteCru = componente.funcaoMonitorar.split(' ')[0];
+    const tipoComponente = tipoComponenteCru.toUpperCase();
+
+    const identificador = componente.identificador.toUpperCase();
+
+    const parametroInfo = {
+      limite: componente.limite,
+      unidadeMedida: componente.unidadeMedida,
+      idComponente: componente.idComponente,
+    };
+
+    if (!parametrosAgrupados[tipoComponente]) {
+      parametrosAgrupados[tipoComponente] = {};
+    }
+
+    parametrosAgrupados[tipoComponente][identificador] = parametroInfo;
+  });
+
+  return parametrosAgrupados;
+}
+
+async function atualizarMaquina(req, res) {
+  const {
+    idMaquina,
+    idFuncionario,
+    nome,
+    macAddress,
+    origemParametro,
+    cpu_parametros,
+    ram_parametros,
+    disco_parametros,
+    rede_parametros,
+  } = req.body;
+
+  if (!nome || !macAddress || !idMaquina || !idFuncionario || !origemParametro) {
     return res
       .status(400)
-      .send('Ao usar limites específicos, todos os 4 tipos de limites devem ser fornecidos.');
+      .send('Dados básicos (ID Máquina, Funcionário, Nome, MAC e Origem) são obrigatórios.');
   }
 
   try {
-    const maquinaAtualizada = await maquinasModel.atualizarDadosMaquina(
-      idMaquina,
-      nome,
-      macAddress,
-    );
-
-    if (!maquinaAtualizada) {
-      return res.status(404).send('Máquina não encontrada ou nenhuma alteração na identificação.');
-    }
-
-    const COMPONENTES_MAP = {
-      CPU: 1,
-      RAM: 2,
-      DISCO: 3,
-      REDE: 4,
+    const PARAMETROS_ENTRADA = {
+      CPU: cpu_parametros,
+      RAM: ram_parametros,
+      DISCO: disco_parametros,
+      REDE: rede_parametros,
     };
 
-    const componentesMaquina = await maquinasModel.getComponentesPorMaquina(idMaquina);
+    await maquinasModel.atualizarDadosMaquina(idMaquina, nome, macAddress, idFuncionario);
 
+    const componentesMaquina = await maquinasModel.getComponentesPorMaquina(idMaquina);
     const promisesAtualizacao = [];
 
     for (const item of componentesMaquina) {
-      const fkMaquinaComponente = item.idMaquinaComponente;
-      const tipoComponente = item.tipoComponente;
+      const fkComponente = item.idComponente;
+      const tipoComponente = item.tipoComponete;
+      const limitesDoComponente = PARAMETROS_ENTRADA[tipoComponente];
 
       promisesAtualizacao.push(
-        maquinasModel.atualizarOrigemComponente(fkMaquinaComponente, origemParametro),
+        maquinasModel.atualizarOrigemComponente(fkComponente, origemParametro, idFuncionario),
       );
 
       if (origemParametro === 'ESPECIFICO') {
-        const limiteFront = limites.find((l) => l.tipo === tipoComponente);
-
-        if (limiteFront) {
+        if (limitesDoComponente) {
           promisesAtualizacao.push(
-            maquinasModel.atualizarParametroEspecifico(limiteFront.limite, fkMaquinaComponente),
+            maquinasModel.atualizarParametrosEspecificos(
+              fkComponente,
+              idFuncionario,
+              limitesDoComponente.aceitavel,
+              limitesDoComponente.atencao,
+              limitesDoComponente.critico,
+            ),
           );
         }
       } else {
-        promisesAtualizacao.push(maquinasModel.removerParametroEspecifico(fkMaquinaComponente));
+        promisesAtualizacao.push(maquinasModel.removerParametroEspecifico(fkComponente));
       }
     }
 
     await Promise.all(promisesAtualizacao);
 
     res.status(200).json({
-      mensagem: 'Máquina e parâmetros de alerta atualizados com sucesso!',
-      idMaquina: idMaquina,
+      mensagem: `Máquina ${idMaquina} e parâmetros atualizados para o modelo ${origemParametro} com sucesso!`,
     });
   } catch (erro) {
     console.error(
