@@ -58,11 +58,11 @@ function getComponentesPorMaquina(idMaquina) {
   console.log('[MODEL] - function getComponentesPorMaquina():', idMaquina);
   var instrucaoSql = `
         SELECT
-            MC.idMaquinaComponente,
-            C.tipoComponente,
+            MC.idComponente,
+            C.tipoComponete,
             MC.origemParametro
-        FROM MaquinaComponente AS MC
-        JOIN Componente AS C ON MC.fkComponente = C.idComponente
+        FROM Componente AS MC
+        JOIN TipoComponente AS C ON MC.fkTipoComponente = C.idTipoComponente
         WHERE MC.fkMaquina = ${idMaquina};
     `;
 
@@ -91,12 +91,39 @@ function getParametrosPadrao(fkEmpresa) {
   console.log('[MODEL] - function getParametrosPadrao():', fkEmpresa);
 
   var instrucaoSql = `
-        SELECT
-            C.tipoComponente,
-            CONCAT(COALESCE(PP.limite, 0), ' ', C.unidadeMedida) AS valorFormatado
-        FROM Componente AS C
-        LEFT JOIN ParametroPadrao AS PP 
-            ON C.idComponente = PP.fkComponente AND PP.fkEmpresa = ${fkEmpresa};
+SELECT
+    P.idParametro,
+    P.fkEmpresa,
+    P.origemParametro,
+    TC.tipoComponete,
+    P.identificador,
+    P.limite
+FROM
+    Parametro AS P
+JOIN
+    TipoComponente AS TC ON P.fkTipoComponente = TC.idTipoComponente
+WHERE
+    P.fkComponente IS NULL
+    AND (
+        (P.origemParametro = 'EMPRESA' AND P.fkEmpresa = 2)
+    )
+UNION ALL
+SELECT
+    P.idParametro,
+    P.fkEmpresa,
+    P.origemParametro,
+    TC.tipoComponete,
+    P.identificador,
+    P.limite
+FROM
+    Parametro AS P
+JOIN
+    TipoComponente AS TC ON P.fkTipoComponente = TC.idTipoComponente
+WHERE
+    P.fkComponente IS NULL
+    
+    AND P.origemParametro = 'OBERON' AND P.fkEmpresa = 1;
+    -- NOTA: Se OBERON tiver um ID fixo, use: AND P.fkEmpresa = 1
     `;
 
   console.log('Executando a instrução SQL de busca de Parâmetros Padrão: \n' + instrucaoSql);
@@ -161,7 +188,7 @@ function listarMaquinasPorEmpresa(fkEmpresa, limite, offset, condicao, termoDePe
         MAX(MC.origemParametro) AS origemParametro 
     FROM Maquina AS M
     LEFT JOIN Componente AS MC ON M.idMaquina = MC.fkMaquina
-    WHERE M.fkEmpresa = 6
+    WHERE M.fkEmpresa = ${fkEmpresa}
       AND (M.${condicao} LIKE '%${termoDePesquisa}%' OR M.${condicao} = '${termoDePesquisa}')
     GROUP BY M.idMaquina
     ORDER BY M.idMaquina ASC
@@ -183,7 +210,7 @@ function contarMaquinasPorEmpresa(fkEmpresa, condicao, termoDePesquisa) {
 
   var instrucaoCountSql = `
         SELECT COUNT(idMaquina) AS totalRegistros FROM Maquina
-        WHERE fkEmpresa = 6 AND (${condicao} LIKE '%${termoDePesquisa}%'
+        WHERE fkEmpresa = ${fkEmpresa} AND (${condicao} LIKE '%${termoDePesquisa}%'
           OR ${condicao} = '${termoDePesquisa}')
     `;
 
@@ -213,44 +240,36 @@ function buscarComponentesComParametros(idMaquina) {
   console.log('[MODEL] - Buscando componentes e parâmetros da máquina:', idMaquina);
 
   var instrucaoSql = `
-        SELECT
-            MC.idMaquinaComponente,
-            MC.origemParametro,
-            C.tipoComponente,
-            C.unidadeMedida,
-            PE.limite AS limiteNumerico
-        FROM MaquinaComponente AS MC
-        JOIN Componente AS C 
-            ON MC.fkComponente = C.idComponente
-        LEFT JOIN ParametroEspecifico AS PE 
-            ON MC.idMaquinaComponente = PE.fkMaquinaComponente
-        WHERE MC.fkMaquina = ${idMaquina};
+        select * from vw_ParametrosComponente where idMaquina = ${idMaquina};
+
     `;
 
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
   return database.executar(instrucaoSql);
 }
 
-function atualizarDadosMaquina(idMaquina, nome, macAddress) {
+function atualizarDadosMaquina(idMaquina, nome, macAddress, idFuncionario) {
   console.log('[MODEL] - function atualizarDadosMaquina():', idMaquina, nome, macAddress);
 
   var instrucaoSql = `
         UPDATE Maquina SET 
           nome = '${nome}', 
-          macAddress = '${macAddress}'
+          macAddress = '${macAddress}', 
+          fkEditadoPor = ${idFuncionario}
         WHERE idMaquina = ${idMaquina};
     `;
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
   return database.executar(instrucaoSql);
 }
 
-function atualizarOrigemComponente(fkMaquinaComponente, novaOrigem) {
+function atualizarOrigemComponente(fkMaquinaComponente, novaOrigem, idFuncionario) {
   console.log('[MODEL] - function atualizarOrigemComponente():', fkMaquinaComponente, novaOrigem);
 
   var instrucaoSql = `
-        UPDATE MaquinaComponente SET 
-          origemParametro = '${novaOrigem}'
-        WHERE idMaquinaComponente = ${fkMaquinaComponente};
+        UPDATE Componente SET 
+          origemParametro = '${novaOrigem}', 
+          fkEditadoPor = ${idFuncionario}
+        WHERE idComponente = ${fkMaquinaComponente};
     `;
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
   return database.executar(instrucaoSql);
@@ -275,8 +294,8 @@ function removerParametroEspecifico(fkMaquinaComponente) {
   console.log('[MODEL] - function removerParametroEspecifico():', fkMaquinaComponente);
 
   var instrucaoSql = `
-        DELETE FROM ParametroEspecifico 
-        WHERE fkMaquinaComponente = ${fkMaquinaComponente};
+        DELETE FROM Parametro 
+        WHERE fkComponente = ${fkMaquinaComponente};
     `;
   console.log('Executando a instrução SQL: \n' + instrucaoSql);
   return database.executar(instrucaoSql);
@@ -298,7 +317,63 @@ function eliminarMaquinaComponente(idMaquina) {
   return database.executar(instrucaoSql);
 }
 
+function cadastrarMaquinaEspecifica(
+  fkEmpresa,
+  idFuncionario,
+  nome,
+  macAddress,
+  cpu_parametros,
+  ram_parametros,
+  disco_parametros,
+  rede_parametros,
+) {
+  var instrucaoSql = `
+       CALL sp_cadastro_especifico(
+    ${fkEmpresa}, ${idFuncionario}, 
+    '${nome}', '${macAddress}', 
+    -- CPU (Aceitável, Atenção, Crítico)
+    ${cpu_parametros.aceitavel}, ${cpu_parametros.atencao}, ${cpu_parametros.critico},
+    -- RAM (Aceitável, Atenção, Crítico)
+    ${ram_parametros.aceitavel}, ${ram_parametros.atencao}, ${ram_parametros.critico},
+    -- DISCO (Aceitável, Atenção, Crítico)
+    ${disco_parametros.aceitavel}, ${disco_parametros.atencao}, ${disco_parametros.critico},
+    -- REDE (Aceitável, Atenção, Crítico)
+    ${disco_parametros.aceitavel}, ${disco_parametros.atencao}, ${disco_parametros.critico});
+    `;
+
+  console.log('Executando a instrução SQL: \n' + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+
+function cadastrarMaquinaPadrao(fkEmpresa, idFuncionario, nome, macAddress, origemParametro) {
+  var instrucaoSql = `
+       CALL sp_cadastro_padrao(
+    ${fkEmpresa}, ${idFuncionario}, 
+    '${nome}', '${macAddress}', 
+    '${origemParametro}');
+    `;
+
+  console.log('Executando a instrução SQL: \n' + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+
+function atualizarParametrosEspecificos(fkComponente, idFuncionario, aceitavel, atencao, critico) {
+  var instrucaoSql = `
+       CALL sp_atualizar_parametros_especificos(
+    ${fkComponente}, ${idFuncionario}, 
+    ${aceitavel}, ${atencao}, 
+    ${critico});
+    `;
+
+  console.log('Executando a instrução SQL: \n' + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
+
 module.exports = {
+  cadastrarMaquinaEspecifica,
+  cadastrarMaquinaPadrao,
+  atualizarParametrosEspecificos,
+
   cadastrarMaquina,
   cadastrarParametroPadrao,
   cadastrarMaquinaComponente,

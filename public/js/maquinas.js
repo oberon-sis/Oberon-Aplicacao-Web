@@ -1,25 +1,16 @@
-const ID_GERENTE = sessionStorage.ID_USUARIO ? sessionStorage.ID_USUARIO : 6;
+const usuarioString = sessionStorage.getItem('usuario');
+const usuarioObjeto = JSON.parse(usuarioString);
+const ID_GERENTE = usuarioObjeto.idFuncionario;
 const limitePorPagina = 14;
 
-const parametroOberon = {
-  CPU: 80,
-  RAM: 10,
-  DISCO: 20,
-  REDE: 30,
-};
-const parametroEmpresa = {
-  CPU: 0,
-  RAM: 0,
-  DISCO: 0,
-  REDE: 0,
-};
+let parametroOberon = {};
+let parametroEmpresa = {};
 
 let paginaAtual = 1;
 let valor_parametro = 'nome';
 let termo = '';
 
 let ipt_nome_cad, ipt_modelo_cad, ipt_mac_cad;
-let ipt_cpu_cad, ipt_ram_cad, ipt_disco_cad, ipt_rede_cad;
 let ipt_pesquisa;
 
 function limparEConverterLimite(valorBruto) {
@@ -170,83 +161,49 @@ function toggleParametros(checkboxEmpresa, checkboxOberon, paramsContainer, para
     dataSource = parametroEmpresa;
   }
 
-  paramInputs.forEach((input) => {
-    const inputId = input.id;
-    let valor = '';
+  let sufixo = '';
+  if (paramInputs.length > 0) {
+    if (paramInputs[0].id.includes('_cad')) sufixo = '_cad';
+    else if (paramInputs[0].id.includes('_upd')) sufixo = '_upd';
+  }
 
-    if (dataSource) {
-      if (inputId.includes('cpu')) valor = dataSource.CPU;
-      else if (inputId.includes('ram')) valor = dataSource.RAM;
-      else if (inputId.includes('disco')) valor = dataSource.DISCO;
-      else if (inputId.includes('rede')) valor = dataSource.REDE;
+  const componentes = ['cpu', 'ram', 'disco', 'rede'];
+
+  componentes.forEach((tipo) => {
+    const iptOcioso = document.getElementById(`ipt_${tipo}_ocioso${sufixo}`);
+    const iptAtencao = document.getElementById(`ipt_${tipo}_atencao${sufixo}`);
+    const iptCritico = document.getElementById(`ipt_${tipo}_critico${sufixo}`);
+
+    const chaveDados = tipo.toUpperCase();
+
+    if (dataSource && dataSource[chaveDados]) {
+      // Ocioso <-> ACEITÁVEL
+      const valOcioso = dataSource[chaveDados].ACEITÁVEL?.limite ?? '';
+      const valAtencao = dataSource[chaveDados].ATENÇÃO?.limite ?? '';
+      const valCritico = dataSource[chaveDados].CRÍTICO?.limite ?? '';
+
+      if (iptOcioso) iptOcioso.value = valOcioso;
+      if (iptAtencao) iptAtencao.value = valAtencao;
+      if (iptCritico) iptCritico.value = valCritico;
+    } else if (isDisabled) {
+      // Se marcou checkbox, mas não tem dados (limpa os inputs)
+      if (iptOcioso) iptOcioso.value = '';
+      if (iptAtencao) iptAtencao.value = '';
+      if (iptCritico) iptCritico.value = '';
     }
 
-    input.value = valor !== undefined ? valor : '';
-
-    input.disabled = isDisabled;
-    input.classList.toggle('text-muted', isDisabled);
+    // Bloqueia ou Desbloqueia os inputs
+    [iptOcioso, iptAtencao, iptCritico].forEach((input) => {
+      if (input) {
+        input.disabled = isDisabled;
+        input.classList.toggle('text-muted', isDisabled);
+      }
+    });
   });
 
   if (paramsContainer) paramsContainer.classList.toggle('text-muted', isDisabled);
 }
 
-async function salvarParametrosEmpresa(event, configModal) {
-  event.preventDefault();
-
-  let cpuLimite = document.getElementById('cpu_config').value;
-  let ramLimite = document.getElementById('ram_config').value;
-  let discoLimite = document.getElementById('disco_config').value;
-  let redeLimite = document.getElementById('rede_config').value;
-
-  cpuLimite = limparEConverterLimite(cpuLimite);
-  ramLimite = limparEConverterLimite(ramLimite);
-  discoLimite = limparEConverterLimite(discoLimite);
-  redeLimite = limparEConverterLimite(redeLimite);
-
-  if (!cpuLimite || !ramLimite || !discoLimite || !redeLimite) {
-    configModal.hide();
-    exibirErro('Campos Obrigatórios', 'Por favor, preencha todos os limites de alerta.');
-    return;
-  }
-
-  const limitesParaEnvio = [
-    { tipo: 'CPU', limite: parseFloat(cpuLimite) },
-    { tipo: 'RAM', limite: parseFloat(ramLimite) },
-    { tipo: 'Disco Duro', limite: parseFloat(discoLimite) },
-    { tipo: 'PlacaRede', limite: parseFloat(redeLimite) },
-  ];
-
-  const dadosConfiguracao = {
-    fkFuncionario: ID_GERENTE,
-    limites: limitesParaEnvio,
-  };
-
-  configModal.hide();
-
-  try {
-    const response = await fetch('/maquinas/salvarPadrao', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(dadosConfiguracao),
-    });
-
-    if (response.ok) {
-      carregarParametrosAtuais();
-      exibirSucesso(
-        'Configuração Salva!',
-        'Os Parâmetros Padrão da Empresa foram atualizados com sucesso.',
-      );
-    } else {
-      const erro = await response.text();
-      exibirErro('Erro na Configuração', erro || 'Erro desconhecido ao salvar os parâmetros.');
-    }
-  } catch (error) {
-    console.error('Erro de rede ao salvar parâmetros:', error);
-    exibirErro('Erro de Rede', 'Não foi possível conectar ao servidor para salvar a configuração.');
-  }
-}
 
 function excluir_maquina(idMaquina) {
   Swal.fire({
@@ -439,146 +396,141 @@ async function getDadosById(idMaquina) {
     document.getElementById('txt_modelo').innerHTML = dados.maquina.modelo;
     document.getElementById('txt_mac').innerHTML = dados.maquina.macAddress;
 
-    preencherDadosAlertas(dados.componentes);
+    preencherDadosAlertas(dados.parametros_por_componente);
   } catch (error) {
     console.error('Falha ao carregar dados da máquina:', error);
     exibirErro('Erro ao Carregar', 'Não foi possível carregar os dados da máquina para edição.');
   }
 }
 
-function preencherDadosAlertas(componentes) {
-  const inputs = {
-    CPU: document.getElementById('ipt_cpu_upd'),
-    RAM: document.getElementById('ipt_ram_upd'),
-    DISCO: document.getElementById('ipt_disco_upd'),
-    REDE: document.getElementById('ipt_rede_upd'),
-  };
-  const textos = {
-    CPU: document.getElementById('txt_cpu'),
-    RAM: document.getElementById('txt_ram'),
-    DISCO: document.getElementById('txt_disco'),
-    REDE: document.getElementById('txt_rede'),
-  };
+function preencherDadosAlertas(parametrosAgrupados) {
+  const tipos = ['CPU', 'RAM', 'DISCO', 'REDE'];
+  let origemGeral = 'ESPECÍFICO';
+  let temParametrosEspecificos = false;
 
-  let origemAtual = 'ESPECIFICO';
+  tipos.forEach((tipo) => {
+    const dadosComponente = parametrosAgrupados[tipo] || {};
+    const nomeElemento = tipo.toLowerCase(); 
 
-  componentes.forEach((c) => {
-    const tipo = c.tipoComponente;
-    const input = inputs[tipo];
-    const texto = textos[tipo];
-    origemAtual = c.origemParametro;
+    const valOcioso = dadosComponente.ACEITÁVEL?.limite ?? '';
+    const valAtencao = dadosComponente.ATENÇÃO?.limite ?? '';
+    const valCritico = dadosComponente.CRÍTICO?.limite ?? '';
 
-    if (input) {
-      if (origemAtual === 'ESPECIFICO') {
-        input.value = c.limiteNumerico !== null ? c.limiteNumerico : '';
-        texto.innerHTML = c.limiteNumerico !== null ? c.limiteNumerico : '';
-      } else if (origemAtual === 'EMPRESA') {
-        input.value = parametroEmpresa[tipo] || '';
-        texto.innerHTML = parametroEmpresa[tipo] || '';
-      } else if (origemAtual === 'OBERON') {
-        input.value = parametroOberon[tipo] || '';
-        texto.innerHTML = parametroOberon[tipo] || '';
-      }
+    if (valOcioso !== '' || valAtencao !== '' || valCritico !== '') {
+      temParametrosEspecificos = true;
     }
+
+    const iptOcioso = document.getElementById(`ipt_${nomeElemento}_ocioso_upd`);
+    const iptAtencao = document.getElementById(`ipt_${nomeElemento}_atencao_upd`);
+    const iptCritico = document.getElementById(`ipt_${nomeElemento}_critico_upd`);
+
+    if (iptOcioso) iptOcioso.value = valOcioso;
+    if (iptAtencao) iptAtencao.value = valAtencao;
+    if (iptCritico) iptCritico.value = valCritico;
+
+    const txtOcioso = document.getElementById(`txt_${nomeElemento}_ocioso`);
+    const txtAtencao = document.getElementById(`txt_${nomeElemento}_atencao`);
+    const txtCritico = document.getElementById(`txt_${nomeElemento}_critico`);
+
+    const unidade = nomeElemento === 'rede' ? ' Mbps' : ' %';
+
+    if (txtOcioso) txtOcioso.innerText = valOcioso ? valOcioso + unidade : '-';
+    if (txtAtencao) txtAtencao.innerText = valAtencao ? valAtencao + unidade : '-';
+    if (txtCritico) txtCritico.innerText = valCritico ? valCritico + unidade : '-';
   });
 
-  const checkboxEmpresaUpd = document.getElementById('alertaEmpresaUpd');
-  const checkboxOberonUpd = document.getElementById('alertaOberonUpd');
+  if (!temParametrosEspecificos) {
+    origemGeral = 'OBERON'; 
+  }
+  const chkEmpresa = document.getElementById('alertaEmpresaUpd');
+  const chkOberon = document.getElementById('alertaOberonUpd');
 
-  checkboxEmpresaUpd.checked = origemAtual === 'EMPRESA';
-  checkboxOberonUpd.checked = origemAtual === 'OBERON';
+  if (chkEmpresa && chkOberon) {
+    chkEmpresa.checked = !temParametrosEspecificos && origemGeral === 'EMPRESA';
+    chkOberon.checked = !temParametrosEspecificos && origemGeral === 'OBERON';
 
-  const paramsContainerUpd = document.getElementById('parametrizacaoIndividualUpd');
-  const paramInputsUpd = paramsContainerUpd ? paramsContainerUpd.querySelectorAll('input') : [];
-  toggleParametros(checkboxEmpresaUpd, checkboxOberonUpd, paramsContainerUpd, paramInputsUpd);
+    const containerInputs = document.getElementById('parametrizacaoIndividualUpd');
+    const listaInputs = containerInputs ? containerInputs.querySelectorAll('input') : [];
+    toggleParametros(chkEmpresa, chkOberon, containerInputs, listaInputs);
+  }
 }
 
 function atualizarMaquinaSubmit(event) {
   event.preventDefault();
   atualizarMaquina();
 }
+
 async function atualizarMaquina() {
+  if (!idMaquinaEmEdicao) return;
+
   const nome = document.getElementById('ipt_nome_upd').value;
-  const mac = document.getElementById('ipt_mac_upd').value;
+  const macAddress = document.getElementById('ipt_mac_upd').value;
 
-  let cpuBruto = document.getElementById('ipt_cpu_upd').value;
-  let ramBruto = document.getElementById('ipt_ram_upd').value;
-  let discoBruto = document.getElementById('ipt_disco_upd').value;
-  let redeBruto = document.getElementById('ipt_rede_upd').value;
-
-  let cpu = limparEConverterLimite(cpuBruto);
-  let ram = limparEConverterLimite(ramBruto);
-  let disco = limparEConverterLimite(discoBruto);
-  let rede = limparEConverterLimite(redeBruto);
-
-  const checkboxEmpresaUpd = document.getElementById('alertaEmpresaUpd');
-  const checkboxOberonUpd = document.getElementById('alertaOberonUpd');
-  const origemParametro = getOrigemLimite(checkboxEmpresaUpd, checkboxOberonUpd);
-
-  if (!nome || !mac) {
-    exibirErro('Campos Obrigatórios', 'Por favor, preencha o nome e o Mac Address da máquina.');
+  if (!nome || !macAddress) {
+    exibirErro('Campos Obrigatórios', 'Preencha Nome e Mac Address.');
     return;
   }
 
-  if (origemParametro === 'ESPECIFICO') {
-    if (!cpu || !ram || !disco || !rede) {
-      exibirErro(
-        'Limites Faltando',
-        'Por favor, defina todos os limites de alerta individualmente.',
-      );
+  const origemParametro = getOrigemSelecionada('alertaEmpresaUpd', 'alertaOberonUpd');
+
+  let cpuParams = null;
+  let ramParams = null;
+  let discoParams = null;
+  let redeParams = null;
+
+  if (origemParametro === 'ESPECÍFICO') {
+    cpuParams = montarObjetoParametros('cpu', '_upd');
+    ramParams = montarObjetoParametros('ram', '_upd');
+    discoParams = montarObjetoParametros('disco', '_upd');
+    redeParams = montarObjetoParametros('rede', '_upd');
+
+    if (!cpuParams || !ramParams || !discoParams || !redeParams) {
+      exibirErro('Atenção', 'Preencha todos os limites para configuração Específica.');
       return;
     }
+  } else {
+    console.log("verificar else especifico")
   }
 
-  const limitesParaEnvio =
-    origemParametro === 'ESPECIFICO'
-      ? [
-          { tipo: 'CPU', limite: parseFloat(cpu) },
-          { tipo: 'RAM', limite: parseFloat(ram) },
-          { tipo: 'DISCO', limite: parseFloat(disco) },
-          { tipo: 'REDE', limite: parseFloat(rede) },
-        ]
-      : [];
-
-  const dadosParaAtualizar = {
+  const payload = {
+    idMaquina: idMaquinaEmEdicao,
+    idFuncionario: ID_GERENTE,
     nome: nome,
-    macAddress: mac,
+    macAddress: macAddress,
     origemParametro: origemParametro,
-    limites: limitesParaEnvio,
+
+    cpu_parametros: cpuParams,
+    ram_parametros: ramParams,
+    disco_parametros: discoParams,
+    rede_parametros: redeParams,
   };
 
-  const idMaquina = idMaquinaEmEdicao;
-
   try {
-    const response = await fetch(`/maquinas/atualizarMaquina/${idMaquina}`, {
+    const response = await fetch(`/maquinas/atualizarMaquina`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(dadosParaAtualizar),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
     });
 
     if (response.ok) {
-      const modalElement = document.getElementById('modalAtualizarMaquina');
-      if (modalElement) {
-        bootstrap.Modal.getInstance(modalElement).hide();
-      }
-      exibirSucesso('Atualização Concluída', `A máquina ${nome} foi atualizada com sucesso!`);
+      const modal = bootstrap.Modal.getInstance(document.getElementById('modalAtualizarMaquina'));
+      modal?.hide();
+      exibirSucesso('Atualizado', `Máquina ${nome} editada com sucesso!`);
       carregarMaquinas(paginaAtual, valor_parametro, termo);
     } else {
-      const errorText = await response.text();
-      exibirErro('Erro na Atualização', errorText || `Erro desconhecido ao atualizar.`);
+      const erroTxt = await response.text();
+      exibirErro('Erro ao atualizar', erroTxt);
     }
   } catch (error) {
-    console.error('Erro na requisição:', error);
-    exibirErro('Erro de Rede', 'Falha na comunicação com o servidor ao tentar atualizar.');
+    console.error(error);
+    exibirErro('Erro', 'Falha na conexão.');
   }
 }
 
 function renderizarPaginacao(totalPaginas, paginaAtual) {
   const elementoPaginacao = document.getElementById('paginazacao');
   if (!elementoPaginacao) return;
-  const elementoPaginacao_ul = elementoPaginacao.querySelector('ul');
+  let elementoPaginacao_ul = elementoPaginacao.querySelector('ul');
   if (!elementoPaginacao_ul) {
     elementoPaginacao.innerHTML = `<ul class="pagination pagination-sm"></ul>`;
     elementoPaginacao_ul = elementoPaginacao.querySelector('ul');
@@ -594,22 +546,47 @@ function renderizarPaginacao(totalPaginas, paginaAtual) {
         </li>
     `;
 
-  for (let i = 1; i <= totalPaginas; i++) {
-    const ativo = i === paginaAtual ? 'active_pagina' : '';
+  const maxPaginasVisiveis = 5;
+  let inicio = Math.max(1, paginaAtual - Math.floor(maxPaginasVisiveis / 2));
+  let fim = Math.min(totalPaginas, inicio + maxPaginasVisiveis - 1);
 
-    if (i === 1 || i === totalPaginas || (i >= paginaAtual - 2 && i <= paginaAtual + 2)) {
+  if (fim - inicio + 1 < maxPaginasVisiveis) {
+    inicio = Math.max(1, fim - maxPaginasVisiveis + 1);
+  }
+
+  if (inicio > 1) {
+    htmlLista += `
+          <li class="page-item"><a class="page-link" onclick="carregarMaquinas(1, '${valor_parametro}', '${termo}'); return false;">1</a></li>
+      `;
+    if (inicio > 2) {
       htmlLista += `
-                <li class="page-item ${ativo}">
-                    <a class="page-link" onclick="carregarMaquinas(${i}, '${valor_parametro}', '${termo}'); return false;">${i}</a>
-                </li>
-            `;
-    } else if (i === paginaAtual - 3 || i === paginaAtual + 3) {
-      htmlLista += `
-                <li class="page-item disabled">
-                    <span class="page-link">...</span>
-                </li>
-            `;
+              <li class="page-item disabled">
+                  <span class="page-link">...</span>
+              </li>
+          `;
     }
+  }
+
+  for (let i = inicio; i <= fim; i++) {
+    const ativo = i === paginaAtual ? 'active_pagina' : '';
+    htmlLista += `
+              <li class="page-item ${ativo}">
+                  <a class="page-link" onclick="carregarMaquinas(${i}, '${valor_parametro}', '${termo}'); return false;">${i}</a>
+              </li>
+          `;
+  }
+
+  if (fim < totalPaginas) {
+    if (fim < totalPaginas - 1) {
+      htmlLista += `
+              <li class="page-item disabled">
+                  <span class="page-link">...</span>
+              </li>
+          `;
+    }
+    htmlLista += `
+          <li class="page-item"><a class="page-link" onclick="carregarMaquinas(${totalPaginas}, '${valor_parametro}', '${termo}'); return false;">${totalPaginas}</a></li>
+      `;
   }
 
   const desabilitarSeguinte = paginaAtual === totalPaginas ? 'disabled' : '';
@@ -623,99 +600,79 @@ function renderizarPaginacao(totalPaginas, paginaAtual) {
   elementoPaginacao_ul.innerHTML = htmlLista;
 }
 
-function getOrigemLimite(checkboxEmpresa, checkboxOberon) {
-  if (checkboxEmpresa.checked) {
-    return 'EMPRESA';
-  } else if (checkboxOberon.checked) {
-    return 'OBERON';
-  }
-  return 'ESPECIFICO';
-}
-
 async function cadastrarMaquina(event) {
   if (event) event.preventDefault();
-  const nome = ipt_nome_cad ? ipt_nome_cad.value : '';
-  const modelo = ipt_modelo_cad ? ipt_modelo_cad.value : '';
-  const macAddress = ipt_mac_cad ? ipt_mac_cad.value : '';
 
-  const checkboxEmpresa = document.getElementById('alertaEmpresa');
-  const checkboxOberon = document.getElementById('alertaOberon');
-
-  let cpuLimite = ipt_cpu_cad ? ipt_cpu_cad.value : '';
-  let ramLimite = ipt_ram_cad ? ipt_ram_cad.value : '';
-  let discoLimite = ipt_disco_cad ? ipt_disco_cad.value : '';
-  let redeLimite = ipt_rede_cad ? ipt_rede_cad.value : '';
-
-  cpuLimite = limparEConverterLimite(cpuLimite);
-  ramLimite = limparEConverterLimite(ramLimite);
-  discoLimite = limparEConverterLimite(discoLimite);
-  redeLimite = limparEConverterLimite(redeLimite);
+  const nome = document.getElementById('ipt_nome_cad').value;
+  const macAddress = document.getElementById('ipt_mac_cad').value;
 
   if (!nome || !macAddress) {
-    exibirErro('Campos Obrigatórios', 'Por favor, preencha o nome e o Mac Address da máquina.');
+    exibirErro('Campos Obrigatórios', 'Preencha Nome e Mac Address.');
     return;
   }
 
-  const origemParametro = getOrigemLimite(checkboxEmpresa, checkboxOberon);
+  const origemParametro = getOrigemSelecionada('alertaEmpresa', 'alertaOberon');
 
-  if (origemParametro === 'ESPECIFICO') {
-    if (cpuLimite === null || ramLimite === null || discoLimite === null || redeLimite === null) {
+  let cpuParams = null;
+  let ramParams = null;
+  let discoParams = null;
+  let redeParams = null;
+
+  if (origemParametro === 'ESPECÍFICO') {
+    cpuParams = montarObjetoParametros('cpu', '_cad');
+    ramParams = montarObjetoParametros('ram', '_cad');
+    discoParams = montarObjetoParametros('disco', '_cad');
+    redeParams = montarObjetoParametros('rede', '_cad');
+
+    if (!cpuParams || !ramParams || !discoParams || !redeParams) {
       exibirErro(
-        'Limites Faltando',
-        'Por favor, defina todos os limites de alerta individualmente (somente números).',
+        'Atenção',
+        'Para configuração Específica, preencha TODOS os campos de Ocioso, Atenção e Crítico.',
       );
       return;
     }
   }
 
-  const dadosMaquina = {
+  const payload = {
     idFuncionario: ID_GERENTE,
-    nome,
-    modelo,
-    macAddress,
-    origemParametro,
+    nome: nome,
+    macAddress: macAddress,
+    origemParametro: origemParametro,
 
-    limites:
-      origemParametro === 'ESPECIFICO'
-        ? [
-            { tipo: 'CPU', limite: cpuLimite },
-            { tipo: 'RAM', limite: ramLimite },
-            { tipo: 'Disco Duro', limite: discoLimite },
-            { tipo: 'PlacaRede', limite: redeLimite },
-          ]
-        : [],
+    cpu_parametros: cpuParams,
+    ram_parametros: ramParams,
+    disco_parametros: discoParams,
+    rede_parametros: redeParams,
   };
 
   try {
     const response = await fetch('/maquinas/cadastrarMaquina', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(dadosMaquina),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
     });
 
     if (response.ok) {
-      const modalElement = document.getElementById('modalCadastrarMaquina');
-      if (modalElement) {
-        bootstrap.Modal.getInstance(modalElement)?.hide();
-      }
-
-      exibirSucesso('Cadastro Concluído', `A máquina ${nome} foi cadastrada com sucesso!`);
+      const modal = bootstrap.Modal.getInstance(document.getElementById('modalCadastrarMaquina'));
+      modal?.hide();
+      exibirSucesso('Sucesso', `Máquina ${nome} cadastrada!`);
       carregarMaquinas(1, valor_parametro, termo);
+
+      document.getElementById('formCadastrarMaquina').reset();
     } else {
-      const erro = await response.text();
-      exibirErro('Erro no Cadastro', erro || 'Erro desconhecido ao cadastrar a máquina.');
+      const erroTxt = await response.text();
+      exibirErro('Erro', erroTxt);
     }
   } catch (error) {
-    console.error('Erro de rede ao cadastrar:', error);
-    exibirErro('Erro de Rede', 'Não foi possível conectar ao servidor para cadastrar.');
+    console.error(error);
+    exibirErro('Erro', 'Falha na conexão.');
   }
 }
 
 async function carregarParametrosAtuais() {
   const checkboxEmpresa = document.getElementById('alertaEmpresa');
   const checkboxEmpresaAtualizar = document.getElementById('alertaEmpresaUpd');
+
   if (!ID_GERENTE) return console.error('ID do Gerente não definido.');
 
   try {
@@ -727,81 +684,160 @@ async function carregarParametrosAtuais() {
 
     const dados = await response.json();
 
-    const mapaDados = dados.reduce((map, item) => {
-      map[item.tipoComponente] = item.valorFormatado;
-      return map;
-    }, {});
+    const mapearDados = (origemObjeto) => {
+      if (!origemObjeto) return {};
 
-    document.getElementById('atual_cpu').textContent = mapaDados['CPU'] || 'Não Configurado';
-    document.getElementById('atual_ram').textContent = mapaDados['RAM'] || 'Não Configurado';
-    document.getElementById('atual_disco').textContent = mapaDados['DISCO'] || 'Não Configurado';
-    document.getElementById('atual_rede').textContent = mapaDados['REDE'] || 'Não Configurado';
+      const mapa = {};
 
-    parametroEmpresa['CPU'] = mapaDados['CPU'];
-    parametroEmpresa['RAM'] = mapaDados['RAM'];
-    parametroEmpresa['DISCO'] = mapaDados['DISCO'];
-    parametroEmpresa['REDE'] = mapaDados['REDE'];
+      Object.entries(origemObjeto).forEach(([chave, info]) => {
+        const partes = chave.split('_');
+        const tipo = partes[0];
+        const identificador = partes[partes.length - 1];
 
-    document.getElementById('oberon_cpu').textContent = `${parametroOberon.CPU} %`;
-    document.getElementById('oberon_ram').textContent = `${parametroOberon.RAM} %`;
-    document.getElementById('oberon_disco').textContent = `${parametroOberon.DISCO} %`;
-    document.getElementById('oberon_rede').textContent = `${parametroOberon.REDE} Mbps`;
+        if (!mapa[tipo]) {
+          mapa[tipo] = {};
+        }
 
-    const isParametroEmpresaZerado =
-      parseFloat(parametroEmpresa['CPU']) === 0 &&
-      parseFloat(parametroEmpresa['RAM']) === 0 &&
-      parseFloat(parametroEmpresa['DISCO']) === 0 &&
-      parseFloat(parametroEmpresa['REDE']) === 0;
+        mapa[tipo][identificador] = {
+          limite: info.limite,
+          tipoComponete: info.tipoComponete,
+          identificador: info.identificador,
+        };
+      });
+      return mapa;
+    };
 
-    if (isParametroEmpresaZerado) {
-      checkboxEmpresa.disabled = true;
-      checkboxEmpresa.checked = false;
+    parametroEmpresa = mapearDados(dados.empresa);
+    parametroOberon = mapearDados(dados.oberon);
 
-      checkboxEmpresaAtualizar.disabled = true;
-      checkboxEmpresaAtualizar.checked = false;
-      const label = document.querySelector(`label[for="${checkboxEmpresa.id}"]`);
-      const labelAtulizar = document.querySelector(`label[for="${checkboxEmpresaAtualizar.id}"]`);
-      if (label) {
-        label.title = 'Configure os Limites Padrão da Empresa para habilitar esta opção.';
-        label.style.cursor = 'not-allowed';
-        label.classList.add('text-muted');
+    const atualizarTextoReferencia = (prefixo, dadosObjeto) => {
+      const tipos = {
+        CPU: 'cpu',
+        RAM: 'ram',
+        DISCO: 'disco',
+        REDE: 'rede',
+      };
+      const identificadores = ['ACEITÁVEL', 'ATENÇÃO', 'CRÍTICO'];
+
+      Object.entries(tipos).forEach(([tipoMaiusculo, nomeElemento]) => {
+        const unidade = tipoMaiusculo === 'REDE' ? ' Mbps' : ' %';
+
+        identificadores.forEach((identificador) => {
+          const limite = dadosObjeto[tipoMaiusculo]?.[identificador]?.limite;
+
+          const nomeIdentificador =
+            identificador === 'ACEITÁVEL' ? 'ocioso' : identificador.toLowerCase();
+
+          const el = document.getElementById(`${prefixo}_${nomeElemento}_${nomeIdentificador}`);
+
+          if (el) {
+            el.textContent = limite !== undefined ? `${limite} ${unidade}` : '-';
+          }
+        });
+      });
+    };
+
+    atualizarTextoReferencia('oberon', parametroOberon);
+    atualizarTextoReferencia('atual', parametroEmpresa);
+
+    let somaLimitesEmpresa = 0;
+    Object.values(parametroEmpresa).forEach((comp) => {
+      somaLimitesEmpresa += comp.ACEITÁVEL?.limite || 0;
+      somaLimitesEmpresa += comp.ATENÇÃO?.limite || 0;
+      somaLimitesEmpresa += comp.CRÍTICO?.limite || 0;
+    });
+
+    const isParametroEmpresaZerado = somaLimitesEmpresa === 0;
+
+    const configurarCheckbox = (checkbox) => {
+      if (!checkbox) return;
+      const label = document.querySelector(`label[for="${checkbox.id}"]`);
+
+      if (isParametroEmpresaZerado) {
+        checkbox.disabled = true;
+        checkbox.checked = false;
+        if (label) {
+          label.title = 'Configure os Limites Padrão da Empresa para habilitar esta opção.';
+          label.style.cursor = 'not-allowed';
+          label.classList.add('text-muted');
+        }
+      } else {
+        checkbox.disabled = false;
+        if (label) {
+          label.title = '';
+          label.style.cursor = 'pointer';
+          label.classList.remove('text-muted');
+        }
       }
-      if (labelAtulizar) {
-        labelAtulizar.title = 'Configure os Limites Padrão da Empresa para habilitar esta opção.';
-        labelAtulizar.style.cursor = 'not-allowed';
-        labelAtulizar.classList.add('text-muted');
-      }
-    } else {
-      checkboxEmpresa.disabled = false;
-      checkboxEmpresaAtualizar.disabled = false;
-      const label = document.querySelector(`label[for="${checkboxEmpresa.id}"]`);
-      const labelAtulizar = document.querySelector(`label[for="${checkboxEmpresaAtualizar.id}"]`);
-      if (labelAtulizar) {
-        labelAtulizar.title = '';
-        labelAtulizar.style.cursor = '';
-        labelAtulizar.classList.remove('text-muted');
-      }
-      if (label) {
-        label.title = '';
-        label.style.cursor = '';
-        label.classList.remove('text-muted');
-      }
-    }
+    };
+
+    configurarCheckbox(checkboxEmpresa);
+    configurarCheckbox(checkboxEmpresaAtualizar);
   } catch (error) {
     console.error('Falha ao carregar dados atuais:', error);
   }
 }
 
+function limparValor(valorBruto) {
+  if (!valorBruto) return null;
+  let valorLimpo = String(valorBruto)
+    .replace(/[^0-9,.]/g, '')
+    .replace(',', '.');
+  const numero = parseFloat(valorLimpo);
+  return isNaN(numero) ? null : numero;
+}
+
+function montarObjetoParametros(tipo, sufixo) {
+  const ociosoVal = document.getElementById(`ipt_${tipo}_ocioso${sufixo}`)?.value;
+  const atencaoVal = document.getElementById(`ipt_${tipo}_atencao${sufixo}`)?.value;
+  const criticoVal = document.getElementById(`ipt_${tipo}_critico${sufixo}`)?.value;
+
+  const ocioso = limparValor(ociosoVal);
+  const atencao = limparValor(atencaoVal);
+  const critico = limparValor(criticoVal);
+
+  if (ocioso === null || atencao === null || critico === null) {
+    return null;
+  }
+
+  return {
+    aceitavel: ocioso, 
+    atencao: atencao,
+    critico: critico,
+  };
+}
+
+function getOrigemSelecionada(idCheckEmpresa, idCheckOberon) {
+  const chkEmpresa = document.getElementById(idCheckEmpresa);
+  const chkOberon = document.getElementById(idCheckOberon);
+
+  if (chkOberon && chkOberon.checked) return 'OBERON';
+  if (chkEmpresa && chkEmpresa.checked) return 'EMPRESA';
+  return 'ESPECÍFICO';
+}
+
+
 document.addEventListener('DOMContentLoaded', function () {
   ipt_pesquisa = document.getElementById('ipt_pesquisa');
 
   ipt_nome_cad = document.getElementById('ipt_nome_cad');
-  ipt_modelo_cad = document.getElementById('ipt_modelo_cad');
   ipt_mac_cad = document.getElementById('ipt_mac_cad');
-  ipt_cpu_cad = document.getElementById('ipt_cpu_cad');
-  ipt_ram_cad = document.getElementById('ipt_ram_cad');
-  ipt_disco_cad = document.getElementById('ipt_disco_cad');
-  ipt_rede_cad = document.getElementById('ipt_rede_cad');
+
+  ipt_cpu_ocioso_cad = document.getElementById('ipt_cpu_ocioso_cad');
+  ipt_cpu_atencao_cad = document.getElementById('ipt_cpu_atencao_cad');
+  ipt_cpu_critico_cad = document.getElementById('ipt_cpu_critico_cad');
+
+  ipt_ram_ocioso_cad = document.getElementById('ipt_ram_ocioso_cad');
+  ipt_ram_atencao_cad = document.getElementById('ipt_ram_atencao_cad');
+  ipt_ram_critico_cad = document.getElementById('ipt_ram_critico_cad');
+
+  ipt_disco_ocioso_cad = document.getElementById('ipt_disco_ocioso_cad');
+  ipt_disco_atencao_cad = document.getElementById('ipt_disco_atencao_cad');
+  ipt_disco_critico_cad = document.getElementById('ipt_disco_critico_cad');
+
+  ipt_rede_ocioso_cad = document.getElementById('ipt_rede_ocioso_cad');
+  ipt_rede_atencao_cad = document.getElementById('ipt_rede_atencao_cad');
+  ipt_rede_critico_cad = document.getElementById('ipt_rede_critico_cad');
 
   const formConfig = document.getElementById('formConfigParametros');
   const modalElementConfig = document.getElementById('modalConfigParametros');
@@ -821,14 +857,30 @@ document.addEventListener('DOMContentLoaded', function () {
   const checkboxEmpresa = document.getElementById('alertaEmpresa');
   const checkboxOberon = document.getElementById('alertaOberon');
   const paramsContainer = document.getElementById('parametrizacaoIndividual');
-  const paramInputs = [ipt_cpu_cad, ipt_ram_cad, ipt_disco_cad, ipt_rede_cad].filter(Boolean);
+
+  const paramInputs = [
+    ipt_cpu_ocioso_cad,
+    ipt_cpu_atencao_cad,
+    ipt_cpu_critico_cad,
+    ipt_ram_ocioso_cad,
+    ipt_ram_atencao_cad,
+    ipt_ram_critico_cad,
+    ipt_disco_ocioso_cad,
+    ipt_disco_atencao_cad,
+    ipt_disco_critico_cad,
+    ipt_rede_ocioso_cad,
+    ipt_rede_atencao_cad,
+    ipt_rede_critico_cad,
+  ].filter(Boolean); 
 
   const dadosAtuaisIdentificacao = document.getElementById('dadosAtuaisIdentificacao');
   const dadosAtuaisAlertas = document.getElementById('dadosAtuaisAlertas');
   const checkboxEmpresaUpd = document.getElementById('alertaEmpresaUpd');
   const checkboxOberonUpd = document.getElementById('alertaOberonUpd');
   const paramsContainerUpd = document.getElementById('parametrizacaoIndividualUpd');
-  const paramInputsUpd = paramsContainerUpd ? paramsContainerUpd.querySelectorAll('input') : [];
+  const paramInputsUpd = Array.from(
+    document.querySelectorAll('#parametrizacaoIndividualUpd input'),
+  );
   const modalElementUpd = document.getElementById('modalAtualizarMaquina');
 
   const modalAjuda = document.getElementById('modalMacHelp');
@@ -955,11 +1007,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (btnAtualizar) {
     btnAtualizar.addEventListener('click', atualizarMaquinaSubmit);
-  }
-
-  if (formConfig && modalElementConfig) {
-    const configModal = new bootstrap.Modal(modalElementConfig);
-    formConfig.addEventListener('submit', (event) => salvarParametrosEmpresa(event, configModal));
   }
 
   if (ipt_pesquisa) {
