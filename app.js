@@ -1,5 +1,9 @@
 var ambiente_processo = 'desenvolvimento';
 
+var caminho_env = ambiente_processo === 'producao' ? '.env' : '.env.dev';
+
+require('dotenv').config({ path: caminho_env });
+
 require('dotenv').config();
 
 var express = require('express');
