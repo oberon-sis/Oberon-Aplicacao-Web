@@ -204,7 +204,6 @@ function toggleParametros(checkboxEmpresa, checkboxOberon, paramsContainer, para
   if (paramsContainer) paramsContainer.classList.toggle('text-muted', isDisabled);
 }
 
-
 function excluir_maquina(idMaquina) {
   Swal.fire({
     title: 'Excluir Máquina',
@@ -410,7 +409,7 @@ function preencherDadosAlertas(parametrosAgrupados) {
 
   tipos.forEach((tipo) => {
     const dadosComponente = parametrosAgrupados[tipo] || {};
-    const nomeElemento = tipo.toLowerCase(); 
+    const nomeElemento = tipo.toLowerCase();
 
     const valOcioso = dadosComponente.ACEITÁVEL?.limite ?? '';
     const valAtencao = dadosComponente.ATENÇÃO?.limite ?? '';
@@ -440,7 +439,7 @@ function preencherDadosAlertas(parametrosAgrupados) {
   });
 
   if (!temParametrosEspecificos) {
-    origemGeral = 'OBERON'; 
+    origemGeral = 'OBERON';
   }
   const chkEmpresa = document.getElementById('alertaEmpresaUpd');
   const chkOberon = document.getElementById('alertaOberonUpd');
@@ -489,7 +488,7 @@ async function atualizarMaquina() {
       return;
     }
   } else {
-    console.log("verificar else especifico")
+    console.log('verificar else especifico');
   }
 
   const payload = {
@@ -801,7 +800,7 @@ function montarObjetoParametros(tipo, sufixo) {
   }
 
   return {
-    aceitavel: ocioso, 
+    aceitavel: ocioso,
     atencao: atencao,
     critico: critico,
   };
@@ -815,7 +814,6 @@ function getOrigemSelecionada(idCheckEmpresa, idCheckOberon) {
   if (chkEmpresa && chkEmpresa.checked) return 'EMPRESA';
   return 'ESPECÍFICO';
 }
-
 
 document.addEventListener('DOMContentLoaded', function () {
   ipt_pesquisa = document.getElementById('ipt_pesquisa');
@@ -871,7 +869,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ipt_rede_ocioso_cad,
     ipt_rede_atencao_cad,
     ipt_rede_critico_cad,
-  ].filter(Boolean); 
+  ].filter(Boolean);
 
   const dadosAtuaisIdentificacao = document.getElementById('dadosAtuaisIdentificacao');
   const dadosAtuaisAlertas = document.getElementById('dadosAtuaisAlertas');
