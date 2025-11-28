@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Análise de risco de Componente</title>
+
+  <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
+  <link rel="stylesheet" href="../css/body.css" />
+  <link rel="stylesheet" href="../component/menu/Menu.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+
+  <link rel="stylesheet" href="../css/maquinas.css" />
+  <link rel="stylesheet" href="../css/analiseRede.css" />
+  <link rel="stylesheet" href="../component/tour/TourGuide.css" />
+  <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
+  <link rel="stylesheet" href="../component/notificao/Notificaocao.css" />
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+  <!-- Chart.js v3 (necessário para o gauge) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+
+  <!-- Plugin do gauge compatível com v3 -->
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-gauge@3.0.1/dist/chartjs-chart-gauge.min.js"></script>
+
+  <!-- Chart.js Data Labels (opcional, funciona com v3) -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
+
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+
+
+  <style>
+    :root {
+      --kpi-bg: #fff;
+      --main-bg: #f0f2f5;
+      --text-muted: #6c757d;
+    }
+
+    body {
+      overflow-x: hidden;
+      width: 100%;
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100dvh;
+      background-color: #1a1a1a;
+      margin: 0;
+      padding: 0;
+     
+
+    }
+   
+
+    .content {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    .main-structure {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding: 15px 0;
+    }
+
+
+    .data-card {
+      background-color: var(--kpi-bg);
+      padding: 15px;
+      border-radius: 8px;
+      height: 390px;
+      width: 750px;
+      box-shadow:
+        rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+        rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+
+    }
+
+    .data-tabela {
+      background-color: var(--kpi-bg);
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow:
+        rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+        rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+      height: 222px;
+      margin-top: 5px;
+      width: 750px;
+    }
+
+
+    .kpi-container-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+
+    .kpi-card {
+      border-radius: 10px;
+      padding: 15px;
+      background: none;
+      background-color: var(--kpi-bg);
+      background-color: #fff;
+      box-shadow:
+        rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+        rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+
+    }
+
+    .kpi-card h3 {
+      font-size: 2.2em;
+      font-weight: 600;
+      margin-top: 5px;
+      color: #343a40;
+    }
+
+    .kpi-header span {
+      font-size: 0.9em;
+      color: var(--text-muted);
+    }
+
+
+    .chart-container-fluid {
+      width: 100%;
+      height: 100%;
+      min-height: 350px;
+      padding: 0;
+    }
+
+    
+
+
+    .header-top {
+      padding: 10px 0 !important;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .header-top h2 {
+      font-weight: 400;
+    }
+
+
+
+    .acoes-recomendadas-scroll {
+      max-height: 135px;
+    
+      overflow-y: auto;
+      padding-right: 10px;
+   
+    }
+
+    .acoes-recomendadas-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .acoes-recomendadas-scroll::-webkit-scrollbar-thumb {
+      background-color: #bbb;
+      border-radius: 10px;
+    }
+
+
+    .text-black {
+      margin-left: 15px;
+    }
+
+    .col-12{
+     width: 750px;
+    }
+
+  
+
+   
+  </style>
+</head>
+
+<body class="d-flex w-100 h-100">
+  <div id="menu-container"></div>
+
+  <main class="content flex-grow-1 padding_main dashboard-main">
+    <button class="btn btn-secondary d-md-none mb-4" type="button" data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
+        viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+          d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+      </svg>
+    </button>
+    <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
+      <h2 class="text-black me-3">
+        Análise de Rede &nbsp;&nbsp; <span id="tituloDoPainel">Máquina-002</span>
+      </h2>
+
+      <div class="d-flex align-items-center flex-wrap flex-grow-1 me-3">
+        <div class="d-flex align-items-center me-3 mb-2 mb-md-0">
+          <div class="search-autocomplete-container me-3" style="position: relative;">
+
+
+
+
+
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <span id="valor_pesquisa_maquina">Selecionar</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end hover_verde">
+              <li>
+                <a class="dropdown-item" onclick="atualizar_painelEspecifico(1)">Máquina-0021</a>
+              </li>
+
+              <li>
+                <a class="dropdown-item" onclick="atualizar_painelEspecifico(2)">Máquina-0022</a>
+              </li>
+
+              <li>
+                <a class="dropdown-item" onclick="atualizar_painelEspecifico(3)">Máquina-0001</a>
+              </li>
+
+              <li>
+                <a class="dropdown-item" onclick="atualizar_painelEspecifico(4)">Máquina-0002</a>
+              </li>
+              <li>
+                <a class="dropdown-item" onclick="atualizar_painelEspecifico(5)">Máquina-0015</a>
+              </li>
+              <li>
+                <a class="dropdown-item" onclick="atualizar_painelEspecifico(6)">Máquina-0030</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="d-flex align-items-center ms-auto"></div>
+    </header>
+
+    <section class="kpi-container" id="kpi-section">
+      <div class="kpi-card" id="kpi-disponibilidade">
+        <div class="topo-kpi">
+          <h6>Disponibilidade de rede</h6>
+          <div class="icone-kpi"><i class="bi bi-box-arrow-in-up"></i></div>
+        </div>
+
+        <div class="baixo-kpi">
+          <div>
+            <span id="txt_disponibilidade" class="text-danger"> Carregando...  </span> <span class="text-danger">%<i class="bi bi-arrow-up" style="scale: 1.2"> </i> </span>
+           
+
+          </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="O que é Disponibilidade?"
+            data-bs-content="A porcentagem de tempo que o sistema ou máquina está operacional e acessível aos usuários durante o período de referência.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </div>
+      </div>
+
+      <div class="kpi-card" id="kpi-total-alertas">
+        <div class="topo-kpi">
+          <h6>Quantidade Total De Alertas</h6>
+          <div class="icone-kpi"><i class="bi bi-bell"></i></div>
+        </div>
+        <div class="baixo-kpi">
+          <div>
+            <span id="qntTotalAlertas" class="text-danger"> 30 <i style="scale: 1.2"></i> </span>
+
+          </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="O que são Alertas?"
+            data-bs-content="Total de notificações geradas por exceder limites configurados de uso de recursos (CPU, RAM, etc.) ou falhas no sistema durante o bimestre.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </div>
+      </div>
+
+      <div class="kpi-card" id="kpi-percentual-critico">
+        <div class="topo-kpi">
+          <h6>Jitter</h6>
+          <div class="icone-kpi">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+          </div>
+        </div>
+        <div class="baixo-kpi">
+          <div>
+            <span id="txt_jitter" class="text-danger">20ms<i class="bi bi-arrow-up" style="scale: 1.2"></i>
+            </span>
+
+          </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="O que é Alerta Crítico?"
+            data-bs-content="A proporção de alertas que atingiram o nível de maior gravidade ('Crítico'), indicando falhas graves ou iminentes que exigem ação imediata.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </div>
+      </div>
+      <div class="kpi-card" id="kpi-componente-critico">
+        <div class="topo-kpi">
+          <h6>Throughput</h6>
+          <div class="icone-kpi"><i class="bi bi-memory"></i></div>
+        </div>
+
+        <div class="baixo-kpi">
+          <div>
+
+            <span id="kpiThroughput" class="text-danger"> Carregando... <i style="scale: 1.2"></i> </span>
+
+          </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="Componente Crítico"
+            data-bs-content="O recurso (CPU, RAM, DISCO, etc.) que gerou o maior número de alertas no nível 'Crítico' durante o bimestre analisado.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </div>
+      </div>
+
+      <div class="kpi-card" id="kpi-tempo-alertas">
+        <div class="topo-kpi">
+          <h6>Perda de pacote</h6>
+          <div class="icone-kpi"><i class="bi bi-stopwatch"></i></div>
+        </div>
+        <div class="baixo-kpi">
+          <div>
+            <span id="pacotesPerdidosid" class="text-danger"> carregando... </span> <span class="text-danger"> % <i class="bi bi-arrow-down"
+                style="scale: 1.2"></i> </span>
+
+          </div>
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="O que é MTBA (Tempo Médio Entre Alertas)?"
+            data-bs-content="O tempo médio que decorre entre a geração de um alerta e o próximo, refletindo a frequência dos problemas de desempenho ou falhas no sistema.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="data-card">
+            <h4 class="mb-3"> Análise da média de Pacotes </h4>
+            <div class="chart-placeholder chart-container-fluid">
+
+              <canvas id="severityBarChart"></canvas>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="data-card"> 
+            <h4 class="mb-3">Throughput das últimas 24 Horas </h4>
+            <canvas id="graficoThroughput" width="900" height="450"></canvas>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      
+          <section class="details-container" style="display:flex;">
+
+      <div class="chart-item-wrapper" id="list-sobrecarga">
+        <h3 style="font-size: 1.1rem; margin-bottom: 10px">
+          Top 5 - Máquinas em Sobrecarga (Média > 85%)
+          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+            data-bs-trigger="focus" data-bs-title="Máquinas em Sobrecarga"
+            data-bs-content="Lista as 5 máquinas que mais precisam de um upgrade, com base na média de uso de CPU ou RAM no período.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+          </button>
+        </h3>
+        <div>
+          <table class="table table-striped table-hover table-sm">
+            <thead>
+              <tr>
+                <th>Máquina</th>
+                <th>Média de Rede</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-sobrecarga">
+            </tbody>
+          </table>
+        </div>
+      </div>
+      </section>
+      
+ </div>
+      
+      <div class="row">
+        
+        <div class="col-12">
+          <div class="data-tabela">
+
+            <div class="card-body">
+              <h4 class="mb-3"><strong>Ações Recomendadas</strong></h4>
+
+              <div class="acoes-recomendadas-scroll">
+
+                <div class="mb-3">
+                  <h6><strong>Reduzir latência elevada</strong></h6>
+                  <p>Picos de latência indicam possíveis gargalos. Verifique portas do switch, cabos e rotas
+                    sobrecarregadas para estabilizar o streaming das câmeras.</p>
+                </div>
+
+                <div class="mb-3">
+                  <h6><strong>Estabilizar jitter</strong></h6>
+                  <p>Variações bruscas sugerem tráfego irregular. Avalie carga do switch e possíveis loops que
+                    podem estar afetando a fluidez do vídeo.</p>
+                </div>
+
+                <div class="mb-3">
+                  <h6><strong>Corrigir perda de pacotes</strong></h6>
+                  <p>Pacotes perdidos prejudicam a qualidade do vídeo. Inspecione cabos, conectores e erros
+                    na porta do switch para evitar interrupções.</p>
+                </div>
+
+                <div class="mb-3">
+                  <h6><strong>Reduzir uso excessivo de banda</strong></h6>
+                  <p>Consumo alto pode indicar câmeras transmitindo acima do bitrate ou tráfego indevido.
+                    Ajuste configurações de vídeo para normalizar o uso.</p>
+                </div>
+
+                <div class="mb-3">
+                  <h6><strong>Investigar quedas de disponibilidade</strong></h6>
+                  <p>Falhas recentes podem ser causadas por flapping, reinicialização de switch ou cabos com
+                    mau contato. Monitore padrões de horário.</p>
+                </div>
+
+              </div>
+
+
+
+
+            </div>
+          </div>
+
+       
+
+
+
+  </main>
+
+  <script>
+
+async function carregarGraficoSeveridade() {
+  const idMaquina = 1;
+
+  try {
+    console.log("🔍 Carregando dados…");
+
+    const reqRecebidos = await fetch(`/analiseRede/recebidos/${idMaquina}`);
+    const reqEnviados  = await fetch(`/analiseRede/enviados/${idMaquina}`);
+
+    const recebidosDados = await reqRecebidos.json();
+    const enviadosDados  = await reqEnviados.json();
+
+    if (!recebidosDados || !enviadosDados) {
+      console.warn("Sem dados");
+      return;
+    }
+
+    const mediaRecebidos = recebidosDados[0]?.mediaRecebidos ?? 0;
+    const mediaEnviados  = enviadosDados[0]?.mediaEnviados  ?? 0;
+
+    console.log("Médias →", { mediaRecebidos, mediaEnviados });
+
+   
+    const ctx = document.getElementById("severityBarChart");
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["Pacotes Enviados", "Pacotes Recebidos"],
+        datasets: [{
+          data: [mediaEnviados, mediaRecebidos],
+          backgroundColor: ["#4BC0C0", "#FFCE56"]
+        }]
+      },
+      options: {
+        indexAxis: "y",
+        plugins: { legend: { display: false } }
+      }
+    });
+
+  } catch (erro) {
+    console.error("Erro geral:", erro);
+  }
+}
+
+carregarGraficoSeveridade()
+
+
+
+ async function getLatenciaUltimas24h() {
+  const idMaquina = 1;
+  try {
+    const resposta = await fetch(`/analiseRede/throughputUltimas24h/${idMaquina}`);
+    const dados = await resposta.json();
+
+    // Cria array com as 24 horas
+    const labels = [];
+    const agora = new Date();
+    for (let i = 23; i >= 0; i--) {
+      const hora = new Date(agora.getTime() - i * 60 * 60 * 1000).getHours();
+      labels.push(String(hora).padStart(2, '0') + 'H');
+    }
+
+    // Cria array com valor para cada hora (ou null se não tiver dado)
+    const throughputPorHora = labels.map(label => {
+      const hora = parseInt(label);
+      const registro = dados.find(item => new Date(item.horario).getHours() === hora);
+      return registro ? registro.throughput : null;
+    });
+
+    const ctx = document.getElementById('graficoThroughput').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Throughput (MBps)',
+          data: throughputPorHora,
+          borderColor: '#009ab4',
+          backgroundColor: '#009ab4',
+          fill: false,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        scales: {
+          x: { title: { display: true, text: 'Horário' } },
+          y: { title: { display: true, text: 'Throughput (MBps)' }, min: 0 }
+        }
+      }
+    });
+
+  } catch (erro) {
+    console.error('Erro ao buscar throughput últimas 24h:', erro);
+  }
+}
+
+getLatenciaUltimas24h();
+
+
+
+     
+    async function getMediaLatencia() {
+      const idMaquina = 1;
+
+      try {
+        const resposta = await fetch(`/analiseRede/throughput/${idMaquina}`);
+
+
+
+        const dados = await resposta.json();
+
+        document.getElementById("kpiThroughput").innerText =
+          `${dados.mediaThroughput} MBps`;
+
+      } catch (erro) {
+        console.error("Erro:", erro);
+        document.getElementById("kpiThroughput").innerText = "-";
+      }
+    }
+
+    getMediaLatencia();
+
+
+
+    async function getSomaAlertas() {
+      const idMaquina = 1;
+
+      try {
+        const resposta = await fetch(`/analiseRede/alertas/${idMaquina}`);
+
+
+
+        const dados = await resposta.json();
+        document.getElementById("qntTotalAlertas").innerText =
+          dados.qtdAlertasRede;
+
+      } catch (erro) {
+        console.error("Erro:", erro);
+        document.getElementById("qntTotalAlertas").innerText = "-";
+      }
+    }
+
+    getSomaAlertas();
+
+
+
+      async function getPerdaPacote() {
+      const idMaquina = 1;
+
+      try {
+        const resposta = await fetch(`/analiseRede/pacotesPerdidos/${idMaquina}`);
+
+
+
+        const dados = await resposta.json();
+        document.getElementById("pacotesPerdidosid").innerText =
+          dados.perdaPacotes ;
+
+      } catch (erro) {
+        console.error("Erro:", erro);
+        document.getElementById("pacotesPerdidosid").innerText = "-";
+      }
+    }
+
+    getPerdaPacote();
+
+
+
+
+      async function getDisponibilidade() {
+      const idMaquina = 1;
+
+      try {
+        const resposta = await fetch(`/analiseRede/disponibilidadePercent/${idMaquina}`);
+
+
+
+        const dados = await resposta.json();
+        document.getElementById("txt_disponibilidade").innerText =
+          dados.disponibilidadePercent;
+
+      } catch (erro) {
+        console.error("Erro:", erro);
+        document.getElementById("txt_disponibilidade").innerText = "-";
+      }
+    }
+
+    getDisponibilidade();
+
+
+    
+
+      async function getJitter() {
+      const idMaquina = 1;
+
+      try {
+        const resposta = await fetch(`/analiseRede/jitter_medio_ms/${idMaquina}`);
+
+
+
+        const dados = await resposta.json();
+        document.getElementById("txt_jitter").innerText =
+         document.getElementById("txt_jitter").innerText =
+           dados[0].jitter_medio_ms + " ms";
+
+
+      } catch (erro) {
+        console.error("Erro:", erro);
+        document.getElementById("txt_jitter").innerText = "-";
+      }
+    }
+
+    getJitter();
+
+
+
+
+
+    function carregarOpcoes() {
+      const select = document.getElementById("selectComponente");
+
+      componentes.forEach(comp => {
+        const option = document.createElement("option");
+        option.value = comp.id;
+        option.textContent = comp.nome;
+        select.appendChild(option);
+      });
+    }
+
+    carregarOpcoes();
+
+
+
+
+  </script>
+
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="../component/menu/Menu.js"></script>
+</body>
+
+</html>

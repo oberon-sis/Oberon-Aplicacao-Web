@@ -66,21 +66,21 @@ function buscarKpis(idEmpresa) {
 // 📌 Tendência — gráfico 1
 function buscarTendencia(idEmpresa) {
     const query = `
-        SELECT 
-            DATE_FORMAT(r.horario, '%d/%m') AS periodo,
-            COUNT(*) AS valor
+       SELECT 
+            a.nivel AS tipo_alerta,
+            SUM(CASE WHEN r.horario >= DATE_SUB(NOW(), INTERVAL 60 DAY) THEN 1 ELSE 0 END) AS atual,
+            SUM(CASE WHEN r.horario BETWEEN DATE_SUB(NOW(), INTERVAL 120 DAY) AND DATE_SUB(NOW(), INTERVAL 60 DAY) THEN 1 ELSE 0 END) AS passado
         FROM Alerta a
         JOIN Registro r ON a.fkRegistro = r.idRegistro
         JOIN Componente c ON r.fkComponente = c.idComponente
         JOIN Maquina m ON c.fkMaquina = m.idMaquina
         WHERE m.fkEmpresa = ${idEmpresa}
-          AND a.nivel = 'CRÍTICO'
-          AND r.horario >= DATE_SUB(NOW(), INTERVAL 120 DAY)
-        GROUP BY periodo
-        ORDER BY MIN(r.horario);
+        GROUP BY a.nivel
+        ORDER BY FIELD(a.nivel, 'CRÍTICO', 'ATENÇÃO', 'OCIOSO');
     `;
     return database.executar(query);
 }
+
 
 // 📌 Comparativo — gráfico 2
 function buscarComparativo(idEmpresa) {
@@ -114,7 +114,7 @@ function buscarRanking(idEmpresa) {
           AND r.horario >= DATE_SUB(NOW(), INTERVAL 60 DAY)
         GROUP BY m.idMaquina
         ORDER BY total_alertas DESC
-        LIMIT 10;
+        LIMIT 5;
     `;
     return database.executar(query);
 }
