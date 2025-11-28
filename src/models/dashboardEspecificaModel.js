@@ -6,25 +6,25 @@ const database = require('../database/config');
 // ======================================================
 
 function ultimo_eventos_maquina_especifica(idMaquina) {
-    console.log('[MODEL] Últimos eventos - Máquina:', idMaquina);
+  console.log('[MODEL] Últimos eventos - Máquina:', idMaquina);
 
-    const instrucaoSql = `
+  const instrucaoSql = `
         SELECT
             R.horario AS hora,
             TC.tipoComponete AS componente,
             A.nivel AS nivel,
             CONCAT(R.valor, '%') AS valor
-        FROM Alerta A
-        JOIN Registro R ON A.fkRegistro = R.idRegistro
-        JOIN Componente C ON R.fkComponente = C.idComponente
-        JOIN TipoComponente TC ON C.fkTipoComponente = TC.idTipoComponente
-        WHERE C.fkMaquina = ${idMaquina}
-          AND R.horario >= DATE_SUB(NOW(), INTERVAL 300 HOUR)
-        ORDER BY R.horario DESC
-        LIMIT 5;
+            FROM Alerta A
+            JOIN Registro R ON A.fkRegistro = R.idRegistro
+            JOIN Componente C ON R.fkComponente = C.idComponente
+            JOIN TipoComponente TC ON C.fkTipoComponente = TC.idTipoComponente
+            WHERE C.fkMaquina = ${idMaquina}
+            AND R.horario >= DATE_SUB(NOW(), INTERVAL 300 HOUR)
+            ORDER BY R.horario DESC
+            LIMIT 5;
     `;
 
-    return database.executar(instrucaoSql, [idMaquina]);
+  return database.executar(instrucaoSql, [idMaquina]);
 }
 
 // ======================================================
@@ -32,9 +32,9 @@ function ultimo_eventos_maquina_especifica(idMaquina) {
 // ======================================================
 
 function calcular_taxa_disponibilidade(idMaquina) {
-    console.log('[MODEL] Disponibilidade 30 dias - Máquina:', idMaquina);
+  console.log('[MODEL] Disponibilidade 30 dias - Máquina:', idMaquina);
 
-    const instrucaoSql = `
+  const instrucaoSql = `
        SELECT
     fkMaquina,
     
@@ -66,7 +66,7 @@ GROUP BY fkMaquina;
 
     `;
 
-    return database.executar(instrucaoSql, [idMaquina]);
+  return database.executar(instrucaoSql, [idMaquina]);
 }
 
 // ======================================================
@@ -74,21 +74,21 @@ GROUP BY fkMaquina;
 // ======================================================
 
 function buscar_kpi_alertas_30_dias(idMaquina) {
-    console.log('[MODEL] KPIs Alertas 30 dias - Máquina:', idMaquina);
+  console.log('[MODEL] KPIs Alertas 30 dias - Máquina:', idMaquina);
 
-    const instrucaoSql = `
+  const instrucaoSql = `
         SELECT
             COUNT(A.idAlerta) AS totalAlertas30dias,
             SUM(CASE WHEN A.nivel = 'CRITICO' THEN 1 ELSE 0 END) AS totalCriticos30dias
-        FROM Maquina m
-        JOIN Componente c ON m.idMaquina = c.fkMaquina
-        JOIN Registro r ON c.idComponente = r.fkComponente
-        LEFT JOIN Alerta a ON r.idRegistro = a.fkRegistro
-        WHERE m.idMaquina = ${idMaquina}
-          AND r.horario >= DATE_SUB(NOW(), INTERVAL 300 DAY);
+            FROM Maquina m
+            JOIN Componente c ON m.idMaquina = c.fkMaquina
+            JOIN Registro r ON c.idComponente = r.fkComponente
+            LEFT JOIN Alerta a ON r.idRegistro = a.fkRegistro
+            WHERE m.idMaquina = ${idMaquina}
+            AND r.horario >= DATE_SUB(NOW(), INTERVAL 300 DAY);
     `;
 
-    return database.executar(instrucaoSql, [idMaquina]);
+  return database.executar(instrucaoSql, [idMaquina]);
 }
 
 // ======================================================
@@ -96,39 +96,39 @@ function buscar_kpi_alertas_30_dias(idMaquina) {
 // ======================================================
 
 function buscar_dados_kpi(idMaquina) {
-    console.log('[MODEL] KPI Pico 24h - Máquina:', idMaquina);
+  console.log('[MODEL] KPI Pico 24h - Máquina:', idMaquina);
 
-    let instrucaoSql = `
-                  SELECT
-    DATE_FORMAT(R.horario, '%d/%m %H:%i') AS Hora,
-    TC.tipoComponete AS Componente,
-    A.nivel AS Alerta,
-    CONCAT(R.valor, '%') AS Valor
-FROM Alerta A
-INNER JOIN Registro R ON A.fkRegistro = R.idRegistro
-INNER JOIN Componente C ON R.fkComponente = C.idComponente
-INNER JOIN TipoComponente TC ON C.fkTipoComponente = TC.idTipoComponente
-WHERE R.horario >= DATE_SUB(NOW(), INTERVAL 300 HOUR )
-  AND C.fkMaquina = ${idMaquina}
-ORDER BY R.horario DESC;
-    `;
-    instrucaoSql = `
+  let instrucaoSql = `
     SELECT
-    TC.tipoComponete AS tipoRecurso,
-    COUNT(A.idAlerta) AS totalAlertas24h
-FROM Componente C
-INNER JOIN TipoComponente TC 
+        DATE_FORMAT(R.horario, '%d/%m %H:%i') AS Hora,
+        TC.tipoComponete AS Componente,
+        A.nivel AS Alerta,
+        CONCAT(R.valor, '%') AS Valor
+        FROM Alerta A
+        INNER JOIN Registro R ON A.fkRegistro = R.idRegistro
+        INNER JOIN Componente C ON R.fkComponente = C.idComponente
+        INNER JOIN TipoComponente TC ON C.fkTipoComponente = TC.idTipoComponente
+        WHERE R.horario >= DATE_SUB(NOW(), INTERVAL 300 HOUR )
+        AND C.fkMaquina = ${idMaquina}
+        ORDER BY R.horario DESC;
+    `;
+  instrucaoSql = `
+    SELECT
+        TC.tipoComponete AS tipoRecurso,
+        COUNT(A.idAlerta) AS totalAlertas24h
+        FROM Componente C
+        INNER JOIN TipoComponente TC 
         ON C.fkTipoComponente = TC.idTipoComponente
-LEFT JOIN Registro R 
+        LEFT JOIN Registro R 
         ON R.fkComponente = C.idComponente
-       AND R.horario >= DATE_SUB(NOW(), INTERVAL 3000 HOUR)
-LEFT JOIN Alerta A 
+        AND R.horario >= DATE_SUB(NOW(), INTERVAL 3000 HOUR)
+        LEFT JOIN Alerta A 
         ON A.fkRegistro = R.idRegistro
-WHERE C.fkMaquina = ${idMaquina}
-GROUP BY TC.tipoComponete
-ORDER BY totalAlertas24h DESC;`
+        WHERE C.fkMaquina = ${idMaquina}
+        GROUP BY TC.tipoComponete
+        ORDER BY totalAlertas24h DESC;`;
 
-    return database.executar(instrucaoSql, [idMaquina]);
+  return database.executar(instrucaoSql, [idMaquina]);
 }
 
 // ======================================================
@@ -136,15 +136,15 @@ ORDER BY totalAlertas24h DESC;`
 // ======================================================
 
 function buscar_info_maquina(idMaquina) {
-    console.log('[MODEL] Info Máquina (Header) - Máquina:', idMaquina);
+  console.log('[MODEL] Info Máquina (Header) - Máquina:', idMaquina);
 
-    const instrucaoSql = `
+  const instrucaoSql = `
         SELECT nome, modelo, ip, sistemaOperacional
         FROM vw_DadosMaquina
         WHERE idMaquina = ${idMaquina};
     `;
 
-    return database.executar(instrucaoSql, [idMaquina]);
+  return database.executar(instrucaoSql, [idMaquina]);
 }
 
 // ======================================================
@@ -152,15 +152,15 @@ function buscar_info_maquina(idMaquina) {
 // ======================================================
 
 function buscar_info_componentes(idMaquina) {
-    console.log('[MODEL] Info Componentes - Máquina:', idMaquina);
+  console.log('[MODEL] Info Componentes - Máquina:', idMaquina);
 
-    const instrucaoSql = `
+  const instrucaoSql = `
         SELECT tipoComponente, valor
         FROM vw_Informacoes_Componentes
         WHERE fkMaquina = ${idMaquina};
     `;
 
-    return database.executar(instrucaoSql, [idMaquina]);
+  return database.executar(instrucaoSql, [idMaquina]);
 }
 
 // ======================================================
@@ -168,26 +168,26 @@ function buscar_info_componentes(idMaquina) {
 // ======================================================
 
 function buscar_parametros(idMaquina) {
-    console.log('[MODEL] Parâmetros - Máquina:', idMaquina);
+  console.log('[MODEL] Parâmetros - Máquina:', idMaquina);
 
-    const instrucaoSql = `
+  const instrucaoSql = `
         SELECT
             CONCAT(TC.tipoComponete, '_', P.identificador) AS nomeParametro,
             P.limite
-        FROM Parametro P
-        LEFT JOIN Componente C 
-                ON P.fkComponente = C.idComponente 
-             AND P.origemParametro = 'ESPECÍFICO'
-        JOIN TipoComponente TC 
-                ON TC.idTipoComponente =
-                 (CASE
-                        WHEN P.origemParametro = 'ESPECÍFICO' THEN C.fkTipoComponente
-                        ELSE P.fkTipoComponente
-                    END)
+            FROM Parametro P
+            LEFT JOIN Componente C 
+            ON P.fkComponente = C.idComponente 
+            AND P.origemParametro = 'ESPECÍFICO'
+            JOIN TipoComponente TC 
+            ON TC.idTipoComponente =
+            (CASE
+                WHEN P.origemParametro = 'ESPECÍFICO' THEN C.fkTipoComponente
+                ELSE P.fkTipoComponente
+                END)
         WHERE C.fkMaquina = ${idMaquina};
     `;
 
-    return database.executar(instrucaoSql, [idMaquina]);
+  return database.executar(instrucaoSql, [idMaquina]);
 }
 
 // ======================================================
@@ -195,26 +195,26 @@ function buscar_parametros(idMaquina) {
 // ======================================================
 
 function buscar_info_24_horas_coleta(idMaquina) {
-    console.log('[MODEL] Gráfico 24h - Máquina:', idMaquina);
+  console.log('[MODEL] Gráfico 24h - Máquina:', idMaquina);
 
-    const instrucaoSql = `
-               SELECT
+  const instrucaoSql = `
+        SELECT
             AVG(r.valor) AS valor_medio,
             DATE_FORMAT(
-                FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(r.horario) / (30 * 60)) * (30 * 60)), 
-                '%H:%i'
+            FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(r.horario) / (30 * 60)) * (30 * 60)), 
+            '%H:%i'
             ) AS intervaloTempo,
             TC.tipoComponete AS tipoRecurso
-        FROM Registro r
-        JOIN Componente C ON r.fkComponente = C.idComponente
-        JOIN TipoComponente TC ON C.fkTipoComponente = TC.idTipoComponente
-        WHERE C.fkMaquina = ${idMaquina}
-          AND r.horario >= DATE_SUB(NOW(), INTERVAL 300 HOUR)
-        GROUP BY intervaloTempo, TC.tipoComponete
-        ORDER BY intervaloTempo ASC, TC.tipoComponete ASC;
+            FROM Registro r
+            JOIN Componente C ON r.fkComponente = C.idComponente
+            JOIN TipoComponente TC ON C.fkTipoComponente = TC.idTipoComponente
+            WHERE C.fkMaquina = ${idMaquina}
+            AND r.horario >= DATE_SUB(NOW(), INTERVAL 300 HOUR)
+            GROUP BY intervaloTempo, TC.tipoComponete
+            ORDER BY intervaloTempo ASC, TC.tipoComponete ASC;
     `;
 
-    return database.executar(instrucaoSql, [idMaquina]);
+  return database.executar(instrucaoSql, [idMaquina]);
 }
 
 // ======================================================
@@ -222,12 +222,12 @@ function buscar_info_24_horas_coleta(idMaquina) {
 // ======================================================
 
 module.exports = {
-    buscar_info_maquina,
-    buscar_info_componentes,
-    buscar_dados_kpi,
-    buscar_parametros,
-    buscar_info_24_horas_coleta,
-    ultimo_eventos_maquina_especifica,
-    calcular_taxa_disponibilidade,
-    buscar_kpi_alertas_30_dias
+  buscar_info_maquina,
+  buscar_info_componentes,
+  buscar_dados_kpi,
+  buscar_parametros,
+  buscar_info_24_horas_coleta,
+  ultimo_eventos_maquina_especifica,
+  calcular_taxa_disponibilidade,
+  buscar_kpi_alertas_30_dias,
 };

@@ -233,11 +233,13 @@ body {
 canvas {
   width: 100% !important;
   height: 260px !important;
+  background-color: white;
 }
 
 .col-md-6 {
   padding-left: 10px;
   padding-right: 10px;
+  background-color: white;
 }
 
 .stats-table {
@@ -277,4 +279,16 @@ canvas {
 
 a {
   text-decoration: none;
+}
+
+@media (min-width: 768px) {
+  .row > .col-lg-8 {
+    flex: 0 0 66.666%;
+    max-width: 66.666%;
+  }
+
+  .row > .col-lg-4 {
+    flex: 0 0 33.333%;
+    max-width: 33.333%;
+  }
 }

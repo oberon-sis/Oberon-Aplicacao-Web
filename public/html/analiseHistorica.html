@@ -72,9 +72,9 @@
         </header>
 
 
-        <div class="main-structure">
+        <div class="main-structure"  style="background-color: white;">
             <section class="kpi-container" id="kpi-section">
-                <div class="kpi-card" id="kpi-disponibilidade">
+                <div class="kpi-card" id="kpi-disponibilidade" style="background-color: white;">
                     <div class="topo-kpi">
                         <h6>Taxa De Disponibilidade Do Sistema</h6>
                         <div class="icone-kpi"><i class="bi bi-box-arrow-in-up"></i></div>
@@ -94,7 +94,7 @@
                     </div>
                 </div>
 
-                <div class="kpi-card" id="kpi-total-alertas">
+                <div class="kpi-card" id="kpi-total-alertas" style="background-color: white;">
                     <div class="topo-kpi">
                         <h6>Quantidade Total De Alertas</h6>
                         <div class="icone-kpi"><i class="bi bi-bell"></i></div>
@@ -113,7 +113,7 @@
                     </div>
                 </div>
 
-                <div class="kpi-card" id="kpi-percentual-critico">
+                <div class="kpi-card" id="kpi-percentual-critico" style="background-color: white;">
                     <div class="topo-kpi">
                         <h6>Percentual De alertas Críticos</h6>
                         <div class="icone-kpi">
@@ -134,13 +134,13 @@
                     </div>
                 </div>
 
-                <div class="kpi-card" id="kpi-componente-critico">
+                <div class="kpi-card" id="kpi-componente-critico" style="background-color: white;">
                     <div class="topo-kpi">
                         <h6>Componente Com Mais Alertas Criticos</h6>
                         <div class="icone-kpi"><i class="bi bi-memory"></i></div>
                     </div>
 
-                    <div class="baixo-kpi">
+                    <div class="baixo-kpi" style="background-color: white;">
                         <div>
                             <span id="txt_componente_critico"> RAM </span>
                             <p>Mês passado: CPU</p>
@@ -155,32 +155,24 @@
             </section>
 
             <div class="row">
-                <div class="col-md-6">
-                    <div class="data-card">
+                <div class="col-md-6" style="background-color: white;">
+                    <div class="data-card" id="garfico-linhas">
                         <h4 class="mb-3">Utilização Média de Recursos (CPU, RAM, DISCO)</h4>
                         <canvas id="mainChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="data-card">
-                        <h4 class="mb-3">Estatísticas de Variação de Uso (%)</h4>
-                        <table class="stats-table" id="tabela-estatistica">
-                        </table>
                     </div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-6">
-                    <div class="data-card">
+                <div class="col-md-6" style="background-color: white;">
+                    <div class="data-card" style="background-color: white;" id="grafico-barras"> 
                         <h4 class="mb-3">Total de Alertas por Componente (30 Dias)</h4>
                         <canvas id="componentAlertsChart"></canvas>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="data-card alert-events-card">
+                <div class="col-md-6" style="background-color: white;">
+                    <div class="data-card alert-events-card" id="tabela-eventos">
                         <h4 class="mb-3">Últimos Eventos de Alerta (24h)</h4>
                         <div class="table-responsive">
                             <table class="table table-sm compact-alert-table">
