@@ -63,26 +63,48 @@ function buscarKpis(idEmpresa) {
     return database.executar(query);
 }
 
-// 📌 Tendência — gráfico 1
+// Função de Tendência (preservada)
 function buscarTendencia(idEmpresa) {
     const query = `
        SELECT 
-            a.nivel AS tipo_alerta,
-            SUM(CASE WHEN r.horario >= DATE_SUB(NOW(), INTERVAL 60 DAY) THEN 1 ELSE 0 END) AS atual,
-            SUM(CASE WHEN r.horario BETWEEN DATE_SUB(NOW(), INTERVAL 120 DAY) AND DATE_SUB(NOW(), INTERVAL 60 DAY) THEN 1 ELSE 0 END) AS passado
+            DATE_FORMAT(r.horario, '%Y-%m') AS periodo,
+            SUM(CASE WHEN a.nivel = 'CRÍTICO' THEN 1 ELSE 0 END) AS critico,
+            SUM(CASE WHEN a.nivel = 'ATENÇÃO' THEN 1 ELSE 0 END) AS atencao,
+            SUM(CASE WHEN a.nivel = 'OCIOSO' THEN 1 ELSE 0 END) AS ocioso
         FROM Alerta a
         JOIN Registro r ON a.fkRegistro = r.idRegistro
         JOIN Componente c ON r.fkComponente = c.idComponente
         JOIN Maquina m ON c.fkMaquina = m.idMaquina
         WHERE m.fkEmpresa = ${idEmpresa}
-        GROUP BY a.nivel
-        ORDER BY FIELD(a.nivel, 'CRÍTICO', 'ATENÇÃO', 'OCIOSO');
+        GROUP BY DATE_FORMAT(r.horario, '%Y-%m')
+        ORDER BY periodo ASC;
+    `;
+    return database.executar(query);
+}
+
+// 📌 Comparativo por Nível - NOVO GRÁFICO
+function buscarComparativoPorNivel(idEmpresa) {
+    const query = `
+        SELECT
+            a.nivel AS nivel_alerta,
+            -- Contagem de alertas no Bimestre Atual (últimos 60 dias)
+            SUM(CASE WHEN r.horario >= DATE_SUB(CURDATE(), INTERVAL 60 DAY) THEN 1 ELSE 0 END) AS atual,
+            -- Contagem de alertas no Bimestre Passado (dias 61 a 120 atrás)
+            SUM(CASE WHEN r.horario < DATE_SUB(CURDATE(), INTERVAL 60 DAY) AND r.horario >= DATE_SUB(CURDATE(), INTERVAL 120 DAY) THEN 1 ELSE 0 END) AS passado
+        FROM Alerta a
+        JOIN Registro r ON a.fkRegistro = r.idRegistro
+        JOIN Componente c ON r.fkComponente = c.idComponente
+        JOIN Maquina m ON c.fkMaquina = m.idMaquina
+        WHERE m.fkEmpresa = ${idEmpresa}
+        -- Filtra apenas registros dentro dos últimos 4 meses (para cobrir ambos os bimestres)
+        AND r.horario >= DATE_SUB(CURDATE(), INTERVAL 120 DAY)
+        GROUP BY a.nivel;
     `;
     return database.executar(query);
 }
 
 
-// 📌 Comparativo — gráfico 2
+// 📌 Comparativo — gráfico de Demanda (preservado)
 function buscarComparativo(idEmpresa) {
     const query = `
         SELECT 
@@ -100,7 +122,7 @@ function buscarComparativo(idEmpresa) {
     return database.executar(query);
 }
 
-// 📌 Ranking — gráfico 3
+// 📌 Ranking (preservado)
 function buscarRanking(idEmpresa) {
     const query = `
         SELECT 
@@ -123,5 +145,6 @@ module.exports = {
     buscarKpis,
     buscarTendencia,
     buscarComparativo,
-    buscarRanking
+    buscarRanking,
+    buscarComparativoPorNivel // <--- NOVA FUNÇÃO EXPORTADA
 };

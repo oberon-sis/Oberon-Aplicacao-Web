@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function carregarDashboardRisco() {
     try {
+        // Assume-se que 'usuario' e 'fkEmpresa' estão corretos
         const usuario = JSON.parse(sessionStorage.getItem("usuario"));
 
         if (!usuario || !usuario.fkEmpresa) {
@@ -13,16 +14,25 @@ async function carregarDashboardRisco() {
 
         const fkEmpresa = usuario.fkEmpresa;
 
+        // O id do canvas no seu novo HTML é 'comparativoBimestreChartNivel'
+        const loadingMessage = document.getElementById('loading-message');
+        if(loadingMessage) loadingMessage.style.display = 'block'; // Mostrar loading
+
         const resposta = await fetch(`/dashboardEstrategica/geral/${fkEmpresa}`);
         if (!resposta.ok) throw new Error("Falha ao buscar dados da API");
 
         const dados = await resposta.json();
+        
+        if(loadingMessage) loadingMessage.style.display = 'none'; // Esconder loading
+        
         preencherKPIs(dados.kpis);
         preencherGraficos(dados.graficos);
         preencherTabelaRankingPrioridade(dados.graficos?.ranking?.tabela);
 
     } catch (erro) {
         console.error("Erro ao carregar dashboard: ", erro);
+        const loadingMessage = document.getElementById('loading-message');
+        if(loadingMessage) loadingMessage.textContent = "Erro ao carregar dados. Verifique o console.";
     }
 }
 
@@ -35,89 +45,104 @@ function preencherKPIs(kpis) {
 }
 
 function preencherGraficos(graficos) {
-    if (graficos?.tendencia) {
-        atualizarHeatmapTendenciaRisco(
-            "riscoCriticoTendenciaChart",
-            graficos.tendencia.labels,
-            graficos.tendencia.tipos,
-            graficos.tendencia.valores
+    // === NOVO GRÁFICO: Comparativo de Alertas por Nível — Bimestre ===
+    // Usa a nova chave 'comparativoNivel' para preencher o canvas 'comparativoBimestreChartNivel'
+    if (graficos?.comparativoNivel) {
+        atualizarGraficoComparativoBimestre(
+            "comparativoBimestreChartNivel", 
+            graficos.comparativoNivel.labels,
+            graficos.comparativoNivel.atual,
+            graficos.comparativoNivel.passado
         );
-
-
     }
+    // =================================================================
+
+    // Gráfico original (deve ter sido renomeado para outro lugar)
+    if (graficos?.comparativoBimestre) {
+        atualizarGraficoComparativoBimestre(
+            "comparativoBimestreChart",
+            graficos.comparativoBimestre.labels,
+            graficos.comparativoBimestre.atual,
+            graficos.comparativoBimestre.passado
+        );
+    }
+
     if (graficos?.demanda) {
         atualizarGraficoBarra("comparativoDemandaChart", graficos.demanda.labels, graficos.demanda.data);
     }
+    
+    // O gráfico de Severidade Comparativa (que agora não existe no seu novo HTML)
+    // Se o canvas ID 'graficoSeveridadeComparativa' for adicionado novamente, ele usará esta função:
+    /*
+    if (graficos?.comparativoNivel) {
+        atualizarGraficoComparativoBimestre(
+            "graficoSeveridadeComparativa", 
+            graficos.comparativoNivel.labels,
+            graficos.comparativoNivel.atual,
+            graficos.comparativoNivel.passado
+        );
+    }
+    */
+
     if (graficos?.ranking?.tabela) {
         preencherTabelaRankingPrioridade(graficos.ranking.tabela);
     }
 }
 
-function atualizarHeatmapTendenciaRisco(id, labels, tipos, valores) {
+function atualizarGraficoComparativoBimestre(id, labels, atual, passado) {
     const canvas = document.getElementById(id);
     if (!canvas) return;
+    
+    // Adicionando lógica para destruir a instância anterior (boa prática)
+    if (canvas.chartInstance) {
+        canvas.chartInstance.destroy();
+    }
 
-    const cores = {
-        "CRÍTICO": "#FF4C4C",
-        "ATENÇÃO": "#FFD700",
-        "OCIOSO": "#A9A9A9"
-    };
-
-    const datasets = tipos.map((tipo, i) => ({
-        label: tipo,
-        data: valores[i],
-        backgroundColor: cores[tipo],
-        stack: "alertas"
-    }));
-
-    new Chart(canvas, {
+    const newChart = new Chart(canvas, {
         type: "bar",
         data: {
             labels: labels,
-            datasets: datasets
+            datasets: [
+                {
+                    label: "Bimestre Atual",
+                    data: atual,
+                    backgroundColor: "rgba(87, 111, 230, 0.8)",
+                    borderRadius: 5
+                },
+                {
+                    label: "Bimestre Passado",
+                    data: passado,
+                    backgroundColor: "rgba(180, 180, 200, 0.8)",
+                    borderRadius: 5
+                }
+            ]
         },
         options: {
+            indexAxis: "y", // 🔥 Horizontal
             responsive: true,
             plugins: {
-                legend: {
-                    position: "top",
-                    labels: {
-                        font: { size: 12 },
-                        boxWidth: 14
-                    }
-                },
+                legend: { position: "top" },
                 tooltip: {
                     callbacks: {
-                        label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y} alertas`
+                        label: ctx => `${ctx.dataset.label}: ${ctx.raw} alertas`
                     }
                 }
             },
             scales: {
                 x: {
-                    stacked: true,
-                    title: {
-                        display: true,
-                        text: "Semana"
-                    }
-                },
-                y: {
-                    stacked: true,
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: "Nº de Alertas"
-                    },
-                    ticks: {
-                        stepSize: 1
+                        text: "Quantidade de Alertas"
                     }
                 }
             }
         }
     });
+    
+    // Armazena a instância para destruição posterior
+    canvas.chartInstance = newChart;
 }
-
-
-
 
 
 function atualizarGraficoBarra(id, labels, data) {
@@ -126,8 +151,13 @@ function atualizarGraficoBarra(id, labels, data) {
         console.warn("Canvas não encontrado:", id);
         return;
     }
+    
+    // Adicionando lógica para destruir a instância anterior (boa prática)
+    if (canvas.chartInstance) {
+        canvas.chartInstance.destroy();
+    }
 
-    new Chart(canvas, {
+    const newChart = new Chart(canvas, {
         type: "bar",
         data: {
             labels: labels,
@@ -136,7 +166,7 @@ function atualizarGraficoBarra(id, labels, data) {
                     label: "Quantidade",
                     data: data,
                     backgroundColor: "#6C63FF",
-                    borderRadius: 6
+                    borderRadius: 5
                 }
             ]
         },
@@ -163,6 +193,9 @@ function atualizarGraficoBarra(id, labels, data) {
         },
         plugins: [ChartDataLabels]
     });
+    
+    // Armazena a instância para destruição posterior
+    canvas.chartInstance = newChart;
 }
 
 function preencherTabelaRankingPrioridade(ranking) {
