@@ -102,7 +102,7 @@ function createMachineCard(machine) {
             ${piorCasoText}
           </p>
 
-          <a href="painelEspecifico.html?machine=${machine.id}" class="btn btn-sm btn-${borderColor} text-white w-100">
+          <a href="analiseHistorica.html?machine=${machine.id}" class="btn btn-sm btn-${borderColor} text-white w-100">
             Ver Detalhes
           </a>
         </div>
