@@ -12,7 +12,6 @@ header div {
   align-items: center;
 }
 
-
 section {
   margin-top: 0.4rem;
   max-width: 100%;
@@ -216,8 +215,6 @@ canvas {
   .charts-container {
     grid-template-columns: repeat(2, 1fr);
   }
-
- 
 }
 
 @media (min-width: 1300px) {
@@ -354,8 +351,6 @@ canvas {
 }
 
 @media (min-width: 1000px) {
- 
-
   .alerts-table-container {
     padding-inline: 1rem;
     max-height: 310px;
@@ -383,7 +378,6 @@ canvas {
 .chart-history {
   position: relative;
 }
-
 
 .chart-header {
   display: flex;
@@ -538,16 +532,14 @@ header li {
 
 .chart-item-wrapper {
   background-color: #fff;
- padding: 10px;
-      border-radius: 8px;
-      box-shadow:
-        rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-        rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-      height: 220px;
-      width: 750px;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  height: 220px;
+  width: 750px;
 }
-
-
 
 .details-container .kpi-card .baixo-kpi {
   flex-direction: column;
