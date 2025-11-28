@@ -2,39 +2,37 @@ var dashboardModel = require("../models/dashboardModel");
 
 function getDadosGerais(req, res) {
     var idEmpresa = req.params.idEmpresa;
+    
+    var bimestre = req.body.bimestre || req.query.bimestre;
 
     if (idEmpresa == undefined) {
         return res.status(400).send("idEmpresa está undefined!");
     }
 
-   
     Promise.all([
-        dashboardModel.buscarKpis(idEmpresa),
-        dashboardModel.buscarListas(idEmpresa),
-        dashboardModel.buscarEvolucaoAlertas(idEmpresa)
+        dashboardModel.buscarKpis(idEmpresa, bimestre),           
+        dashboardModel.buscarListas(idEmpresa, bimestre),       
+        dashboardModel.buscarEvolucaoAlertas(idEmpresa, bimestre) 
     ])
     .then(function (resultados) {
-  
+
         const kpis = resultados[0][0]; 
         
-       
+  
         const listaCompleta = resultados[1];
         
- 
+    
         const topSobrecarga = [...listaCompleta]
             .filter(m => (m.media_cpu > 85 || m.media_ram > 85))
             .sort((a, b) => Math.max(b.media_cpu, b.media_ram) - Math.max(a.media_cpu, a.media_ram))
             .slice(0, 5);
 
- 
         const topOciosas = [...listaCompleta]
             .filter(m => (m.media_cpu < 20 && m.media_ram < 20))
             .sort((a, b) => Math.max(a.media_cpu, a.media_ram) - Math.max(b.media_cpu, b.media_ram))
             .slice(0, 5);
 
-   
         const alertasBrutos = resultados[2];
-        
         
         res.json({
             kpis: {

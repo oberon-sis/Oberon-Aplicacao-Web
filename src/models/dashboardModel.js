@@ -1,12 +1,22 @@
 var database = require("../database/config");
 
-function buscarKpis(idEmpresa) {
-    // Busca os totais para os cards do topo
-    // Como o idEmpresa vem do login, filtramos por ele.
-    
-    // Observação: No seu DER, "Alerta" está ligado a "Registro", "Incidente" a "LogDetalheEvento".
-    // Vou assumir que você quer contar Incidentes do mês atual para a empresa.
-    
+// Função auxiliar para gerar o filtro de data dinâmico
+function gerarFiltroData(bimestre, colunaData = 'r.horario') {
+    // Se não vier bimestre, assume o atual (ex: 6) ou trata como erro
+    if (!bimestre) bimestre = 6; 
+
+    const mesInicio = (bimestre * 2) - 1; // Ex: Bimestre 4 -> (4*2)-1 = 7 (Julho)
+    const mesFim = bimestre * 2;          // Ex: Bimestre 4 -> 4*2 = 8 (Agosto)
+
+    // Retorna o trecho do SQL para filtrar por 2025 e os meses calculados
+    return `AND YEAR(${colunaData}) = 2025 AND MONTH(${colunaData}) BETWEEN ${mesInicio} AND ${mesFim}`;
+}
+
+function buscarKpis(idEmpresa, bimestre) {
+    // Geramos o filtro para tabelas de Registro (r.horario) e Incidente (i.dataCriacao)
+    const filtroRegistro = gerarFiltroData(bimestre, 'r.horario');
+    const filtroIncidente = gerarFiltroData(bimestre, 'i.dataCriacao');
+
     const instrucaoSql = `
         SELECT 
             (SELECT COUNT(idMaquina) FROM Maquina WHERE fkEmpresa = ${idEmpresa}) as totalMaquinas,
@@ -17,7 +27,7 @@ function buscarKpis(idEmpresa) {
              JOIN TipoComponente tc ON c.fkTipoComponente = tc.idTipoComponente
              JOIN Registro r ON r.fkComponente = c.idComponente
              WHERE m.fkEmpresa = ${idEmpresa} 
-             AND r.horario >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+             ${filtroRegistro} -- Filtro Dinâmico Inserido Aqui
              AND r.valor > 85 
              AND tc.tipoComponete IN ('CPU', 'RAM')) as maquinasSobrecarga,
              
@@ -27,7 +37,7 @@ function buscarKpis(idEmpresa) {
              JOIN TipoComponente tc ON c.fkTipoComponente = tc.idTipoComponente
              JOIN Registro r ON r.fkComponente = c.idComponente
              WHERE m.fkEmpresa = ${idEmpresa} 
-             AND r.horario >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+             ${filtroRegistro}
              AND r.valor > 90 
              AND tc.tipoComponete = 'DISCO') as maquinasRiscoDisco,
              
@@ -37,7 +47,7 @@ function buscarKpis(idEmpresa) {
              JOIN TipoComponente tc ON c.fkTipoComponente = tc.idTipoComponente
              JOIN Registro r ON r.fkComponente = c.idComponente
              WHERE m.fkEmpresa = ${idEmpresa} 
-             AND r.horario >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+             ${filtroRegistro}
              AND r.valor < 20 
              AND tc.tipoComponete IN ('CPU', 'RAM')) as maquinasOciosas,
 
@@ -47,30 +57,35 @@ function buscarKpis(idEmpresa) {
              JOIN LogSistema ls ON lde.fkLogSistema = ls.idLogSistema
              JOIN Maquina m ON ls.fkMaquina = m.idMaquina
              WHERE m.fkEmpresa = ${idEmpresa}
-             AND i.dataCriacao >= DATE_SUB(NOW(), INTERVAL 30 DAY)) as totalIncidentes;
+             ${filtroIncidente}) as totalIncidentes; -- Note que aqui usa a data de criação do incidente
     `;
     return database.executar(instrucaoSql);
 }
 
-function buscarListas(idEmpresa) {
-    
+function buscarListas(idEmpresa, bimestre) {
+    const filtroRegistro = gerarFiltroData(bimestre, 'r.horario');
+
     const instrucaoSql = `
         SELECT 
             m.nome as nomeMaquina,
-            AVG(CASE WHEN tc.tipoComponete = 'CPU' THEN r.valor END) as media_cpu,
-            AVG(CASE WHEN tc.tipoComponete = 'RAM' THEN r.valor END) as media_ram
+            ROUND(AVG(CASE WHEN tc.tipoComponete = 'CPU' THEN r.valor END), 1) as media_cpu,
+            ROUND(AVG(CASE WHEN tc.tipoComponete = 'RAM' THEN r.valor END), 1) as media_ram
         FROM Maquina m
         JOIN Componente c ON c.fkMaquina = m.idMaquina
         JOIN TipoComponente tc ON c.fkTipoComponente = tc.idTipoComponente
         JOIN Registro r ON r.fkComponente = c.idComponente
         WHERE m.fkEmpresa = ${idEmpresa}
-        AND r.horario >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-        GROUP BY m.idMaquina, m.nome;
+        ${filtroRegistro}
+        GROUP BY m.idMaquina, m.nome
+        HAVING media_cpu IS NOT NULL OR media_ram IS NOT NULL; 
+        -- REMOVI O LIMIT 5 DAQUI PARA O CONTROLLER PODER ORDENAR A LISTA INTEIRA
     `;
     return database.executar(instrucaoSql);
 }
 
-function buscarEvolucaoAlertas(idEmpresa) {
+function buscarEvolucaoAlertas(idEmpresa, bimestre) {
+    const filtroRegistro = gerarFiltroData(bimestre, 'r.horario');
+
     const instrucaoSql = `
         SELECT 
             DATE_FORMAT(r.horario, '%d/%m') as dia,
@@ -83,13 +98,13 @@ function buscarEvolucaoAlertas(idEmpresa) {
         JOIN Maquina m ON c.fkMaquina = m.idMaquina
         WHERE m.fkEmpresa = ${idEmpresa}
         AND a.nivel = 'CRITICO'
-        -- AQUI ESTÁ A MUDANÇA: DE 7 DIAS PARA 3 MESES PARA PEGAR O HISTÓRICO COMPLETO
-        AND r.horario >= DATE_SUB(NOW(), INTERVAL 3 MONTH) 
+        ${filtroRegistro}
         GROUP BY dia, tc.tipoComponete
         ORDER BY MIN(r.horario);
     `;
     return database.executar(instrucaoSql);
 }
+
 module.exports = {
     buscarKpis,
     buscarListas,

@@ -1,8 +1,6 @@
 var ambiente_processo = 'desenvolvimento';
 
-var caminho_env = ambiente_processo === 'producao' ? '.env' : '.env.dev';
-
-require('dotenv').config({ path: caminho_env });
+require('dotenv').config();
 
 var express = require('express');
 var cors = require('cors');
@@ -22,6 +20,8 @@ var maquinasRouter = require('./src/routes/maquinas');
 var gerenciamentoUsuarioRouter = require('./src/routes/gerenciamentoUsuario');
 var authRouter = require('./src/routes/email');
 var alertasRouter = require('./src/routes/alertas');
+var dashboardRouter = require("./src/routes/dashboard");
+
 
 const downloadRoutes = require('./src/routes/appInstalacao');
 
@@ -61,6 +61,7 @@ app.use('/api/maquinas', homeRouter);
 app.use('/dashboardParametros', dashboardParametrosRouter);
 app.use("/dashboardEstrategica", dashboardEstrategicaRouter); 
 app.use("/logAuditoria", logAuditoriaRouter);
+app.use("/dashboard", dashboardRouter);
 
 app.listen(PORTA_APP, function () {
   console.log(`                                                                            

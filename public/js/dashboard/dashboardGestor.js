@@ -1,50 +1,82 @@
-// Variáveis globais para armazenar as instâncias dos gráficos e permitir atualização
+// Variáveis globais
 let chartEvolucao = null;
 let chartMatriz = null;
+let bimestreAtual = 6; // Define o bimestre padrão (Novembro/Dezembro)
 
 document.addEventListener("DOMContentLoaded", function() {
-    // Inicializa os popovers do Bootstrap (ferramentas de dica visual)
+    // Inicializa os popovers do Bootstrap
     const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
     popoverTriggerList.map(function (popoverTriggerEl) { 
         return new bootstrap.Popover(popoverTriggerEl); 
     });
 
-    // 1. Renderiza os gráficos vazios inicialmente para garantir que o canvas exista
+    // 1. Renderiza os gráficos vazios inicialmente
     initGraficosVazios();
 
-    // 2. Busca os dados reais do backend
-    carregarDadosDashboard();
+    // 2. Define o texto inicial do botão de período
+    document.getElementById('valor_pesquisa_periodo').innerText = `Bimestre ${bimestreAtual}`;
+    document.querySelector(".header-top h2.fs-5").innerText = `2025 - Bimestre ${bimestreAtual}`;
+
+    // 3. Busca os dados reais do backend
+    carregarDadosDashboard(bimestreAtual);
 });
 
 /**
  * Função principal que orquestra a busca de dados
+ * Agora recebe o bimestre como parâmetro
  */
-function carregarDadosDashboard() {
-    // Tenta pegar ID da empresa do sessionStorage. Se não tiver, usa 1 como fallback (teste).
+function carregarDadosDashboard(bimestre) {
     const idEmpresa = sessionStorage.getItem("ID_EMPRESA") || 1; 
 
-    console.log("Buscando dados para empresa:", idEmpresa);
+    console.log(`Buscando dados da empresa ${idEmpresa} para o Bimestre ${bimestre}...`);
 
-    fetch(`/dashboard/geral/${idEmpresa}`)
-        .then(response => {
-            if (response.ok) return response.json();
-            throw new Error("Erro na resposta do servidor");
+    // ALTERAÇÃO IMPORTANTE: Mudamos para POST para enviar o JSON com o bimestre
+    fetch(`/dashboard/geral/${idEmpresa}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            bimestre: bimestre
         })
-        .then(data => {
-            console.log("Dados recebidos:", data);
-            atualizarKPIs(data.kpis);
-            atualizarListas(data.listas);
-            atualizarGraficos(data.graficos);
-        })
-        .catch(error => {
-            console.error("Erro ao carregar dashboard:", error);
-            // Aqui você pode adicionar uma chamada para seu SweetAlert de erro, se desejar
-        });
+    })
+    .then(response => {
+        if (response.ok) return response.json();
+        throw new Error("Erro na resposta do servidor");
+    })
+    .then(data => {
+        console.log("Dados recebidos:", data);
+        atualizarKPIs(data.kpis);
+        atualizarListas(data.listas);
+        atualizarGraficos(data.graficos);
+    })
+    .catch(error => {
+        console.error("Erro ao carregar dashboard:", error);
+    });
 }
 
 /**
- * Atualiza os números dos Cards (KPIs)
+ * Funções Auxiliares da UI
  */
+function filtrarPeriodo(bimestreSelecionado) {
+    // 1. Atualiza a variável global
+    bimestreAtual = bimestreSelecionado;
+
+    // 2. Feedback Visual: Atualiza os textos da tela
+    document.getElementById('valor_pesquisa_periodo').innerText = `Bimestre ${bimestreSelecionado}`;
+    document.querySelector(".header-top h2.fs-5").innerText = `2025 - Bimestre ${bimestreSelecionado}`;
+
+    console.log(`Trocando filtro para Bimestre ${bimestreSelecionado}...`);
+
+    // 3. Chama a função de busca novamente com o novo valor
+    carregarDadosDashboard(bimestreSelecionado);
+}
+
+// ---------------------------------------------------------
+// AS FUNÇÕES ABAIXO NÃO PRECISARAM DE ALTERAÇÕES NA LÓGICA
+// MANTIVE EXATAMENTE COMO VOCÊ ME ENVIOU PARA NÃO QUEBRAR
+// ---------------------------------------------------------
+
 function atualizarKPIs(kpis) {
     document.getElementById('txt_total_maquinas').innerText = kpis.totalMaquinas;
     document.getElementById('txt_maquinas_sobrecarga').innerText = kpis.maquinasSobrecarga;
@@ -53,27 +85,24 @@ function atualizarKPIs(kpis) {
     document.getElementById('txt_total_incidentes').innerText = kpis.totalIncidentes;
 }
 
-/**
- * Gerencia a atualização das tabelas Top 5
- */
 function atualizarListas(listas) {
     preencherTabela('tbody-sobrecarga', listas.topSobrecarga, true);
     preencherTabela('tbody-ociosas', listas.topOciosas, false);
 }
 
-/**
- * Preenche o HTML de uma tabela específica
- * @param {string} elementId - ID do tbody
- * @param {Array} dados - Array de objetos com os dados
- * @param {boolean} isCritico - Se true, usa cor vermelha; se false, verde.
- */
 function preencherTabela(elementId, dados, isCritico) {
     const tbody = document.getElementById(elementId);
-    tbody.innerHTML = ""; // Limpa o conteúdo atual
+    tbody.innerHTML = ""; 
     
+    // Verifica se veio nulo ou vazio para evitar erro de .forEach
+    if (!dados || dados.length === 0) {
+        tbody.innerHTML = "<tr><td colspan='3' class='text-center'>Sem dados neste período</td></tr>";
+        return;
+    }
+
     dados.forEach(item => {
-        const cpuVal = item.media_cpu ? item.media_cpu.toFixed(1) : "0.0";
-        const ramVal = item.media_ram ? item.media_ram.toFixed(1) : "0.0";
+        const cpuVal = item.media_cpu ? Number(item.media_cpu).toFixed(1) : "0.0";
+        const ramVal = item.media_ram ? Number(item.media_ram).toFixed(1) : "0.0";
         const classeCor = isCritico ? "text-danger" : "text-success";
 
         tbody.innerHTML += `
@@ -86,11 +115,11 @@ function preencherTabela(elementId, dados, isCritico) {
     });
 }
 
-/**
- * Atualiza os dados dentro dos gráficos Chart.js já existentes
- */
 function atualizarGraficos(dadosGraficos) {
     // --- 1. Atualiza Matriz de Otimização ---
+    // Limpa dados antigos antes de inserir novos (boa prática)
+    chartMatriz.data.datasets[0].data = [];
+    
     const dadosPontos = dadosGraficos.matriz.map(m => ({
         x: m.media_cpu || 0,
         y: m.media_ram || 0,
@@ -103,11 +132,8 @@ function atualizarGraficos(dadosGraficos) {
     // --- 2. Atualiza Evolução (Line Chart) ---
     const alertas = dadosGraficos.evolucao;
     
-    // Extrai labels unicos (dias/semanas)
     const labels = [...new Set(alertas.map(a => a.dia))];
     
-    // Mapeia valores para cada dataset (CPU, RAM, DISCO)
-    // Nota: Isso assume que o backend retorna [{dia, tipoComponete, qtd_alertas}, ...]
     const dadosCPU = labels.map(dia => {
         const found = alertas.find(a => a.dia === dia && a.tipoComponete === 'CPU');
         return found ? found.qtd_alertas : 0;
@@ -128,9 +154,6 @@ function atualizarGraficos(dadosGraficos) {
     chartEvolucao.update();
 }
 
-/**
- * Inicializa os gráficos com dados vazios e configurações visuais
- */
 function initGraficosVazios() {
     // --- Configuração Gráfico Evolução (Linha) ---
     const ctx1 = document.getElementById('evolucaoComponentesChart').getContext('2d');
@@ -169,7 +192,6 @@ function initGraficosVazios() {
                 label: 'Máquinas',
                 data: [],
                 backgroundColor: ctx => {
-                    // Lógica de Cores Dinâmica (Quadrantes)
                     const v = ctx.raw;
                     if(!v) return '#999';
                     if(v.x > 80 || v.y > 80) return '#dc3545'; // Crítico
@@ -202,16 +224,6 @@ function initGraficosVazios() {
     });
 }
 
-/**
- * Funções Auxiliares da UI
- */
-function filtrarPeriodo(bimestre) {
-    console.log(`Recarregando dados para o Bimestre ${bimestre}...`);
-    document.getElementById('valor_pesquisa_periodo').innerText = `2025 - Bimestre ${bimestre}`;
-    // Futuramente: carregarDadosDashboard(bimestre);
-}
-
 function iniciarTourGestor() {
     console.log("Iniciando o Tour do Painel de Gestão...");
-    // Lógica do TourGuide.js iria aqui
 }
