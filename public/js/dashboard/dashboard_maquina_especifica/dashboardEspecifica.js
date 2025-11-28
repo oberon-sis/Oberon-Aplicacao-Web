@@ -7,6 +7,8 @@ let idMaquina = new URL(window.location.href).searchParams.get("id");
 // Elementos da página - KPIs
 const tituloDoPainel = document.getElementById("tituloDoPainel");
 const txtDisponibilidade = document.getElementById("txt_disponibilidade");
+
+const txt_disponibilidade_passado = document.getElementById("txt_disponibilidade_passado");
 const txtTotalAlertas = document.getElementById("txt_total_alertas");
 const txtPercentualCritico = document.getElementById("txt_percentual_critico");
 const txtComponenteCritico = document.getElementById("txt_componente_critico");
@@ -27,6 +29,7 @@ let graficoAlertas;
 // ============================
 
 async function carregarInformacoesMaquina() {
+    idMaquina = 1
     try {
         if (!idMaquina) {
             console.warn("Nenhum ID encontrado — usando ID mockado (1) e nome padrão.");
@@ -46,8 +49,10 @@ async function carregarInformacoesMaquina() {
         if (!dados) {
             throw new Error("Resposta da API está vazia ou mal formatada.");
         }
-
+        console.log(dados)
         // 1. DADOS DOS KPIs
+
+
         const infoMaquina = dados?.info_tecnica_computador?.[0];
         const dadosAlertaKPI = dados?.dados_kpi_alertas_30d?.[0];
         const dadosDisp = dados?.dados_kpi_disponibilidade?.[0];
@@ -55,7 +60,7 @@ async function carregarInformacoesMaquina() {
         // 2. DADOS DOS GRÁFICOS E TABELAS
         const alertas = dados?.dados_ultimos_eventos ?? [];
         const dadosGrafico24h = dados?.dados_coleta_24_horas ?? [];
-        const dadosComponenteAlerta = dados?.dados_kpi_pico_24h ?? []; // Usaremos este para o gráfico de barras
+        const dadosComponenteAlerta = dados?.dados_kpi_pico_24h ??[]; // Usaremos este para o gráfico de barras
 
 
         // CHAMADAS DE ATUALIZAÇÃO
@@ -65,17 +70,19 @@ async function carregarInformacoesMaquina() {
         
         // Processamento avançado do gráfico de linha (CPU, RAM, DISCO separados)
         const dadosProntosGraficoPrincipal = montarGrafico24h(dadosGrafico24h);
+        console.log("-----dados------")
+        console.log(dadosProntosGraficoPrincipal)
         atualizarGraficoPrincipal(dadosProntosGraficoPrincipal);
-
         // Processamento para o gráfico de barras (alertas por componente)
         const dadosProntosGraficoAlertas = montarGrafGraficoAlertas(dadosComponenteAlerta);
+        console.log(dadosProntosGraficoAlertas)
         atualizarGraficoAlertas(dadosProntosGraficoAlertas);
 
 
     } catch (erro) {
         console.error("Erro ao carregar dashboard:", erro.message);
         // Exibir mensagem de erro amigável ao usuário
-        if(tituloDoPainel) tituloDoPainel.innerText = `ERRO: Não foi possível carregar o painel (ID: ${idMaquina})`;
+        // if(tituloDoPainel) tituloDoPainel.innerText = `ERRO: Não foi possível carregar o painel (ID: ${idMaquina})`;
     }
 }
 
@@ -104,15 +111,10 @@ function atualizarKpis(dadosAlertaKPI, dadosDisp) {
 
     // KPI 1: Disponibilidade
     if (txtDisponibilidade) {
-        const tempoTotalMinutos = dadosDisp.tempoTotalPeriodoMinutos;
-        const indisponibilidade = dadosDisp.tempoTotalIndisponibilidadeMinutos ?? 0;
-        
-        // Cálculo da Taxa de Disponibilidade (1 - Indisponibilidade/Total) * 100
-        const disponibilidade = (1 - (indisponibilidade / tempoTotalMinutos)) * 100;
 
-        txtDisponibilidade.innerHTML = `${disponibilidade.toFixed(1)}%`;
-        // Nota: A lógica de cor e seta (arrow-up/down) deve ser implementada aqui, 
-        // comparando com um valor do mês passado (que precisa ser buscado na API).
+        
+        txtDisponibilidade.innerHTML = `${dadosDisp.tempoLigadoUltimaSemana}`;
+        txt_disponibilidade_passado.innerHTML = `${dadosDisp.tempoLigadoSemanaPassada}`;
     }
 
     // KPI 2 e 3: Total de Alertas e Percentual Crítico
@@ -129,13 +131,13 @@ function atualizarKpis(dadosAlertaKPI, dadosDisp) {
 
     // KPI 4: Componente Crítico - Não há um dado direto no model atual para isto, 
     // mas seria o componente com o maior totalAlertas24h de dadosComponenteAlerta
-    if (txtComponenteCritico && dadosComponenteAlerta.length > 0) {
-        const critico = dadosComponenteAlerta.reduce((max, item) => 
-            (item.totalAlertas24h > max.totalAlertas24h ? item : max), 
-            { totalAlertas24h: -1 }
-        );
-        txtComponenteCritico.innerText = critico.tipoRecurso;
-    }
+    // if (txtComponenteCritico && dadosComponenteAlerta.length > 0) {
+    //     const critico = dadosComponenteAlerta.reduce((max, item) => 
+    //         (item.totalAlertas24h > max.totalAlertas24h ? item : max), 
+    //         { totalAlertas24h: -1 }
+    //     );
+    //     txtComponenteCritico.innerText = critico.tipoRecurso;
+    // }
 }
 
 
@@ -144,6 +146,8 @@ function atualizarKpis(dadosAlertaKPI, dadosDisp) {
 // ============================
 // Nomes de campos agora estão corretos graças aos aliases no Model.
 function preencherTabelaAlertas(alertas) {
+    console.log(alertas)
+    console.log(tabelaAlertas)
     if (!tabelaAlertas) {
         console.warn("ID tabela-alertas não encontrado no HTML.");
         return;
@@ -186,11 +190,12 @@ function preencherTabelaAlertas(alertas) {
 // ============================
 
 function montarGrafico24h(dados) {
+    console.log(dados)
     // 1. Agrupar dados por intervalo de tempo (labels)
     const labels = [...new Set(dados.map(d => d.intervaloTempo))].sort();
 
     // 2. Definir os recursos esperados
-    const recursos = ['CPU', 'RAM', 'DISCO']; 
+    const recursos = ['CPU', 'RAM', 'DISCO', 'REDE']; 
     const datasetsMap = {};
 
     // Inicializar datasets
@@ -210,7 +215,6 @@ function montarGrafico24h(dados) {
             datasetsMap[rec].data.push(dadoNoIntervalo ? dadoNoIntervalo.valor_medio : null);
         });
     });
-
     return { labels: labels, datasets: Object.values(datasetsMap) };
 }
 
@@ -229,6 +233,7 @@ function atualizarGraficoPrincipal(dadosGrafico) {
 
     if (graficoPrincipal) {
         graficoPrincipal.destroy();
+        console.log("passou  no if")
     }
 
     graficoPrincipal = new Chart(ctx, {
