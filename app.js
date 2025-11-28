@@ -24,7 +24,7 @@ var dashboardRouter = require("./src/routes/dashboard");
 
 
 const downloadRoutes = require('./src/routes/appInstalacao');
-
+var analiseRedeRoutes = require('./src/routes/analiseRede');
 const dashboardEspecificaRouter = require('./src/routes/dashboardEspecifica'); 
 
 const analiseGeralRoutes = require('./src/routes/analise-tendencia');
@@ -53,7 +53,7 @@ app.use('/maquinas', maquinasRouter);
 app.use('/auth', authRouter);
 app.use('/alertas', alertasRouter);
 app.use('/api/download', downloadRoutes);
-
+app.use('/', analiseRedeRoutes);
 app.use('/dashboardEspecifica', dashboardEspecificaRouter);
 app.use('/painel', painelRoutes);
 app.use('/api/desempenho', analiseGeralRoutes);
