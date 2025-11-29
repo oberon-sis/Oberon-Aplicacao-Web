@@ -26,7 +26,6 @@
             height: 16px;
             width: 16px;
         }
-        
     </style>
 </head>
 
@@ -76,7 +75,8 @@
 
         <div class="mb-3 ">
             <a class="d-block text-decoration-none text-dark bg-fundo" data-bs-toggle="collapse" href="#filterCollapse"
-                role="button" aria-expanded="false" aria-controls="filterCollapse" onclick="toggleFilterArrow(this)" id="filtro-toggler">
+                role="button" aria-expanded="false" aria-controls="filterCollapse" onclick="toggleFilterArrow(this)"
+                id="filtro-toggler">
                 <div class="d-flex gap-4 align-content-center">
 
                     <h4 class="filtragem">
@@ -90,72 +90,75 @@
                 </div>
             </a>
         </div>
-<div class="collapse card-filter" id="filterCollapse" id="filtro-area-detalhe">
-    <div class="row g-3">
-        <div class="col-md-4">
-            <label class="form-label">Tipo de Gráfico</label>
-            <select class="form-select form-select-sm" id="selectTipoGrafico" onchange="toggleFilterFields()" id="filtro-tipo-grafico">
-                <option value="comparar" selected>Tendência – ótimo para ver se está aumentando ou diminuindo.</option>
-                <option value="Previsoes">Previsões – use para prever dados futuros relacionadas.</option>
-                <option value="Correlacao">Correlação – use para comparar duas variáveis e entender se estão
-                    relacionadas.</option>
-            </select>
-        </div>
+        <div class="collapse card-filter" id="filterCollapse" id="filtro-area-detalhe">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Tipo de Gráfico</label>
+                    <select class="form-select form-select-sm" id="selectTipoGrafico" onchange="toggleFilterFields()"
+                        id="filtro-tipo-grafico">
+                        <option value="comparar" selected>Tendência – ótimo para ver se está aumentando ou diminuindo.
+                        </option>
+                        <option value="Previsoes">Previsões – use para prever dados futuros relacionadas.</option>
+                        <option value="Correlacao">Correlação – use para comparar duas variáveis e entender se estão
+                            relacionadas.</option>
+                    </select>
+                </div>
 
-        <div class="col-md-4" id="divTempo">
-            <label class="form-label">Período de Análise</label>
-            <select class="form-select form-select-sm" id="selectTempo" onchange="toggleFilterFields()">
-                </select>
-        </div>
+                <div class="col-md-4" id="divTempo">
+                    <label class="form-label">Período de Análise</label>
+                    <select class="form-select form-select-sm" id="selectTempo" onchange="toggleFilterFields()">
+                    </select>
+                </div>
 
-        <div class="col-md-4">
-            <label class="form-label" id="labelMetricaPrincipal">Métrica a analisar</label>
-            <select class="form-select form-select-sm" id="selectMetricaPrincipal" onchange="toggleFilterFields()" id="filtro-metrica-principal">
-                </select>
-        </div>
+                <div class="col-md-4">
+                    <label class="form-label" id="labelMetricaPrincipal">Métrica a analisar</label>
+                    <select class="form-select form-select-sm" id="selectMetricaPrincipal"
+                        onchange="toggleFilterFields()" id="filtro-metrica-principal">
+                    </select>
+                </div>
 
 
 
-        <div class="col-md-4" id="divVariavelRelacionada" style="display: none;">
-            <label class="form-label">Variável relacionada</label>
-            <select class="form-select form-select-sm" id="selectVariavelRelacionada">
-                </select>
-        </div>
+                <div class="col-md-4" id="divVariavelRelacionada" style="display: none;">
+                    <label class="form-label">Variável relacionada</label>
+                    <select class="form-select form-select-sm" id="selectVariavelRelacionada">
+                    </select>
+                </div>
 
                 <div class="col-md-4" id="divComponente" style="display: none;">
-            <label class="form-label">Componente</label>
-            <select class="form-select form-select-sm" id="selectComponente" onchange="toggleFilterFields()">
-                </select>
-        </div>
+                    <label class="form-label">Componente</label>
+                    <select class="form-select form-select-sm" id="selectComponente" onchange="toggleFilterFields()">
+                    </select>
+                </div>
 
-        <div class="col-md-12" id="divDetalhesPrevisao" style="display: none;">
-            <hr>
-            <h6 class="text-secondary">(Selecionado automaticamente pelo sistema)</h6>
-            <p class="mb-0">
-                <i class="bi bi-clock-history me-1"></i>
-                Histórico Usado: <span id="periodoHistorico"></span>
-            </p>
-            <h5 class="mt-2 mb-0" style="color: #0c8186;">
-                <i class="bi bi-magic me-1"></i>
-                Período Previsto: <span id="periodoPrevisto"></span>
-            </h5>
-        </div>
+                <div class="col-md-12" id="divDetalhesPrevisao" style="display: none;">
+                    <hr>
+                    <h6 class="text-secondary">(Selecionado automaticamente pelo sistema)</h6>
+                    <p class="mb-0">
+                        <i class="bi bi-clock-history me-1"></i>
+                        Histórico Usado: <span id="periodoHistorico"></span>
+                    </p>
+                    <h5 class="mt-2 mb-0" style="color: #0c8186;">
+                        <i class="bi bi-magic me-1"></i>
+                        Período Previsto: <span id="periodoPrevisto"></span>
+                    </h5>
+                </div>
 
-        <div class="col-12 text-end">
-            <button class="btn btn-info btn-sm" onclick="aplicarFiltro()">
-                <i class="bi bi-funnel-fill me-1"></i> Aplicar Filtro
-            </button>
-        </div>
-    </div>
+                <div class="col-12 text-end">
+                    <button class="btn btn-info btn-sm" onclick="aplicarFiltro()">
+                        <i class="bi bi-funnel-fill me-1"></i> Aplicar Filtro
+                    </button>
+                </div>
+            </div>
 
-    <div class="mt-3 row" id="specific-machine-dropdown" style="display: none;">
-        <div class="col-4">
-            <label class="form-label">Selecione a Máquina</label>
-            <select class="form-select form-select-sm">
-            </select>
+            <div class="mt-3 row" id="specific-machine-dropdown" style="display: none;">
+                <div class="col-4">
+                    <label class="form-label">Selecione a Máquina</label>
+                    <select class="form-select form-select-sm">
+                    </select>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
         <section class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-3 mb-4" id="kpi-row">
 
             <div class="col">
@@ -294,7 +297,7 @@
                     <div class="p-3 content-area overflow-auto flex-grow-1" style="height: calc(100% - 40px);">
 
                         <div id="interpretacoes-content" id="interpretacoes-panel">
-                            <p class="mb-4" >
+                            <p class="mb-4">
                                 "Após o pico de Abril, o Downtime estabilizou-se em torno de 55. A projeção (Mock)
                                 indica um aumento gradual para 65 até Setembro, sugerindo atenção imediata."
                             </p>
@@ -361,21 +364,24 @@
                         </h5>
 
                         <div class="btn-group btn-group-sm" role="group" aria-label="Filtro de Ranking">
-                            <input type="radio" class="btn-check" name="ranking-limit" id="top3" autocomplete="off" checked onclick="renderizarTabela2(this, 3)">
+                            <input type="radio" class="btn-check" name="ranking-limit" id="top3" autocomplete="off"
+                                checked onclick="renderizarTabela2(this, 3)">
                             <label class="btn btn-outline-info" for="top5">Top 3</label>
 
-                            <input type="radio" class="btn-check" name="ranking-limit" id="top5" autocomplete="off" onclick="renderizarTabela2(this, 6)">
+                            <input type="radio" class="btn-check" name="ranking-limit" id="top5" autocomplete="off"
+                                onclick="renderizarTabela2(this, 6)">
                             <label class="btn btn-outline-info" for="top5">Top 5</label>
 
-                            <input type="radio" class="btn-check" name="ranking-limit" id="top10" autocomplete="off" onclick="renderizarTabela2(this, 11)">
+                            <input type="radio" class="btn-check" name="ranking-limit" id="top10" autocomplete="off"
+                                onclick="renderizarTabela2(this, 11)">
                             <label class="btn btn-outline-info" for="top10">Top 10</label>
 
                         </div>
 
                         <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                                data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Top Máquinas com Downtime"
-                                data-bs-content="Exibe as máquinas que tiveram a maior porcentagem de inatividade no período selecionado, priorizando aquelas com a maior variação negativa.">
-                                <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
+                            data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Top Máquinas com Downtime"
+                            data-bs-content="Exibe as máquinas que tiveram a maior porcentagem de inatividade no período selecionado, priorizando aquelas com a maior variação negativa.">
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
                         </button>
                     </div>
                     <div class="table-responsive">
@@ -430,4 +436,5 @@
     <script src="../js/dash_analise_desempenho/02_filters.js"></script>
     <script src="../js/tour/analiseDesempenhoTour.js"></script>
 </body>
+
 </html>
