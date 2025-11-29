@@ -192,7 +192,7 @@ async function excluirMaquina(req, res) {
       return res.status(401).send('Credenciais inválidas.');
     }
 
-    const resultadoExclusao = await maquinasModel.eliminarMaquina(idMaquinaServer, idGerenteServer);
+    const resultadoExclusao = await maquinasModel.eliminarMaquina(idMaquinaServer, idGerenteServer, idGerenteServer);
 
     return res.status(200).send(`Máquina de ID ${idMaquinaServer} excluída com sucesso!`);
   } catch (erro) {

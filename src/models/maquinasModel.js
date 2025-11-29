@@ -139,10 +139,10 @@ function excluirParametroEspecifico(fkMaquinaComponente) {
   return database.executar(instrucaoSql);
 }
 
-function eliminarMaquina(idMaquina) {
+function eliminarMaquina(idMaquina, idFuncionario) {
   console.log('[MODEL] - function eliminarMaquina():', idMaquina);
-
   var instrucaoSql = `
+        SET @USUARIO_LOGADO = ${idFuncionario};
         Delete from Maquina where idMaquina = ${idMaquina};
     `;
   console.log('Executando a instrução SQL: \n' + instrucaoSql);

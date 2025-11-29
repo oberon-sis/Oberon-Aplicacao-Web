@@ -12,7 +12,8 @@ const config = {
     database: process.env.DB_DATABASE,
     port: process.env.DB_PORT,
     connectionLimit: 10,
-    waitForConnections: true
+    waitForConnections: true,
+    multipleStatements: true
 };
 
 // Log de Debug para confirmar que as variáveis foram lidas
