@@ -17,6 +17,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.17.1",
+    "express-session": "^1.18.2",
     "json2csv": "^6.0.0-alpha.2",
     "mysql2": "^3.9.4",
     "nodemailer": "^7.0.10",

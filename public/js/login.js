@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
   const togglePasswordButton = document.querySelector('.password-toggle');
+
   function exibirToast(icone, texto) {
     const COR_DE_FUNDO = '#1a1a1a';
     const COR_DO_ICONE = 'white';
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
       title: texto,
     });
   }
+
   togglePasswordButton.addEventListener('click', () => {
     const img = togglePasswordButton.querySelector('img');
     if (passwordInput.type === 'password') {
@@ -61,16 +63,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!resposta.ok) {
         const erro = await resposta.json();
-        throw new new Error(erro.mensagem || 'Falha no login.')();
+        // Corrigi um erro de sintaxe que tinha aqui (tinha dois "new")
+        throw new Error(erro.mensagem || 'Falha no login.');
       }
+
       const dadosUsuario = await resposta.json();
-      exibirToast('success', 'Login realizado com sucesso! Redirecionando...');
+
+      sessionStorage.ID_USUARIO = dadosUsuario.idFuncionario || dadosUsuario.id;
+      console.log("ID SALVO NA SESSÃO:", sessionStorage.ID_USUARIO);
+      sessionStorage.NOME_USUARIO = dadosUsuario.nome;
+      sessionStorage.EMAIL_USUARIO = dadosUsuario.email;
+   
       sessionStorage.setItem('usuario', JSON.stringify(dadosUsuario));
+ 
+
+      exibirToast('success', 'Login realizado com sucesso! Redirecionando...');
+      
       setTimeout(() => {
         window.location.href = './home.html';
       }, 1500);
+
     } catch (erro) {
-      exibirToast('error', 'Credenciais inválidas');
+      console.error(erro);
+      exibirToast('error', erro.message || 'Credenciais inválidas');
       botaoSubmit.disabled = false;
       botaoSubmit.textContent = 'ENTRAR';
     }

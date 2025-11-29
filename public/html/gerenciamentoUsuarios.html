@@ -71,8 +71,9 @@
 
     </div>
     <div class="table-responsive shadow-sm border rounded div_tabela">
-      
-      <table class="table table-hover mb-0" <thead>
+
+      <table class="table table-hover mb-0">
+        <thead>
         <tr class="table-success" style="--bs-table-bg:  #009ab4; --bs-table-color: white !important">
           <th scope="col" class="py-3">ID</th>
           <th scope="col" class="py-3">Nome <i class="bi bi-arrow-down-up ms-1"></i>
@@ -82,144 +83,16 @@
           <th scope="col" class="py-3">Função</th>
           <th scope="col" class="py-3">Editar</th>
           <th scope="col" class="py-3">Excluir</th>
-          <!-- <th scope="col" class="py-3">Ver Mais</th> -->
         </tr>
         </thead>
         <tbody id="Conteudo_real">
-          <tr>
-            <td></td>
-            <td><i class="bi bi-person-circle me-2"></i></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><span class="opcao_crud text-primary" data-bs-toggle="modal" onclick="getUsuariobyID(1)"
-                data-bs-target="#modalAtualizarMaquina">
-                <img src="../assets/svg/atualizar_blue.svg" alt="">
-                Editar<i class="bi bi-arrow-clockwise"></i></span>
-            </td>
-            <td><span class="opcao_crud text-danger" onclick="ExcluirUsuario()">
-                <img src="../assets/svg/excluir_red.svg" alt="">
-                Excluir<i class="bi bi-trash"></i></span>
-            </td>
-            <!-- <td><span class="opcao_crud detalhes">
-                                <img src="../assets/svg/eye_black.svg" alt="">
-                                Detalhes<i class="bi bi-trash"></i></span>
-                        </td> -->
-          </tr>
-          <tr>
-            <td></td>
-            <td><i class="bi bi-person-circle me-2"></i></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><span class="opcao_crud text-primary" data-bs-toggle="modal" onclick="getUsuariobyID(2)"
-                data-bs-target="#modalAtualizarMaquina">
-                <img src="../assets/svg/atualizar_blue.svg" alt="">
-                Atualizar<i class="bi bi-arrow-clockwise"></i></span>
-            </td>
-            <td><span class="opcao_crud text-danger" onclick="ExcluirUsuario()">
-                <img src="../assets/svg/excluir_red.svg" alt="">
-                Excluir<i class="bi bi-trash"></i></span>
-            </td>
-            <!-- <td><span class="opcao_crud detalhes">
-                                <img src="../assets/svg/eye_black.svg" alt="">
-                                Detalhes<i class="bi bi-trash"></i></span>
-                        </td> -->
-          </tr>
-        </tbody>
+          </tbody>
         <tbody id="Estrutura_esqueleto_carregamento">
-          <tr class="skeleton-row">
-            <td><span class="skeleton-text short"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
-          </tr>
-          <tr class="skeleton-row">
-            <td><span class="skeleton-text short"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
-          </tr>
-          <tr class="skeleton-row">
-            <td><span class="skeleton-text short"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
-          </tr>
-          <tr class="skeleton-row">
-            <td><span class="skeleton-text short"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
-          </tr>
-          <tr class="skeleton-row">
-            <td><span class="skeleton-text short"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
-          </tr>
-          <tr class="skeleton-row">
-            <td><span class="skeleton-text short"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
-          </tr>
-          <tr class="skeleton-row">
-            <td><span class="skeleton-text short"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
-          </tr>
-          <tr class="skeleton-row">
-            <td><span class="skeleton-text short"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
-          </tr>
-          <tr class="skeleton-row">
-            <td><span class="skeleton-text short"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td>
-            <!-- <td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td> -->
-          </tr>
-        </tbody>
-        </span>
+          <tr class="skeleton-row"><td><span class="skeleton-text short"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td><td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td></tr>
+          <tr class="skeleton-row"><td><span class="skeleton-text short"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td><td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td></tr>
+          <tr class="skeleton-row"><td><span class="skeleton-text short"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td><td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td></tr>
+          <tr class="skeleton-row"><td><span class="skeleton-text short"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td><td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td></tr>
+          <tr class="skeleton-row"><td><span class="skeleton-text short"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-text medium"></span></td><td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td><td><span class="skeleton-icon"></span><span class="skeleton-text medium"></span></td></tr>
         </tbody>
       </table>
     </div>
@@ -231,6 +104,7 @@
 
 
   </main>
+  
   <div class="modal fade" id="modalCadastrarMaquina" tabindex="-1" aria-labelledby="modalCadastrarMaquinaLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -247,33 +121,33 @@
               <h6 class="fs-5 fw-bold mb-4">Identificação do Usúario</h6>
 
               <div class="mb-3">
-                <label for="hostname" class="form-label text-muted">Nome</label>
+                <label for="nome_input" class="form-label text-muted">Nome</label>
                 <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="nome_input"
                   placeholder="Insira o nome completo">
               </div>
 
               <div class="mb-3">
-                <label for="modelo" class="form-label text-muted">CPF</label>
+                <label for="cpf_input" class="form-label text-muted">CPF</label>
                 <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="cpf_input"
                   placeholder="Insira CPF(Cadastro de Pessoa Fisica)">
               </div>
 
               <div class="mb-3">
-                <label for="modelo" class="form-label text-muted">E-mail</label>
+                <label for="email_input" class="form-label text-muted">E-mail</label>
                 <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="email_input"
                   placeholder="Insira o email de acesso">
               </div>
 
               <div class="mb-3">
-                <label for="mac" class="form-label text-muted">Senha</label>
+                <label for="senha_input" class="form-label text-muted">Senha</label>
                 <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="senha_input"
                   placeholder="Insira a senha">
               </div>
 
               <div class="mb-3">
-                <label for="tipo_usuario_select_tipos">Tipo de usuário</label>
-                <select class="tipo_usuario_select_tipos" required>
-                  <option value="" disabled selected>Carregando tipos...</option>
+                <label for="select_tipo_cadastro" class="form-label text-muted">Tipo de Usuário</label>
+                <select class="form-select tipo_usuario_select_tipos shadow-none input_pesquisa" id="select_tipo_cadastro">
+                  <option value="" disabled selected>Carregando...</option>
                 </select>
               </div>
             </div>
@@ -322,25 +196,25 @@
                 <div id="step-update-1">
                   <h6 class="fs-5 fw-bold mb-3">Editar Dados Pessoais</h6>
                   <div class="mb-3">
-                    <label for="nome_upd" class="form-label text-muted">Nome(apelido)</label>
+                    <label for="ipt_nome" class="form-label text-muted">Nome(apelido)</label>
                     <input required="required" type="text" class="form-control shadow-none input_pesquisa" id="ipt_nome"
                       placeholder="ex: Roberto lima...">
                   </div>
 
                   <div class="mb-3">
-                    <label for="modelo_upd" class="form-label text-muted">Email</label>
+                    <label for="ipt_email" class="form-label text-muted">Email</label>
                     <input required="required" type="text" class="form-control shadow-none input_pesquisa"
                       id="ipt_email" placeholder="Ex: robertolima@gmail.com ">
                   </div>
                   <div class="mb-3">
-                    <label for="mac_upd" class="form-label text-muted">Senha</label>
+                    <label for="ipt_senha" class="form-label text-muted">Senha</label>
                     <input required="required" type="text" class="form-control shadow-none input_pesquisa"
                       id="ipt_senha" placeholder="Ex: Nova senha">
                   </div>
                   <div class="mb-3">
-                    <label for="mac_upd" class="form-label text-muted">Função</label>
-                    <label for="tipo_usuario_select_tipos">Tipo de Usuário</label>
-                    <select class="tipo_usuario_select_tipos">
+                    <label for="select_tipo_update_unico" class="form-label text-muted">Função</label>
+                    
+                    <select class="form-select tipo_usuario_select_tipos shadow-none input_pesquisa" id="select_tipo_update_unico">
                       <option value="" disabled selected>Carregando...</option>
                     </select>
                   </div>
@@ -351,11 +225,10 @@
         </div>
 
         <div class="modal-footer justify-content-center border-0 p-4">
-          <button type="button" id="btnVoltarUpd" class="btn  fw-bold px-5 botao_branco botao_configuracao"
+          <button type="button" id="btnVoltarUpd" class="btn fw-bold px-5 botao_branco botao_configuracao"
             style="display: none;">Voltar Atrás</button>
           <button type="button" id="btnAvancarUpd" class="btn fw-bold px-5 verde_claro botao_configuracao"
-            onclick="salvarEdicao(1)">Finalizar</button>
-
+            onclick="salvarEdicao()">Finalizar</button>
         </div>
       </div>
     </div>
