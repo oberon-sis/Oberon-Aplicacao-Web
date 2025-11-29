@@ -49,7 +49,7 @@ function getDadosGerais(req, res) {
                     return item ? item.passado : 0;
                 })
             })),
-            dadosBrutos: severidadePorComponente // ✅ usado pelo gráfico com filtro
+            dadosBrutos: severidadePorComponente
         };
 
         res.json({
@@ -79,7 +79,13 @@ function getDadosGerais(req, res) {
                     data: ranking.map(r => r.total_alertas),
                     tabela: ranking.map(r => ({
                         maquina: r.maquina,
-                        alertasBimestre: r.total_alertas
+                        alertasBimestre: r.total_alertas,
+                        cpuMedia: r.cpuMedia,
+                        ramMedia: r.ramMedia,
+                        discoUso: r.discoUso,
+                        totalIncidentes: r.totalIncidentes,
+                        severidadeMedia: r.severidadeMedia,
+                        status: r.status
                     }))
                 },
                 comparativoNivel: comparativoNivelFormatado,

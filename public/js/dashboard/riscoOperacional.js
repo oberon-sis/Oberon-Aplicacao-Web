@@ -206,7 +206,6 @@ function atualizarGraficoBarra(id, labels, data) {
     canvas.chartInstance = newChart;
 }
 
-// ✅ NOVA FUNÇÃO: gráfico de severidade vertical duplo
 function atualizarGraficoSeveridade(id, labels, atual, passado) {
     const canvas = document.getElementById(id);
     if (!canvas) return;
@@ -244,12 +243,41 @@ function preencherTabelaRankingPrioridade(ranking) {
 
     ranking.forEach(item => {
         const tr = document.createElement("tr");
+
         const tdMaquina = document.createElement("td");
-        tdMaquina.textContent = item.maquina || item.nome || "—";
+        tdMaquina.textContent = item.maquina || "—";
+
         const tdAlertas = document.createElement("td");
-        tdAlertas.textContent = item.alertasBimestre || item.totalAlertas || 0;
+        tdAlertas.textContent = item.alertasBimestre ?? 0;
+
+        const tdCpu = document.createElement("td");
+        tdCpu.textContent = item.cpuMedia ? item.cpuMedia + "%" : "—";
+
+        const tdRam = document.createElement("td");
+        tdRam.textContent = item.ramMedia ? item.ramMedia + "%" : "—";
+
+        const tdDisco = document.createElement("td");
+        tdDisco.textContent = item.discoUso ? item.discoUso + "%" : "—";
+
+        const tdIncidentes = document.createElement("td");
+        tdIncidentes.textContent = item.totalIncidentes ?? "—";
+
+        const tdSeveridade = document.createElement("td");
+        tdSeveridade.textContent = item.severidadeMedia || "—";
+
+        const tdStatus = document.createElement("td");
+        tdStatus.textContent = item.status || "—";
+
         tr.appendChild(tdMaquina);
         tr.appendChild(tdAlertas);
+        tr.appendChild(tdCpu);
+        tr.appendChild(tdRam);
+        tr.appendChild(tdDisco);
+        tr.appendChild(tdIncidentes);
+        tr.appendChild(tdSeveridade);
+        tr.appendChild(tdStatus);
+
         tbody.appendChild(tr);
     });
 }
+
