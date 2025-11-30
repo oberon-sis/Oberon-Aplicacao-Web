@@ -296,7 +296,11 @@ async function aplicarFiltro() {
         await buscar_dados_kpi_tabela(ID_EMPRESA, dataTabela, maquinaSelecionada.id);
 
         updateDynamicFilterDisplay();
-        renderizarDados(mockData); 
+        renderizarDados(mockData, () => {
+            setTimeout(() => {
+                toggleSkeleton(false);
+            }, 100);
+        });
 
     } catch (e) {
         console.error('Falha ao aplicar filtro:', e);
