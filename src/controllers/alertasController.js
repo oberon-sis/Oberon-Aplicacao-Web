@@ -163,8 +163,22 @@ function exportarAlertas(req, res) {
     return res.status(400).send(e.message);
   }
 }
+async function listarFeedAlertas(req, res) {
+    const idEmpresa = req.headers["id-empresa"];
+    if (!idEmpresa) return res.status(400).send('dado não fornecido.');
+    try {
+        const maquinas = await alertasModel.listarFeedAlertas(idEmpresa)
+        res.status(200).json(maquinas);
+    } catch (erro) {
+        res.status(500).json({
+            mensagem: 'Erro interno ao buscar dados das máquinas.',
+            detalhe: erro.message,
+        });
+    }
+}
 
 module.exports = {
   listarAlertas,
   exportarAlertas,
+  listarFeedAlertas
 };
