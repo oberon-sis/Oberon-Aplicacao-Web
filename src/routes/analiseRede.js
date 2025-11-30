@@ -16,6 +16,7 @@ router.get('/pacotesPerdidos/:fkMaquina', function (req, res) {
 });
 
 router.get('/disponibilidadePercent/:fkMaquina', function (req, res) { 
+        analiseRedeController.getDisponibilidade(req, res);
 });
 
 router.get('/throughputUltimas24h/:fkMaquina', function(req, res) {
