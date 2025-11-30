@@ -4,6 +4,6 @@ var dashboardParametrosController = require("../controllers/dashboardParametrosC
 
 router.get("/dados/:idEmpresa/:componente", dashboardParametrosController.getDados);
 
-router.post("/atualizar", dashboardParametrosController.atualizarParametros);
+router.post("/atualizarParametros", dashboardParametrosController.atualizarParametros);
 
 module.exports = router;

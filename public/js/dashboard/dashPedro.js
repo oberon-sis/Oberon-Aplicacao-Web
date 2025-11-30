@@ -509,7 +509,7 @@ document.addEventListener('DOMContentLoaded', function () {
     btnSalvarParametros.innerHTML =
       '<span class="spinner-border spinner-border-sm me-2"></span>Salvando...';
     try {
-      const response = await fetch('/dashboardParametros/atualizar', {
+      const response = await fetch('/dashboardParametros/atualizarParametros', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -554,12 +554,6 @@ document.addEventListener('DOMContentLoaded', function () {
       btnSalvarParametros.innerHTML = '<i class="bi bi-check-circle me-1"></i>Salvar Parâmetros';
     }
   });
-
-  function mostrarAlerta(mensagem, tipo) {
-    alertaFeedback.textContent = mensagem;
-    alertaFeedback.classList.remove('d-none', 'alert-success', 'alert-danger');
-    alertaFeedback.classList.add(`alert-${tipo}`);
-  }
 
   document
     .getElementById('modalDefinirParametros')
