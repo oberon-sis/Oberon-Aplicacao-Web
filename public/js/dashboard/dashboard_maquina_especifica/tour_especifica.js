@@ -3,10 +3,10 @@
 // 1. Definição das Informações do Tour (Configuração)
 const dashboardTourSteps = [
   {
-    id: 'kpi-section', 
+    id: 'kpi-section',
     title: 'Passo 1/8: Resumo Executivo (KPIs)',
     content:
-      'Esta primeira linha fornece um resumo instantâneo da saúde da Máquina-002 no bimestre. Os valores atuais (em negrito) são sempre comparados com o desempenho do período anterior.',
+      'Esta primeira linha (KPIs) fornece um resumo instantâneo da saúde da máquina. Os valores em destaque são comparados com o desempenho do período anterior para avaliar tendências.',
     position: 'bottom',
   },
 
@@ -14,50 +14,51 @@ const dashboardTourSteps = [
     id: 'kpi-disponibilidade',
     title: 'Passo 2/8: Taxa de Disponibilidade (SLA)',
     content:
-      'Mede a porcentagem de tempo que a máquina esteve operacional. Uma queda em relação ao bimestre passado indica inatividade que precisa ser investigada.',
+      'Mostra o tempo total em que o sistema esteve operacional e acessível neste período. É crucial para medir a confiabilidade e evitar paralisações.',
     position: 'right',
   },
   {
     id: 'kpi-total-alertas',
     title: 'Passo 3/8: Quantidade Total de Eventos',
     content:
-      'O número absoluto de alertas registrados no período. O objetivo é manter este valor o mais baixo possível. Um aumento contínuo sugere instabilidade crônica.',
+      'Indica o número total de eventos de alerta (Crítico, Alto, Médio, Baixo) gerados no período. Use para monitorar o nível de ruído e a frequência de problemas.',
     position: 'right',
   },
   {
     id: 'kpi-percentual-critico',
     title: 'Passo 4/8: Proporção de Críticos',
-    content: 'Esta é a métrica mais crítica: a proporção de alertas que são graves (Nível 1).',
+    content:
+      'Apresenta a porcentagem de todos os alertas que foram classificados como Críticos. Essencial para priorizar a atenção nos problemas de maior impacto.',
     position: 'bottom',
   },
   {
     id: 'kpi-componente-critico',
     title: 'Passo 5/8: Foco do Problema',
     content:
-      'Indica o recurso que mais contribuiu para os alertas críticos (neste caso, a RAM). Use esta informação para direcionar a equipe técnica no diagnóstico.',
+      'Identifica o recurso (RAM, CPU, Disco, Rede) que gerou o maior número de alertas Críticos. Ajuda a direcionar rapidamente as ações de correção de causa raiz.',
     position: 'bottom',
   },
   {
     id: 'garfico-linhas',
-    title: 'Passo 6/8: Comparativo Detalhado de Recurso',
+    title: 'Passo 6/8: Utilização Média de Recursos (Tendência)',
     content:
-      'O gráfico de barras mostra a distribuição dos alertas por recurso (CPU, RAM, DISCO, REDE), comparando a situação atual (cor) com o bimestre anterior (cinza).',
+      'Exibe a variação da utilização dos principais recursos (CPU, RAM, DISCO) ao longo do tempo. Permite visualizar tendências e identificar picos de consumo.',
     position: 'left',
   },
   {
     id: 'grafico-barras',
-    title: 'Passo 7/8: Histórico de Uptime/Downtime',
+    title: 'Passo 7/8: Total de Alertas por Componente (30 Dias)',
     content:
-      'Gráfico semanal que visualiza o tempo exato de inatividade (Downtime). O objetivo é que as barras vermelhas sejam inexistentes e o Uptime seja sempre 100%.',
+      'Gráfico de barras que mostra qual componente gerou mais alertas nos últimos 30 dias. Excelente para entender a distribuição de falhas e planejar melhorias de capacidade.',
     position: 'top',
   },
   {
     id: 'tabela-eventos',
-    title: 'Passo 8/8: Filtro de Visualização',
+    title: 'Passo 8/8: Últimos Eventos de Alerta (24h)',
     content:
-      'Use este menu para refinar a análise. Você pode mudar o foco dos dados, visualizando apenas Alertas Críticos, de Manutenção ou Informativos.',
+      'Tabela com os alertas mais recentes, incluindo Hora, Componente, Tipo e Valor exato do recurso. Essencial para a análise imediata e confirmação dos alertas mais urgentes.',
     position: 'bottom',
-  }
+  },
 ];
 document.addEventListener('DOMContentLoaded', () => {
   const dashboardTour = new TourGuide(dashboardTourSteps);

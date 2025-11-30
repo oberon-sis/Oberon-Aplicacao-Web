@@ -12,34 +12,24 @@
         <span class="nav-text-fixed">Home</span>
       </a>
 
-      <div class="nav-item-accordion" id="menu_paineis_container">
-        <a class="nav-link-accordion-toggle" data-bs-toggle="collapse" href="#submenuPainel" role="button"
-          id="menu_paineis" aria-expanded="false" aria-controls="submenuPainel">
-          <img src="../assets/svg/painel_white.svg" alt="Painéis" class="nav-icon-fixed" />
-          <span class="nav-text-fixed">Painéis</span>
-
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+<div class="nav-item-accordion" id="menu_paineis_container">
+    <a class="nav-link-accordion-toggle" 
+        data-bs-toggle="collapse" 
+        href="#submenuPainel" 
+        role="button"
+        aria-expanded="false" 
+        aria-controls="submenuPainel">
+        <img src="../assets/svg/painel_white.svg" alt="Painéis" class="nav-icon-fixed" />
+        <span class="nav-text-fixed" id="menu_paineis">Painéis</span> 
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
             class="accordion-arrow">
             <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </a>
-        <div class="collapse" id="submenuPainel">
-          <a class="submenu-item" href="painel.html" id="painelMonitoramento">
-            <span class="nav-text-fixed">Monitoramento Ativo</span>
-          </a>
-          <a class="submenu-item" href="analiseHistorica.html" id="painelHistorico">
-            <span class="nav-text-fixed">Análise Histórica</span>
-          </a>
-          <a class="submenu-item" href="dashboardAtivos.html" id="painelGestaoAtivos">
-            <span class="nav-text-fixed">Gestão de Ativos</span>
-          </a>
-           <a class="submenu-item" href="dashboardRiscoOperacional.html" id="painelEstrategico">
-            <span class="nav-text-fixed">Gestão de Risco</span>
-          </a>
+        </svg>
+    </a>
+    <div class="collapse" id="submenuPainel">
         </div>
-      </div>
-
+</div>
       <a class="nav-item-fixed" href="alertas.html" id="menu_alertas">
         <img src="../assets/svg/alertas_white.svg" alt="Alertas" class="nav-icon-fixed" />
         <span class="nav-text-fixed">Alertas</span>
@@ -103,7 +93,7 @@
           <a class="dropdown-item mini-menu" href="gerenciamentoDadosUsuarios.html">Meu Perfil</a>
         </li>
         <li>
-          <a class="dropdown-item mini-menu" href="https://slack.com/" target="_blank">Acesso Rápido Slack</a>
+          <a class="dropdown-item mini-menu" href="https://slack.com/" target="_blank" id="pc_slack">Acesso Rápido Slack</a>
         </li>
         <li>
           <hr class="dropdown-divider" />
