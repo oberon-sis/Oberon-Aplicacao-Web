@@ -5,6 +5,10 @@
   --kpi-bg: #fff;
   --main-bg: #f0f2f5;
   --text-muted: #6c757d;
+  --primary-color: #6366f1;
+  --secondary-color: #64748b;
+  --success-color: #10b981; 
+  --warning-color: #f59e0b;
 }
 
 .content {
@@ -111,7 +115,7 @@ body {
 /* Estilo para o Filtro (Collapsible/Escondido) */
 .card-filter {
   background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
+  border: 1px solid #3d3d3d;
   border-radius: 8px;
   margin-bottom: 20px;
   padding: 15px;
@@ -189,3 +193,239 @@ canvas {
 .chart-skeleton.skeleton {
   background-color: #f8f9fa; /* Fundo mais claro para o container do gráfico */
 }
+        /* --- Estilos Existentes --- */
+        .saber_mais { padding: 0; margin-left: 5px; line-height: 1; }
+        .icone-info { height: 16px; width: 16px; }
+        
+        /* Select Premium */
+        .select-premium {
+            -webkit-appearance: none; -moz-appearance: none; appearance: none;
+            background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;
+            padding: 3px 10px 3px 16px; font-size: 0.95rem; font-weight: 500; color: #334155;
+            cursor: pointer; line-height: 1.5; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease-in-out;
+        }
+        .select-premium:hover { border-color: #cbd5e1; background-color: #f8fafc; transform: translateY(-1px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .select-premium:focus { outline: none; border-color: #14a0b3; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+        .select-premium option { padding: 30px; background-color: #ffffffd7; color: #000000; }
+        .select-premium option[disabled] { color: #94a3b8; }
+
+        /* --- NOVOS ESTILOS PARA OS MODAIS DO ASSISTENTE --- */
+
+
+        /* Cards do Menu Principal */
+        .card-menu {
+            border: 1px solid #e2e8f0; border-radius: 16px; background: #fff;
+            transition: all 0.3s ease; cursor: pointer; height: 100%; padding: 1.5rem;
+        }
+        .card-menu:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.2); border-color: var(--primary-color); }
+        
+        .icon-box {
+            width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center;
+            justify-content: center; font-size: 1.5rem; margin-bottom: 1rem;
+        }
+
+        /* Estrutura dos Modais */
+        .modal-assistente .modal-content {
+            border: none; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            background: #f8fafc; overflow: hidden;
+        }
+        .modal-assistente .modal-header-custom {
+            background: #fff; padding: 1.5rem 2rem; border-bottom: 1px solid #e2e8f0;
+        }
+
+        /* Layout Interno */
+        .content-card {
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.5rem; height: 100%;
+        }
+        .section-title {
+            font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;
+            font-weight: 700; color: var(--secondary-color); margin-bottom: 1rem; display: block;
+        }
+
+        /* Cenário e AI Box */
+        .scenario-box {
+            background: #f1f5f9; border-radius: 12px; padding: 1.25rem;
+            margin-bottom: 1.5rem; border-left: 4px solid var(--primary-color);
+        }
+        .ai-box {
+            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+            border: 1px solid #dbeafe; border-radius: 12px; padding: 1.25rem;
+        }
+
+        /* Passos */
+        .step-item { display: flex; align-items: flex-start; margin-bottom: 1rem; }
+        .step-number {
+            background: #e0e7ff; color: var(--primary-color); font-weight: 700;
+            width: 28px; height: 28px; border-radius: 8px; display: flex;
+            align-items: center; justify-content: center; font-size: 0.8rem;
+            margin-right: 10px; flex-shrink: 0;
+        }
+        
+        .status-critico { background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+        .status-atencao { background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+        /* --- Estilização da Sidebar de Detalhes --- */
+        
+/* Tabs Customizadas */
+.nav-tabs-custom {
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0 1rem;
+}
+
+.nav-link-custom {
+    border: none;
+    background: transparent;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 1rem 0;
+    margin-right: 1.5rem;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.nav-link-custom:hover { color: var(--primary-color); }
+
+.nav-link-custom.active {
+    color: var(--primary-color);
+}
+
+.nav-link-custom.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 3px 3px 0 0;
+}
+
+/* Estilo do Card de IA (Igual ao Modal) */
+.ai-response-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.ai-response-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 4px; height: 100%;
+    background: linear-gradient(to bottom, #6366f1, #a855f7); /* Gradiente Oberon */
+}
+
+.ai-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    color: #334155;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.ai-text {
+    font-size: 0.9rem;
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* Estilo dos Cards de Métricas (Stat Cards) */
+.metric-tile {
+    background: #fff;
+    border: 1px solid #f1f5f9;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.metric-tile:hover {
+    transform: translateX(3px);
+    border-color: #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.metric-label { font-size: 0.8rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+.metric-value { font-size: 1.25rem; font-weight: 700; color: #1e293b; line-height: 1.2; }
+.metric-trend-badge {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.trend-up { background-color: #dcfce7; color: #166534; } /* Verde */
+.trend-down { background-color: #fee2e2; color: #991b1b; } /* Vermelho */
+.trend-neutral { background-color: #f3f4f6; color: #4b5563; } /* Cinza */
+
+/* Animação de Shimmer (O brilho passando) */
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-purple {
+    0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+}
+
+/* Esqueleto Padrão (Cinza) */
+.skeleton {
+    color: transparent !important;
+    background: #e2e8f0;
+    background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 6px;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* --- O ESQUELETO DA IA (GEMINI STYLE) --- */
+.ai-loading-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px;
+}
+
+.ai-loading-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #6366f1; /* Cor Oberon/Gemini */
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.gemini-sparkle {
+    font-size: 1.2rem;
+    animation: pulse 2s infinite; /* Usa animação de pulso simples */
+}
+
+/* Linhas de texto simuladas com gradiente roxo suave */
+.ai-line {
+    height: 12px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #e0e7ff 25%, #c7d2fe 50%, #e0e7ff 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+.w-100 { width: 100%; }
+.w-80 { width: 80%; }
+.w-60 { width: 60%; }
