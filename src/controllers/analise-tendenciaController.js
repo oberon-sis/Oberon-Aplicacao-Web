@@ -4,7 +4,7 @@ async function procurar_dados_pagina(req, res) {
     const dataInicio = req.headers["data-inicio"];
     const idEmpresa = req.headers["id-empresa"];
     const idMaquina = req.headers["id-maquina"] == ''? null: req.headers["id-maquina"];
-    const limite_raning = 5;
+    const limite_raning = 3;
     if (!idEmpresa || !dataInicio) {
         return res.status(400).send('dado não fornecido.');
     }
