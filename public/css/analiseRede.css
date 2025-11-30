@@ -1,6 +1,3 @@
-/* body {
-    background-color: rgb(187, 187, 187);
-} */
 
 header {
   display: flex;
@@ -537,15 +534,23 @@ header li {
       box-shadow:
         rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
         rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-      height: 280px;
+      height: 220px;
       width: 750px;
+   
       
+}
+.ranking-scroll{
+  max-height: 135px;
+  
+      overflow-x: auto; 
+      padding-right: 10px;
 }
 
 .details-container .kpi-card .baixo-kpi {
   flex-direction: column;
   align-items: flex-start;
 }
+
 
 /* --- ESTILOS DO SELECT MELHORADOS --- */
 .select-group {
@@ -619,3 +624,5 @@ header li {
   max-height: 200px;
   overflow-y: auto;
 }
+
+
