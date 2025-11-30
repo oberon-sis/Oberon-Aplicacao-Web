@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ver_dash_pedro: { nome: 'Análise de Parâmetros', url: 'dashPedro.html' },
     ver_dash_jhoel: { nome: 'Análise de Desempenho', url: 'análiseDesempenho.html' },
     ver_dash_dandara: { nome: 'Gestão de Risco', url: 'dashboardRiscoOperacional.html' },
-    ver_dash_miguel: { nome: 'Gestão de Ativos', url: 'DashboardMiguel.html' },
+    ver_dash_miguel: { nome: 'Gestão de Ativos', url: 'dashboardAtivos.html' },
   };
 
   function ocultarElementoSeNaoPermitido(id, isPermitido) {

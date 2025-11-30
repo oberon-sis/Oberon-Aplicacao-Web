@@ -13,7 +13,9 @@
   <link rel="stylesheet" href="../css/painelEspecifico.css" />
   <link rel="stylesheet" href="../component/tour/TourGuide.css" />
   <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
+  
   <link rel="stylesheet" href="../component/notificao/Notificaocao.css" />
+  
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -31,12 +33,12 @@
 
     <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
       <h2 class="text-black me-3">
-        Gestão de Ativos e Planejamento Orçamentário:
+        Gestão de Ativos e Planejamento Orçamentário
       </h2>
 
       <div class="d-flex align-items-center flex-wrap flex-grow-1 me-3">
         <div class="d-flex align-items-center">
-          <h2 class="text-black mb-0 me-2 fs-5">2025 - Bimestre 5</h2>
+          <h2 class="text-black mb-0 me-2 fs-5">Carregando...</h2>
           <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
             aria-expanded="false">
             <span id="valor_pesquisa_periodo">Selecionar</span>
@@ -52,7 +54,7 @@
       </div>
 
       <div class="d-flex align-items-center ms-auto">
-        <button class="btn btn-primary d-none d-md-inline-block" onclick="iniciarTourGestor()">
+        <button id="btn-tour-fixo" class="btn btn-primary d-none d-md-inline-block" onclick="iniciarTourGestor()">
           <i class="bi bi-compass-fill me-2"></i> Primeiros Passos
         </button>
       </div>
@@ -159,14 +161,14 @@
 
       <div class="chart-item-wrapper" id="chart-saude-ativos">
         <h3 style="font-size: 1.1rem; margin-bottom: 15px">
-          Matriz de Otimização (CPU vs RAM)
+          Distribuição do Status de Saúde da Frota
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
-            data-bs-trigger="focus" data-bs-title="Matriz de Otimização"
-            data-bs-content="Cada ponto é uma máquina. Pontos no topo/direita indicam sobrecarga. Pontos na base/esquerda indicam ociosidade.">
+            data-bs-trigger="focus" data-bs-title="Distribuição de Saúde"
+            data-bs-content="Representação visual da proporção de máquinas críticas (sobecarga/risco), ociosas e saudáveis na frota.">
             <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
           </button>
         </h3>
-        <div style="height: 300px">
+        <div style="height: 300px; background-color: white; border-radius: 8px; padding: 10px;">
           <canvas id="matrizOtimizacaoChart"></canvas>
         </div>
       </div>
@@ -175,21 +177,23 @@
     <section class="details-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px">
 
       <div class="chart-item-wrapper" id="list-sobrecarga">
-        <h3 style="font-size: 1.1rem; margin-bottom: 10px">
-          Top 5 - Máquinas em Sobrecarga (Média > 85%)
-          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+        <h3 style="font-size: 1.1rem; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+          <span>Top 5 - Sobrecarga</span>
+          <button type="button" class="saber_mais btn btn-link p-0" data-bs-toggle="popover" data-bs-placement="right"
             data-bs-trigger="focus" data-bs-title="Máquinas em Sobrecarga"
-            data-bs-content="Lista as 5 máquinas que mais precisam de um upgrade, com base na média de uso de CPU ou RAM no período.">
-            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+            data-bs-content="Lista as 5 máquinas com maiores médias. Clique em 'Média' para inverter a ordem.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.2" />
           </button>
         </h3>
         <div>
           <table class="table table-striped table-hover table-sm">
             <thead>
               <tr>
-                <th>Máquina</th>
-                <th>Média CPU</th>
-                <th>Média RAM</th>
+                <th style="width: 45%; text-align: left; padding-left: 15px;">Máquina</th>
+                <th style="width: 35%; cursor: pointer; text-align: center;" onclick="ordenarLista('sobrecarga')">
+                  Média (CPU | RAM) <i class="bi bi-arrow-down-up" style="font-size: 0.8rem"></i>
+                </th>
+                <th style="width: 20%; text-align: center;">Alertas Críticos</th>
               </tr>
             </thead>
             <tbody id="tbody-sobrecarga">
@@ -199,20 +203,23 @@
       </div>
 
       <div class="chart-item-wrapper" id="list-ociosas">
-        <h3 style="font-size: 1.1rem; margin-bottom: 10px">
-          Top 5 - Máquinas Ociosas (Média < 20%) <button type="button" class="saber_mais btn btn-link"
-            data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Máquinas Ociosas"
-            data-bs-content="Lista as 5 máquinas que estão sendo subutilizadas. Elas podem ser remanejadas ou ter seus recursos re-alocados.">
-            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
-            </button>
+        <h3 style="font-size: 1.1rem; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+          <span>Top 5 - Ociosas</span>
+          <button type="button" class="saber_mais btn btn-link p-0" data-bs-toggle="popover" data-bs-placement="right" 
+            data-bs-trigger="focus" data-bs-title="Máquinas Ociosas"
+            data-bs-content="Lista as 5 máquinas com menores médias. Clique em 'Média' para inverter a ordem.">
+            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.2" />
+          </button>
         </h3>
         <div>
           <table class="table table-striped table-hover table-sm">
             <thead>
               <tr>
-                <th>Máquina</th>
-                <th>Média CPU</th>
-                <th>Média RAM</th>
+                <th style="width: 45%; text-align: left; padding-left: 15px;">Máquina</th>
+                <th style="width: 35%; cursor: pointer; text-align: center;" onclick="ordenarLista('ociosa')">
+                  Média (CPU | RAM) <i class="bi bi-arrow-down-up" style="font-size: 0.8rem"></i>
+                </th>
+                <th style="width: 20%; text-align: center;">Alertas Ociosos</th>
               </tr>
             </thead>
             <tbody id="tbody-ociosas">
