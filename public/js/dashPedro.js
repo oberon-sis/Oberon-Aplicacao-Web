@@ -64,10 +64,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function calcularEstatisticas(dadosBrutos) {
     if (!dadosBrutos || dadosBrutos.length === 0) {
-      return { mediana: null, q1: null, q3: null, p90: null, min: null, max: null };
+      return { mediana: null, q1: null, q3: null, p90: null, min: null, max: null, outliers: [] };
     }
+
     const sorted = [...dadosBrutos].sort((a, b) => a - b);
     const n = sorted.length;
+
     const quantile = (arr, p) => {
       if (n === 0) return null;
       if (n === 1) return arr[0];
@@ -78,13 +80,38 @@ document.addEventListener('DOMContentLoaded', function () {
       if (lower === upper) return arr[lower];
       return arr[lower] * (1 - weight) + arr[upper] * weight;
     };
+
+    const q1 = quantile(sorted, 0.25);
+    const median = quantile(sorted, 0.5);
+    const q3 = quantile(sorted, 0.75);
+    const p90 = quantile(sorted, 0.9);
+    const iqr = q3 - q1;
+    const limiteInferior = q1 - 1.5 * iqr;
+    const limiteSuperior = q3 + 1.5 * iqr;
+    const outliers = [];
+    let minimo = null;
+    let maximo = null;
+
+    sorted.forEach((valor) => {
+      if (valor < limiteInferior || valor > limiteSuperior) {
+        outliers.push(valor);
+      } else {
+        if (minimo === null || valor < minimo) minimo = valor;
+        if (maximo === null || valor > maximo) maximo = valor;
+      }
+    });
+
+    if (minimo === null) minimo = sorted[0];
+    if (maximo === null) maximo = sorted[n - 1];
+
     return {
-      q1: quantile(sorted, 0.25),
-      mediana: quantile(sorted, 0.5),
-      q3: quantile(sorted, 0.75),
-      p90: quantile(sorted, 0.9),
-      min: sorted[0],
-      max: sorted[n - 1],
+      q1: q1,
+      mediana: median,
+      q3: q3,
+      p90: p90,
+      min: minimo,
+      max: maximo,
+      outliers: outliers,
     };
   }
 
@@ -94,19 +121,54 @@ document.addEventListener('DOMContentLoaded', function () {
     const percCriticoOcioso = parseFloat(kpisAgregados.percCriticoOcioso);
     const totalAlertas =
       kpisAgregados.totalAlertas !== null ? parseInt(kpisAgregados.totalAlertas) : 0;
+    const mediana = estatisticas.mediana;
     const unidade = '%';
+
     var corMedia = 'inherit';
     if (media < parametrosAtuais.aceitavel) {
-      corMedia = '#3498db';
+      corMedia = '#3498db'; // Ocioso (azul)
     } else if (media >= parametrosAtuais.aceitavel && media < parametrosAtuais.atencao) {
-      corMedia = '#27ae60';
+      corMedia = '#27ae60'; // Normal (verde)
     } else if (media >= parametrosAtuais.atencao && media < parametrosAtuais.critico) {
-      corMedia = '#f39c12';
+      corMedia = '#f39c12'; // Atenção (laranja)
     } else if (media >= parametrosAtuais.critico) {
-      corMedia = '#e74c3c';
+      corMedia = '#e74c3c'; // Crítico (vermelho)
     }
+
     mediaUsoEl.textContent = `${media || 0}${unidade}`;
     mediaUsoEl.style.color = corMedia;
+    mediaUsoEl.style.fontWeight = 'bold';
+
+    var corMediana = 'inherit';
+    if (mediana !== null) {
+      if (mediana < parametrosAtuais.aceitavel) {
+        corMediana = '#3498db';
+      } else if (mediana >= parametrosAtuais.aceitavel && mediana < parametrosAtuais.atencao) {
+        corMediana = '#27ae60';
+      } else if (mediana >= parametrosAtuais.atencao && mediana < parametrosAtuais.critico) {
+        corMediana = '#f39c12';
+      } else if (mediana >= parametrosAtuais.critico) {
+        corMediana = '#e74c3c';
+      }
+    }
+
+    medianaEl.textContent = `${mediana ? mediana.toFixed(2) : 'N/A'}${unidade}`;
+    medianaEl.style.color = corMediana;
+    medianaEl.style.fontWeight = 'bold';
+
+    var corDesvioPadrao = 'inherit';
+    if (desvioPadrao < 10) {
+      corDesvioPadrao = '#27ae60';
+    } else if (desvioPadrao >= 10 && desvioPadrao < 20) {
+      corDesvioPadrao = '#f39c12';
+    } else if (desvioPadrao >= 20) {
+      corDesvioPadrao = '#e74c3c';
+    }
+
+    desvioPadraoEl.textContent = `${desvioPadrao || 0}${unidade}`;
+    desvioPadraoEl.style.color = corDesvioPadrao;
+    desvioPadraoEl.style.fontWeight = 'bold';
+
     var corAlertas = 'inherit';
     if (totalAlertas > 25) {
       corAlertas = '#e74c3c';
@@ -115,12 +177,11 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       corAlertas = '#27ae60';
     }
-    desvioPadraoEl.textContent = `${desvioPadrao || 0}${unidade}`;
+
     totalAlertasEl.textContent = totalAlertas;
     totalAlertasEl.style.color = corAlertas;
     totalAlertasEl.style.fontWeight = 'bold';
     percCriticasEl.textContent = `${percCriticoOcioso ? percCriticoOcioso.toFixed(1) : 'N/A'}%`;
-    medianaEl.textContent = `${estatisticas.mediana ? estatisticas.mediana.toFixed(2) : 'N/A'}${unidade}`;
     quartil1El.textContent = `${estatisticas.q1 ? estatisticas.q1.toFixed(2) : 'N/A'}${unidade}`;
     quartil3El.textContent = `${estatisticas.q3 ? estatisticas.q3.toFixed(2) : 'N/A'}${unidade}`;
     percentil90El.textContent = `${estatisticas.p90 ? estatisticas.p90.toFixed(2) : 'N/A'}${unidade}`;
@@ -168,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 median: estatisticas.mediana,
                 q3: estatisticas.q3,
                 max: estatisticas.max,
-                outliers: [],
+                outliers: estatisticas.outliers,
               },
             ],
             minStats: 'min',
@@ -188,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function () {
               title: () => `Estatísticas de ${componenteAtual}`,
               label: function (context) {
                 const datapoint = context.raw;
-                return [
+                let linhas = [
                   `Mínimo: ${datapoint.min.toFixed(2)}${unidade}`,
                   `Q1 (25%): ${datapoint.q1.toFixed(2)}${unidade}`,
                   `Mediana: ${datapoint.median.toFixed(2)}${unidade}`,
@@ -196,6 +257,11 @@ document.addEventListener('DOMContentLoaded', function () {
                   `Máximo: ${datapoint.max.toFixed(2)}${unidade}`,
                   `IQR: ${(datapoint.q3 - datapoint.q1).toFixed(2)}${unidade}`,
                 ];
+                if (datapoint.outliers && datapoint.outliers.length > 0) {
+                  linhas.push('---');
+                  linhas.push(`Valores de Outliers: ${datapoint.outliers.join(', ')}`);
+                }
+                return linhas;
               },
             },
           },
