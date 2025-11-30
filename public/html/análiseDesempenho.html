@@ -14,19 +14,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
     <link rel="stylesheet" href="../css/analiseGeral.css">
-    <style>
-        .saber_mais {
-            /* Ajustado para ser mais compacto e não ter altura/largura fixa na div */
-            padding: 0;
-            margin-left: 5px;
-            line-height: 1;
-        }
-
-        .icone-info {
-            height: 16px;
-            width: 16px;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body class="d-flex w-100 h-100">
@@ -35,41 +23,36 @@
 
     <main class="content flex-grow-1 padding_main dashboard-main">
         <header class="header-top d-flex justify-content-between align-items-center mb-4">
-            <h2 class="text-black mb-0" style="font-size: 1.5rem;">
+            <h2 class="text-black mb-0 pe-4" style="font-size: 1.5rem; ">
                 Análise de Desempenho e Tendências
             </h2>
 
             <div class="d-flex align-items-center">
-                <div class="dropdown me-3" id="machine-filter-group">
-                    <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button"
+                <div class="dropdown me-3 pe-4" id="machine-filter-group">
+                    <button class="btn btn-outline-secondary dropdown-toggle btn-sm " type="button"
                         data-bs-toggle="dropdown" aria-expanded="false" id="machineFilterDropdown">
                         Todas as Máquinas
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="machineFilterDropdown">
-                        <li><a class="dropdown-item" href="#"
-                                onclick="selecionarFiltroMaquina('Todas as Máquinas')">Todas as Máquinas</a></li>
-                        <li><a class="dropdown-item" href="#"
-                                onclick="selecionarFiltroMaquina('Máquina Específica')">Máquina Específica</a></li>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#" onclick="selecionarFiltroMaquina('Todas as Máquinas')">Todas as Máquinas</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="selecionarFiltroMaquina('Máquina Específica')">Máquina Específica</a></li>
                     </ul>
                 </div>
 
                 <div class="dropdown me-3" id="specific-machine-dropdown-group" style="display: none;">
                     <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button"
-                        data-bs-toggle="dropdown" aria-expanded="false" id="machineFilterDropdown">
+                        data-bs-toggle="dropdown" aria-expanded="false" id="specificMachineDropdownBtn">
                         Selecionar Máquina
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="machineFilterDropdown">
-                        <li><a class="dropdown-item" href="#"
-                                onclick="filtrar_maquina('Maquina-001', 1)">Maquina-001</a></li>
-                        <li><a class="dropdown-item" href="#"
-                                onclick="filtrar_maquina('Maquina-002', 2)">Maquina-002</a></li>
-                        <li><a class="dropdown-item" href="#"
-                                onclick="filtrar_maquina('Maquina-003', 3)">Maquina-003</a></li>
-                    </ul>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        </ul>
                 </div>
 
-                <div id="notificacao-container" class="position-relative">
-                </div>
+                <button class="btn btn-outline-primary shadow-sm fw-bold btn-sm" data-bs-toggle="modal" data-bs-target="#mainModal">
+                    <i class="bi bi-robot me-2"></i> Assistente Oberon
+                </button>
+
+                <div id="notificacao-container" class="position-relative"></div>
             </div>
         </header>
 
@@ -78,89 +61,54 @@
                 role="button" aria-expanded="false" aria-controls="filterCollapse" onclick="toggleFilterArrow(this)"
                 id="filtro-toggler">
                 <div class="d-flex gap-4 align-content-center">
-
                     <h4 class="filtragem">
                         Filtragem de dados
                         <i class="bi bi-caret-down-fill ms-2 float-end"></i>
                     </h4>
                     <h4 style="font-size: 1.2rem; margin-bottom: 0; display: flex; align-items: center;">
-                        Filtro atual: Análise de previsão da taxa de uptime, agrupado por mês, no período de
-                        30/10/2025 até 09/03/3409.
+                        Filtro atual: Carregando...
                     </h4>
                 </div>
             </a>
         </div>
-        <div class="collapse card-filter" id="filterCollapse" id="filtro-area-detalhe">
+        <div class="collapse card-filter"  id="filterCollapse" id="filtro-area-detalhe">
             <div class="row g-3">
                 <div class="col-md-4">
                     <label class="form-label">Tipo de Gráfico</label>
-                    <select class="form-select form-select-sm" id="selectTipoGrafico" onchange="toggleFilterFields()"
-                        id="filtro-tipo-grafico">
-                        <option value="comparar" selected>Tendência – ótimo para ver se está aumentando ou diminuindo.
-                        </option>
-                        <option value="Previsoes">Previsões – use para prever dados futuros relacionadas.</option>
-                        <option value="Correlacao">Correlação – use para comparar duas variáveis e entender se estão
-                            relacionadas.</option>
-                    </select>
+                    <select class="form-select form-select-sm select-premium" id="selectTipoGrafico" onchange="toggleFilterFields()">
+                        </select>
                 </div>
-
                 <div class="col-md-4" id="divTempo">
                     <label class="form-label">Período de Análise</label>
-                    <select class="form-select form-select-sm" id="selectTempo" onchange="toggleFilterFields()">
-                    </select>
+                    <select class="form-select form-select-sm select-premium" id="selectTempo" onchange="toggleFilterFields()"></select>
                 </div>
-
                 <div class="col-md-4">
                     <label class="form-label" id="labelMetricaPrincipal">Métrica a analisar</label>
-                    <select class="form-select form-select-sm" id="selectMetricaPrincipal"
-                        onchange="toggleFilterFields()" id="filtro-metrica-principal">
-                    </select>
+                    <select class="form-select form-select-sm select-premium" id="selectMetricaPrincipal" onchange="toggleFilterFields()"></select>
                 </div>
-
-
-
                 <div class="col-md-4" id="divVariavelRelacionada" style="display: none;">
                     <label class="form-label">Variável relacionada</label>
-                    <select class="form-select form-select-sm" id="selectVariavelRelacionada">
-                    </select>
+                    <select class="form-select form-select-sm select-premium" id="selectVariavelRelacionada"></select>
                 </div>
-
                 <div class="col-md-4" id="divComponente" style="display: none;">
                     <label class="form-label">Componente</label>
-                    <select class="form-select form-select-sm" id="selectComponente" onchange="toggleFilterFields()">
-                    </select>
+                    <select class="form-select form-select-sm select-premium" id="selectComponente" onchange="toggleFilterFields()"></select>
                 </div>
-
-                <div class="col-md-12" id="divDetalhesPrevisao" style="display: none;">
+                <div class="col-md-12 d-none" id="divDetalhesPrevisao" style="display: none;">
                     <hr>
                     <h6 class="text-secondary">(Selecionado automaticamente pelo sistema)</h6>
-                    <p class="mb-0">
-                        <i class="bi bi-clock-history me-1"></i>
-                        Histórico Usado: <span id="periodoHistorico"></span>
-                    </p>
-                    <h5 class="mt-2 mb-0" style="color: #0c8186;">
-                        <i class="bi bi-magic me-1"></i>
-                        Período Previsto: <span id="periodoPrevisto"></span>
-                    </h5>
+                    <p class="mb-0"><i class="bi bi-clock-history me-1"></i> Histórico Usado: <span id="periodoHistorico"></span></p>
+                    <h5 class="mt-2 mb-0" style="color: #0c8186;"><i class="bi bi-magic me-1"></i> Período Previsto: <span id="periodoPrevisto"></span></h5>
                 </div>
-
-                <div class="col-12 text-end">
-                    <button class="btn btn-info btn-sm" onclick="aplicarFiltro()">
-                        <i class="bi bi-funnel-fill me-1"></i> Aplicar Filtro
+                <div class="col-12 d-flex justify-content-end mt-3 pt-3 border-top">
+                    <button class="btn btn-primary px-4 w-25" onclick="aplicarFiltro()">
+                        <i class="bi bi-check-lg me-2"></i> Aplicar Filtros
                     </button>
                 </div>
             </div>
-
-            <div class="mt-3 row" id="specific-machine-dropdown" style="display: none;">
-                <div class="col-4">
-                    <label class="form-label">Selecione a Máquina</label>
-                    <select class="form-select form-select-sm">
-                    </select>
-                </div>
-            </div>
         </div>
-        <section class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-3 mb-4" id="kpi-row">
 
+        <section class="row row-cols-sm-1 row-cols-md-2 row-cols-lg-4 g-3 mb-4" id="kpi-row">
             <div class="col">
                 <div class="kpi-card-geral" id="kpi-uptime-card">
                     <div class="kpi-header">
@@ -168,190 +116,72 @@
                         <div class="kpi-icon-wrapper"><i class="bi bi-pc-display"></i></div>
                     </div>
                     <div class="kpi-content">
-                        <span class="kpi-value-geral" id="kpi_uptime_valor">placeholder</span>
-                        <span class="kpi-variation text-success" id="kpi_uptime_variacao">placeholder</span>
+                        <span class="kpi-value-geral" id="kpi_uptime_valor">--</span>
+                        <span class="kpi-variation text-success" id="kpi_uptime_variacao">--</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
-                        <p class="kpi-small-text mb-0 " id="kpi_uptime_passado">passado: placeholder</p>
-                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                            data-bs-placement="right" data-bs-trigger="focus"
-                            data-bs-title="Taxa de Disponibilidade (Uptime)"
-                            data-bs-content="Porcentagem de tempo em que a(s) máquina(s) esteve(ram) operacional(is) no período.">
-                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
-                        </button>
+                        <p class="kpi-small-text mb-0 " id="kpi_uptime_passado">passado: --</p>
                     </div>
                 </div>
             </div>
-
             <div class="col">
-                <div class="kpi-card-geral" id="kpi-alertas-card">
-                    <div class="kpi-header">
-                        <span class="kpi-title-geral" id="kpi_alertas_totais_titulo">Total de Alertas</span>
-                        <div class="kpi-icon-wrapper"><i class="bi bi-bar-chart-fill"></i></div>
-                    </div>
-                    <div class="kpi-content">
-                        <span class="kpi-value-geral" id="kpi_alertas_totais_valor">placeholder</span>
-                        <span class="kpi-variation text-danger" id="kpi_alertas_totais_variacao">placeholder</span>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p class="kpi-small-text mb-0" id="kpi_alertas_totais_passado">passado: placeholder</p>
-                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                            data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Total de Alertas"
-                            data-bs-content="Contagem total de notificações (Crítico, Atenção, Ocioso) geradas no período analisado.">
-                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
-                        </button>
-                    </div>
+                <div class="kpi-card-geral">
+                    <div class="kpi-header"><span class="kpi-title-geral">Total de Alertas</span><div class="kpi-icon-wrapper"><i class="bi bi-bar-chart-fill"></i></div></div>
+                    <div class="kpi-content"><span class="kpi-value-geral" id="kpi_alertas_totais_valor">--</span><span class="kpi-variation text-danger" id="kpi_alertas_totais_variacao">--</span></div>
+                    <div class="d-flex justify-content-between align-items-center"><p class="kpi-small-text mb-0" id="kpi_alertas_totais_passado">passado: --</p></div>
                 </div>
             </div>
-
             <div class="col">
-                <div class="kpi-card-geral" id="kpi-criticos-card">
-                    <div class="kpi-header">
-                        <span class="kpi-title-geral" id="kpi_criticos_titulo">Total de Alertas Críticos</span>
-                        <div class="kpi-icon-wrapper"><i class="bi bi-exclamation-triangle-fill text-warning"></i></div>
-                    </div>
-                    <div class="kpi-content">
-                        <span class="kpi-value-geral" id="kpi_criticos_valor">placeholder</span>
-                        <span class="kpi-variation text-success" id="kpi_criticos_variacao">placeholder</span>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p class="kpi-small-text mb-0" id="kpi_criticos_passado">Mês Passado: placeholder</p>
-                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                            data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Total de Alertas Críticos"
-                            data-bs-content="Contagem total de alertas no nível máximo de severidade (Crítico) no período.">
-                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
-                        </button>
-                    </div>
+                <div class="kpi-card-geral">
+                    <div class="kpi-header"><span class="kpi-title-geral">Total de Alertas Críticos</span><div class="kpi-icon-wrapper"><i class="bi bi-exclamation-triangle-fill text-warning"></i></div></div>
+                    <div class="kpi-content"><span class="kpi-value-geral" id="kpi_criticos_valor">--</span><span class="kpi-variation text-success" id="kpi_criticos_variacao">--</span></div>
+                    <div class="d-flex justify-content-between align-items-center"><p class="kpi-small-text mb-0" id="kpi_criticos_passado">passado: --</p></div>
                 </div>
             </div>
-
             <div class="col">
-                <div class="kpi-card-geral" id="kpi-frequente-card">
-                    <div class="kpi-header">
-                        <span class="kpi-title-geral" id="kpi_frequente_titulo">Métrica Mais Frequente de Alerta</span>
-                        <div class="kpi-icon-wrapper"><i class="bi bi-cpu"></i></div>
-                    </div>
-                    <div class="kpi-content">
-                        <span class="kpi-value-geral" style="font-size: 1.5rem;"
-                            id="kpi_frequente_nome">Cplaceholder</span>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p class="kpi-small-text mb-0" id="kpi_frequente_detalhe">placeholder</p>
-                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                            data-bs-placement="right" data-bs-trigger="focus"
-                            data-bs-title="Métrica de Alerta Frequente"
-                            data-bs-content="O recurso (CPU, RAM, Disco) que gerou o maior volume de alertas Críticos no período.">
-                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
-                        </button>
-                    </div>
+                <div class="kpi-card-geral">
+                    <div class="kpi-header"><span class="kpi-title-geral">Métrica Frequente</span><div class="kpi-icon-wrapper"><i class="bi bi-cpu"></i></div></div>
+                    <div class="kpi-content"><span class="kpi-value-geral" style="font-size: 1.5rem;" id="kpi_frequente_nome">--</span></div>
+                    <div class="d-flex justify-content-between align-items-center"><p class="kpi-small-text mb-0" id="kpi_frequente_detalhe">--</p></div>
                 </div>
             </div>
         </section>
 
         <section class="row g-4 mb-4 align-items-stretch bg-fundo" id="chart-area">
-
             <div class="col-lg-9 h-100 ">
                 <div class="content-box h-100">
                     <h5 class="mb-3" style="font-size: 1.1rem;" id="titulo_grafico">Evolução Temporal de Desempenho
-
                         <p class="text-muted small mb-3" id="modelInfoDisplay"></p>
-
-                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                            data-bs-placement="right" data-bs-trigger="focus"
-                            data-bs-title="Análise de Tendência e Correlação"
-                            data-bs-content="Gráfico utilizado para visualizar a progressão de uma métrica no tempo (Tendência/Previsão) ou a relação entre duas variáveis (Correlação).">
-                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
-                        </button>
                     </h5>
-
-                    <div class="chart-skeleton d-flex">
-                        procurando dados....
-                    </div>
+                    <div class="chart-skeleton d-flex">procurando dados....</div>
                     <canvas id="alertTrendChart" class="d-none"></canvas>
                 </div>
             </div>
-
             <div class="col-lg-3 h-100 d-flex">
-                <div class="content-box w-100 p-0">
-
-                    <div class="d-flex justify-content-between text-center border-bottom" id="info-tabs"
-                        style="height: 40px;">
-                        <button class="btn btn-sm flex-fill rounded-0 toggle-button active" data-target="interpretacoes"
-                            onclick="toggleInfoPanel(this)"
-                            style="border-bottom: 2px solid #000; font-weight: 600; color: #000; background-color: transparent;">
-                            Interpretações
-                        </button>
-                        <button class="btn btn-sm flex-fill rounded-0 toggle-button" data-target="metricas"
-                            onclick="toggleInfoPanel(this)"
-                            style="border-bottom: 2px solid transparent; font-weight: 600; color: #6c757d; background-color: transparent;">
-                            Métricas
-                        </button>
-                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                            data-bs-placement="right" data-bs-trigger="focus"
-                            data-bs-title="Análise Preditiva e Métricas"
-                            data-bs-content="Resultados de modelos de Machine Learning (Regressão Linear) usados para gerar previsões e interpretações automáticas.">
-                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
-                        </button>
-                    </div>
-
-                    <div class="p-3 content-area overflow-auto flex-grow-1" style="height: calc(100% - 40px);">
-
-                        <div id="interpretacoes-content" id="interpretacoes-panel">
-                            <p class="mb-4">
-                                "Após o pico de Abril, o Downtime estabilizou-se em torno de 55. A projeção (Mock)
-                                indica um aumento gradual para 65 até Setembro, sugerindo atenção imediata."
-                            </p>
-
-                            <p class="mb-0">
-                                "A análise desta tendência de alertas foi realizada utilizando Regressão Linear
-                                sobre o histórico semanal de dados. O Índice de Confiabilidade do modelo é de
-                                85%, indicando alta aderência da projeção à variação real observada."
-                            </p>
-                        </div>
-
-                        <div id="metricas-content" class="d-none">
-
-                            <div
-                                class="info-metric-card d-flex align-items-center justify-content-between p-3 mb-3 border rounded">
-                                <div>
-                                    <h6 class="mb-0">Coeficiente de Correlação (R)</h6>
-                                    <p class="mb-0">10%</p>
-                                </div>
-                                <i class="bi bi-graph-up-arrow text-primary" style="font-size: 1.2rem;"></i>
-                            </div>
-
-                            <div
-                                class="info-metric-card d-flex align-items-center justify-content-between p-3 mb-3 border rounded">
-                                <div>
-                                    <h6 class="mb-0">Coeficiente de Determinação (R²)</h6>
-                                    <p class="mb-0">10%</p>
-                                </div>
-                                <i class="bi bi-graph-up-arrow text-primary" style="font-size: 1.2rem;"></i>
-                            </div>
-
-                            <div
-                                class="info-metric-card d-flex align-items-center justify-content-between p-3 mb-3 border rounded">
-                                <div>
-                                    <h6 class="mb-0">Erro Padrão Residual (RSE)</h6>
-                                    <p class="mb-0">10%</p>
-                                </div>
-                                <i class="bi bi-graph-up-arrow text-primary" style="font-size: 1.2rem;"></i>
-                            </div>
-
-                            <div
-                                class="info-metric-card d-flex align-items-center justify-content-between p-3 border rounded">
-                                <div>
-                                    <h6 class="mb-0">Índice de Confiabilidade da Projeção</h6>
-                                    <p class="mb-0">10%</p>
-                                </div>
-                                <i class="bi bi-graph-up-arrow text-primary" style="font-size: 1.2rem;"></i>
-                            </div>
-
-                        </div>
-
-                    </div>
-
+                <div class="content-box w-100 p-0 d-flex flex-column h-100 bg-white" style="border-radius: 16px; overflow: hidden;">
+                    
+            <div class="nav-tabs-custom d-flex" id="info-tabs">
+                <button class="nav-link-custom active flex-grow-1" data-target="interpretacoes" onclick="toggleInfoPanel(this)">
+                    <i class="bi bi-stars me-2"></i>Análise IA
+                </button>
+                
+                <button class="nav-link-custom flex-grow-1" data-target="metricas" onclick="toggleInfoPanel(this)">
+                    <i class="bi bi-sliders me-2"></i>Métricas
+                </button>
+            </div>
+        <div class="p-3 content-area overflow-auto flex-grow-1 custom-scrollbar">
+            
+            <div id="interpretacoes-content" class="fade-in">
                 </div>
+
+            <div id="metricas-content" class="d-none fade-in">
+                </div>
+        </div>
+        
+            <div class="p-2 border-top bg-light text-center">
+            <small class="text-muted" style="font-size: 0.7rem;">Gerado com o Gemini 2.5 Flash</small>
+             </div>
+                 </div>
             </div>
         </section>
 
@@ -359,63 +189,19 @@
             <div class="col-lg-12">
                 <div class="content-box">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="mb-0" style="font-size: 1.1rem;">
-                            Ranking de Indisponibilidade
-                        </h5>
-
-                        <div class="btn-group btn-group-sm" role="group" aria-label="Filtro de Ranking">
-                            <input type="radio" class="btn-check" name="ranking-limit" id="top3" autocomplete="off"
-                                checked onclick="renderizarTabela2(this, 3)">
-                            <label class="btn btn-outline-info" for="top5">Top 3</label>
-
-                            <input type="radio" class="btn-check" name="ranking-limit" id="top5" autocomplete="off"
-                                onclick="renderizarTabela2(this, 6)">
-                            <label class="btn btn-outline-info" for="top5">Top 5</label>
-
-                            <input type="radio" class="btn-check" name="ranking-limit" id="top10" autocomplete="off"
-                                onclick="renderizarTabela2(this, 11)">
-                            <label class="btn btn-outline-info" for="top10">Top 10</label>
-
+                        <h5 class="mb-0">Ranking de Indisponibilidade</h5>
+                        <div class="btn-group btn-group-sm">
+                            <input type="radio" class="btn-check" name="ranking-limit" id="top3" checked onclick="renderizarTabela2(this, 3)"><label class="btn btn-outline-info" for="top3">Top 3</label>
+                            <input type="radio" class="btn-check" name="ranking-limit" id="top5" onclick="renderizarTabela2(this, 6)"><label class="btn btn-outline-info" for="top5">Top 5</label>
+                            <input type="radio" class="btn-check" name="ranking-limit" id="top10" onclick="renderizarTabela2(this, 11)"><label class="btn btn-outline-info" for="top10">Top 10</label>
                         </div>
-
-                        <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                            data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Top Máquinas com Downtime"
-                            data-bs-content="Exibe as máquinas que tiveram a maior porcentagem de inatividade no período selecionado, priorizando aquelas com a maior variação negativa.">
-                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
-                        </button>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-hover table-sm">
                             <thead class="table-light">
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Downtime(%)</th>
-                                    <th>Dif. P. Passado</th>
-                                    <th>Total de Alertas</th>
-                                    <th>Dif. P. Passado</th>
-                                    <th>Top1 Alerta da Máquina</th>
-                                    <th>Top2 Alerta da Máquina</th>
-                                    <th>Top3 Alerta da Máquina</th>
-                                    <th>Ações</th>
-                                </tr>
+                                <tr><th>Nome</th><th>Downtime(%)</th><th>Dif. P. Passado</th><th>Total de Alertas</th><th>Dif. P. Passado</th><th>Top1 Alerta</th><th>Top2 Alerta</th><th>Top3 Alerta</th><th>Ações</th></tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Máquina-001</td>
-                                    <td>91%</td>
-                                    <td class="text-danger">9%</td>
-                                    <td class="text-success">+10%</td>
-                                    <td>CPU - Crítico (150)</td>
-                                    <td>CPU - Atenção (200)</td>
-                                    <td>RAM - Crítico (200)</td>
-                                    <td>
-                                        <button class="btn btn-info btn-sm me-1"
-                                            onclick="analisarMaquina('Máquina-001')">Analisar Máquina</button>
-                                        <button class="btn btn-primary btn-sm"
-                                            onclick="verHistorico('Máquina-001')">Histórico</button>
-                                    </td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -423,11 +209,238 @@
         </section>
     </main>
 
+    <div class="modal fade modal-assistente" id="mainModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content" style="background: #fff;">
+                <div class="modal-header border-0 p-4 pb-2">
+                    <div>
+                        <h4 class="fw-bold mb-1">Diagnóstico de Infraestrutura</h4>
+                        <p class="text-muted small mb-0">Selecione o tipo de análise para as máquinas dos operadores.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 pt-2">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card-menu p-4" onclick="openSubModal('#comparacaoModal', '#mainModal')">
+                                <div class="icon-box bg-primary bg-opacity-10 text-primary"><i class="bi bi-calendar-range"></i></div>
+                                <h5 class="fw-bold">Comparação</h5>
+                                <p class="text-muted small">"A estabilidade piorou após a atualização?"</p>
+                                <span class="badge bg-light text-dark border">Produtividade</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card-menu p-4" onclick="openSubModal('#previsaoModal', '#mainModal')">
+                                <div class="icon-box bg-success bg-opacity-10 text-success"><i class="bi bi-graph-up-arrow"></i></div>
+                                <h5 class="fw-bold">Previsão (AI)</h5>
+                                <p class="text-muted small">"Quando o disco da estação vai lotar?"</p>
+                                <span class="badge bg-light text-dark border">Estabilidade</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card-menu p-4" onclick="openSubModal('#correlacaoModal', '#mainModal')">
+                                <div class="icon-box bg-warning bg-opacity-10 text-warning"><i class="bi bi-link-45deg"></i></div>
+                                <h5 class="fw-bold">Correlação</h5>
+                                <p class="text-muted small">"O Uptime caiu por causa da CPU?"</p>
+                                <span class="badge bg-light text-dark border">Causa Raiz</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade modal-assistente" id="comparacaoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header-custom d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="fw-bold mb-0 text-primary"><i class="bi bi-calendar-range me-2"></i>Análise de Comparação</h5>
+                        <small class="text-muted">Auditoria de performance temporal</small>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="row g-4 h-100">
+                        <div class="col-lg-6">
+                            <div class="content-card">
+                                <span class="section-title text-primary">COMPARATIVO TEMPORAL</span>
+                                <p class="small text-muted mb-4">O sistema cruza períodos equivalentes para identificar anomalias.</p>
+                                
+                                <div class="mb-3">
+                                    <span class="badge-custom">Período: Hoje vs Ontem</span>
+                                    <span class="badge-custom">Métricas: Alertas</span>
+                                    <span class="badge-custom">Variação %</span>
+                                </div>
+
+                                <div class="step-item">
+                                    <div class="step-number step-number-blue">1</div>
+                                    <div>
+                                        <h6 class="fw-bold mb-0 font-sm">Definição de Ciclos</h6>
+                                        <p class="small text-muted mb-0">Análise automática de janelas de tempo (Ex: Semana Atual vs Semana Passada).</p>
+                                    </div>
+                                </div>
+                                <div class="step-item">
+                                    <div class="step-number step-number-blue">2</div>
+                                    <div>
+                                        <h6 class="fw-bold mb-0 font-sm">Cálculo Delta (Δ)</h6>
+                                        <p class="small text-muted mb-0">Mensuração da diferença absoluta e percentual de incidentes.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="content-card border-0 bg-transparent p-0">
+                                <div class="scenario-box">
+                                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-lightbulb-fill text-warning me-2"></i>Cenário Real</h6>
+                                    <p class="small text-muted mb-0 fst-italic">"O Operador da Estação 02 relatou lentidão hoje. O consumo de RAM aumentou em relação a ontem?"</p>
+                                </div>
+                                <div class="ai-box">
+                                    <h6 class="fw-bold text-primary mb-2"><i class="bi bi-stars me-2"></i>Análise Gemini AI</h6>
+                                    <p class="small text-secondary mb-0">
+                                        <i class="bi bi-arrow-up-right-circle-fill text-danger me-1"></i> <strong>Exemplo:</strong> "Sim. Alertas Críticos de RAM subiram de 33 para 82 (+148%). O uso médio da memória está significativamente maior."
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-white border-top-0 p-4">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" onclick="openSubModal('#mainModal', '#comparacaoModal')">Voltar</button>
+                    <button type="button" class="btn btn-primary btn-action text-white shadow-sm" onclick="ativarModoAnalise('comparar')">
+                        Executar Comparação <i class="bi bi-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade modal-assistente" id="previsaoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header-custom d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="fw-bold mb-0 text-success"><i class="bi bi-graph-up-arrow me-2"></i>Análise de Previsão</h5>
+                        <small class="text-muted">Projeção de Recursos e Alertas</small>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="row g-4 h-100">
+                        <div class="col-lg-6">
+                            <div class="content-card">
+                                <span class="section-title text-success">TORNEIO DE MODELOS</span>
+                                <p class="small text-muted mb-4">O sistema treina 4 modelos (incluindo Polinomial e Random Forest) para projetar o futuro com base no histórico.</p>
+                                
+                                <div class="mb-3">
+                                    <span class="badge-custom">Métricas: Uptime / Downtime</span>
+                                    <span class="badge-custom">Todos os Alertas</span>
+                                    <span class="badge-custom">Uso % (RAM/Disco/CPU)</span>
+                                </div>
+
+                                <div class="step-item">
+                                    <div class="step-number step-number-green">1</div>
+                                    <div>
+                                        <h6 class="fw-bold mb-0 font-sm">Aprendizado</h6>
+                                        <p class="small text-muted mb-0">Utilizamos o histórico automático da máquina para entender o padrão de consumo de recursos.</p>
+                                    </div>
+                                </div>
+                                <div class="step-item">
+                                    <div class="step-number step-number-green">2</div>
+                                    <div>
+                                        <h6 class="fw-bold mb-0 font-sm">Projeção Futura</h6>
+                                        <p class="small text-muted mb-0">Estimamos valores para a <strong>"Próxima Semana"</strong> (ex: Uso do Disco chegará a 98%?).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="content-card border-0 bg-transparent p-0">
+                                <div class="scenario-box" style="border-left-color: var(--success-color);">
+                                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-lightbulb-fill text-warning me-2"></i>Cenário Real</h6>
+                                    <p class="small text-muted mb-0 fst-italic">"Se o Operador continuar salvando gravações no disco C:, quando o armazenamento vai lotar?"</p>
+                                </div>
+                                <div class="ai-box">
+                                    <h6 class="fw-bold text-success mb-2"><i class="bi bi-stars me-2"></i>Análise Gemini AI</h6>
+                                    <p class="small text-secondary mb-0">Baseado no Modelo Polinomial (Grau 2):</p>
+                                    <p class="small text-secondary mt-2">
+                                        <i class="bi bi-exclamation-triangle-fill text-warning me-1"></i> <strong>Projeção:</strong> "Tendência de crescimento acentuado. O total de alertas de 'Disco Cheio' deve subir para 16 incidentes diários até o fim da semana. Risco de parada iminente."
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-white border-top-0 p-4">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" onclick="openSubModal('#mainModal', '#previsaoModal')">Voltar</button>
+                    <button type="button" class="btn btn-success btn-action text-white shadow-sm" onclick="ativarModoAnalise('previsao')">
+                        Gerar Previsão <i class="bi bi-magic"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade modal-assistente" id="correlacaoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header-custom d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="fw-bold mb-0 text-warning text-dark"><i class="bi bi-link-45deg me-2"></i>Análise de Correlação</h5>
+                        <small class="text-muted">Cruzamento de Métricas (Causa e Efeito)</small>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="row g-4 h-100">
+                        <div class="col-lg-6">
+                            <div class="content-card">
+                                <span class="section-title text-warning text-dark">ESTATÍSTICA PEARSON (r)</span>
+                                <p class="small text-muted mb-4">Cruzamos métricas para achar conexões matemáticas.</p>
+                                
+                                <div class="mb-3">
+                                    <span class="badge-custom">Métrica A (Eixo Y)</span>
+                                    <span class="badge-custom">Métrica B (Eixo X)</span>
+                                    <span class="badge-custom">Pearson (r)</span>
+                                </div>
+
+                                <ul class="list-group list-group-flush small mb-3">
+                                    <li class="list-group-item border-0 px-0 d-flex align-items-center"><i class="bi bi-arrow-up-right-circle-fill text-success fs-5 me-3"></i><div><strong>Positiva (+1):</strong><div class="text-muted">Alertas sobem, Downtime sobe.</div></div></li>
+                                    <li class="list-group-item border-0 px-0 d-flex align-items-center"><i class="bi bi-dash-circle-fill text-secondary fs-5 me-3"></i><div><strong>Neutra (0):</strong><div class="text-muted">Sem conexão (Coincidência).</div></div></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="content-card border-0 bg-transparent p-0">
+                                <div class="scenario-box" style="border-left-color: var(--warning-color);">
+                                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-lightbulb-fill text-warning me-2"></i>Cenário Real</h6>
+                                    <p class="small text-muted mb-0 fst-italic">"A queda de Uptime tem relação com o excesso de Alertas de RAM?"</p>
+                                </div>
+                                <div class="ai-box">
+                                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-stars me-2 text-warning"></i>Análise Gemini AI</h6>
+                                    <p class="small text-secondary mb-0">
+                                        <i class="bi bi-info-circle-fill text-primary me-1"></i> <strong>Diagnóstico:</strong> "Pearson r=0.00. Relação Neutra. A queda do Uptime <strong>não está sendo causada</strong> pelos Alertas de RAM. Sugere-se investigar outras causas, como Rede ou Energia."
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-white border-top-0 p-4">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" onclick="openSubModal('#mainModal', '#correlacaoModal')">Voltar</button>
+                    <button type="button" class="btn btn-warning btn-action shadow-sm" onclick="ativarModoAnalise('correlacao')">
+                        Verificar Correlação <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@2.0.0/dist/chartjs-chart-matrix.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
     <script src="../component/menu/Menu.js"></script>
     <script src="../component/notificao/Notificacao.js"></script>
     <script src="../component/tour/TourGuide.js"></script>
@@ -435,6 +448,10 @@
     <script src="../js/dash_analise_desempenho/03_render.js"></script>
     <script src="../js/dash_analise_desempenho/02_filters.js"></script>
     <script src="../js/tour/analiseDesempenhoTour.js"></script>
-</body>
 
+    <script>
+        //Adicionando aqui para n
+
+    </script>
+</body>
 </html>

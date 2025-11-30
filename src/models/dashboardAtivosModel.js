@@ -1,19 +1,19 @@
 var database = require("../database/config");
 
-// Função auxiliar para gerar o filtro de data dinâmico
+
 function gerarFiltroData(bimestre, colunaData = 'r.horario') {
-    // Se não vier bimestre, assume o atual (ex: 6) ou trata como erro
-    if (!bimestre) bimestre = 6; 
+    
+    if (!bimestre) bimestre = 6;
 
-    const mesInicio = (bimestre * 2) - 1; // Ex: Bimestre 4 -> (4*2)-1 = 7 (Julho)
-    const mesFim = bimestre * 2;          // Ex: Bimestre 4 -> 4*2 = 8 (Agosto)
+    const mesInicio = (bimestre * 2) - 1;
+    const mesFim = bimestre * 2;          
 
-    // Retorna o trecho do SQL para filtrar por 2025 e os meses calculados
+    
     return `AND YEAR(${colunaData}) = 2025 AND MONTH(${colunaData}) BETWEEN ${mesInicio} AND ${mesFim}`;
 }
 
 function buscarKpis(idEmpresa, bimestre) {
-    // Geramos o filtro para tabelas de Registro (r.horario) e Incidente (i.dataCriacao)
+    
     const filtroRegistro = gerarFiltroData(bimestre, 'r.horario');
     const filtroIncidente = gerarFiltroData(bimestre, 'i.dataCriacao');
 
@@ -62,14 +62,37 @@ function buscarKpis(idEmpresa, bimestre) {
     return database.executar(instrucaoSql);
 }
 
+
 function buscarListas(idEmpresa, bimestre) {
+   
     const filtroRegistro = gerarFiltroData(bimestre, 'r.horario');
+    
+    const filtroAlerta = gerarFiltroData(bimestre, 'r2.horario'); 
 
     const instrucaoSql = `
         SELECT 
             m.nome as nomeMaquina,
-            ROUND(AVG(CASE WHEN tc.tipoComponete = 'CPU' THEN r.valor END), 1) as media_cpu,
-            ROUND(AVG(CASE WHEN tc.tipoComponete = 'RAM' THEN r.valor END), 1) as media_ram
+            ROUND(AVG(CASE WHEN tc.tipoComponete LIKE 'CPU%' THEN r.valor END), 1) as media_cpu,
+            ROUND(AVG(CASE WHEN tc.tipoComponete LIKE 'RAM%' THEN r.valor END), 1) as media_ram,
+            
+            -- Subquery para contar alertas CRÍTICOS desta máquina neste período
+            (SELECT COUNT(a.idAlerta) 
+             FROM Alerta a 
+             JOIN Registro r2 ON a.fkRegistro = r2.idRegistro 
+             JOIN Componente c2 ON r2.fkComponente = c2.idComponente 
+             WHERE c2.fkMaquina = m.idMaquina 
+             AND a.nivel = 'CRÍTICO' 
+             ${filtroAlerta}) as alertas_criticos,
+
+            -- Subquery para contar alertas OCIOSOS desta máquina neste período
+            (SELECT COUNT(a.idAlerta) 
+             FROM Alerta a 
+             JOIN Registro r2 ON a.fkRegistro = r2.idRegistro 
+             JOIN Componente c2 ON r2.fkComponente = c2.idComponente 
+             WHERE c2.fkMaquina = m.idMaquina 
+             AND a.nivel = 'OCIOSO' 
+             ${filtroAlerta}) as alertas_ociosos
+
         FROM Maquina m
         JOIN Componente c ON c.fkMaquina = m.idMaquina
         JOIN TipoComponente tc ON c.fkTipoComponente = tc.idTipoComponente
@@ -77,8 +100,7 @@ function buscarListas(idEmpresa, bimestre) {
         WHERE m.fkEmpresa = ${idEmpresa}
         ${filtroRegistro}
         GROUP BY m.idMaquina, m.nome
-        HAVING media_cpu IS NOT NULL OR media_ram IS NOT NULL; 
-        -- REMOVI O LIMIT 5 DAQUI PARA O CONTROLLER PODER ORDENAR A LISTA INTEIRA
+        HAVING media_cpu IS NOT NULL OR media_ram IS NOT NULL;
     `;
     return database.executar(instrucaoSql);
 }

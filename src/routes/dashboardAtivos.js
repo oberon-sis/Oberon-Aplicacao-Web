@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var dashboardController = require("../controllers/dashboardController");
+var dashboardController = require("../controllers/dashboardAtivosController");
 
 
 router.post("/geral/:idEmpresa", function (req, res) {

@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../component/tour/TourGuide.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-    <link rel="stylesheet" href="../css/dashboard_nathan.css">
+    <link rel="stylesheet" href="../css/analiseHistorica.css">
 </head>
 
 <body class="d-flex w-100 h-100">
@@ -49,21 +49,12 @@
                         <span id="valor_pesquisa_maquina">Selecionar</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end hover_verde">
-                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(1)">Máquina-0021</a></li>
-                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(2)">Máquina-0022</a></li>
-                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(3)">Máquina-0001</a></li>
-                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(4)">Máquina-0002</a></li>
-                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(5)">Máquina-0015</a></li>
-                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(6)">Máquina-0030</a></li>
-                    </ul>
-                </div>
-
-                <div class="d-flex align-items-center">
-                    <ul class="dropdown-menu dropdown-menu-end hover_verde">
-                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(1)">2025 - Bimestre 6</a></li>
-                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(2)">2025 - Bimestre 4</a></li>
-                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(3)">2025 - Bimestre 3</a></li>
-                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(4)">2025 - Bimestre 2</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(1)">AAAAAAAAAA</a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(2)"></a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(3)"></a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(4)"></a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(5)"></a></li>
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(6)"></a></li>
                     </ul>
                 </div>
             </div>
@@ -72,7 +63,7 @@
         </header>
 
 
-        <div class="main-structure"  style="background-color: white;">
+        <div class="main-structure" style="background-color: white;">
             <section class="kpi-container" id="kpi-section">
                 <div class="kpi-card" id="kpi-disponibilidade" style="background-color: white;">
                     <div class="topo-kpi">
@@ -103,7 +94,7 @@
                         <div>
                             <span id="txt_total_alertas" class="text-danger"> 450 <i class="bi bi-arrow-up"
                                     style="scale: 1.2"></i> </span>
-                            <p>Mês passado: 380</p>
+                            <p>Semana Passada: 380</p>
                         </div>
                         <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
                             data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que são Alertas?"
@@ -124,7 +115,7 @@
                         <div>
                             <span id="txt_percentual_critico" class="text-danger"> 15% <i class="bi bi-arrow-up"
                                     style="scale: 1.2"></i> </span>
-                            <p>Mês passado: 8%</p>
+                            <p>Semana Passada: 8%</p>
                         </div>
                         <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
                             data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que é Alerta Crítico?"
@@ -143,7 +134,7 @@
                     <div class="baixo-kpi" style="background-color: white;">
                         <div>
                             <span id="txt_componente_critico"> RAM </span>
-                            <p>Mês passado: CPU</p>
+                            <p>Semana Passada: CPU</p>
                         </div>
                         <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
                             data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Componente Crítico"
@@ -161,17 +152,16 @@
                         <canvas id="mainChart"></canvas>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
                 <div class="col-md-6" style="background-color: white;">
-                    <div class="data-card" style="background-color: white;" id="grafico-barras"> 
+                    <div class="data-card" style="background-color: white;" id="grafico-barras">
                         <h4 class="mb-3">Total de Alertas por Componente (30 Dias)</h4>
                         <canvas id="componentAlertsChart"></canvas>
                     </div>
                 </div>
-
-                <div class="col-md-6" style="background-color: white;">
+            </div>
+            <div class="row">
+                <div class="col-md-12" style="background-color: white;">
                     <div class="data-card alert-events-card" id="tabela-eventos">
                         <h4 class="mb-3">Últimos Eventos de Alerta (24h)</h4>
                         <div class="table-responsive">
@@ -185,7 +175,6 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tabela-alertas">
-                                    <!-- JS IRÁ PREENCHER AQUI -->
                                 </tbody>
                             </table>
                         </div>
@@ -199,8 +188,115 @@
     <script src="../component/tour/TourGuide.js"></script>
     <script src="../js/dashboard/dashboard_maquina_especifica/tour_especifica.js"></script>
     <script src="../component/notificao/Notificacao.js"></script>
-    <script src="../js/dashboard/dashboard_maquina_especifica/graficos.js"></script>
     <script src="../js/dashboard/dashboard_maquina_especifica/dashboardEspecifica.js"></script>
 </body>
 
 </html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Inicializa APENAS o gráfico restante (uptime/downtime)
+        initUptimeDowntimeChart();
+
+        // A inicialização do AlertTrendChart é feita no próprio script alertTrendChart.js
+
+        // Inicializa os popovers (se a função foi movida para utils.js)
+        if (typeof initializeBootstrap === "function") {
+            initializeBootstrap();
+        }
+    });
+
+
+    // MOCK DE DADOS: Lista de máquinas para simular a busca
+    const LISTA_MAQUINAS = [];
+
+    console.log("-------------AQUI--------")
+
+
+    /**
+     * Função principal de autocompletar. Chamada no evento oninput do campo de busca.
+     * @param {string} termoBusca - O texto digitado pelo usuário.
+     */
+    function filtrarSugestoes(termoBusca) {
+        const listaSugestoesEl = document.getElementById('listaSugestoes');
+        const termo = termoBusca.trim().toUpperCase();
+
+        // 1. Limpa e Oculta a lista se o termo estiver vazio
+        if (termo.length < 2) { // Começa a filtrar a partir de 2 ou 3 caracteres
+            listaSugestoesEl.innerHTML = '';
+            listaSugestoesEl.style.display = 'none';
+            return;
+        }
+
+        // 2. Filtra os dados
+        const resultados = LISTA_MAQUINAS.filter(maquina =>
+            maquina.nome.toUpperCase().includes(termo)
+        );
+        console.log("-------------AQUI--------")
+
+        console.log(LISTA_MAQUINAS)
+
+        // 3. Constrói o HTML da lista
+        let html = '';
+
+        if (resultados.length > 0) {
+            resultados.forEach(maquina => {
+                // Usa a classe dropdown-item e adiciona um evento de clique
+                html += `
+                <li>
+                    <a class="dropdown-item" href="#" 
+                       onclick="selecionarMaquina('${nomeMaquina}', ${idMaquina}); return false;">
+                        ${maquina.nome}
+                    </a>
+                </li>
+            `;
+            });
+        } else {
+            // Mensagem de "nenhum resultado"
+            html = `<li><span class="dropdown-item text-muted">Nenhuma máquina encontrada.</span></li>`;
+        }
+
+        // 4. Exibe os resultados
+        listaSugestoesEl.innerHTML = html;
+        listaSugestoesEl.style.display = 'block';
+    }
+
+    /**
+     * Função chamada ao clicar em uma sugestão.
+     * @param {string} nome - Nome completo da máquina.
+     * @param {number} id - ID da máquina.
+     */
+    function selecionarMaquina(nome, id) {
+        const inputBuscaEl = document.getElementById('inputBusca');
+        const listaSugestoesEl = document.getElementById('listaSugestoes');
+
+        // 1. Preenche o campo de busca com o nome selecionado
+        inputBuscaEl.value = nome;
+
+        // 2. Oculta a lista de sugestões
+        listaSugestoesEl.style.display = 'none';
+
+        // 3. Ação Principal: Atualiza o painel para a máquina selecionada
+        // Você deve chamar a função que carrega os dados da máquina aqui:
+        // por exemplo: atualizar_painelEspecifico(id);
+
+        console.log(`Máquina selecionada: ${nome} (ID: ${id}). Iniciando carregamento do painel...`);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const nomeMaquina = sessionStorage.getItem('maquinaSelecionadaNome');
+        const idMaquina = sessionStorage.getItem('maquinaSelecionadaId');
+
+        // 2. Identifica o elemento de destino (o <h1>)
+        const tituloElemento = document.getElementById('tituloDoPainel');
+
+        if (nomeMaquina && tituloElemento) {
+            tituloElemento.innerHTML = `${nomeMaquina}`;
+        } else {
+            if (tituloElemento) {
+                tituloElemento.innerHTML = 'Maquina-001';
+            }
+        }
+        // carregarDadosDoGrafico(idMaquina); 
+    });
+</script>

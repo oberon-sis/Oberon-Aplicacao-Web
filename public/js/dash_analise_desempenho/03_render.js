@@ -2,7 +2,7 @@
 
 let chartInstance = null; 
 
-function renderizarGraficoMock(tipoGrafico, data = mockData) {
+function renderizarGraficoMock(tipoGrafico, data = mockData, onPlotComplete) {
     const chartPlaceholder = document.querySelector('.chart-skeleton');
     const chartCanvas = document.getElementById('alertTrendChart');
     
@@ -10,8 +10,10 @@ function renderizarGraficoMock(tipoGrafico, data = mockData) {
         chartPlaceholder.classList.replace('d-flex', 'd-none');
         chartCanvas.classList.replace('d-none', 'd-flex')
     }
-
-    if (!chartCanvas) return;
+    if (!chartCanvas) {
+        if(onPlotComplete) onPlotComplete();
+        return;
+    }
     if (chartInstance) chartInstance.destroy();
 
     const ctx = chartCanvas.getContext('2d');
@@ -126,6 +128,16 @@ function renderizarGraficoMock(tipoGrafico, data = mockData) {
             }
         };
     }
+    config.options = {
+        ...config.options, 
+        animation: {
+            onComplete: () => {
+                if (onPlotComplete) {
+                    onPlotComplete(); 
+                }
+            }
+        }
+    };
 
     chartInstance = new Chart(ctx, config);
 }
@@ -144,20 +156,21 @@ function renderizarInterpretacoes(iaMetricas) {
         let htmlContent = '';
         chave_metricas.forEach(metric => {
              htmlContent += `
-                <div class="info-metric-card d-flex align-items-center justify-content-between p-3 mb-3 border rounded">
-                    <div>
-                        <h6 class="mb-0">${metric.titulo}</h6>
+                <div class="info-metric-card d-flex align-items-center justify-content-between p-3 mb-3 border rounded position-relative">
+                    <div class="d-flex column-gap-4">
+                        <h6 class="mb-1 w-50">${metric.titulo}: </h6>
                         <p class="mb-0">${metric.valor}</p>
                     </div>
                     <i class="bi bi-graph-up-arrow text-primary" style="font-size: 1.2rem;"></i>
                 </div>
             `;
         });
+        console.log(htmlContent)
         metricasContent.innerHTML = htmlContent;
     }
 }
 
-function renderizarDados(data) {
+function renderizarDados(data, onRenderComplete) {
     const { kpis, iaMetricas, topMaquinas, tipo_de_modelo } = data;
     const periodoLabel = 'período passado'; 
 
@@ -204,7 +217,8 @@ function renderizarDados(data) {
     
     const selectTipoGrafico = document.getElementById('selectTipoGrafico');
     const tipoGraficoAtual = selectTipoGrafico ? selectTipoGrafico.value : data.analise_tipo; 
-    renderizarGraficoMock(tipoGraficoAtual, data);
+    
+    renderizarGraficoMock(tipoGraficoAtual, data, onRenderComplete);
 }
 
 function renderizarTabela(maquinas) {
@@ -277,46 +291,72 @@ const elementsToLoad = [
     "kpi_frequente_nome", "kpi_frequente_detalhe", 
 ];
 
+function getGeminiSkeletonHTML() {
+    return `
+        <div class="ai-loading-container fade-in">
+            <div class="ai-loading-header">
+                <i class="bi bi-stars gemini-sparkle"></i>
+                <span>Oberon AI está analisando...</span>
+            </div>
+            <div class="ai-line w-100"></div>
+            <div class="ai-line w-100"></div>
+            <div class="ai-line w-80"></div>
+            <div class="ai-line w-60"></div>
+        </div>
+    `;
+}
+
 function toggleSkeleton(isLoading) {
     elementsToLoad.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
             if (isLoading) {
                 el.classList.add('skeleton');
-                el.dataset.originalText = el.innerText; 
-                el.innerText = "0000"; 
+                if (!el.innerText.trim()) el.innerHTML = "&nbsp;"; 
             } else {
                 el.classList.remove('skeleton');
             }
         }
     });
 
-    // 2. Aplica no Gráfico
     const chartCanvas = document.getElementById('alertTrendChart');
     const chartSkeleton = document.querySelector('.chart-skeleton');
-    const texto_1 = document.getElementById('interpretacoes-content');
-    const texto_2 = document.getElementById('metricas-content')
+    
     if (chartCanvas && chartSkeleton) {
         if (isLoading) {
             chartCanvas.classList.add('d-none');     
-            chartCanvas.classList.remove('d-flex');
             chartSkeleton.classList.remove('d-none');
-            chartSkeleton.classList.add('d-flex', 'skeleton');
-            chartSkeleton.innerHTML = ""; // Remove texto "procurando..."
-            texto_1.classList.add('skeleton');
-            texto_2.classList.add('skeleton')
-
+            chartSkeleton.innerHTML = '<div class="text-center text-muted opacity-25"><i class="bi bi-graph-up" style="font-size: 3rem;"></i></div>';
+            chartSkeleton.classList.add('d-flex', 'align-items-center', 'justify-content-center', 'skeleton');
         } else {
             chartCanvas.classList.remove('d-none');
-            chartCanvas.classList.add('d-flex');
             chartSkeleton.classList.add('d-none');
-            chartSkeleton.classList.remove('d-flex', 'skeleton');
-            texto_1.classList.remove('skeleton');
-            texto_2.classList.remove('skeleton')
+            chartSkeleton.classList.remove('skeleton');
         }
     }
 
-    // 3. Aplica na Tabela
+    const interpretacoesDiv = document.getElementById('interpretacoes-content');
+    const metricasDiv = document.getElementById('metricas-content');
+
+    if (isLoading) {
+        if (interpretacoesDiv) interpretacoesDiv.innerHTML = getGeminiSkeletonHTML();
+        
+        if (!metricasDiv.classList.contains('d-none')) {
+            metricasDiv.classList.add('d-flex') 
+            metricasDiv.classList.add('flex-column') 
+            metricasDiv.innerHTML = `
+            <div id="skeleton_ia" class="d-flex flex-column">
+                <div class="p-3 mb-2 border rounded skeleton" style="height: 60px;"></div>
+                <div class="p-3 mb-2 border rounded skeleton" style="height: 60px;"></div>
+                <div class="p-3 mb-2 border rounded skeleton" style="height: 60px;"></div>
+            </div>
+            `;
+        }
+    } else {
+        const skeleton_ia = document.getElementById('skeleton_ia')
+        if (metricasDiv) skeleton_ia.innerHTML = ''; 
+    }
+
     toggleTableSkeleton(isLoading);
 }
 
@@ -325,20 +365,17 @@ function toggleTableSkeleton(isLoading) {
     if (!tbody) return;
 
     if (isLoading) {
-        // Cria linhas falsas para a tabela
         const skeletonRow = `
             <tr>
-                <td><div class="skeleton" style="width: 100px;">-</div></td>
-                <td><div class="skeleton" style="width: 50px;">-</div></td>
-                <td><div class="skeleton" style="width: 50px;">-</div></td>
-                <td><div class="skeleton" style="width: 50px;">-</div></td>
-                <td><div class="skeleton" style="width: 120px;">-</div></td>
-                <td><div class="skeleton" style="width: 120px;">-</div></td>
-                <td><div class="skeleton" style="width: 120px;">-</div></td>
-                <td><div class="skeleton" style="width: 120px;">-</div></td>
-                <td><div class="skeleton" style="width: 150px;">-</div></td>
+                <td><div class="skeleton rounded" style="height:20px; width: 80%;"></div></td>
+                <td><div class="skeleton rounded" style="height:20px; width: 60%;"></div></td>
+                <td><div class="skeleton rounded" style="height:20px; width: 60%;"></div></td>
+                <td><div class="skeleton rounded" style="height:20px; width: 40%;"></div></td>
+                <td><div class="skeleton rounded" style="height:20px; width: 50%;"></div></td>
+                <td><div class="skeleton rounded" style="height:20px; width: 90%;"></div></td>
+                <td><div class="skeleton rounded" style="height:30px; width: 100%;"></div></td>
             </tr>
         `;
-        tbody.innerHTML = skeletonRow.repeat(3); // Repete 5 vezes
+        tbody.innerHTML = skeletonRow.repeat(5);
     }
 }
