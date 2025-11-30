@@ -16,11 +16,6 @@ const graficoCanvasAlertas = document.getElementById("componentAlertsChart");
 let graficoPrincipal;
 let graficoAlertas;
 
-
-// ============================
-// FUNÇÕES DE NORMALIZAÇÃO (DEVEM VIR PRIMEIRO!)
-// ============================
-
 function corrigirDataHora(valor) {
     if (typeof valor === "string") return valor;
     if (valor instanceof Date) return valor.toISOString();
@@ -28,13 +23,42 @@ function corrigirDataHora(valor) {
     try {
         return new Date(valor).toISOString();
     } catch {
-        return "--:--:--";
+        return "2000-01-01T00:00:00.000Z";
+    }
+}
+
+
+function formatarDataHoraLegivel(isoString) {
+    try {
+        const data = new Date(isoString);
+
+        const opcoes = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+            timeZoneName: undefined 
+        };
+
+        const dataHoraCompleta = data.toLocaleString('pt-BR', opcoes);
+        
+        return dataHoraCompleta.replace(', ', ' ');
+
+    } catch (e) {
+        console.error("Erro ao formatar data:", e);
+        return "--/--/---- --:--:--"; 
     }
 }
 
 function normalizarAlerta(a) {
+    const horaISO = corrigirDataHora(a.hora);
+    const horaLegivel = formatarDataHoraLegivel(horaISO); 
+    
     return {
-        hora: corrigirDataHora(a.hora),
+        hora: horaLegivel,
         componente: a.componente || "—",
         nivel: a.nivel ? a.nivel.toUpperCase() : "—",
         valor: a.valor || "—"
@@ -63,7 +87,6 @@ function preencherTabelaAlertas(alertas) {
         tabela.appendChild(linha);
     });
 }
-
 
 
 
@@ -107,6 +130,7 @@ async function carregarInformacoesMaquina() {
 }
 
 window.onload = carregarInformacoesMaquina;
+
 
 
 // ============================
