@@ -99,7 +99,6 @@ body {
   scale: 1.2;
 }
 
-
 .data-card {
   background-color: var(--kpi-bg);
   padding: 15px;
@@ -162,16 +161,15 @@ a {
 }
 
 .alert-events-card {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .alert-events-card .table-responsive {
-    flex-grow: 1;
-    overflow-y: auto;
+  flex-grow: 1;
+  overflow-y: auto;
 }
-
 
 @media (min-width: 768px) {
   .kpi-card {
