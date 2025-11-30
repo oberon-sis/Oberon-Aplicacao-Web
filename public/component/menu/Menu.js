@@ -29,8 +29,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const itemClass = isMobile ? 'offcanvas-submenu-item' : 'submenu-item';
 
+        // ALTERAÇÃO: Adicionado data-target-url para mapeamento posterior na ativação
         htmlPaineis += `
-                    <a class="${itemClass}" href="${dash.url}" id="dash_${permissao.substring(9)}">
+                    <a class="${itemClass}" 
+                       href="${dash.url}" 
+                       id="dash_${permissao.substring(9)}"
+                       data-target-url="${dash.url}"> 
                         <span class="nav-text-fixed">${dash.nome}</span>
                     </a>
                 `;
@@ -91,6 +95,54 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  function ativarLinkAtual() {
+    const pathCompleto = window.location.pathname;
+    const nomeDoArquivo = pathCompleto.substring(pathCompleto.lastIndexOf('/') + 1) || 'home.html';
+    const links = document.querySelectorAll(
+      '.nav-item-fixed, .submenu-item, .offcanvas-link, .offcanvas-submenu-item, .nav-link-accordion-toggle, .offcanvas-accordion-toggle'
+    );
+    links.forEach(link => {
+      link.classList.remove('active-link'); 
+      const submenu = link.nextElementSibling;
+      if (submenu && submenu.classList.contains('collapse') && submenu.classList.contains('show')) {
+          submenu.classList.remove('show');
+          link.setAttribute('aria-expanded', 'false');
+      }
+    });
+    
+    if (nomeDoArquivo === 'home.html' || nomeDoArquivo === '') {
+        document.getElementById('menu_home')?.classList.add('active-link');
+        document.getElementById('menu_home_mobile')?.classList.add('active-link');
+        return;
+    }
+    links.forEach(link => {
+      const href = link.getAttribute('href') || link.getAttribute('data-target-url');
+      const hrefFileName = href ? href.substring(href.lastIndexOf('/') + 1) : null;
+      
+      if (hrefFileName === nomeDoArquivo) {
+        
+        link.classList.add('active-link');
+        
+        const isSubmenuItem = link.classList.contains('submenu-item') || link.classList.contains('offcanvas-submenu-item');
+        
+        if (isSubmenuItem) {
+          const accordionParent = link.closest('.nav-item-accordion, .nav-item-accordion.mb-1');
+          if (accordionParent) {
+            const linkPai = accordionParent.querySelector('.nav-link-accordion-toggle, .offcanvas-accordion-toggle');
+            const submenu = accordionParent.querySelector('.collapse');
+            if (linkPai) {
+                linkPai.classList.add('active-link');
+            }
+            if (submenu && !submenu.classList.contains('show')) {
+                submenu.classList.add('show');
+                linkPai?.setAttribute('aria-expanded', 'true');
+            }
+          }
+        }
+      }
+    });
+  }
+
   fetch('../component/menu/MenuEsqueleto.html')
     .then((response) => {
       if (!response.ok) {
@@ -112,6 +164,8 @@ document.addEventListener('DOMContentLoaded', function () {
           usuarioObjeto.email || '(Sem e-mail)';
 
         permissoesUsuario = usuarioObjeto.permissoes;
+        document.getElementById('pc_slack').href = usuarioObjeto.LinkCanalSlack || "https://slack.com/"
+        document.getElementById('slack_home')? document.getElementById('slack_home').href = usuarioObjeto.LinkCanalSlack || "https://slack.com/" : console.log("não home")
 
         if (!permissoesUsuario) {
           const tipo = usuarioObjeto.fkTipoUsuario;
@@ -152,6 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       setTimeout(() => {
         renderizarMenuPorPermissao(permissoesLimpa);
+        ativarLinkAtual();
       }, 50);
     })
     .catch((error) => {
