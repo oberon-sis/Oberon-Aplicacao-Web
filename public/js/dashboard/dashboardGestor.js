@@ -1,7 +1,7 @@
-// Variáveis globais
+
 let chartEvolucao = null;
 let chartMatriz = null;
-let bimestreAtual = 6; // Define o bimestre padrão (Novembro/Dezembro)
+let bimestreAtual = 6; 
 
 document.addEventListener("DOMContentLoaded", function() {
     // Inicializa os popovers do Bootstrap
@@ -26,14 +26,14 @@ document.addEventListener("DOMContentLoaded", function() {
  * Agora recebe o bimestre como parâmetro
  */
 function carregarDadosDashboard(bimestre) {
-      const usuarioString = sessionStorage.getItem('usuario');
+    const usuarioString = sessionStorage.getItem('usuario');
     const usuarioObjeto = JSON.parse(usuarioString);
 
     const idEmpresa = usuarioObjeto.fkEmpresa
 
     console.log(`Buscando dados da empresa ${idEmpresa} para o Bimestre ${bimestre}...`);
 
-    // ALTERAÇÃO IMPORTANTE: Mudamos para POST para enviar o JSON com o bimestre
+
     fetch(`/dashboard/geral/${idEmpresa}`, {
         method: "POST",
         headers: {
@@ -75,11 +75,6 @@ function filtrarPeriodo(bimestreSelecionado) {
     carregarDadosDashboard(bimestreSelecionado);
 }
 
-// ---------------------------------------------------------
-// AS FUNÇÕES ABAIXO NÃO PRECISARAM DE ALTERAÇÕES NA LÓGICA
-// MANTIVE EXATAMENTE COMO VOCÊ ME ENVIOU PARA NÃO QUEBRAR
-// ---------------------------------------------------------
-
 function atualizarKPIs(kpis) {
     document.getElementById('txt_total_maquinas').innerText = kpis.totalMaquinas;
     document.getElementById('txt_maquinas_sobrecarga').innerText = kpis.maquinasSobrecarga;
@@ -120,7 +115,7 @@ function preencherTabela(elementId, dados, isCritico) {
 
 function atualizarGraficos(dadosGraficos) {
     // --- 1. Atualiza Matriz de Otimização ---
-    // Limpa dados antigos antes de inserir novos (boa prática)
+   
     chartMatriz.data.datasets[0].data = [];
     
     const dadosPontos = dadosGraficos.matriz.map(m => ({

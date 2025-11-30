@@ -276,24 +276,26 @@ const mockData = {
 
     
 function toggleInfoPanel(clickedButton) {
-  const target = clickedButton.getAttribute('data-target');
-  const contentContainers = ['interpretacoes-content', 'metricas-content'];
-  const buttons = document.querySelectorAll('#info-tabs .toggle-button');
-  contentContainers.forEach(id => {
-    document.getElementById(id).classList.add('d-none');
-  });
+    const target = clickedButton.getAttribute('data-target');
+    
+    const contentIds = ['interpretacoes-content', 'metricas-content'];
+    contentIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('d-none');
+    });
 
-  buttons.forEach(button => {
-    button.classList.remove('active');
-    button.style.borderBottom = '2px solid transparent';
-    button.style.color = '#6c757d';
-  });
+    const targetContent = document.getElementById(target + '-content');
+    if (targetContent) targetContent.classList.remove('d-none');
 
-  document.getElementById(target + '-content').classList.remove('d-none');
+    const buttons = document.querySelectorAll('#info-tabs .nav-link-custom'); 
+    
+    buttons.forEach(btn => {
+        btn.classList.remove('active'); 
+        btn.style.borderBottom = ''; 
+        btn.style.color = '';
+    });
 
-  clickedButton.classList.add('active');
-  clickedButton.style.borderBottom = '2px solid #000';
-  clickedButton.style.color = '#000';
+    clickedButton.classList.add('active');
 }
 
 
@@ -305,7 +307,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     mockData.topMaquinas = dados.dados_ranking;
 
     iniciarDashboard();
-    renderizarDados(mockData); 
+    renderizarDados(mockData, () => {
+            setTimeout(() => {
+                toggleSkeleton(false);
+            }, 100);
+        });
 
   } catch (erro) {
     console.error('Erro fatal ao iniciar dashboard (Falha no Fetch):', erro);
@@ -323,3 +329,46 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
+function openSubModal(modalToOpenId, modalToCloseId) {
+    const modalToCloseEl = document.querySelector(modalToCloseId);
+    const modalToClose = bootstrap.Modal.getInstance(modalToCloseEl);
+
+    if (modalToClose) {
+        modalToClose.hide();
+        modalToCloseEl.addEventListener('hidden.bs.modal', function tempHandler() {
+        const modalToOpen = new bootstrap.Modal(document.querySelector(modalToOpenId));
+        modalToOpen.show();
+        modalToCloseEl.removeEventListener('hidden.bs.modal', tempHandler);
+    });
+    } else {
+        const modalToOpen = new bootstrap.Modal(document.querySelector(modalToOpenId));
+        modalToOpen.show();
+    }
+}
+
+function ativarModoAnalise(modo) {
+    const modais = ['#mainModal', '#comparacaoModal', '#previsaoModal', '#correlacaoModal'];
+    modais.forEach(id => {
+        const el = document.querySelector(id);
+        const instance = bootstrap.Modal.getInstance(el);
+        if (instance) instance.hide();
+    });
+    const select = document.getElementById('selectTipoGrafico');
+    if (select) {
+        select.value = modo;
+        select.dispatchEvent(new Event('change'));
+
+        if(typeof toggleFilterFields === 'function') {
+        toggleFilterFields();
+        }
+    }
+    const filterCollapse = document.getElementById('filterCollapse');
+        if (filterCollapse && !filterCollapse.classList.contains('show')) {
+            new bootstrap.Collapse(filterCollapse, { toggle: false }).show();
+            const togglerIcon = document.querySelector('#filtro-toggler i');
+        if(togglerIcon) {
+            togglerIcon.classList.remove('bi-caret-down-fill');
+            togglerIcon.classList.add('bi-caret-up-fill');
+        }
+    }
+}

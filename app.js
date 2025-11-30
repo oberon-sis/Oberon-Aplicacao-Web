@@ -9,10 +9,23 @@ require('dotenv').config();
 var express = require('express');
 var cors = require('cors');
 var path = require('path');
+var session = require('express-session'); // <<-- NOVO: Importando a biblioteca de sessão
 var PORTA_APP = process.env.APP_PORT;
 var HOST_APP = process.env.APP_HOST;
 
 var app = express();
+
+// --- NOVO: CONFIGURAÇÃO DA SESSÃO ---
+app.use(session({
+    secret: 'sua_chave_secreta_muito_segura', // Mude este valor para uma string longa e complexa!
+    resave: false, // Evita salvar a sessão se nada mudou
+    saveUninitialized: true, // Salva novas sessões não modificadas
+    cookie: { 
+        secure: false, // Deve ser true em HTTPS (Produção)
+        maxAge: 3600000 // 1 hora de vida para o cookie
+    } 
+}));
+// --- FIM CONFIGURAÇÃO DA SESSÃO ---
 
 // --- IMPORTAÇÃO DAS ROTAS (agrupadas) ---
 var indexRouter = require('./src/routes/index');
@@ -25,6 +38,7 @@ var gerenciamentoUsuarioRouter = require('./src/routes/gerenciamentoUsuario');
 var authRouter = require('./src/routes/email');
 var alertasRouter = require('./src/routes/alertas');
 var dashboardRouter = require("./src/routes/dashboard");
+var empresasRouter = require("./src/routes/Atualizar.empresas");
 
 
 const downloadRoutes = require('./src/routes/appInstalacao');
@@ -66,6 +80,7 @@ app.use('/dashboardParametros', dashboardParametrosRouter);
 app.use("/dashboardEstrategica", dashboardEstrategicaRouter); 
 app.use("/logAuditoria", logAuditoriaRouter);
 app.use("/dashboard", dashboardRouter);
+app.use("/empresas", empresasRouter);
 
 app.listen(PORTA_APP, function () {
   console.log(`                                                                            

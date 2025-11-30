@@ -122,8 +122,59 @@ function getPacotesRecebidos(req, res) {
         .catch(err => res.status(500).json(err.sqlMessage));
 }
 
+function autenticar(req, res) {
+    const email = req.body.emailServer;
+    const senha = req.body.senhaServer;
+
+    redeModel.autenticar(email, senha)
+        .then(resultado => {
+            if (resultado.length === 1) {
+                const usuario = resultado[0];
+                res.json({
+                    idUsuario: usuario.idUsuario,
+                    nome: usuario.nome,
+                    email: usuario.email,
+                    fkEmpresa: usuario.fkEmpresa
+                });
+            } else {
+                res.status(403).json({ mensagem: "Credenciais inválidas" });
+            }
+        })
+        .catch(erro => {
+            console.error(erro);
+            res.status(500).json(erro);
+        });
+}
+
+
+
+
+function buscarRanking(req, res) {
+ const fkEmpresa = req.params.fkEmpresa;
+
+ redeModel.buscarRanking(fkEmpresa)
+  .then(resultado => {
+   if (resultado.length > 0) {
+    res.status(200).json(resultado);
+   } else {
+    res.status(200).json([]); 
+   }
+  })
+  .catch(erro => {
+   console.error("Erro ao buscar ranking:", erro);
+  
+   res.status(500).json({ 
+                mensagem: "Erro interno no servidor ao executar a consulta.",
+                detalhe: erro.sqlMessage || erro 
+            });
+ });
+}
+
+
+
 
   
 
 
-module.exports = { getMediaLatencia, getSomaAlertas, getPerdaPacote, getDisponibilidade, getLatenciaUltimas24h, getPacotesEnviados, getPacotesRecebidos, getJitter };
+module.exports = { getMediaLatencia, getSomaAlertas, getPerdaPacote, getDisponibilidade, getLatenciaUltimas24h, 
+    getPacotesEnviados, getPacotesRecebidos, getJitter, buscarRanking,autenticar };

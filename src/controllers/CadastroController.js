@@ -138,15 +138,29 @@ const usuarioController = {
       return res.status(400).json({ mensagem: 'Email e senha são obrigatórios.' });
     }
     try {
+      // 1. Busca o usuário no BD
       const resultado = await usuarioModel.buscarPorEmail(email);
       if (resultado.length == 0) {
         return res.status(403).json({ mensagem: 'Email ou senha inválidos.' });
       }
       const usuarioEncontrado = resultado[0];
+      
+      // 2. Compara a senha
       const senhaCorreta = await bcrypt.compare(senha, usuarioEncontrado.senha);
       if (!senhaCorreta) {
         return res.status(403).json({ mensagem: 'Email ou senha inválidos.' });
       }
+
+      // 3. ** CORREÇÃO CRÍTICA: SALVANDO O USUÁRIO NA SESSÃO **
+      // Isso popula o req.session.usuario que estava faltando
+      req.session.usuario = {
+          idFuncionario: usuarioEncontrado.idFuncionario, 
+          nome: usuarioEncontrado.nome,
+          fkTipoUsuario: usuarioEncontrado.fkTipoUsuario,
+          fkEmpresa: usuarioEncontrado.fkEmpresa // Adicionei fkEmpresa, se estiver disponível no resultado
+      };
+
+      // 4. Retorna para o Front-end
       delete usuarioEncontrado.senha;
       res.status(200).json(usuarioEncontrado);
     } catch (erro) {

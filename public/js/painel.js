@@ -234,11 +234,12 @@ function getOpcoesChart() {
 const error_message = document.getElementById('error-message');
 const mensagem_incial = document.getElementById('initial-message');
 const card_dash_body = document.getElementById('card_dash_body');
-const titulo_erro = error_message.getElementsByTagName('h5');
-const conteudo_erro = error_message.getElementsByTagName('p');
+const titulo_erro = error_message ? error_message.getElementsByTagName('h5')[0] : null;
+const conteudo_erro = error_message ? error_message.getElementsByTagName('p')[0] : null;
+
 
 function initLinhaChart(idMaquina) {
-  error_message.classList.add('d-none');
+  if (error_message) error_message.classList.add('d-none');
   if (linhaChartInstance) linhaChartInstance.destroy();
   if (linhaIntervalId) clearInterval(linhaIntervalId);
 
@@ -254,19 +255,21 @@ function initLinhaChart(idMaquina) {
   const statusMaquina = INFO_TECNICA_COMPUTADOR[0]?.status || 'Online';
 
   if (statusMaquina === 'Offline' || statusMaquina === 'Manutenção') {
-    card_dash_body.style.display = 'none';
-    error_message.classList.remove('d-none');
-    error_message.classList.add('d-block');
-    titulo_erro.innerHTML = `Máquina - ${statusMaquina}`;
-    let descricao =
-      statusMaquina == 'Offline'
-        ? 'Verique se os agentes se encontram ligados'
-        : 'Em breve a máquina estará disponivél';
-    conteudo_erro.innerHTML = descricao;
+    if (card_dash_body) card_dash_body.style.display = 'none';
+    if (error_message) {
+      error_message.classList.remove('d-none');
+      error_message.classList.add('d-block');
+      if (titulo_erro) titulo_erro.textContent = `Máquina - ${statusMaquina}`;
+      let descricao =
+        statusMaquina == 'Offline'
+          ? 'Verique se os agentes se encontram ligados'
+          : 'Em breve a máquina estará disponivél';
+      if (conteudo_erro) conteudo_erro.textContent = descricao;
+    }
     return;
   }
 
-  card_dash_body.style.display = 'block';
+  if (card_dash_body) card_dash_body.style.display = 'block';
   messageContainer.style.display = 'none';
   messageContainer.innerHTML = '';
 
@@ -276,14 +279,15 @@ function initLinhaChart(idMaquina) {
   const dadosComponente = DADOS_GRAFICO_24H[componenteAtual] || [];
 
   if (dadosComponente.length === 0) {
-    card_dash_body.style.display = 'none';
-    error_message.classList.remove('d-none');
-    error_message.classList.add('d-block');
-    titulo_erro.innerHTML = `Máquina - Sem dados`;
-    let descricao =
-      statusMaquina ==
-      'Não há dados de utilização para ${COMPONENT_LABELS[componenteAtual]} nas últimas 24 horas';
-    conteudo_erro.innerHTML = descricao;
+    if (card_dash_body) card_dash_body.style.display = 'none';
+    if (error_message) {
+      error_message.classList.remove('d-none');
+      error_message.classList.add('d-block');
+      if (titulo_erro) titulo_erro.textContent = `Máquina - Sem dados`;
+      let descricao =
+        `Não há dados de utilização para ${COMPONENT_LABELS[componenteAtual]} nas últimas 24 horas`;
+      if (conteudo_erro) conteudo_erro.textContent = descricao;
+    }
     return;
   }
   const labelsReais = dadosComponente.map((ponto) => ponto.horario);
@@ -323,54 +327,69 @@ function atualizarDetalhes() {
   const maquina = INFO_TECNICA_COMPUTADOR[0] || {};
   const getKpi = (comp, key) => DADOS_KPI_ALERTAS[comp.toUpperCase()]?.[key] || 'N/A';
 
-  document.getElementById('tituloDetalhes').textContent =
-    `${maquina.nome || 'Máquina'} | Tendência de Utilização de Recursos (24 Horas)`;
+  const tituloDetalhes = document.getElementById('tituloDetalhes');
+  if (tituloDetalhes) {
+    tituloDetalhes.textContent =
+      `${maquina.nome || 'Máquina'} | Tendência de Utilização de Recursos (24 Horas)`;
+  }
 
   const metricas = [
-    { id: 'cpu', limite: getLimiteMaximo(), isRede: false },
-    { id: 'ram', limite: getLimiteMaximo(), isRede: false },
-    { id: 'rede', limite: getLimiteMaximo(), isRede: true },
-    { id: 'disco', limite: getLimiteMaximo(), isRede: false },
+    { id: 'cpu', limite: getLimiteMaximo('cpu'), isRede: false },
+    { id: 'ram', limite: getLimiteMaximo('ram'), isRede: false },
+    { id: 'rede', limite: getLimiteMaximo('rede'), isRede: true },
+    { id: 'disco', limite: getLimiteMaximo('disco'), isRede: false },
   ];
 
   metricas.forEach((m) => {
     const totalAlertas = getKpi(m.id, 'totalAlertas24h');
     const picoUso = getKpi(m.id, 'maiorPicoUso');
-    document.getElementById(`${m.id}24h`).textContent = totalAlertas;
-    const picoElement = document.getElementById(`${m.id}Pico`);
-    picoElement.textContent = picoUso;
 
-    if (picoUso !== 'N/A' && m.limite !== 90) {
-      const limiteAtencao = getLimiteAtencao();
-      let classe = 'text-black';
-      if (picoUso >= m.limite) {
-        classe = 'text-black';
-      } else if (picoUso >= limiteAtencao) {
-        classe = 'text-black';
+    const elem24h = document.getElementById(`${m.id}24h`);
+    if (elem24h) elem24h.textContent = totalAlertas;
+
+    const picoElement = document.getElementById(`${m.id}Pico`);
+    if (picoElement) {
+      picoElement.textContent = picoUso;
+
+      // O valor 90 é o fallback, então usamos ele como default caso não haja parâmetro.
+      const limiteCritico = DADOS_PARAMETROS[m.id]?.limiteCritico || 90;
+      const limiteAtencao = DADOS_PARAMETROS[m.id]?.limiteAtencao || 70;
+
+      if (picoUso !== 'N/A') {
+        let classe = 'text-black'; // Cor padrão
+        if (picoUso >= limiteCritico) {
+            // Lógica para cor crítica
+        } else if (picoUso >= limiteAtencao) {
+            // Lógica para cor de atenção
+        }
+        picoElement.className = `fw-bold fs-5 ${classe}`;
+      } else {
+        picoElement.className = 'fw-bold fs-5 text-secondary';
       }
-      picoElement.className = `fw-bold fs-5 ${classe}`;
-    } else {
-      picoElement.className = 'fw-bold fs-5 text-secondary';
     }
   });
-  document.getElementById('infoModelo').textContent = maquina.modelo || 'N/A';
-  document.getElementById('infoIp').textContent = maquina.ip || 'N/A';
-  document.getElementById('infoSo').textContent = maquina.sistemaOperacional || 'N/A';
-  document.getElementById('infoCpuCapacidade').textContent = getCapacidade(
-    'CPU',
-    INFO_TECNICA_COMPONENTES,
-  );
-  document.getElementById('infoRamCapacidade').textContent = getCapacidade(
-    'RAM',
-    INFO_TECNICA_COMPONENTES,
-  );
-  document.getElementById('infoDiscoCapacidade').textContent = getCapacidade(
-    'DISCO',
-    INFO_TECNICA_COMPONENTES,
-  );
+
+  const infoModelo = document.getElementById('infoModelo');
+  if (infoModelo) infoModelo.textContent = maquina.modelo || 'N/A';
+
+  const infoIp = document.getElementById('infoIp');
+  if (infoIp) infoIp.textContent = maquina.ip || 'N/A';
+
+  const infoSo = document.getElementById('infoSo');
+  if (infoSo) infoSo.textContent = maquina.sistemaOperacional || 'N/A';
+
+  const infoCpuCapacidade = document.getElementById('infoCpuCapacidade');
+  if (infoCpuCapacidade) infoCpuCapacidade.textContent = getCapacidade('CPU', INFO_TECNICA_COMPONENTES);
+
+  const infoRamCapacidade = document.getElementById('infoRamCapacidade');
+  if (infoRamCapacidade) infoRamCapacidade.textContent = getCapacidade('RAM', INFO_TECNICA_COMPONENTES);
+
+  const infoDiscoCapacidade = document.getElementById('infoDiscoCapacidade');
+  if (infoDiscoCapacidade) infoDiscoCapacidade.textContent = getCapacidade('DISCO', INFO_TECNICA_COMPONENTES);
 }
 function trocar_maquina(idMaquina) {
   maquinaAtualId = idMaquina;
+  sessionStorage.ID_MAQUINA_PAINEL = idMaquina;
   procurar_detalhes_maquina(idMaquina);
 }
 
@@ -379,18 +398,17 @@ function trocarComponente(componente) {
   initLinhaChart(maquinaAtualId);
 }
 async function procurar_detalhes_maquina(idMaquina) {
-  if (!idMaquina) return;
-
-  if (idMaquina > 0) {
-    card_dash_body.style.display = 1;
-    mensagem_incial.style.display = 'none';
-    error_message.classList.add('d-none');
-  } else {
-    card_dash_body.style.display = 'none';
-    mensagem_incial.style.display = 1;
-    error_message.classList.add('d-none');
+  if (!idMaquina || idMaquina == 0) {
+    if (card_dash_body) card_dash_body.style.display = 'none';
+    if (mensagem_incial) mensagem_incial.style.display = 'block';
+    if (error_message) error_message.classList.add('d-none');
     return;
   }
+
+  if (card_dash_body) card_dash_body.style.display = 'block';
+  if (mensagem_incial) mensagem_incial.style.display = 'none';
+  if (error_message) error_message.classList.add('d-none');
+
   try {
     const response = await fetch(`/painel/procurar_informacoes_maquina/${idMaquina}`);
     if (!response.ok) {
@@ -418,7 +436,68 @@ async function procurar_detalhes_maquina(idMaquina) {
   }
 }
 
+// =========================================================================
+// FUNÇÕES PARA FILTRAGEM E BUSCA
+// =========================================================================
+
+/**
+ * Função global para mudar o filtro de status e aplicar a filtragem.
+ * @param {string} filtro - O status para filtrar ('todas', 'critico', 'atencao', etc.).
+ */
+function filtrarMaquinas(filtro) {
+  filtroAtual = filtro.toLowerCase(); 
+  aplicarFiltros(); 
+}
+
+/**
+ * Função global para buscar máquinas por nome.
+ * @param {string} termoBusca - O texto digitado na barra de pesquisa.
+ */
+function buscarMaquina(termoBusca) {
+  aplicarFiltros(termoBusca);
+}
+
+/**
+ * Função central para aplicar o filtro de status e a busca de texto.
+ * @param {string} termoBusca - O texto digitado na barra de pesquisa (pode ser vazio).
+ */
+function aplicarFiltros(termoBusca = '') {
+  // O ID 'resource-cards' é o container dos seus cards no HTML
+  const containerMaquinas = document.getElementById('resource-cards');
+
+  if (!containerMaquinas) {
+    console.error('Container de máquinas não encontrado. Certifique-se de que o elemento principal dos cards possui o ID "resource-cards".');
+    return;
+  }
+
+  const termoBuscaLower = termoBusca.toLowerCase().trim();
+  const todosCards = containerMaquinas.querySelectorAll('.card-recurso');
+
+  todosCards.forEach((card) => {
+
+    const statusMaquina = card.getAttribute('data-status')?.toLowerCase() || 'desconhecido';
+    const nomeMaquina = card.getAttribute('data-nome')?.toLowerCase() || '';
+
+    const passaPeloFiltro =
+      filtroAtual === 'todas' || statusMaquina === filtroAtual;
+
+    const passaPelaBusca =
+      !termoBuscaLower || nomeMaquina.includes(termoBuscaLower);
+
+    if (passaPeloFiltro && passaPelaBusca) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+// =========================================================================
+// EVENT LISTENERS E INICIALIZAÇÃO
+// =========================================================================
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Listener para os botões de filtro de status
   document.querySelectorAll('.btn-custom-status').forEach((btn) => {
     btn.addEventListener('click', function () {
       document.querySelectorAll('.btn-custom-status').forEach((b) => b.classList.remove('active'));
@@ -427,33 +506,51 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Listener para o clique nos botões dos cards de recurso (trocar máquina)
   document.querySelectorAll('.card-recurso button').forEach((btn) => {
     btn.addEventListener('click', function () {
       const card = this.closest('.card-recurso');
-      trocar_maquina(parseInt(card.getAttribute('data-maquina-id')));
+      const maquinaId = parseInt(card.getAttribute('data-maquina-id'));
+      if (maquinaId) {
+        trocar_maquina(maquinaId);
+      }
     });
   });
 
-  document
-    .getElementById('inputBusca')
-    .addEventListener('input', (e) => buscarMaquina(e.target.value));
+  // Listener para a barra de pesquisa
+  const inputBusca = document.getElementById('inputBusca');
+  if (inputBusca) {
+    inputBusca.addEventListener('input', (e) => buscarMaquina(e.target.value));
+  }
 
+  // Listener para o dropdown de componentes (trocar gráfico)
   document.querySelectorAll('[data-componente]').forEach((item) => {
     item.addEventListener('click', function (e) {
       e.preventDefault();
       const componente = this.getAttribute('data-componente');
       if (componente === 'todos') return;
-      document.getElementById('dropdownComponente').textContent = this.textContent;
+      const dropdownComponente = document.getElementById('dropdownComponente');
+      if (dropdownComponente) {
+        dropdownComponente.textContent = this.textContent;
+      }
       trocarComponente(componente);
     });
-  }); // NOVO: Listener para os checkboxes de limites (Ocultar/Mostrar individual)
+  });
+
+  // Listener para os checkboxes de limites (Ocultar/Mostrar individual)
   document.querySelectorAll('.form-check-input[id^="toggleLimite"]').forEach((checkbox) => {
     checkbox.addEventListener('change', function () {
-      // Recria o gráfico com as opções de anotação atualizadas
       initLinhaChart(maquinaAtualId);
     });
   });
 
-  maquinaAtualId = sessionStorage.ID_MAQUINA_PAINEL ? sessionStorage.ID_MAQUINA_PAINEL : 0;
+  // Inicialização ao carregar a página
+  maquinaAtualId = sessionStorage.ID_MAQUINA_PAINEL ? parseInt(sessionStorage.ID_MAQUINA_PAINEL) : 0;
+
+  const btnTodas = document.querySelector('.btn-custom-status[data-filtro="todas"]');
+  if (btnTodas) {
+    btnTodas.classList.add('active');
+  }
+
   procurar_detalhes_maquina(maquinaAtualId);
 });

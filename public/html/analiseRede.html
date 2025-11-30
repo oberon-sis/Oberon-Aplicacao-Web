@@ -95,7 +95,7 @@
         rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
         rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
       height: 222px;
-      margin-top: 5px;
+     
       width: 750px;
     }
 
@@ -187,7 +187,7 @@
   </style>
 </head>
 
-<body class="d-flex w-100 h-100">
+<body class="d-flex w-100 h-100"  onload="carregarRankingRede()">
   <div id="menu-container"></div>
 
   <main class="content flex-grow-1 padding_main dashboard-main">
@@ -365,34 +365,31 @@
       </div>
 
       
-          <section class="details-container" style="display:flex;">
+  <section class="details-container" style="display:flex; margin-top:20px;">
 
-      <div class="chart-item-wrapper" id="list-sobrecarga">
-        <h3 style="font-size: 1.1rem; margin-bottom: 10px">
-          Top 5 - Máquinas em Sobrecarga (Média > 85%)
-          <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
-            data-bs-trigger="focus" data-bs-title="Máquinas em Sobrecarga"
-            data-bs-content="Lista as 5 máquinas que mais precisam de um upgrade, com base na média de uso de CPU ou RAM no período.">
-            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
-          </button>
-        </h3>
-        <div>
-          <table class="table table-striped table-hover table-sm">
-            <thead>
-              <tr>
-                <th>Máquina</th>
-                <th>Média de Rede</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="tbody-sobrecarga">
-            </tbody>
-          </table>
-        </div>
-      </div>
-      </section>
-      
- </div>
+  <div class="chart-item-wrapper" id="chart-ranking-rede">
+    <h3 class="text-lg font-medium mb-2 text-gray-700">
+      Ranking de Máquinas por Alertas de Rede
+    </h3>
+
+    <div class="overflow-x-auto max-h-[250px]">
+      <table class="table table-striped table-hover table-sm">
+        <thead>
+          <tr>
+            <th>Máquina</th>
+            <th>Alertas (Últimos 60 dias)</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-ranking-rede"></tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+
+
+
       
       <div class="row">
         
@@ -456,8 +453,8 @@ async function carregarGraficoSeveridade() {
   try {
     console.log("🔍 Carregando dados…");
 
-    const reqRecebidos = await fetch(`/analiseRede/recebidos/${idMaquina}`);
-    const reqEnviados  = await fetch(`/analiseRede/enviados/${idMaquina}`);
+    const reqRecebidos = await fetch(`/recebidos/${idMaquina}`);
+    const reqEnviados  = await fetch(`/enviados/${idMaquina}`);
 
     const recebidosDados = await reqRecebidos.json();
     const enviadosDados  = await reqEnviados.json();
@@ -501,7 +498,7 @@ carregarGraficoSeveridade()
  async function getLatenciaUltimas24h() {
   const idMaquina = 1;
   try {
-    const resposta = await fetch(`/analiseRede/throughputUltimas24h/${idMaquina}`);
+    const resposta = await fetch(`/throughputUltimas24h/${idMaquina}`);
     const dados = await resposta.json();
 
     // Cria array com as 24 horas
@@ -557,7 +554,7 @@ getLatenciaUltimas24h();
       const idMaquina = 1;
 
       try {
-        const resposta = await fetch(`/analiseRede/throughput/${idMaquina}`);
+        const resposta = await fetch(`/throughput/${idMaquina}`);
 
 
 
@@ -580,7 +577,7 @@ getLatenciaUltimas24h();
       const idMaquina = 1;
 
       try {
-        const resposta = await fetch(`/analiseRede/alertas/${idMaquina}`);
+        const resposta = await fetch(`/alertas/${idMaquina}`);
 
 
 
@@ -602,7 +599,7 @@ getLatenciaUltimas24h();
       const idMaquina = 1;
 
       try {
-        const resposta = await fetch(`/analiseRede/pacotesPerdidos/${idMaquina}`);
+        const resposta = await fetch(`/pacotesPerdidos/${idMaquina}`);
 
 
 
@@ -625,7 +622,7 @@ getLatenciaUltimas24h();
       const idMaquina = 1;
 
       try {
-        const resposta = await fetch(`/analiseRede/disponibilidadePercent/${idMaquina}`);
+        const resposta = await fetch(`/disponibilidadePercent/${idMaquina}`);
 
 
 
@@ -648,7 +645,7 @@ getLatenciaUltimas24h();
       const idMaquina = 1;
 
       try {
-        const resposta = await fetch(`/analiseRede/jitter_medio_ms/${idMaquina}`);
+        const resposta = await fetch(`/jitter_medio_ms/${idMaquina}`);
 
 
 
@@ -683,6 +680,54 @@ getLatenciaUltimas24h();
 
     carregarOpcoes();
 
+
+  async function carregarRankingRede() {
+  const usuario = JSON.parse(sessionStorage.usuario);
+  const fkEmpresa = usuario.fkEmpresa;
+
+
+  try {
+
+const resposta = await fetch(`/ranking/${fkEmpresa}`);
+    const dados = await resposta.json();
+
+    console.log("Ranking recebido:", dados);
+
+    const tbody = document.getElementById("tbody-ranking-rede");
+    tbody.innerHTML = ""; // limpar tabela
+
+    if (!dados || dados.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="2" class="text-center">Nenhum alerta encontrado.</td>
+        </tr>
+      `;
+      return;
+    }
+
+    dados.forEach(item => {
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+        <td>${item.maquina}</td>
+        <td>${item.total_alertas}</td>
+      `;
+
+      tbody.appendChild(tr);
+    });
+
+  } catch (erro) {
+    console.error("Erro ao carregar ranking:", erro);
+
+    document.getElementById("tbody-ranking-rede").innerHTML = `
+      <tr>
+        <td colspan="2" class="text-center text-danger">
+          Erro ao carregar ranking.
+        </td>
+      </tr>
+    `;
+  }
+}
 
 
 

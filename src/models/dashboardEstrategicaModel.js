@@ -147,11 +147,24 @@ function buscarRanking(idEmpresa) {
     const query = `
         SELECT 
             m.nome AS maquina,
-            COUNT(a.idAlerta) AS total_alertas
-        FROM Alerta a
-        JOIN Registro r ON a.fkRegistro = r.idRegistro
-        JOIN Componente c ON r.fkComponente = c.idComponente
-        JOIN Maquina m ON c.fkMaquina = m.idMaquina
+            COUNT(a.idAlerta) AS total_alertas,
+            ROUND(AVG(CASE WHEN tc.tipoComponete = 'CPU' THEN r.valor END),1) AS cpuMedia,
+            ROUND(AVG(CASE WHEN tc.tipoComponete = 'RAM' THEN r.valor END),1) AS ramMedia,
+            ROUND(AVG(CASE WHEN tc.tipoComponete = 'DISCO' THEN r.valor END),1) AS discoUso,
+            COUNT(DISTINCT i.idIncidente) AS totalIncidentes,
+            MAX(i.severidade) AS severidadeMedia,
+            m.status
+        FROM Maquina m
+        LEFT JOIN Componente c ON c.fkMaquina = m.idMaquina
+        LEFT JOIN TipoComponente tc ON c.fkTipoComponente = tc.idTipoComponente
+        LEFT JOIN Registro r ON r.fkComponente = c.idComponente
+        LEFT JOIN Alerta a ON a.fkRegistro = r.idRegistro
+        LEFT JOIN Incidente i ON i.fkLogDetalheEvento IN 
+        (
+            SELECT lde.idLogDetalheEvento FROM LogDetalheEvento lde
+                JOIN LogSistema ls ON lde.fkLogSistema = ls.idLogSistema
+                WHERE ls.fkMaquina = m.idMaquina
+        )
         WHERE m.fkEmpresa = ${idEmpresa}
           AND r.horario >= DATE_SUB(NOW(), INTERVAL 60 DAY)
         GROUP BY m.idMaquina

@@ -150,11 +150,50 @@ function getPacotesRecebidos(fkMaquina) {
         LIMIT 5;
     `;
     return database.executar(sql);
+
+}
+
+
+
+function autenticar(email, senha) {
+    const instrucao = `
+        SELECT 
+            idFuncionario AS idUsuario,
+            nome,
+            email,
+            fkEmpresa
+        FROM Funcionario
+        WHERE email = '${email}'
+        AND senha = '${senha}';
+    `;
+    return database.executar(instrucao);
 }
 
 
 
 
+function buscarRanking(fkEmpresa) {
+    const sql = `
+        SELECT 
+            m.nome AS maquina,
+            COUNT(a.idAlerta) AS total_alertas
+        FROM Alerta a
+        JOIN Registro r ON a.fkRegistro = r.idRegistro
+        JOIN Componente c ON r.fkComponente = c.idComponente
+        JOIN Maquina m ON c.fkMaquina = m.idMaquina
+        WHERE m.fkEmpresa = ${fkEmpresa}
+        GROUP BY m.nome
+        ORDER BY total_alertas DESC
+        LIMIT 5;
+    `;
+
+    console.log("Executando SQL:", sql);
+    return database.executar(sql);
+}
+
+
+
 module.exports = {
-    getMediaLatencia,getSomaAlertas,getPerdaPacote, getDisponibilidade, getLatenciaUltimas24h, getJitter,getPacotesEnviados,getPacotesRecebidos
+    getMediaLatencia,getSomaAlertas,getPerdaPacote, getDisponibilidade, getLatenciaUltimas24h, getJitter,getPacotesEnviados,getPacotesRecebidos,
+    autenticar,buscarRanking
 };
