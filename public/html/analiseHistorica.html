@@ -19,11 +19,11 @@
 <body class="d-flex w-100 h-100">
     <div id="menu-container"></div>
 
-    <main class="content flex-grow-1 padding_main main dashboard-main">
+    <main class="content flex-grow-1 padding_main main dashboard-main m-0 w-100" style="max-width: 100% !important;"  >
 
         <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
             <h2 class="text-black me-3">
-                Análise Histórica de Desempenho: &nbsp;&nbsp; <span id="tituloDoPainel">Máquina-003</span>
+                Análise de Desempenho: &nbsp;&nbsp; <span id="tituloDoPainel">Máquina-003</span>
             </h2>
 
             <div class="d-flex align-items-center flex-wrap flex-grow-1 me-3">
@@ -75,7 +75,7 @@
                         <div>
                             <span id="txt_disponibilidade" class="text-danger"> 97.8% <i class="bi bi-arrow-down"
                                     style="scale: 1.2"></i> </span>
-                            <p>Semana passada: <span id="txt_disponibilidade_passado"></span></p>
+                            <!-- <p>Semana passada: <span id="txt_disponibilidade_passado"></span></p> -->
                         </div>
                         <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
                             data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que é Disponibilidade?"
@@ -87,14 +87,14 @@
 
                 <div class="kpi-card" id="kpi-total-alertas" style="background-color: white;">
                     <div class="topo-kpi">
-                        <h6>Quantidade Total De Alertas</h6>
+                        <h6>Quantidade de Alertas</h6>
                         <div class="icone-kpi"><i class="bi bi-bell"></i></div>
                     </div>
                     <div class="baixo-kpi">
                         <div>
                             <span id="txt_total_alertas" class="text-danger"> 450 <i class="bi bi-arrow-up"
                                     style="scale: 1.2"></i> </span>
-                            <p>Semana Passada: 380</p>
+                            <!-- <p id="txt_valor_passado_alertas">Semana Passada: 380</p> -->
                         </div>
                         <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
                             data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que são Alertas?"
@@ -115,7 +115,7 @@
                         <div>
                             <span id="txt_percentual_critico" class="text-danger"> 15% <i class="bi bi-arrow-up"
                                     style="scale: 1.2"></i> </span>
-                            <p>Semana Passada: 8%</p>
+                            <!-- <p id="txt_percentual_critico_passada">Semana Passada: 8%</p> -->
                         </div>
                         <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
                             data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que é Alerta Crítico?"
@@ -134,7 +134,7 @@
                     <div class="baixo-kpi" style="background-color: white;">
                         <div>
                             <span id="txt_componente_critico"> RAM </span>
-                            <p>Semana Passada: CPU</p>
+                            <!-- <p>Semana Passada: CPU</p> -->
                         </div>
                         <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
                             data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Componente Crítico"

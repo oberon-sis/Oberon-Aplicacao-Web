@@ -1,10 +1,5 @@
 const database = require('../database/config');
 
-// ======================================================
-// FUNÇÕES PARA LISTA DETALHADA (ÚLTIMOS EVENTOS)
-// CORRIGIDO: Adicionando aliases para bater com o frontend (hora, componente, nivel, valor)
-// ======================================================
-
 function ultimo_eventos_maquina_especifica(idMaquina) {
   console.log('[MODEL] Últimos eventos - Máquina:', idMaquina);
 
@@ -27,9 +22,7 @@ function ultimo_eventos_maquina_especifica(idMaquina) {
   return database.executar(instrucaoSql, [idMaquina]);
 }
 
-// ======================================================
 // KPI 1 – Disponibilidade (30 dias)
-// ======================================================
 
 function calcular_taxa_disponibilidade(idMaquina) {
   console.log('[MODEL] Disponibilidade 30 dias - Máquina:', idMaquina);
@@ -69,9 +62,7 @@ GROUP BY fkMaquina;
   return database.executar(instrucaoSql, [idMaquina]);
 }
 
-// ======================================================
 // KPI 2 e KPI 3 → total de alertas e críticos (30 dias)
-// ======================================================
 
 function buscar_kpi_alertas_30_dias(idMaquina) {
   console.log('[MODEL] KPIs Alertas 30 dias - Máquina:', idMaquina);
@@ -91,9 +82,29 @@ function buscar_kpi_alertas_30_dias(idMaquina) {
   return database.executar(instrucaoSql, [idMaquina]);
 }
 
-// ======================================================
-//  KPI – Pico de uso + total de alertas 24h
-// ======================================================
+function buscar_kpi_componente_critico(idMaquina) {
+  console.log('[MODEL] KPIs Alertas 30 dias - Máquina:', idMaquina);
+
+  const instrucaoSql = `
+        SELECT 
+        c.idComponente,
+        tc.tipoComponete AS tipoComponente,
+        COUNT(a.idAlerta) AS total_alertas_criticos
+        FROM Componente c
+        JOIN Registro r 
+        ON r.fkComponente = c.idComponente
+        JOIN Alerta a 
+        ON a.fkRegistro = r.idRegistro
+        JOIN TipoComponente tc
+        ON c.fkTipoComponente = tc.idTipoComponente
+        WHERE c.fkMaquina = ${idMaquina}
+        AND a.nivel = 'CRÍTICO'
+        GROUP BY c.idComponente, tc.tipoComponete
+        ORDER BY total_alertas_criticos DESC
+        LIMIT 1;`;
+
+  return database.executar(instrucaoSql, [idMaquina]);
+}
 
 function buscar_dados_kpi(idMaquina) {
   console.log('[MODEL] KPI Pico 24h - Máquina:', idMaquina);
@@ -121,7 +132,7 @@ function buscar_dados_kpi(idMaquina) {
         ON C.fkTipoComponente = TC.idTipoComponente
         LEFT JOIN Registro R 
         ON R.fkComponente = C.idComponente
-        AND R.horario >= DATE_SUB(NOW(), INTERVAL 3000 HOUR)
+        AND R.horario >= DATE_SUB(NOW(), INTERVAL 730 HOUR)
         LEFT JOIN Alerta A 
         ON A.fkRegistro = R.idRegistro
         WHERE C.fkMaquina = ${idMaquina}
@@ -131,9 +142,7 @@ function buscar_dados_kpi(idMaquina) {
   return database.executar(instrucaoSql, [idMaquina]);
 }
 
-// ======================================================
 // Header – Info da máquina
-// ======================================================
 
 function buscar_info_maquina(idMaquina) {
   console.log('[MODEL] Info Máquina (Header) - Máquina:', idMaquina);
@@ -147,9 +156,7 @@ function buscar_info_maquina(idMaquina) {
   return database.executar(instrucaoSql, [idMaquina]);
 }
 
-// ======================================================
 // Detalhes dos componentes
-// ======================================================
 
 function buscar_info_componentes(idMaquina) {
   console.log('[MODEL] Info Componentes - Máquina:', idMaquina);
@@ -163,9 +170,7 @@ function buscar_info_componentes(idMaquina) {
   return database.executar(instrucaoSql, [idMaquina]);
 }
 
-// ======================================================
 // Parâmetros para o gráfico
-// ======================================================
 
 function buscar_parametros(idMaquina) {
   console.log('[MODEL] Parâmetros - Máquina:', idMaquina);
@@ -190,9 +195,7 @@ function buscar_parametros(idMaquina) {
   return database.executar(instrucaoSql, [idMaquina]);
 }
 
-// ======================================================
 // Dados agregados – 24h para gráfico
-// ======================================================
 
 function buscar_info_24_horas_coleta(idMaquina) {
   console.log('[MODEL] Gráfico 24h - Máquina:', idMaquina);
@@ -217,9 +220,7 @@ function buscar_info_24_horas_coleta(idMaquina) {
   return database.executar(instrucaoSql, [idMaquina]);
 }
 
-// ======================================================
 // EXPORTS
-// ======================================================
 
 module.exports = {
   buscar_info_maquina,
@@ -230,4 +231,5 @@ module.exports = {
   ultimo_eventos_maquina_especifica,
   calcular_taxa_disponibilidade,
   buscar_kpi_alertas_30_dias,
+  buscar_kpi_componente_critico
 };

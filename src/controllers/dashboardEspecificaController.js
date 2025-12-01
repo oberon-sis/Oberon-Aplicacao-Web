@@ -20,7 +20,8 @@ async function procurar_informacoes_maquina(req, res) {
       dados_coleta_24_horas,
       dados_ultimos_eventos,
       dados_kpi_disponibilidade,
-      dados_kpi_alertas_30d
+      dados_kpi_alertas_30d,
+      dados_kpi_componente_critico
     ] = await Promise.all([
       dashboardespecifica.buscar_info_maquina(idMaquina),
       dashboardespecifica.buscar_info_componentes(idMaquina),
@@ -29,7 +30,9 @@ async function procurar_informacoes_maquina(req, res) {
       dashboardespecifica.buscar_info_24_horas_coleta(idMaquina),
       dashboardespecifica.ultimo_eventos_maquina_especifica(idMaquina),
       dashboardespecifica.calcular_taxa_disponibilidade(idMaquina),
-      dashboardespecifica.buscar_kpi_alertas_30_dias(idMaquina)
+      dashboardespecifica.buscar_kpi_alertas_30_dias(idMaquina),
+      dashboardespecifica.buscar_kpi_componente_critico(idMaquina)
+
     ]);
 
     return res.status(200).json({
@@ -42,7 +45,8 @@ async function procurar_informacoes_maquina(req, res) {
         dados_coleta_24_horas,
         dados_ultimos_eventos,
         dados_kpi_disponibilidade,
-        dados_kpi_alertas_30d
+        dados_kpi_alertas_30d,
+        dados_kpi_componente_critico
       }
     });
 
