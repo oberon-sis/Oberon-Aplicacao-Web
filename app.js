@@ -71,7 +71,7 @@ app.use('/maquinas', maquinasRouter);
 app.use('/auth', authRouter);
 app.use('/alertas', alertasRouter);
 app.use('/api/download', downloadRoutes);
-app.use('/', analiseRedeRoutes);
+app.use('/analiseRede', analiseRedeRoutes);
 app.use('/dashboardEspecifica', dashboardEspecificaRouter);
 app.use('/painel', painelRoutes);
 app.use('/api/desempenho', analiseGeralRoutes);
