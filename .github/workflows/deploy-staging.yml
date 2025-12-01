@@ -49,8 +49,8 @@ jobs:
             cd /home/$APP_USER/Oberon-Config-AWS
             
             # 1. Login no Docker Hub na EC2
-            docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-            
+            # docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
             
             echo "# Arquivo .env gerado pelo GitHub Actions (Production)" > .env
             
@@ -76,7 +76,7 @@ jobs:
             echo "PYTHON_HOST='${{ secrets.PYTHON_HOST }}'" >> .env
             echo "SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN }}'" >> .env
             echo "BOT_PADRAO_IDS='${{ secrets.BOT_PADRAO_IDS }}'" >> .env
-            echo "ADMINS_PADRAO_EMAILS='${{ secrets.ADMINS_PADRAO_EMAILS }}'" >> .env
+            echo "ADMINS_PADRAO_EMAILS='${{ secrets.ADMINS_PADRAO_EMAILS }}" >> .env
             
 
             # Fazendo o pull da imagem 
