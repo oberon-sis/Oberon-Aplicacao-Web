@@ -54,7 +54,9 @@ jobs:
             
             echo "# Arquivo .env gerado pelo GitHub Actions (Production)" > .env
             
-            echo "WEB_IMAGE=$IMAGE_NAME:$IMAGE_TAG" >> .env 
+            echo "WEB_IMAGE=jhoeldiego/oberon-app-web:$IMAGE_TAG" >> .env 
+            echo "BANCO_IMAGE=jhoeldiego/oberon-banco-de-dados:latest >> .env 
+            echo "PYTHON_IMAGE=jhoeldiego/oberon-analise-ia:latest >> .env 
 
             echo "AMBIENTE_PROCESSO=producao" >> .env
 
@@ -74,9 +76,16 @@ jobs:
             echo "FRONTEND_URL='${{ secrets.FRONTEND_URL_PROD }}'" >> .env
 
             echo "PYTHON_HOST='${{ secrets.PYTHON_HOST }}'" >> .env
-            echo "SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN }}'" >> .env
+            echo "SLACK_BOT_TOKEN='${{ secrets.SLACK_BOT_TOKEN }}'" >> .env
             echo "BOT_PADRAO_IDS='${{ secrets.BOT_PADRAO_IDS }}'" >> .env
-            echo "ADMINS_PADRAO_EMAILS='${{ secrets.ADMINS_PADRAO_EMAILS }}" >> .env
+            echo "ADMINS_PADRAO_EMAILS='${{ secrets.ADMINS_PADRAO_EMAILS }}'" >> .env
+
+            echo "HOST_DB='${{ secrets.DB_HOST_PROD }}'" >> .env
+            echo "USER_DB='${{ secrets.DB_USER_PROD }}'" >> .env
+            echo "PASSWORD_DB='${{ secrets.DB_PASSWORD_PROD }}'" >> .env
+            echo "GEMINI_API_KEY='${{ secrets.GEMINI_API_KEY }}'" >> .env
+            echo "PORT=5055" >> .env
+
             
 
             # Fazendo o pull da imagem 
