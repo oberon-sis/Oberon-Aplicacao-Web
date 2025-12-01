@@ -171,26 +171,69 @@ function atualizarKpis(dadosAlertaKPI, dadosDisp) {
 // ============================
 
 function montarGrafico24h(dados) {
-    const labels = [...new Set(dados.map(d => d.intervaloTempo))].sort();
+   
+    const diasSemana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta"];
+
     const recursos = ['CPU', 'RAM', 'DISCO', 'REDE'];
+
     const datasetsMap = {};
 
-    recursos.forEach(r => datasetsMap[r] = {
-        label: `${r} (%)`,
+    for (let i = 0; i < recursos.length; i++) {
+        const r = recursos[i];
+        datasetsMap[r] = {
+            label: `${r} (%)`,
+            data: [],
+            tension: 0.4,
+            fill: false
+        };
+    }
+
+    datasetsMap["CRITICO"] = {
+        label: "Crítico (%)",
         data: [],
-        tension: 0.4,
+        borderDash: [6, 6],
+        tension: 0.1,
         fill: false
-    });
+    };
 
-    labels.forEach(intervalo => {
-        recursos.forEach(r => {
-            const item = dados.find(d => d.intervaloTempo === intervalo && d.tipoRecurso === r);
-            datasetsMap[r].data.push(item ? item.valor_medio : null);
-        });
-    });
+    datasetsMap["OCIOSO"] = {
+        label: "Ocioso (%)",
+        data: [],
+        borderDash: [6, 6],
+        tension: 0.1,
+        fill: false
+    };
 
-    return { labels, datasets: Object.values(datasetsMap) };
+ 
+    for (let i = 0; i < diasSemana.length; i++) {
+        const dia = diasSemana[i];
+
+        for (let j = 0; j < recursos.length; j++) {
+            const recurso = recursos[j];
+
+            let valorEncontrado = null;
+
+            for (let k = 0; k < dados.length; k++) {
+                const d = dados[k];
+                if (d.intervaloTempo === dia && d.tipoRecurso === recurso) {
+                    valorEncontrado = d.valor_medio;
+                    break;
+                }
+            }
+
+            datasetsMap[recurso].data.push(valorEncontrado);
+        }
+
+        datasetsMap["CRITICO"].data.push(90);
+        datasetsMap["OCIOSO"].data.push(20);
+    }
+
+    return { 
+        labels: diasSemana,
+        datasets: Object.values(datasetsMap)
+    };
 }
+
 
 function atualizarGraficoPrincipal(dadosGrafico) {
     const ctx = graficoCanvasPrincipal.getContext("2d");
@@ -215,11 +258,17 @@ function atualizarGraficoPrincipal(dadosGrafico) {
 // ============================
 
 function montarGrafGraficoAlertas(dados) {
-    return {
-        labels: dados.map(d => d.tipoRecurso),
-        data: dados.map(d => d.totalAlertas24h)
-    };
+    const labels = [];
+    const data = [];
+
+    for (let i = 0; i < dados.length; i++) {
+        labels.push(dados[i].tipoRecurso);
+        data.push(dados[i].totalAlertas24h);
+    }
+
+    return { labels, data };
 }
+
 
 
 
@@ -235,11 +284,11 @@ function atualizarGraficoAlertas(dadosGrafico) {
         graficoAlertas.destroy();
     }
 
-    // Cores (para manter o padrão do mock, mas dinâmico)
     const backgroundColors = dadosGrafico.labels.map(label => {
-        if (label === 'RAM') return 'rgba(0, 123, 255, 0.7)';
-        if (label === 'CPU') return 'rgba(220, 53, 69, 0.7)';
-        return 'rgba(40, 167, 69, 0.7)'; // DISCO
+        if (label === 'RAM') return '#046d8b';
+        if (label === 'CPU') return '#309292';
+        if (label === 'REDE') return '#2fb8ac'
+        return '#2f576eff'; // DISCO
     });
     
     graficoAlertas = new Chart(ctx2, {
