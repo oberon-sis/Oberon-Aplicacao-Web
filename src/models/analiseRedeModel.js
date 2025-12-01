@@ -196,8 +196,24 @@ LIMIT 5;
 }
 
 
+function listarMaquinas(fkEmpresa) {
+    var instrucaoSql = `
+        SELECT 
+            idMaquina,
+            nome
+        FROM Maquina 
+        WHERE fkEmpresa = ${fkEmpresa}
+        ORDER BY nome;
+    `;
+   
+    return database.executar(instrucaoSql);
+}
+
+
+
+
 
 module.exports = {
     getMediaLatencia,getSomaAlertas,getPerdaPacote, getDisponibilidade, getLatenciaUltimas24h, getJitter,getPacotesEnviados,getPacotesRecebidos,
-    autenticar,buscarRanking
+    autenticar,buscarRanking, listarMaquinas
 };
