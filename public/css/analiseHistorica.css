@@ -192,77 +192,103 @@ a {
   }
 }
 
-
 .table th {
-    font-weight: 600;
-    color: #6c757d;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.5px;
+  font-weight: 600;
+  color: #6c757d;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
 }
 
-.badge.bg-danger { background-color: #ffe5e5 !important; color: #cc0000 !important; }
-.badge.bg-warning { background-color: #fff8c5 !important; color: #9a6700 !important; }
-.badge.bg-info { background-color: #e3f2fd !important; color: #0d47a1 !important; }
-.badge.bg-success { background-color: #d4edda !important; color: #155724 !important; }
+.badge.bg-danger {
+  background-color: #ffe5e5 !important;
+  color: #cc0000 !important;
+}
+.badge.bg-warning {
+  background-color: #fff8c5 !important;
+  color: #9a6700 !important;
+}
+.badge.bg-info {
+  background-color: #e3f2fd !important;
+  color: #0d47a1 !important;
+}
+.badge.bg-success {
+  background-color: #d4edda !important;
+  color: #155724 !important;
+}
 
 .kpi-card {
-    border: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    transition: transform 0.2s;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
 }
 .kpi-card:hover {
-    transform: translateY(-2px);
+  transform: translateY(-2px);
 }
-.kpi-card, .data-card {
-    background-color: #ffffff;
-    border: 1px solid #e9ecef;
-    border-radius: 16px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
-    padding: 24px;
-    transition: all 0.3s ease;
+.kpi-card,
+.data-card {
+  background-color: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.02),
+    0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  padding: 24px;
+  transition: all 0.3s ease;
 }
 
 .kpi-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
 }
 
 .icone-info {
-    width: 18px;
-    height: 18px;
-    opacity: 0.5;
-    transition: opacity 0.2s;
-    filter: grayscale(100%)
+  width: 18px;
+  height: 18px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  filter: grayscale(100%);
 }
 .saber_mais:hover .icone-info {
-    opacity: 1;
-    filter: grayscale(0%);
+  opacity: 1;
+  filter: grayscale(0%);
 }
 
 .table thead th {
-    background-color: transparent;
-    border-bottom: 1px solid #e9ecef;
-    color: #8392ab;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    font-weight: 700;
-    padding-bottom: 12px;
+  background-color: transparent;
+  border-bottom: 1px solid #e9ecef;
+  color: #8392ab;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding-bottom: 12px;
 }
 .table td {
-    padding: 16px 8px;
-    border-bottom: 1px solid #f1f3f5;
-    vertical-align: middle;
-    color: #495057;
-    font-size: 0.9rem;
+  padding: 16px 8px;
+  border-bottom: 1px solid #f1f3f5;
+  vertical-align: middle;
+  color: #495057;
+  font-size: 0.9rem;
 }
 
 .badge {
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    padding: 0.55em 0.9em;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 0.55em 0.9em;
 }
-.bg-danger { background-color: #fdecef !important; color: #f13a53 !important; }
-.bg-warning { background-color: #fef7e0 !important; color: #d99a06 !important; }
-.bg-info    { background-color: #e3f2fd !important; color: #0866c6 !important; }
-.bg-success { background-color: #e6f7ec !important; color: #0d9449 !important; }
+.bg-danger {
+  background-color: #fdecef !important;
+  color: #f13a53 !important;
+}
+.bg-warning {
+  background-color: #fef7e0 !important;
+  color: #d99a06 !important;
+}
+.bg-info {
+  background-color: #e3f2fd !important;
+  color: #0866c6 !important;
+}
+.bg-success {
+  background-color: #e6f7ec !important;
+  color: #0d9449 !important;
+}
