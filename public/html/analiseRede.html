@@ -95,6 +95,7 @@
         rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
         rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
       height: 222px;
+      
      
       width: 750px;
     }
@@ -158,19 +159,14 @@
     .acoes-recomendadas-scroll {
       max-height: 135px;
     
-      overflow-y: auto;
+      overflow-x: auto; 
       padding-right: 10px;
    
     }
 
-    .acoes-recomendadas-scroll::-webkit-scrollbar {
-      width: 6px;
-    }
+    
 
-    .acoes-recomendadas-scroll::-webkit-scrollbar-thumb {
-      background-color: #bbb;
-      border-radius: 10px;
-    }
+
 
 
     .text-black {
@@ -190,19 +186,21 @@
 <body class="d-flex w-100 h-100"  onload="carregarRankingRede()">
   <div id="menu-container"></div>
 
-  <main class="content flex-grow-1 padding_main dashboard-main">
-    <button class="btn btn-secondary d-md-none mb-4" type="button" data-bs-toggle="offcanvas"
-      data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+   <main class="content flex-grow-1 padding_main main">
+    <button class="btn btn-secondary d-md-none mb-4 " type="button" data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar" style="margin-left: 1rem;">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
         viewBox="0 0 16 16">
         <path fill-rule="evenodd"
           d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
       </svg>
     </button>
+    
     <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
       <h2 class="text-black me-3">
         Análise de Rede &nbsp;&nbsp; <span id="tituloDoPainel">Máquina-002</span>
       </h2>
+      
 
       <div class="d-flex align-items-center flex-wrap flex-grow-1 me-3">
         <div class="d-flex align-items-center me-3 mb-2 mb-md-0">
@@ -242,13 +240,18 @@
           </div>
 
           <div class="d-flex align-items-center ms-auto"></div>
+           <div class="d-flex align-items-center ms-auto">
+        <button class="btn btn-primary d-none d-md-inline-block">
+          <i class="bi bi-compass-fill me-2"></i> Primeiros Passos
+        </button>
+      </div>
     </header>
 
     <section class="kpi-container" id="kpi-section">
       <div class="kpi-card" id="kpi-disponibilidade">
         <div class="topo-kpi">
           <h6>Disponibilidade de rede</h6>
-          <div class="icone-kpi"><i class="bi bi-box-arrow-in-up"></i></div>
+          <div class="icone-kpi"><i class="bi bi-wifi"></i></div>
         </div>
 
         <div class="baixo-kpi">
@@ -268,16 +271,16 @@
       <div class="kpi-card" id="kpi-total-alertas">
         <div class="topo-kpi">
           <h6>Quantidade Total De Alertas</h6>
-          <div class="icone-kpi"><i class="bi bi-bell"></i></div>
+          <div class="icone-kpi"><i class="bi bi-bell-fill"></i></div>
         </div>
         <div class="baixo-kpi">
           <div>
-            <span id="qntTotalAlertas" class="text-danger"> 30 <i style="scale: 1.2"></i> </span>
+            <span id="qntTotalAlertas" class="text-danger"> carregando... <i style="scale: 1.2"></i> </span>
 
           </div>
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
             data-bs-trigger="focus" data-bs-title="O que são Alertas?"
-            data-bs-content="Total de notificações geradas por exceder limites configurados de uso de recursos (CPU, RAM, etc.) ou falhas no sistema durante o bimestre.">
+            data-bs-content="Total de notificações geradas por exceder limites configurados de uso de recursos da rede ou falhas no sistema durante o bimestre.">
             <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
           </button>
         </div>
@@ -287,18 +290,19 @@
         <div class="topo-kpi">
           <h6>Jitter</h6>
           <div class="icone-kpi">
-            <i class="bi bi-exclamation-triangle-fill"></i>
+            <i class="bi bi-activity"></i>
           </div>
         </div>
         <div class="baixo-kpi">
           <div>
-            <span id="txt_jitter" class="text-danger">20ms<i class="bi bi-arrow-up" style="scale: 1.2"></i>
+            <span id="txt_jitter" class="text-danger">carregando...<i class="bi bi-arrow-up" style="scale: 1.2"></i>
             </span>
 
           </div>
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
-            data-bs-trigger="focus" data-bs-title="O que é Alerta Crítico?"
-            data-bs-content="A proporção de alertas que atingiram o nível de maior gravidade ('Crítico'), indicando falhas graves ou iminentes que exigem ação imediata.">
+            data-bs-trigger="focus"data-bs-title="O que é Jitter?"
+            data-bs-content="Variação do tempo de resposta entre pacotes. Quanto maior, pior a estabilidade da rede."
+>
             <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
           </button>
         </div>
@@ -306,7 +310,7 @@
       <div class="kpi-card" id="kpi-componente-critico">
         <div class="topo-kpi">
           <h6>Throughput</h6>
-          <div class="icone-kpi"><i class="bi bi-memory"></i></div>
+          <div class="icone-kpi"><i class="bi bi-speedometer2"></i></div>
         </div>
 
         <div class="baixo-kpi">
@@ -316,8 +320,9 @@
 
           </div>
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
-            data-bs-trigger="focus" data-bs-title="Componente Crítico"
-            data-bs-content="O recurso (CPU, RAM, DISCO, etc.) que gerou o maior número de alertas no nível 'Crítico' durante o bimestre analisado.">
+            data-bs-trigger="focus" data-bs-title="O que é Throughput?"
+            data-bs-content="Quantidade real de dados transmitidos por segundo. Mede a capacidade útil da rede."
+>
             <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
           </button>
         </div>
@@ -326,7 +331,7 @@
       <div class="kpi-card" id="kpi-tempo-alertas">
         <div class="topo-kpi">
           <h6>Perda de pacote</h6>
-          <div class="icone-kpi"><i class="bi bi-stopwatch"></i></div>
+          <div class="icone-kpi"><i class="bi bi-graph-down-arrow"></i></div>
         </div>
         <div class="baixo-kpi">
           <div>
@@ -335,8 +340,9 @@
 
           </div>
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
-            data-bs-trigger="focus" data-bs-title="O que é MTBA (Tempo Médio Entre Alertas)?"
-            data-bs-content="O tempo médio que decorre entre a geração de um alerta e o próximo, refletindo a frequência dos problemas de desempenho ou falhas no sistema.">
+            data-bs-trigger="focus" data-bs-title="O que é Throughput?"
+            data-bs-content="Quantidade real de dados transmitidos por segundo. Mede a capacidade útil da rede."
+>
             <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
           </button>
         </div>
@@ -365,19 +371,19 @@
       </div>
 
       
-  <section class="details-container" style="display:flex; margin-top:20px;">
+  <section class="details-container" style="display:block; margin-bottom:20px; flex-wrap: wrap;">
 
-  <div class="chart-item-wrapper" id="chart-ranking-rede">
+  <div class="chart-item-wrapper" id="chart-ranking-rede" >
     <h3 class="text-lg font-medium mb-2 text-gray-700">
-      Ranking de Máquinas por Alertas de Rede
+      Top 5 Máquinas por Alertas de Rede
     </h3>
 
-    <div class="overflow-x-auto max-h-[250px]">
-      <table class="table table-striped table-hover table-sm">
+    <div class="overflow-x-auto max-h-[300px] ranking-scroll" >
+      <table class="table table-striped table-hover table-sm " >
         <thead>
           <tr>
             <th>Máquina</th>
-            <th>Alertas (Últimos 60 dias)</th>
+            <th>Alertas (Últimos 30 dias)</th>
           </tr>
         </thead>
         <tbody id="tbody-ranking-rede"></tbody>
@@ -451,7 +457,7 @@ async function carregarGraficoSeveridade() {
   const idMaquina = 1;
 
   try {
-    console.log("🔍 Carregando dados…");
+    
 
     const reqRecebidos = await fetch(`/recebidos/${idMaquina}`);
     const reqEnviados  = await fetch(`/enviados/${idMaquina}`);
@@ -477,7 +483,7 @@ async function carregarGraficoSeveridade() {
         labels: ["Pacotes Enviados", "Pacotes Recebidos"],
         datasets: [{
           data: [mediaEnviados, mediaRecebidos],
-          backgroundColor: ["#4BC0C0", "#FFCE56"]
+          backgroundColor: ["#0097b1", "#113d57"]
         }]
       },
       options: {
@@ -509,7 +515,7 @@ carregarGraficoSeveridade()
       labels.push(String(hora).padStart(2, '0') + 'H');
     }
 
-    // Cria array com valor para cada hora (ou null se não tiver dado)
+   
     const throughputPorHora = labels.map(label => {
       const hora = parseInt(label);
       const registro = dados.find(item => new Date(item.horario).getHours() === hora);
@@ -694,7 +700,7 @@ const resposta = await fetch(`/ranking/${fkEmpresa}`);
     console.log("Ranking recebido:", dados);
 
     const tbody = document.getElementById("tbody-ranking-rede");
-    tbody.innerHTML = ""; // limpar tabela
+    tbody.innerHTML = ""; 
 
     if (!dados || dados.length === 0) {
       tbody.innerHTML = `
@@ -739,7 +745,7 @@ const resposta = await fetch(`/ranking/${fkEmpresa}`);
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+<script src="../component/tour/TourGuide.js"></script>
   <script src="../component/menu/Menu.js"></script>
 </body>
 

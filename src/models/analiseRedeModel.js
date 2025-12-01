@@ -175,16 +175,20 @@ function autenticar(email, senha) {
 function buscarRanking(fkEmpresa) {
     const sql = `
         SELECT 
-            m.nome AS maquina,
-            COUNT(a.idAlerta) AS total_alertas
-        FROM Alerta a
-        JOIN Registro r ON a.fkRegistro = r.idRegistro
-        JOIN Componente c ON r.fkComponente = c.idComponente
-        JOIN Maquina m ON c.fkMaquina = m.idMaquina
-        WHERE m.fkEmpresa = ${fkEmpresa}
-        GROUP BY m.nome
-        ORDER BY total_alertas DESC
-        LIMIT 5;
+    m.nome AS maquina,
+    COUNT(a.idAlerta) AS total_alertas
+FROM Alerta a
+JOIN Registro r 
+    ON a.fkRegistro = r.idRegistro
+JOIN Componente c 
+    ON r.fkComponente = c.idComponente
+JOIN Maquina m 
+    ON c.fkMaquina = m.idMaquina
+WHERE m.fkEmpresa = ${fkEmpresa}
+  AND r.horario >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+GROUP BY m.nome
+ORDER BY total_alertas DESC
+LIMIT 5;
     `;
 
     console.log("Executando SQL:", sql);
