@@ -330,3 +330,52 @@
 .profile-name {
   color: #ffffff;
 }
+
+.submenu-item {
+  display: block;
+  padding: 8px 10px 8px 48px;
+  color: #aeb1b7;
+  margin: 2px 0;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+/* ded */
+.offcanvas-submenu-item.active-link {
+  background-color: #313740;
+  color: #e0e6ea;
+}
+.submenu-item:hover,
+.submenu-item.active-link {
+  background-color: #009ab4;
+  color: #e0e6ea;
+}
+.nav-item-fixed:hover,
+.nav-item-fixed.active-link,
+.profile-link-desktop:hover,
+.profile-link-desktop.active-link,
+.nav-link-accordion-toggle.active-link {
+  background-color: #009ab4;
+  color: #e0e6ea;
+}
+.nav-item-accordion .nav-link-accordion-toggle[aria-expanded='true'] {
+  background-color: #313740;
+  color: #e0e6ea;
+}
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 0;
+  margin-right: 5px;
+  font-size: 12px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+.profile-info span {
+  word-break: break-all;
+  white-space: normal;
+}
+a {
+  text-decoration: none !important;
+}

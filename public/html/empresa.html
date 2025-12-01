@@ -15,8 +15,6 @@
   <link rel="stylesheet" href="../component/notificao/Notificaocao.css">
   <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
 </head>
 
 <body class="d-flex w-100 h-100" onload="getDadosEmpresaBd()">
@@ -32,100 +30,79 @@
           d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
       </svg>
     </button>
+
     <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
       <h2 id="titleh2" class="text-black">Edição de dados da Empresa</h2>
     </header>
+
     <div class="d-flex justify-content-between align-items-center mb-4 p-4 bg-white shadow-sm rounded div_banner"
       style="margin-top: 10px;">
       <div class="me-3">
         <h4 class="text-white mb-1">
-          Olá <span id="nome_funcionario_logado"></span> - Seja bem-vindo(a)
+          Olá <span id="nome_funcionario_logado">Carregando...</span>
         </h4>
         <p class="mb-0 text-white">
-          <span id="cargo_funcionario_logado" style="display: none;"></span>Administrador(a) da <span id="nome_banco"></span>
+          Administrador(a) da <span id="nome_banco">...</span>
         </p>
         <p class="mb-0 small text-white">
-          Dados organizados, resultados otimizados. Gerencie as informações<br>da sua empresa com facilidade.
+          Gerencie as informações da sua empresa com facilidade.
         </p>
       </div>
-      <img src="../assets/img/Banner.jpg" alt="Imagem de Boas-Vindas - Pessoas em um painel"
-        class="img-fluid rounded  d-md-block banner">
+      <img src="../assets/img/Banner.jpg" alt="Imagem de Boas-Vindas" class="img-fluid rounded d-md-block banner">
     </div>
 
-
-    <!-- Excluir empresa -->
     <div class="cont_tudo w-100">
+      
       <div class="container01">
-
-
         <h3 class="txt-dados">Dados Atuais</h3>
         <div class="dadosAtuais">
-
           <br>
-          <label for="name">Razão Social</label>
+          <label>Razão Social</label>
           <br> <br>
-          <p id="razao_social_atual">Carregando...</p>
-
+          <p id="razao_social_atual">...</p>
         </div>
-
         <br>
-
         <div class="form-grupo">
-          <label for="id">CNPJ</label>
-
+          <label>CNPJ</label>
           <div class="input-container">
             <br>
-            <p id="cnpj_atual">Carregando...</p>
+            <p id="cnpj_atual">...</p>
             <p id="linha"></p>
           </div>
-
-
         </div>
-
+        
+        <input type="hidden" id="hdn_id_empresa">
 
         <button type="button" class="excluir-btn verde_obscuro" onclick="deleteEmpresa()">Excluir Empresa</button>
       </div>
-      <!-- Editar empresa -->
 
-      <br>
-      <br>
+      <br><br>
       <div class="container01">
         <h3 class="txt-dados">Novos dados</h3>
-        <form id="editarEmpresa">
+        <form id="editarEmpresa" onsubmit="return false;">
           <div class="form-empresa">
             <br>
             <label class="label-esp" for="ipt_razao_social">Razão Social</label>
             <br><br>
-            <input type="text" class="ipt" id="ipt_razao_social" name="razao"
-              placeholder="Digite a Razão Social de sua empresa" required>
+            <input type="text" class="ipt" id="ipt_razao_social" placeholder="Digite a Razão Social" required>
           </div>
-
-
           <br>
           <div class="form-empresa">
             <label class="label-esp" for="ipt_cnpj">CNPJ</label>
             <br><br>
-            <input type="text" class="ipt" id="ipt_cnpj" name="CNPJ" placeholder="Digite seu CNPJ" required>
+            <input type="text" class="ipt" id="ipt_cnpj" placeholder="Digite o CNPJ" required>
           </div>
-
           <br>
-
-
         </form>
-        <button type="submit" class="atualizar-btn" onclick="AtualizarUsuario()">Editar</button>
-
+        <button type="button" class="atualizar-btn" onclick="atualizarEmpresa()">Editar</button>
       </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/edicaoDadosEmpresa.js"></script>
+    <script src="../js/TESTE2.js"></script>
     <script src="../component/menu/Menu.js"></script>
     <script src="../component/notificao/Notificacao.js"></script>
 
-
   </main>
-
-
 </body>
-
 </html>

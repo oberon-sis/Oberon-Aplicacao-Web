@@ -1,679 +1,337 @@
+// ============================================================================
+// VARIÁVEIS GLOBAIS
+// ============================================================================
+let maquinaAtualId = 0;
+let filtroAtual = "todas";
+let componenteAtual = "cpu";
 let linhaChartInstance = null;
-let linhaIntervalId = null;
-let maquinaAtualId = 3; // Iniciar na Máquina-0001 (ID 3)
-let filtroAtual = 'todas';
-let componenteAtual = 'cpu';
-const LINHA_CHART_ID = 'utilizacaoChart';
+
+let INFO_TECNICA_COMPUTADOR = [];
+let INFO_TECNICA_COMPONENTES = [];
+let DADOS_KPI_ALERTAS = {};
+let DADOS_PARAMETROS = {};
+let DADOS_GRAFICO_24H = {};
+
+const LINHA_CHART_ID = "utilizacaoChart";
 
 const COLORS = {
-  cpu: { line: 'rgba(157, 206, 206, 0.8)', point: '#BADCDA' },
-  ram: { line: 'rgba(62, 150, 131, 0.8)', point: '#0C8186' },
-  disco: { line: 'rgba(230, 126, 34, 0.8)', point: '#e67e22' },
-  rede: { line: 'rgba(51, 51, 51, 0.8)', point: '#000000ff' },
-};
-
-const MAQUINAS_DATA = {
-  1: {
-    nome: 'Máquina-0021',
-    criticidade: 'normal',
-    cpu24h: 5,
-    cpuPico: 91,
-    ram24h: 3,
-    ramPico: 89,
-    rede24h: 2,
-    redePico: 5,
-    disco24h: 4,
-    discoPico: 89,
-    cpuLimite: 78,
-    cpuLimiteAtencao: 65, 
-    cpuLimiteMin: 12.4,
-    ramLimite: 74.3,
-    ramLimiteAtencao: 60.0, 
-    ramLimiteMin: 20.4,
-    discoLimite: 88.8,
-    discoLimiteAtencao: 60.0, 
-    discoLimiteMin: 40.5,
-    redeLimite: 3.5,
-    redeLimiteAtencao: 2.8, 
-    redeLimiteMin: 1.7,
-    modelo: 'Dell OptiPlex 3050 SFF',
-    ip: '192.168.1.101',
-    so: 'Windows 10 Pro',
-    nucleosCpu: 8,
-    capacidadeRam: '16 GB',
-    capacidadeDisco: '512 GB',
-  },
-  2: {
-    nome: 'Máquina-0022',
-    criticidade: 'ocioso',
-    cpu24h: 4,
-    cpuPico: 25,
-    ram24h: 2,
-    ramPico: 35,
-    rede24h: 1,
-    redePico: 1,
-    disco24h: 3,
-    discoPico: 57,
-    cpuLimite: 78,
-    cpuLimiteAtencao: 65, 
-    cpuLimiteMin: 12.4,
-    ramLimite: 74.3,
-    ramLimiteAtencao: 60.0, 
-    ramLimiteMin: 20.4,
-    discoLimite: 88.8,
-    discoLimiteAtencao: 80.0, 
-    discoLimiteMin: 47.5,
-    redeLimite: 3.5,
-    redeLimiteAtencao: 2.8, 
-    redeLimiteMin: 1.7,
-    modelo: 'Dell OptiPlex 5060',
-    ip: '192.168.1.102',
-    so: 'Windows 10 Pro',
-    nucleosCpu: 8,
-    capacidadeRam: '16 GB',
-    capacidadeDisco: '512 GB',
-  },
-  3: {
-    nome: 'Máquina-0001',
-    criticidade: 'critico',
-    cpu24h: 15,
-    cpuPico: 93,
-    ram24h: 10,
-    ramPico: 92,
-    rede24h: 5,
-    redePico: 10,
-    disco24h: 12,
-    discoPico: 94,
-    cpuLimite: 78,
-    cpuLimiteAtencao: 65, 
-    cpuLimiteMin: 12.4,
-    ramLimite: 74.3,
-    ramLimiteAtencao: 60.0, 
-    ramLimiteMin: 25.4,
-    discoLimite: 88.8,
-    discoLimiteAtencao: 80.0, 
-    discoLimiteMin: 47.5,
-    redeLimite: 3.5,
-    redeLimiteAtencao: 2.8, 
-    redeLimiteMin: 1.7,
-    modelo: 'Dell OptiPlex 3050 SFF',
-    ip: '192.168.1.103',
-    so: 'Windows 10 Pro',
-    nucleosCpu: 8,
-    capacidadeRam: '8 GB',
-    capacidadeDisco: '256 GB',
-  },
-  4: {
-    nome: 'Máquina-0002',
-    criticidade: 'offline',
-    cpu24h: 0,
-    cpuPico: 0,
-    ram24h: 0,
-    ramPico: 0,
-    rede24h: 0,
-    redePico: 0,
-    disco24h: 0,
-    discoPico: 0,
-    cpuLimite: 78,
-    cpuLimiteAtencao: 65, 
-    cpuLimiteMin: 12.4,
-    ramLimite: 74.3,
-    ramLimiteAtencao: 60.0, 
-    ramLimiteMin: 25.4,
-    discoLimite: 88.8,
-    discoLimiteAtencao: 80.0, 
-    discoLimiteMin: 47.5,
-    redeLimite: 3.5,
-    redeLimiteAtencao: 2.8, 
-    redeLimiteMin: 1.7,
-    modelo: 'Dell OptiPlex 7060',
-    ip: '192.168.1.104',
-    so: 'Windows 10 Pro',
-    nucleosCpu: 8,
-    capacidadeRam: '8 GB',
-    capacidadeDisco: '512 GB',
-  },
-  5: {
-    nome: 'Máquina-0015',
-    criticidade: 'atencao',
-    cpu24h: 8,
-    cpuPico: 77,
-    ram24h: 12,
-    ramPico: 82,
-    rede24h: 4,
-    redePico: 4,
-    disco24h: 9,
-    discoPico: 82,
-    cpuLimite: 78,
-    cpuLimiteAtencao: 65, 
-    cpuLimiteMin: 12.4,
-    ramLimite: 74.3,
-    ramLimiteAtencao: 60.0, 
-    ramLimiteMin: 25.4,
-    discoLimite: 88.8,
-    discoLimiteAtencao: 80.0, 
-    discoLimiteMin: 47.5,
-    redeLimite: 3.5,
-    redeLimiteAtencao: 2.8, 
-    redeLimiteMin: 1.7,
-    modelo: 'Dell OptiPlex 3050 SFF',
-    ip: '192.168.1.105',
-    so: 'Windows 10 Pro',
-    nucleosCpu: 8,
-    capacidadeRam: '8 GB',
-    capacidadeDisco: '512 GB',
-  },
-  6: {
-    nome: 'Máquina-0030',
-    criticidade: 'manutencao',
-    cpu24h: 0,
-    cpuPico: 0,
-    ram24h: 0,
-    ramPico: 0,
-    rede24h: 0,
-    redePico: 0,
-    disco24h: 0,
-    discoPico: 0,
-    cpuLimite: 78,
-    cpuLimiteAtencao: 65, 
-    cpuLimiteMin: 12.4,
-    ramLimite: 74.3,
-    ramLimiteAtencao: 60.0, 
-    ramLimiteMin: 25.4,
-    discoLimite: 88.8,
-    discoLimiteAtencao: 80.0, 
-    discoLimiteMin: 47.5,
-    redeLimite: 3.5,
-    redeLimiteAtencao: 2.8, 
-    redeLimiteMin: 1.7,
-    modelo: 'Dell OptiPlex 3060',
-    ip: '192.168.1.106',
-    so: 'Windows 11 Pro',
-    nucleosCpu: 8,
-    capacidadeRam: '8 GB',
-    capacidadeDisco: '256 GB',
-  },
+  cpu: { line: "rgba(157, 206, 206, 0.8)", point: "#BADCDA" },
+  ram: { line: "rgba(62, 150, 131, 0.8)", point: "#0C8186" },
+  disco: { line: "rgba(230, 126, 34, 0.8)", point: "#e67e22" },
+  rede: { line: "rgba(51, 51, 51, 0.8)", point: "#000000ff" },
 };
 
 const COMPONENT_LABELS = {
-  cpu: 'Uso de CPU',
-  ram: 'Uso de RAM',
-  disco: 'Uso do Disco Duro',
-  rede: 'Taxa de utilização de rede',
+  cpu: "Uso de CPU",
+  ram: "Uso de RAM",
+  disco: "Uso de Disco",
+  rede: "Conectividade de Rede",
 };
 
-function limiteEstaVisivel(id) {
-  const checkbox = document.getElementById(id);
-  return checkbox && checkbox.checked;
-}
-
-function getLimiteMaximo() {
-  const maquina = MAQUINAS_DATA[maquinaAtualId];
-  const limites = {
-    cpu: maquina.cpuLimite,
-    ram: maquina.ramLimite,
-    disco: maquina.discoLimite,
-    rede: maquina.redeLimite,
-  };
-  return limites[componenteAtual] || 90;
-}
-
-function getLimiteMinimo() {
-  const maquina = MAQUINAS_DATA[maquinaAtualId];
-  const limites = {
-    cpu: maquina.cpuLimiteMin,
-    ram: maquina.ramLimiteMin,
-    disco: maquina.discoLimiteMin,
-    rede: maquina.redeLimiteMin,
-  };
-  return limites[componenteAtual] || 90;
-}
-
-function getLimiteAtencao() {
-  const maquina = MAQUINAS_DATA[maquinaAtualId];
-  const limiteKey = `${componenteAtual}LimiteAtencao`;
-
-  const limites = {
-    cpu: maquina.cpuLimiteAtencao,
-    ram: maquina.ramLimiteAtencao,
-    disco: maquina.discoLimiteAtencao,
-    rede: maquina.redeLimiteAtencao,
-  }; // Retorna o valor de atenção, ou 70 como fallback.
-
-  return limites[componenteAtual] || 70;
-}
-
-function getOpcoesChart() {
-  const limiteMax = getLimiteMaximo();
-  const limiteMin = getLimiteMinimo(); // Obtém o limite de atenção SEM CÁLCULO
-  const limiteAtencao = getLimiteAtencao();
-  const isRede = componenteAtual === 'rede';
-
-  const annotations = {}; // 1. LIMITE MÁXIMO (CRÍTICO)
-
-  if (limiteEstaVisivel('toggleLimiteCritico')) {
-    annotations.limiteCritico = {
-      type: 'line',
-      yMin: limiteMax,
-      yMax: limiteMax,
-      borderColor: 'rgb(255, 99, 132)', // Vermelho
-      borderWidth: 2,
-      borderDash: [5, 5],
-      label: {
-        display: true,
-        content: `Limite Máximo (Crítico): ${limiteMax}%`,
-        position: 'end',
-        backgroundColor: 'rgba(255, 99, 132, 0.8)',
-        color: 'white',
-        font: { size: 11 },
-      },
+// ============================================================================
+// ADAPTADORES DE DADOS
+// ============================================================================
+function adaptarKPIs(kpis) {
+  const dados = {};
+  (kpis || []).forEach((item) => {
+    dados[(item.tipoRecurso || "").toUpperCase()] = {
+      totalAlertas24h: item.totalAlertas24h || 0,
+      maiorPicoUso: item.maiorPicoUso || 0,
     };
-  } // 2. LIMITE DE ATENÇÃO
-
-  if (limiteEstaVisivel('toggleLimiteAtencao')) {
-    annotations.limiteAtencao = {
-      type: 'line',
-      yMin: limiteAtencao,
-      yMax: limiteAtencao,
-      borderColor: 'rgb(255, 159, 64)', // Laranja
-      borderWidth: 2,
-      borderDash: [5, 5],
-      label: {
-        display: true,
-        content: `Limite de Atenção: ${limiteAtencao}%`,
-        position: 'end',
-        backgroundColor: 'rgba(255, 159, 64, 0.8)',
-        color: 'white',
-        font: { size: 11 },
-      },
-    };
-  } // 3. LIMITE MÍNIMO (OCIOSO)
-
-  if (limiteEstaVisivel('toggleLimiteOcioso')) {
-    annotations.limiteOcioso = {
-      type: 'line',
-      yMin: limiteMin,
-      yMax: limiteMin,
-      borderColor: 'rgb(54, 162, 235)', // Azul
-      borderWidth: 2,
-      borderDash: [5, 5],
-      label: {
-        display: true,
-        content: isRede
-          ? `Limite Mínimo (Ocioso): ${limiteMin.toFixed(2)} %`
-          : `Limite Mínimo (Ocioso): ${limiteMin.toFixed(1)}%`,
-        position: 'start',
-        backgroundColor: 'rgba(54, 162, 235, 0.8)',
-        color: 'white',
-        font: { size: 11 },
-      },
-    };
-  }
-
-  return {
-    responsive: true,
-    maintainAspectRatio: false,
-    interaction: { mode: 'index', intersect: false },
-    plugins: {
-      legend: {
-        position: 'bottom',
-        labels: {
-          usePointStyle: true,
-          pointStyle: 'circle',
-          font: { family: 'Segoe UI', size: 14 },
-        },
-      },
-      tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.95)',
-        titleFont: { size: 16, weight: 'bold' },
-        bodyFont: { size: 14 },
-        cornerRadius: 8,
-        padding: 12,
-        callbacks: {
-          label: function (context) {
-            let label = context.dataset.label || '';
-            if (label) label += ': ';
-            if (context.parsed.y !== null) {
-              label += isRede
-                ? `${context.parsed.y.toFixed(2)} %`
-                : `${context.parsed.y.toFixed(1)}%`;
-            }
-            return label;
-          },
-        },
-      },
-      annotation: {
-        annotations: annotations, // Aplica as anotações individualmente
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: false,
-        grid: { color: 'rgba(0, 0, 0, 0.08)', drawBorder: false },
-        ticks: {
-          font: { family: 'Segoe UI', size: 12 },
-          color: '#666',
-          callback: (value) => (isRede ? `${value.toFixed(1)} %` : `${value.toFixed(0)}%`),
-        },
-        title: {
-          display: true,
-          text: isRede ? 'Conectividade (%)' : 'Porcentagem (%)',
-          font: { family: 'Segoe UI', size: 14, weight: 'bold' },
-          color: '#555',
-        },
-      },
-      x: {
-        grid: { display: false },
-        ticks: { font: { family: 'Segoe UI', size: 12 }, color: '#666' },
-        title: {
-          display: true,
-          text: 'Horário (horas)',
-          font: { family: 'Segoe UI', size: 14, weight: 'bold' },
-          color: '#555',
-        },
-      },
-    },
-    animation: { duration: 2000, easing: 'easeInOutQuart' },
-  };
-}
-
-function createGradient(ctx, chartArea, color) {
-  if (!ctx || !chartArea || chartArea.top === undefined) return;
-  const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-  gradient.addColorStop(0, color.replace('0.8', '0.6'));
-  gradient.addColorStop(0.5, color.replace('0.8', '0.3'));
-  gradient.addColorStop(1, color.replace('0.8', '0.0'));
-  return gradient;
-}
-
-function applyGradients(chart) {
-  const ctx = chart.ctx;
-  const chartArea = chart.chartArea;
-  if (!chartArea || !chart.data.datasets.length) return;
-
-  chart.data.datasets.forEach((dataset) => {
-    let colorLine = COLORS[componenteAtual].line;
-    dataset.backgroundColor = createGradient(ctx, chartArea, colorLine);
   });
+  return dados;
 }
 
-function getNewValue(min, max) {
-  return (Math.random() * (max - min) + min).toFixed(2);
-}
+function adaptarParametros(params) {
+  const resultado = {};
+  (params || []).forEach((p) => {
+    const [tipo, nivel] = String(p.nomeParametro || "").split("_");
+    const key = (tipo || "").toLowerCase();
+    if (!key) return;
 
-function getValoresIniciais(maquina) {
-  if (maquina.criticidade === 'ocioso') {
-    return {
-      cpu: { min: maquina.cpuLimiteMin * 0.2, max: maquina.cpuLimite * 0.4 },
-      ram: { min: maquina.ramLimiteMin * 0.8, max: maquina.ramLimite * 0.9 },
-      disco: { min: maquina.discoLimiteMin * 0.96, max: maquina.discoLimite * 0.99 },
-      rede: { min: maquina.redeLimiteMin * 0.2, max: maquina.redeLimite * 0.4 },
-    };
-  }
-
-  if (maquina.criticidade === 'critico') {
-    return {
-      cpu: { min: maquina.cpuLimite * 0.9, max: maquina.cpuLimite * 1.15 },
-      ram: { min: maquina.ramLimite * 0.9, max: maquina.ramLimite * 1.1 },
-      disco: { min: maquina.discoLimite * 0.9, max: maquina.discoLimite * 1.1 },
-      rede: { min: maquina.redeLimite * 0.8, max: maquina.redeLimite * 1.05 },
-    };
-  } // Para status 'normal' ou 'atencao' (padrão)
-
-  return {
-    cpu: { min: maquina.cpuLimiteMin, max: maquina.cpuLimite },
-    ram: { min: maquina.ramLimiteMin, max: maquina.ramLimite },
-    disco: { min: maquina.discoLimiteMin, max: maquina.discoLimite },
-    rede: { min: maquina.redeLimiteMin, max: maquina.redeLimite },
-  };
-}
-
-async function fetchData(idMaquina) {
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  const maquina = MAQUINAS_DATA[idMaquina];
-  const newTime = new Date().toLocaleTimeString('pt-BR', {
-    hour: '2-digit',
-    minute: '2-digit',
+    if (!resultado[key]) resultado[key] = {};
+    if (nivel === "CRITICO") resultado[key].limiteCritico = p.limite;
+    else if (nivel === "ATENÇÃO" || nivel === "ATENCAO") resultado[key].limiteAtencao = p.limite;
+    else if (nivel === "ACEITÁVEL" || nivel === "ACEITAVEL") resultado[key].limiteOcioso = p.limite;
   });
-  const valores = getValoresIniciais(maquina);
-
-  return {
-    label: newTime,
-    cpu: getNewValue(valores.cpu.min, valores.cpu.max),
-    ram: getNewValue(valores.ram.min, valores.ram.max),
-    disco: getNewValue(valores.disco.min, valores.disco.max),
-    rede: getNewValue(valores.rede.min, valores.rede.max),
-  };
+  return resultado;
 }
 
-async function updateChartData(chart) {
-  const newPoint = await fetchData(maquinaAtualId);
-
-  chart.data.datasets[0].data.shift(); // Continua usando o valor simulado para o movimento.
-  chart.data.datasets[0].data.push(parseFloat(newPoint[componenteAtual]));
-
-  chart.data.labels.shift();
-  chart.data.labels.push(newPoint.label);
-  applyGradients(chart);
-  chart.update();
-}
-
-function initLinhaChart(idMaquina) {
-  if (linhaChartInstance) linhaChartInstance.destroy();
-  if (linhaIntervalId) clearInterval(linhaIntervalId);
-
-  const canvas = document.getElementById(LINHA_CHART_ID);
-  if (!canvas) {
-    console.error(`Elemento canvas com ID "${LINHA_CHART_ID}" não encontrado.`);
-    return;
-  }
-
-  const maquina = MAQUINAS_DATA[idMaquina];
-
-  if (maquina.criticidade === 'offline' || maquina.criticidade === 'manutencao') {
-    canvas.style.display = 'none';
-    let mensagemDiv = document.getElementById('mensagemGrafico');
-    if (!mensagemDiv) {
-      mensagemDiv = document.createElement('div');
-      mensagemDiv.id = 'mensagemGrafico';
-      mensagemDiv.style.cssText =
-        'display: flex; align-items: center; justify-content: center; height: 250px; background-color: #f8f9fa; border-radius: 0.375rem; font-size: 1.2rem; color: #6c757d; font-weight: 500;';
-      canvas.parentElement.appendChild(mensagemDiv);
+function transformarDadosGrafico(lista) {
+  const result = { cpu: [], ram: [], disco: [], rede: [] };
+  (lista || []).forEach((reg) => {
+    const tipo = String(reg.tipoRecurso || "").toLowerCase();
+    if (result[tipo]) {
+      result[tipo].push({
+        valor: reg.valor_medio,
+        horario: reg.intervaloTempo,
+      });
     }
-    mensagemDiv.style.display = 'flex';
-    mensagemDiv.textContent =
-      maquina.criticidade === 'offline' ? 'Máquina OFF-LINE' : 'Máquina em Manutenção';
-    return;
+  });
+  return result;
+}
+
+// ============================================================================
+// REDE: CHAMADAS AO BACKEND
+// ============================================================================
+async function fetchJson(url, options = {}) {
+  const res = await fetch(url, options);
+  const text = await res.text();
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new Error(`Resposta não JSON: ${text}`);
   }
-
-  const mensagemDiv = document.getElementById('mensagemGrafico');
-  if (mensagemDiv) mensagemDiv.style.display = 'none';
-  canvas.style.display = 'block';
-
-  const ctx = canvas.getContext('2d');
-  if (!ctx) {
-    console.error('Não foi possível obter o contexto 2D do canvas.');
-    return;
+  if (!res.ok) {
+    const msg = data?.erro || data?.mensagem || text || `HTTP ${res.status}`;
+    throw new Error(msg);
   }
+  return data;
+}
 
-  const valores = getValoresIniciais(maquina);
-  const componenteValor = valores[componenteAtual];
+// Carregar lista de máquinas para os cards (usa headers, conforme seu controller)
+async function carregarMaquinas(filtro = "todas", busca = "") {
+  try {
+    const headers = {
+      "id-empresa": "1",         // ajuste conforme sua sessão
+      "pagina-atual": "1",
+      "tamanho-pagina": "20",
+      "status-filtro": filtro !== "todas" ? filtro : "",
+      "nome-busqueda": busca || ""
+    };
 
-  const dadosHistorico = Array(8)
-    .fill(0)
-    .map(() => parseFloat(getNewValue(componenteValor.min, componenteValor.max)));
+    const data = await fetchJson("/painel/procurar_cards_painel_dinamico", { headers });
+    const maquinas = data?.dados_card || [];
 
-  let valorPico = maquina[`${componenteAtual}Pico`];
-  dadosHistorico.push(valorPico);
+    const container = document.getElementById("resource-cards");
+    container.innerHTML = "";
 
-  const dataChart = {
-    labels: ['21h', '23h', '01h', '03h', '05h', '07h', '09h', '11h', '13h'],
-    datasets: [
-      {
-        label: COMPONENT_LABELS[componenteAtual],
-        data: dadosHistorico,
-        borderColor: COLORS[componenteAtual].line,
-        tension: 0.4,
-        fill: true,
-        pointBackgroundColor: COLORS[componenteAtual].point,
-        pointBorderColor: '#fff',
-        pointRadius: 5,
-        pointHoverRadius: 8,
-      },
-    ],
+    atualizarBadgesContagem(maquinas);
+    maquinas.forEach((m) => container.appendChild(gerarCardMaquina(m)));
+  } catch (e) {
+    console.error("Erro ao carregar máquinas:", e);
+  }
+}
+
+// Buscar detalhes da máquina selecionada
+async function procurar_detalhes_maquina(id) {
+  try {
+    const dados = await fetchJson(`/painel/procurar_informacoes_maquina/${id}`);
+
+    INFO_TECNICA_COMPUTADOR = dados.info_tecnica_computador || [];
+    INFO_TECNICA_COMPONENTES = dados.info_tecnica_componentes || [];
+    DADOS_KPI_ALERTAS = adaptarKPIs(dados.dados_kpi_alertas || []);
+    DADOS_PARAMETROS = adaptarParametros(dados.dados_parametros_por_componente || []);
+    DADOS_GRAFICO_24H = transformarDadosGrafico(dados.dados_coleta_24_horas || []);
+
+    atualizarDetalhes();
+    initLinhaChart();
+  } catch (e) {
+    console.error("Erro ao carregar detalhes:", e);
+  }
+}
+
+// ============================================================================
+// CARDS
+// ============================================================================
+// Observação: seu controller mapeia status para: status_normalizado, cor_classe, icone_classe
+function gerarCardMaquina(m) {
+  const status = (m.status_normalizado || "normal").toLowerCase(); // vindo do controller
+  const corClasse = m.cor_classe || "success";
+  const iconeClasse = m.icone_classe || "bi-check-circle-fill";
+
+  const card = document.createElement("div");
+  card.classList.add("card", "card-recurso");
+  card.setAttribute("data-maquina-id", m.idMaquina || m.id || "");
+  card.setAttribute("data-status", status);
+  card.setAttribute("data-nome", m.nome || m.NomeMaquina || "Máquina");
+
+  card.innerHTML = `
+    <div class="d-flex justify-content-between mb-2">
+      <h5 class="h6 mb-0">${m.nome || m.NomeMaquina || "Máquina"}</h5>
+      <i class="bi ${iconeClasse} text-${corClasse} fs-5"></i>
+    </div>
+    <p class="card-text">
+      <small class="text-${corClasse}">${(status || "normal").toUpperCase()}</small>
+    </p>
+    <button class="btn btn-${getBtnColor(status)} btn-sm w-100 btn-ver-detalhes">Ver Detalhes</button>
+  `;
+
+  card.querySelector(".btn-ver-detalhes").addEventListener("click", () => {
+    const id = m.idMaquina || m.id;
+    if (!id) return;
+    trocar_maquina(id);
+  });
+
+  return card;
+}
+
+function getBtnColor(status) {
+  switch (String(status).toLowerCase()) {
+    case "critico": return "danger";
+    case "atencao": return "warning";
+    case "normal": return "success";
+    case "ocioso": return "info";
+    case "offline": return "secondary";
+    case "manutencao": return "secondary";
+    default: return "primary";
+  }
+}
+
+function atualizarBadgesContagem(lista) {
+  const grupos = {
+    todas: lista.length,
+    critico: 0,
+    atencao: 0,
+    normal: 0,
+    ocioso: 0,
+    offline: 0,
+    manutencao: 0,
   };
+
+  (lista || []).forEach((m) => {
+    const st = String(m.status_normalizado || m.status || "normal").toLowerCase();
+    if (grupos.hasOwnProperty(st)) grupos[st]++;
+  });
+
+  Object.keys(grupos).forEach((g) => {
+    const badge = document.getElementById(`badge_${g}`);
+    if (badge) badge.textContent = grupos[g];
+  });
+}
+
+// ============================================================================
+// TROCAR MÁQUINA
+// ============================================================================
+function trocar_maquina(id) {
+  maquinaAtualId = id;
+  sessionStorage.ID_MAQUINA_PAINEL = id;
+  procurar_detalhes_maquina(id);
+}
+
+// ============================================================================
+// SIDEBAR DE DETALHES
+// ============================================================================
+function atualizarDetalhes() {
+  const m = INFO_TECNICA_COMPUTADOR[0];
+  if (!m) {
+    // Alterna mensagens (opcional): esconder card e mostrar aviso
+    document.getElementById("card_dash_body").style.display = "none";
+    document.getElementById("initial-message").classList.remove("d-none");
+    return;
+  }
+
+  document.getElementById("initial-message").classList.add("d-none");
+  document.getElementById("card_dash_body").style.display = "block";
+
+  document.getElementById("tituloDetalhes").textContent =
+    `${m.nome || "Máquina"} | Tendência (24h)`;
+
+  document.getElementById("infoModelo").textContent = m.modelo || "N/A";
+  document.getElementById("infoIp").textContent = m.ip || "N/A";
+  document.getElementById("infoSo").textContent = m.sistemaOperacional || "N/A";
+
+  document.getElementById("infoCpuCapacidade").textContent =
+    getCapacidade("CPU") || "N/A";
+  document.getElementById("infoRamCapacidade").textContent =
+    getCapacidade("RAM") || "N/A";
+  document.getElementById("infoDiscoCapacidade").textContent =
+    getCapacidade("DISCO") || "N/A";
+
+  atualizarKPIs();
+}
+
+function getCapacidade(tipo) {
+  const c = (INFO_TECNICA_COMPONENTES || []).find(
+    (x) => String(x.tipoComponente || "").toUpperCase() === tipo
+  );
+  return c ? c.valor : "N/A";
+}
+
+function atualizarKPIs() {
+  const comps = ["cpu", "ram", "rede", "disco"];
+  comps.forEach((c) => {
+    const kpi = DADOS_KPI_ALERTAS[c.toUpperCase()] || {};
+    document.getElementById(`${c}24h`).textContent = kpi.totalAlertas24h || 0;
+    document.getElementById(`${c}Pico`).textContent = kpi.maiorPicoUso || 0;
+  });
+}
+
+// ============================================================================
+// GRÁFICO
+// ============================================================================
+function initLinhaChart() {
+  const canvas = document.getElementById(LINHA_CHART_ID);
+  if (!canvas) return;
+
+  if (linhaChartInstance) linhaChartInstance.destroy();
+  const ctx = canvas.getContext("2d");
+
+  const dados = DADOS_GRAFICO_24H[componenteAtual] || [];
+  if (dados.length === 0) return;
 
   linhaChartInstance = new Chart(ctx, {
-    type: 'line',
-    data: dataChart,
-    options: getOpcoesChart(),
+    type: "line",
+    data: {
+      labels: dados.map((x) => x.horario),
+      datasets: [
+        {
+          label: COMPONENT_LABELS[componenteAtual],
+          data: dados.map((x) => x.valor),
+          borderColor: COLORS[componenteAtual].line,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: COLORS[componenteAtual].point,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+    },
   });
-
-  setTimeout(() => {
-    applyGradients(linhaChartInstance);
-    linhaChartInstance.update();
-  }, 3000);
-
-  linhaChartInstance.options.onResize = () => applyGradients(linhaChartInstance);
-  linhaIntervalId = setInterval(() => updateChartData(linhaChartInstance), 5000);
 }
 
-function trocar_maquina(idMaquina) {
-  maquinaAtualId = idMaquina;
-  atualizarDetalhes();
-  initLinhaChart(idMaquina);
-}
-
-function atualizarDetalhes() {
-  const maquina = MAQUINAS_DATA[maquinaAtualId];
-
-  document.getElementById('tituloDetalhes').textContent =
-    `${maquina.nome} | Histórico de Utilização de Recursos`;
-
-  const metricas = [
-    { id: 'cpu', pico: maquina.cpuPico, limite: maquina.cpuLimite, isRede: false },
-    { id: 'ram', pico: maquina.ramPico, limite: maquina.ramLimite, isRede: false },
-    { id: 'rede', pico: maquina.redePico, limite: maquina.redeLimite, isRede: true },
-    { id: 'disco', pico: maquina.discoPico, limite: maquina.discoLimite, isRede: false },
-  ];
-
-  metricas.forEach((m) => {
-    document.getElementById(`${m.id}24h`).textContent = maquina[`${m.id}24h`];
-
-    const picoElement = document.getElementById(`${m.id}Pico`);
-    if (m.isRede) {
-      picoElement.textContent = `${m.pico} %`;
-    } else {
-      picoElement.textContent = `${m.pico}%`;
-    }
-    let classe;
-    if (maquina.criticidade === 'ocioso') {
-      classe = m.pico < m.limite * 0.5 ? 'text-info' : 'text-warning';
-    } else {
-      const porcentagemLimite = (m.pico / m.limite) * 100;
-      classe =
-        porcentagemLimite > 100
-          ? 'text-danger'
-          : porcentagemLimite > 85
-            ? 'text-warning'
-            : 'text-success';
-    }
-
-    picoElement.className = `fw-bold fs-5 ${classe}`;
-  });
-
-  document.getElementById('infoModelo').textContent = maquina.modelo;
-  document.getElementById('infoIp').textContent = maquina.ip;
-  document.getElementById('infoSo').textContent = maquina.so;
-  document.getElementById('infoCpuCapacidade').textContent = maquina.nucleosCpu;
-  document.getElementById('infoRamCapacidade').textContent = maquina.capacidadeRam;
-  document.getElementById('infoDiscoCapacidade').textContent = maquina.capacidadeDisco;
-}
-
+// ============================================================================
+// FILTRAGEM E BUSCA
+// ============================================================================
 function filtrarMaquinas(filtro) {
   filtroAtual = filtro;
-  document.querySelectorAll('.card-recurso').forEach((card) => {
-    const idMaquina = parseInt(card.getAttribute('data-maquina-id'));
-    const maquina = MAQUINAS_DATA[idMaquina];
-    card.style.display = filtro === 'todas' || maquina.criticidade === filtro ? 'block' : 'none';
-  });
+  carregarMaquinas(filtroAtual);
 }
 
-function trocarComponente(componente) {
-  componenteAtual = componente;
-  initLinhaChart(maquinaAtualId);
+function buscarMaquina(texto) {
+  carregarMaquinas(filtroAtual, texto);
 }
 
-function buscarMaquina(termo) {
-  termo = termo.toLowerCase();
-  document.querySelectorAll('.card-recurso').forEach((card) => {
-    const nome = card.querySelector('.card-title').textContent.toLowerCase();
-    card.style.display = nome.includes(termo) || termo === '' ? 'block' : 'none';
-  });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  initLinhaChart(maquinaAtualId);
-  atualizarDetalhes();
-
-  document.querySelectorAll('.btn-custom-status').forEach((btn) => {
-    btn.addEventListener('click', function () {
-      document.querySelectorAll('.btn-custom-status').forEach((b) => b.classList.remove('active'));
-      this.classList.add('active');
-      filtrarMaquinas(this.getAttribute('data-filtro'));
-    });
-  });
-
-  document.querySelectorAll('.card-recurso button').forEach((btn) => {
-    btn.addEventListener('click', function () {
-      const card = this.closest('.card-recurso');
-      trocar_maquina(parseInt(card.getAttribute('data-maquina-id')));
-    });
-  });
+// ============================================================================
+// EVENTOS
+// ============================================================================
+document.addEventListener("DOMContentLoaded", () => {
+  carregarMaquinas();
 
   document
-    .getElementById('inputBusca')
-    .addEventListener('input', (e) => buscarMaquina(e.target.value));
+    .getElementById("inputBusca")
+    .addEventListener("input", (e) => buscarMaquina(e.target.value));
 
-  document.querySelectorAll('[data-componente]').forEach((item) => {
-    item.addEventListener('click', function (e) {
-      e.preventDefault();
-      const componente = this.getAttribute('data-componente');
-      if (componente === 'todos') return;
-      document.getElementById('dropdownComponente').textContent = this.textContent;
-      trocarComponente(componente);
-    });
-  }); // NOVO: Listener para os checkboxes de limites (Ocultar/Mostrar individual)
-  document.querySelectorAll('.form-check-input[id^="toggleLimite"]').forEach((checkbox) => {
-    checkbox.addEventListener('change', function () {
-      // Recria o gráfico com as opções de anotação atualizadas
-      initLinhaChart(maquinaAtualId);
+  document.querySelectorAll(".btn-custom-status").forEach((btn) => {
+    btn.addEventListener("click", function () {
+      document
+        .querySelectorAll(".btn-custom-status")
+        .forEach((b) => b.classList.remove("active"));
+      this.classList.add("active");
+      filtrarMaquinas(this.getAttribute("data-filtro"));
     });
   });
-  const linkAnaliseHistorica = document.getElementById('linkAnaliseHistorica');
 
-if (linkAnaliseHistorica) {
-    linkAnaliseHistorica.addEventListener('click', function(e) {
-        // Previne a navegação imediata do link
-        e.preventDefault(); 
-        
-        // Usa a variável global maquinaAtualId
-        const idMaquina = maquinaAtualId; 
-        
-        // 1. Busca o objeto da máquina
-        const maquina = MAQUINAS_DATA[idMaquina];
-        
-        if (maquina && maquina.nome) {
-            // 2. Salva o nome e o ID da máquina no sessionStorage
-            sessionStorage.setItem('maquinaSelecionadaNome', maquina.nome);
-            sessionStorage.setItem('maquinaSelecionadaId', idMaquina);
-            console.log(`Máquina selecionada: ${maquina.nome} (ID: ${idMaquina}) salva no sessionStorage.`);
-        } else {
-            console.error('ID da máquina não encontrado ou inválido no maquinaAtualId:', idMaquina);
-        }
-        
-        // 3. Continua a navegação
-        window.location.href = this.href;
+  document.querySelectorAll("[data-componente]").forEach((el) => {
+    el.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      componenteAtual = el.getAttribute("data-componente");
+      document.getElementById("dropdownComponente").textContent =
+        el.textContent;
+      initLinhaChart();
     });
-}
+  });
 });

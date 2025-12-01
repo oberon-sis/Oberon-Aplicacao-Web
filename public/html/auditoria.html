@@ -380,51 +380,8 @@
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Funções para a usabilidade
-
-    // Função para preencher e exibir o modal
-    function showLogDetails(title, valorAntigo, valorNovo) {
-      document.getElementById('modalActionTitle').textContent = title;
-
-      let descriptionText = '';
-      if (valorAntigo.includes('N/A') && !valorNovo.includes('N/A')) {
-        descriptionText = 'Registro de Inclusão. O valor antigo é N/A.';
-      } else if (!valorAntigo.includes('N/A') && valorNovo.includes('N/A')) {
-        descriptionText = 'Registro de Exclusão. O valor novo é N/A.';
-      } else {
-        descriptionText = 'Comparação dos valores antes e depois da alteração.';
-      }
-      document.getElementById('modalDescription').textContent = descriptionText;
-
-      // Usamos textContent para preencher o <pre> e respeitar as quebras de linha (\n)
-      document.getElementById('modalValorAntigo').textContent = valorAntigo;
-      document.getElementById('modalValorNovo').textContent = valorNovo;
-    }
-
-    // Funções mock para o dropdown de pesquisa (mantidas)
-    function atualizar_parametro_lista_novo(param) {
-      let texto = '';
-      switch (param) {
-        case 1:
-          texto = 'Usuário';
-          break;
-        case 2:
-          texto = 'Ação';
-          break;
-        case 3:
-          texto = 'Tabela Afetada';
-          break;
-        case 4:
-          texto = 'ID Afetado';
-          break;
-      }
-      document.getElementById('valor_pesquisa_novo').textContent = texto;
-    }
-
-  </script>
   <script src="../component/menu/Menu.js"></script>
-  <script src="../js/log_auditoria.js"></script>
+  <script src="../js/logAuditoria.js"></script>
 
 </body>
 

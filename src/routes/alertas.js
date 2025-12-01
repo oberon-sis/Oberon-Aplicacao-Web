@@ -15,5 +15,9 @@ router.get(
     alertasController.exportarAlertas(req, res);
   },
 );
-
+router.get('/listarFeedAlertas',
+  function (req, res) {
+    alertasController.listarFeedAlertas(req, res);
+  },
+);
 module.exports = router;

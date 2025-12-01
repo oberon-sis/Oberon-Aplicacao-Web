@@ -1,410 +1,450 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Página Inicial - OBERON</title>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Página Inicial - OBERON</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/body.css" />
+    <link rel="stylesheet" href="../component/menu/Menu.css" />
+    <link rel="stylesheet" href="../css/home_dash.css" />
+    <link rel="stylesheet" href="../css/painelEspecifico.css" />
+    <link rel="stylesheet" href="../component/tour/TourGuide.css" />
+    <link rel="stylesheet" href="../component/notificao/Notificaocao.css" />
+    <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+  </head>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/body.css">
-  <link rel="stylesheet" href="../component/menu/Menu.css">
-  <link rel="stylesheet" href="../css/home_dash.css">
-  <link rel="stylesheet" href="../css/painelEspecifico.css">
-  <link rel="stylesheet" href="../component/tour/TourGuide.css">
-  <link rel="stylesheet" href="../component/notificao/Notificaocao.css">
-  <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js">
-  </script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <body class="d-flex w-100 h-100">
+    <div id="menu-container"></div>
 
-</head>
+    <main class="content flex-grow-1 padding_main">
+      <header
+        class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0"
+      >
+        <h2 class="text-black">Home</h2>
+      </header>
 
-<body class="d-flex w-100 h-100">
-
-  <div id="menu-container"></div>
-
-  <main class="content flex-grow-1 padding_main">
-    <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
-      <h2 class=" text-black">Home</h2>
-    </header>
-
-
-    <div class="d-flex justify-content-between align-items-center mb-2 p-4 bg-white shadow-sm rounded div_banner"
-      style="margin-top: 5px;" id="boas-vindas-card">
-      <div class="me-3">
-        <h4 class="text-white mb-1" id="nome_usuario">OLÁ ARMANDO!</h4>
-        <p class="mb-0 text-white" id="nome_razao">
-          Colaborador(a) da ADT Monitoramento
-        </p>
-        <p class="mb-0 small text-white">
-          Seja bem vindo(a) ao seu painel da Oberon! Otimize suas operações com análise de dados em tempo real de forma
-          rápida e eficiente.
-        </p>
+      <div
+        class="d-flex justify-content-between align-items-center mb-2 p-4 bg-white shadow-sm rounded div_banner"
+        style="margin-top: 5px"
+        id="boas-vindas-card"
+      >
+        <div class="me-3">
+          <h4 class="text-white mb-1" id="nome_usuario">OLÁ ARMANDO!</h4>
+          <p class="mb-0 text-white" id="nome_razao">Colaborador(a) da ADT Monitoramento</p>
+          <p class="mb-0 small text-white">
+            Seja bem vindo(a) ao seu painel da Oberon! Otimize suas operações com análise de dados
+            em tempo real de forma rápida e eficiente.
+          </p>
+        </div>
+        <img
+          src="../assets/img/Banner.jpg"
+          alt="Imagem de Boas-Vindas - Pessoas em um painel"
+          class="img-fluid rounded d-md-block banner"
+        />
       </div>
-      <img src="../assets/img/Banner.jpg" alt="Imagem de Boas-Vindas - Pessoas em um painel"
-        class="img-fluid rounded  d-md-block banner">
-    </div>
-    <div class="row">
-
-      <div class="col-lg-8">
-
-        <div class="card shadow-sm  mb-2" id="tour-card-desempenho-geral">
-          <div class="card-body">
-            <h5 class="card-title text-black mb-3 d-flex">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                class="bi bi-speedometer2 me-2" viewBox="0 0 16 16">
-                <path
-                  d="M8 12a4 4 0 0 1 4-4V7a.5.5 0 0 1 1 0v1.01a5 5 0 1 0-8.995 0V7.001a.5.5 0 0 1 1 0v4.997a4 4 0 0 1 3.996.992zM6 7.001a.5.5 0 1 1-1 0a.5.5 0 0 1 1 0zM10 7.001a.5.5 0 1 1-1 0a.5.5 0 0 1 1 0z" />
-              </svg>
-              <p>
-
-                Abrir Painel de Desempenho geral do Sistema
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="card shadow-sm mb-2" id="tour-card-desempenho-geral">
+            <div class="card-body">
+              <h5 class="card-title text-black mb-3 d-flex">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  class="bi bi-speedometer2 me-2"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M8 12a4 4 0 0 1 4-4V7a.5.5 0 0 1 1 0v1.01a5 5 0 1 0-8.995 0V7.001a.5.5 0 0 1 1 0v4.997a4 4 0 0 1 3.996.992zM6 7.001a.5.5 0 1 1-1 0a.5.5 0 0 1 1 0zM10 7.001a.5.5 0 1 1-1 0a.5.5 0 0 1 1 0z"
+                  />
+                </svg>
+                <p>Abrir Painel de Desempenho geral do Sistema</p>
+                <button
+                  type="button"
+                  class="saber_mais btn btn-link ms-auto"
+                  data-bs-toggle="popover"
+                  data-bs-placement="right"
+                  data-bs-trigger="focus"
+                  data-bs-title="Prioridades Atuais do Sistema"
+                  data-bs-content="Estes cards exibem o top 3 de máquinas que estão em estado de Crítico ou Alerta no momento. É a sua lista de problemas urgentes."
+                >
+                  <img
+                    src="../assets/svg/saber.svg"
+                    alt="Saiba Mais"
+                    class="icone-info"
+                    style="scale: 1.5"
+                  />
+                </button>
+              </h5>
+              <p class="card-text text-muted">
+                Visualize e filtre o status em tempo real de CPU, RAM, Disco e Rede de todos ativos.
               </p>
-              <button type="button" class="saber_mais btn btn-link ms-auto" data-bs-toggle="popover"
-                data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Prioridades Atuais do Sistema"
-                data-bs-content="Estes cards exibem o top 3 de máquinas que estão em estado de Crítico ou Alerta no momento. É a sua lista de problemas urgentes.">
-                <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.5" />
+              <div class="row" id="top-maquinas-criticas-container">
+                <div class="col-12 text-center text-muted p-4">
+                  Carregando as máquinas mais críticas...
+                </div>
+              </div>
+              <a
+                href="analiseHistorica.html"
+                class="btn btn-info text-white w-100 mt-2 verde_obscuro"
+                id="acessar-painel-geral-button"
+              >
+                Acessar painel geral
+              </a>
+            </div>
+          </div>
+          <div class="chart-item chart-comparative" id="tour-grafico-dispersao">
+            <div class="row align-items-center justify-content-start position-relative">
+              <h5>
+                Distribuição de Máquinas nas Últimas 24 horas - Média de Uso da CPU x Média de Uso
+                da RAM
+              </h5>
+
+              <button
+                type="button"
+                class="saber_mais btn btn-link ms-auto"
+                data-bs-toggle="popover"
+                data-bs-placement="right"
+                data-bs-trigger="focus"
+                data-bs-title="Análise de Risco (CPU vs. RAM)"
+                data-bs-content="Este gráfico plota o uso de dois recursos por máquina, identificando rapidamente o risco operacional. Pontos Vermelhos (Crítico) indicam falha iminente."
+              >
+                <img
+                  src="../assets/svg/saber.svg"
+                  alt="Saiba Mais"
+                  class="icone-info"
+                  style="scale: 1.5; position: absolute; top: 10px; right: 10px"
+                />
               </button>
+            </div>
 
-            </h5>
-            <p class="card-text text-muted">
-              Visualize e filtre o status em tempo real de CPU, RAM, Disco e Rede de todos ativos.
-            </p>
             <div class="row">
+              <div class="col-12">
+                <div class="card shadow-sm p-3">
+                  <div class="chartjs-legend-container">
+                    <div id="chart-legend-html"></div>
+                  </div>
+                  <div class="chart-container">
+                    <canvas id="scatterChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="modal fade"
+            id="machineDetailModal"
+            tabindex="-1"
+            aria-labelledby="machineDetailModalLabel"
+            aria-hidden="true"
+            style="z-index: 10000000"
+          >
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="machineDetailModalLabel">
+                    Detalhes da Máquina Clicada
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body" id="modal-body-content"></div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-info text-white"
+                    id="btn-analise-historica"
+                    onclick="navigateToHistorico()"
+                  >
+                    Análise Histórica
+                  </button>
 
-              <div class="col-md-4 shadow_div">
-                <div class="card border-0 border-start border-5 border-danger">
-                  <div class="card-body p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-2 etiquetas">
-                      <span class="fw-bold">Máquina - 003</span>
-                      <div class="div_etiquetas">
-                        <span class="badge bg-success">on-line</span>
-                        <span class="badge bg-danger">CRÍTICO</span>
-                        <span class="badge bg-secondary">+1</span>
-                      </div>
-                    </div>
+                  <button type="button" class="btn btn-primary" onclick="navigateToMonitoramento()">
+                    Monitoramento Ativo
+                  </button>
 
-                    <p class="mb-1 small text-danger">
-                      LIMITE CRÍTICO (90%) - ULTRAPASSADO
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Fechar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 fd_fundo" id="acessos-rapidos-section">
+          <h5 class="text-black mb-2">Acessos rápidos</h5>
+
+          <div class="card shadow-sm mb-3">
+            <div class="card-body">
+              <h6 class="card-title text-black mb-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-file-earmark-arrow-down-fill me-2 text-primary"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7.414zM8 12.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5m0-2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 1 .5.5m0-2a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 1 .5.5"
+                  />
+                </svg>
+                Baixar o nosso manual de instalação
+              </h6>
+              <p class="card-text small text-muted">
+                Guia de instalação. Baixe o manual completo e configure seus equipamentos sem
+                complicação.
+              </p>
+              <a
+                href="/api/download/manual"
+                class="btn btn-outline-primary w-100"
+                download="ManualDeInstação.pdf"
+                role="button"
+              >
+                Baixar Manual
+              </a>
+            </div>
+          </div>
+          <div class="card shadow-sm mb-3">
+            <div class="card-body">
+              <h6 class="card-title text-black mb-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-gear-fill me-2 text-warning"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M9.405 1.788L1.758 9.4l6.096 6.095 7.647-7.647A.75.75 0 0 0 13.91 7.64l-6.096-6.097z"
+                  />
+                </svg>
+                Configurar os parâmetros padrão da sua empresa
+              </h6>
+              <p class="card-text small text-muted">
+                Inicie sua jornada! Configure os parâmetros da sua empresa e aproveite o Oberon ao
+                máximo.
+              </p>
+              <a class="btn btn-outline-warning w-100" href="analiseParametros.html">
+                Configurar Parâmetros
+              </a>
+            </div>
+          </div>
+          <div class="card shadow-sm mb-3" id="slack-card">
+            <div class="card-body">
+              <h6 class="card-title text-black mb-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-slack me-2 text-danger"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.465 6.4h-.058A1.5 1.5 0 0 1 1.95 4.9H0V8.35c0 1.25.96 2.062 2.08 2.062h.058a1.5 1.5 0 0 1 1.515 1.493V14.9H6.9a1.5 1.5 0 0 1 1.494-1.515V11.2h.058a1.5 1.5 0 0 1 1.516 1.493V14.9H16V11.45c0-1.25-.96-2.062-2.08-2.062h-.058A1.5 1.5 0 0 1 12.35 7.85H14.9V4.4H11.45a1.5 1.5 0 0 1-1.493-1.515V.1H8.35c-1.25 0-2.062.96-2.062 2.08v.058a1.5 1.5 0 0 1-1.493 1.515H.1V6.9h3.364z"
+                  />
+                </svg>
+                Receber Alertas Através do Slack
+              </h6>
+              <p class="card-text small text-muted">
+                Receba notificações do Slack diretamente e fique por dentro das novidades. Acesse e
+                responda rapidamente a incidentes!
+              </p>
+              <a href="https://slack.com/" class="btn btn-danger w-100" target="_blank" id="slack_home">
+                Entrar ao Canal do Slack
+              </a>
+            </div>
+          </div>
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h6 class="card-title text-black mb-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-download me-2 text-success"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"
+                  />
+                  <path
+                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"
+                  />
+                </svg>
+                Instale o Programa de Monitoramento
+              </h6>
+              <p class="card-text small text-muted">
+                Gerencie incidentes e receba notificações importantes sem atrasos. Mantenha a visão
+                completa do seu ambiente, onde quer que você esteja.
+              </p>
+
+              <button
+                type="button"
+                class="btn btn-success w-100"
+                data-bs-toggle="modal"
+                data-bs-target="#downloadModal"
+              >
+                Baixar Programa
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div
+      class="modal fade"
+      id="downloadModal"
+      tabindex="-1"
+      aria-labelledby="downloadModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header text-white" style="background-color: #0c8186">
+            <h5 class="modal-title" id="downloadModalLabel">
+              <i class="bi bi-download me-2"></i>
+              Baixar Agente de Monitoramento OBERON
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body p-4">
+            <p class="text-muted text-center mb-4">
+              Selecione o agente de monitoramento compatível com o sistema operacional da máquina
+              que será monitorada para garantir a coleta de dados de forma eficaz.
+            </p>
+
+            <div class="row g-4 d-flex align-items-stretch">
+              <div class="col-md-6">
+                <div class="card shadow-sm p-3 d-flex flex-column h-100">
+                  <div class="card-body d-flex flex-column text-center justify-content-center">
+                    <i class="bi bi-windows text-info mb-3" style="font-size: 3rem"></i>
+                    <h5 class="card-title text-black mb-2 fw-bold">Agente Windows (Executáveis)</h5>
+                    <p class="card-text small text-muted flex-grow-1 mb-3">
+                      A solução mais simples para ambientes Windows. Arquivo executável (.exe) que
+                      dispensa instalações complexas.
                     </p>
-                    <p class="fw-bold mb-2">
-                      Pior Caso: CPU 98%
-                    </p>
-
-                    <a href="painelEspecifico.html" class="btn btn-sm btn-danger text-white w-100">
-                      Ver Detalhes
+                    <a
+                      href="/api/download//windows/agente"
+                      class="btn btn-info w-100 mt-auto text-white"
+                      download="Agente_Windows"
+                      role="button"
+                    >
+                      <i class="bi bi-box-arrow-down me-1"></i>
+                      Baixar EXE para Windows
                     </a>
                   </div>
                 </div>
               </div>
 
-              <div class="col-md-4 shadow_div">
-                <div class="card border-0 border-start border-5 border-warning">
-                  <div class="card-body p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-2 etiquetas">
-                      <span class="fw-bold">Máquina - 0015</span>
-                      <div class="div_etiquetas">
-                        <span class="badge bg-success">on-line</span>
-                        <span class="badge bg-warning">ATENÇÃO</span>
-                      </div>
-                    </div>
-                    <p class="mb-1 small text-warning">
-                      LIMITE CRÍTICO (90%) - PRÓXIMO
+              <div class="col-md-6 d-flex flex-column g-4">
+                <div class="card shadow-sm p-3 mb-3 flex-grow-1">
+                  <div class="card-body d-flex flex-column text-center p-0">
+                    <i class="bi bi-terminal text-danger mb-2" style="font-size: 2.5rem"></i>
+                    <h6 class="fw-bold mb-1 text-danger">Script Shell (.sh) - Linux</h6>
+                    <p class="card-text small text-muted flex-grow-1 mb-3">
+                      O agente mais coringa. Dependências mínimas, ideal para servidores Linux sem
+                      interface (headless).
                     </p>
-                    <p class="fw-bold mb-2">
-                      Pior Caso: RAM 88%
-                    </p>
-                    <button class="btn btn-sm btn-warning text-dark w-100">
-                      Ver Detalhes
-                    </button>
+                    <a
+                      href="api/download/sh/agente"
+                      class="btn btn-outline-danger w-100 mt-auto"
+                      download="Agente_Linux"
+                      role="button"
+                    >
+                      <i class="bi bi-file-code me-1"></i>
+                      Baixar Agente Shell (.sh)
+                    </a>
                   </div>
                 </div>
-              </div>
 
-              <div class="col-md-4 shadow_div">
-                <div class="card border-0 border-start border-5 border-secondary">
-                  <div class="card-body p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-2 etiquetas">
-                      <span class="fw-bold">Máquina-0030</span>
-                      <div class="div_etiquetas">
-                        <span class="badge bg-dark">off-line</span>
-                        <span class="badge bg-secondary">INDISPONÍVEL</span>
-                      </div>
-                    </div>
-                    <p class="mb-1 small text-secondary">
-                      Último Status Registrado:
+                <div class="card shadow-sm p-3 flex-grow-1">
+                  <div class="card-body d-flex flex-column text-center p-0">
+                    <i class="bi bi-code-slash text-danger mb-2" style="font-size: 2.5rem"></i>
+                    <h6 class="fw-bold mb-1 text-black">Agente Java (Executáveis)</h6>
+                    <p class="card-text small text-muted flex-grow-1 mb-3">
+                      A solução mais simples para ambientes Linux. Arquivo executável (.exe) que
+                      dispensa instalações complexas.
                     </p>
-                    <p class="fw-bold mb-2">
-                      Desconectada há 1h
-                    </p>
-                    <button class="btn btn-sm btn-secondary text-white w-100">
-                      Ver Detalhes
-                    </button>
+                    <a
+                      href="/api/download//linux/agente"
+                      class="btn btn-danger w-100 mt-auto"
+                      download="Agente_Sh"
+                      role="button"
+                    >
+                      <i class="bi bi-file-earmark-code me-1"></i>
+                      Baixar EXE para Linux
+                    </a>
                   </div>
                 </div>
               </div>
             </div>
-            <a href="painel.html" class="btn btn-info text-white w-100 mt-2 verde_obscuro"
-              id="acessar-painel-geral-button">
-              Acessar painel geral
-            </a>
           </div>
-        </div>
-        <div class="chart-item chart-comparative" id="tour-grafico-dispersao">
-          <div class="row align-items-center justify-content-start position-relative">
-            <h5>Distribuição de Máquinas nas Últimas 24 horas - Média de Uso da CPU x Média de Uso da RAM</h5>
-
-            <button type="button" class="saber_mais btn btn-link ms-auto" data-bs-toggle="popover"
-              data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Análise de Risco (CPU vs. RAM)"
-              data-bs-content="Este gráfico plota o uso de dois recursos por máquina, identificando rapidamente o risco operacional. Pontos Vermelhos (Crítico) indicam falha iminente.">
-              <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info"
-                style="scale: 1.5; position: absolute; top: 10px; right: 10px;" />
-            </button>
-          </div>
-
-          <div class="row">
-            <div class="col-12">
-              <div class="card shadow-sm p-3">
-                <div class="chartjs-legend-container">
-                  <div id="chart-legend-html"></div>
-                </div>
-                <div class="chart-container">
-                  <canvas id="scatterChart"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal fade" id="machineDetailModal" tabindex="-1" aria-labelledby="machineDetailModalLabel"
-          aria-hidden="true" style="z-index: 10000000;">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="machineDetailModalLabel">Detalhes da Máquina Clicada</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body" id="modal-body-content">
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-info text-white" id="btn-analise-historica"
-                  onclick="navigateToHistorico()">
-                  Análise Histórica
-                </button>
-
-                <button type="button" class="btn btn-primary" onclick="navigateToMonitoramento()">
-                  Monitoramento Ativo
-                </button>
-
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                  Fechar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-4 fd_fundo" id="acessos-rapidos-section">
-        <h5 class="text-black mb-2">Acessos rápidos</h5>
-
-        <div class="card shadow-sm  mb-3">
-          <div class="card-body">
-            <h6 class="card-title text-black mb-3">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                class="bi bi-file-earmark-arrow-down-fill me-2 text-primary" viewBox="0 0 16 16">
-                <path
-                  d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7.414zM8 12.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5m0-2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 1 .5.5m0-2a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 1 .5.5" />
-              </svg>
-              Baixar o nosso manual de instalação
-            </h6>
-            <p class="card-text small text-muted">
-              Guia de instalação. Baixe o manual completo e configure seus equipamentos sem complicação.
-            </p>
-            <a href="/api/download/manual" class="btn btn-outline-primary w-100" download="ManualDeInstação.pdf"
-              role="button">
-              Baixar Manual
-            </a>
-          </div>
-        </div>
-        <div class="card shadow-sm  mb-3">
-          <div class="card-body">
-            <h6 class="card-title text-black mb-3">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                class="bi bi-gear-fill me-2 text-warning" viewBox="0 0 16 16">
-                <path d="M9.405 1.788L1.758 9.4l6.096 6.095 7.647-7.647A.75.75 0 0 0 13.91 7.64l-6.096-6.097z" />
-              </svg>
-              Configurar os parâmetros padrão da sua empresa
-            </h6>
-            <p class="card-text small text-muted">
-              Inicie sua jornada! Configure os parâmetros da sua empresa e aproveite o Oberon ao máximo.
-            </p>
-            <button class="btn btn-outline-warning w-100" onclick="configurar_parametro()">
-              Configurar Parâmetros
-            </button>
-          </div>
-        </div>
-        <div class="card shadow-sm  mb-3" id="slack-card">
-          <div class="card-body">
-            <h6 class="card-title text-black mb-3">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                class="bi bi-slack me-2 text-danger" viewBox="0 0 16 16">
-                <path
-                  d="M3.465 6.4h-.058A1.5 1.5 0 0 1 1.95 4.9H0V8.35c0 1.25.96 2.062 2.08 2.062h.058a1.5 1.5 0 0 1 1.515 1.493V14.9H6.9a1.5 1.5 0 0 1 1.494-1.515V11.2h.058a1.5 1.5 0 0 1 1.516 1.493V14.9H16V11.45c0-1.25-.96-2.062-2.08-2.062h-.058A1.5 1.5 0 0 1 12.35 7.85H14.9V4.4H11.45a1.5 1.5 0 0 1-1.493-1.515V.1H8.35c-1.25 0-2.062.96-2.062 2.08v.058a1.5 1.5 0 0 1-1.493 1.515H.1V6.9h3.364z" />
-              </svg>
-              Receber Alertas Através do Slack
-            </h6>
-            <p class="card-text small text-muted">
-              Receba notificações do Slack diretamente e fique por dentro das novidades. Acesse e responda rapidamente
-              a
-              incidentes!
-            </p>
-            <a href="https://slack.com/" class="btn btn-danger w-100" target="_blank">
-              Entrar ao Canal do Slack
-            </a>
-          </div>
-        </div>
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <h6 class="card-title text-black mb-3">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                class="bi bi-download me-2 text-success" viewBox="0 0 16 16">
-                <path
-                  d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
-                <path
-                  d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
-              </svg>
-              Instale o Programa de Monitoramento
-            </h6>
-            <p class="card-text small text-muted">
-              Gerencie incidentes e receba notificações importantes sem atrasos. Mantenha a visão completa do seu
-              ambiente, onde quer que você esteja.
-            </p>
-
-            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#downloadModal">
-              Baixar Programa
-            </button>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
           </div>
         </div>
       </div>
     </div>
-  </main>
-  <div class="modal fade" id="downloadModal" tabindex="-1" aria-labelledby="downloadModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header text-white" style="background-color: #0c8186;">
-          <h5 class="modal-title" id="downloadModalLabel">
-            <i class="bi bi-download me-2"></i>
-            Baixar Agente de Monitoramento OBERON
-          </h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body p-4">
-          <p class="text-muted text-center mb-4">Selecione o agente de monitoramento compatível com o sistema
-            operacional da máquina que será monitorada para garantir a coleta de dados de forma eficaz.</p>
 
-          <div class="row g-4 d-flex align-items-stretch">
-            <div class="col-md-6">
-              <div class="card shadow-sm p-3 d-flex flex-column h-100">
-                <div class="card-body d-flex flex-column text-center justify-content-center">
-                  <i class="bi bi-windows text-info mb-3" style="font-size: 3rem;"></i>
-                  <h5 class="card-title text-black mb-2 fw-bold">
-                    Agente Windows (Executáveis)
-                  </h5>
-                  <p class="card-text small text-muted flex-grow-1 mb-3">
-                    A solução mais simples para ambientes Windows. Arquivo executável (.exe) que dispensa instalações
-                    complexas.
-                  </p>
-                  <a href="/api/download//windows/agente" class="btn btn-info w-100 mt-auto text-white"
-                    download="Agente_Windows" role="button">
-                    <i class="bi bi-box-arrow-down me-1"></i>
-                    Baixar EXE para Windows
-                  </a>
-                </div>
-              </div>
-            </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-            <div class="col-md-6 d-flex flex-column g-4">
+    <script src="../component/menu/Menu.js"></script>
+    <script src="../component/tour/TourGuide.js"></script>
+    <script src="../component/notificao/Notificacao.js"></script>
 
-              <div class="card shadow-sm p-3 mb-3 flex-grow-1">
-                <div class="card-body d-flex flex-column text-center p-0">
-                  <i class="bi bi-terminal text-danger mb-2" style="font-size: 2.5rem;"></i>
-                  <h6 class="fw-bold mb-1 text-danger">Script Shell (.sh) - Linux</h6>
-                  <p class="card-text small text-muted flex-grow-1 mb-3">
-                    O agente mais coringa. Dependências mínimas, ideal para servidores Linux sem interface (headless).
-                  </p>
-                  <a href="api/download/sh/agente" class="btn btn-outline-danger w-100 mt-auto"
-                    download="Agente_Linux" role="button">
-                    <i class="bi bi-file-code me-1"></i>
-                    Baixar Agente Shell (.sh)
-                  </a>
-                </div>
-              </div>
+    <script src="../js/home.js"></script>
+    <script src="../js/dashboard/scatter_home.js"></script>
 
-              <div class="card shadow-sm p-3 flex-grow-1">
-                <div class="card-body d-flex flex-column text-center p-0">
-                  <i class="bi bi-code-slash text-danger mb-2" style="font-size: 2.5rem;"></i>
-                  <h6 class="fw-bold mb-1 text-black">Agente Java (Executáveis)</h6>
-                  <p class="card-text small text-muted flex-grow-1 mb-3">
-                    A solução mais simples para ambientes Linux. Arquivo executável (.exe) que dispensa instalações complexas.
-                  </p>
-                  <a href="/api/download//linux/agente" class="btn btn-danger w-100 mt-auto"
-                    download="Agente_Sh" role="button">
-                    <i class="bi bi-file-earmark-code me-1"></i>
-                    Baixar EXE para Linux
-                  </a>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-  <script src="../component/menu/Menu.js"></script>
-  <script src="../component/tour/TourGuide.js"></script>
-  <script src="../component/notificao/Notificacao.js"></script>
-
-  <script src="../js/home.js"></script>
-  <script src="../js/dashboard/scatter_home.js"></script>
-
-  <script>
-    // Função utilitária fora do Tour
-    function configurar_parametro() {
-      window.location.href = "gerenciamentoMaquinas.html";
-    }
-
-  </script>
-  <script src="../js/tour/homeTour.js"></script>
-</body>
-
+    <script>
+      // Função utilitária fora do Tour
+      function configurar_parametro() {
+        window.location.href = 'gerenciamentoMaquinas.html';
+      }
+    </script>
+    <script src="../js/tour/homeTour.js"></script>
+  </body>
 </html>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-
     var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
       return new bootstrap.Popover(popoverTriggerEl, {
         trigger: 'focus',
-        html: true
+        html: true,
       });
     });
-    const usuarioString = sessionStorage.getItem("usuario");
+    const usuarioString = sessionStorage.getItem('usuario');
     if (usuarioString) {
       const usuarioObjeto = JSON.parse(usuarioString);
-      document.getElementById("nome_usuario").innerHTML = usuarioObjeto.nome;
+      document.getElementById('nome_usuario').innerHTML = usuarioObjeto.nome;
     } else {
-      document.getElementById("nome_usuario").innerHTML = "E-mail não encontrado (sessão expirada)";
+      document.getElementById('nome_usuario').innerHTML = 'E-mail não encontrado (sessão expirada)';
     }
   });
-
 </script>
