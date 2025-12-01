@@ -3,7 +3,7 @@ name: Deploy para Production (EC2 Container)
 on:
   push:
     tags:
-      - 'v*.*' 
+      - 'v*.*.*' 
       
   workflow_dispatch: 
 
@@ -53,28 +53,38 @@ jobs:
             IMAGE_TAG=${{ env.IMAGE_TAG }}
             
             # Navegando para o diretorio principal
-            cd /home/$APP_USER/oberon
+            cd /home/$APP_USER/Oberon-Config-AWS
             
             # 1. Login no Docker Hub na EC2
             docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
             
             
-            echo "# Arquivo .env gerado pelo GitHub Actions (Staging)" > .env
+            echo "# Arquivo .env gerado pelo GitHub Actions (Production)" > .env
             
             echo "WEB_IMAGE=$IMAGE_NAME:$IMAGE_TAG" >> .env 
+
             echo "AMBIENTE_PROCESSO=producao" >> .env
 
-            echo "DB_HOST=${{ secrets.DB_HOST_PROD }}" >> .env
-            echo "DB_USER=${{ secrets.DB_USER_PROD }}" >> .env
-            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD_PROD }}" >> .env
-            echo "DB_DATABASE=${{ secrets.DB_DATABASE_PROD }}" >> .env
+            echo "DB_HOST='${{ secrets.DB_HOST_PROD }}'" >> .env
+            echo "DB_USER='${{ secrets.DB_USER_PROD }}'" >> .env
+            echo "DB_PASSWORD='${{ secrets.DB_PASSWORD_PROD }}'" >> .env
+            echo "DB_DATABASE='${{ secrets.DB_DATABASE_PROD }}'" >> .env
             echo "DB_PORT=${{ secrets.DB_PORT_PROD }}" >> .env
+
+
             echo "APP_HOST=${{ secrets.APP_HOST_PROD }}" >> .env
             echo "APP_PORT=${{ secrets.APP_PORT_PROD }}" >> .env
-            echo "EMAIL_USER=${{ secrets.EMAIL_USER_PROD }}" >> .env
-            echo "EMAIL_PASS=${{ secrets.EMAIL_PASS_PROD }}" >> .env
-            echo "FRONTEND_URL=${{ secrets.FRONTEND_URL_PROD }}" >> .env
 
+            echo "EMAIL_USER='${{ secrets.EMAIL_USER_PROD }}'" >> .env
+            echo "EMAIL_PASS='${{ secrets.EMAIL_PASS_PROD }}'" >> .env
+
+            echo "FRONTEND_URL='${{ secrets.FRONTEND_URL_PROD }}'" >> .env
+
+            echo "PYTHON_HOST='${{ secrets.PYTHON_HOST }}'" >> .env
+            echo "SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN }}'" >> .env
+            echo "BOT_PADRAO_IDS='${{ secrets.BOT_PADRAO_IDS }}'" >> .env
+            echo "ADMINS_PADRAO_EMAILS='${{ secrets.ADMINS_PADRAO_EMAILS }}'" >> .env
+            
 
             # Fazendo o pull da imagem 
             sudo docker compose pull web
