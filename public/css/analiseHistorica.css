@@ -96,7 +96,7 @@ body {
 }
 
 .saber_mais .icone-info {
-  scale: 1.2;
+  scale: 0.9;
 }
 
 .data-card {
@@ -108,6 +108,8 @@ body {
   flex-direction: column;
   height: 100%;
 }
+
+
 
 canvas {
   width: 100% !important;
