@@ -13,9 +13,9 @@
   <link rel="stylesheet" href="../css/painelEspecifico.css" />
   <link rel="stylesheet" href="../component/tour/TourGuide.css" />
   <link rel="icon" type="image/x-icon" href="../assets/marca/icone_pequeno.svg" />
-  
+
   <link rel="stylesheet" href="../component/notificao/Notificaocao.css" />
-  
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -33,7 +33,7 @@
 
     <header class="header-top d-flex justify-content-between align-items-center p-3 flex-shrink-0">
       <h2 class="text-black me-3">
-        Gestão de Ativos e Planejamento Orçamentário
+        Gestão de Ativos e Planejamento Orçamentário:
       </h2>
 
       <div class="d-flex align-items-center flex-wrap flex-grow-1 me-3">
@@ -49,15 +49,11 @@
             <li><a class="dropdown-item" onclick="filtrarPeriodo(4)">2025 - Bimestre 4</a></li>
             <li><a class="dropdown-item" onclick="filtrarPeriodo(3)">2025 - Bimestre 3</a></li>
             <li><a class="dropdown-item" onclick="filtrarPeriodo(2)">2025 - Bimestre 2</a></li>
+            <li><a class="dropdown-item" onclick="filtrarPeriodo(1)">2025 - Bimestre 1</a></li>
           </ul>
         </div>
       </div>
 
-      <div class="d-flex align-items-center ms-auto">
-        <button id="btn-tour-fixo" class="btn btn-primary d-none d-md-inline-block" onclick="iniciarTourGestor()">
-          <i class="bi bi-compass-fill me-2"></i> Primeiros Passos
-        </button>
-      </div>
     </header>
 
     <section class="kpi-container" id="kpi-section">
@@ -177,7 +173,8 @@
     <section class="details-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px">
 
       <div class="chart-item-wrapper" id="list-sobrecarga">
-        <h3 style="font-size: 1.1rem; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+        <h3
+          style="font-size: 1.1rem; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
           <span>Top 5 - Sobrecarga</span>
           <button type="button" class="saber_mais btn btn-link p-0" data-bs-toggle="popover" data-bs-placement="right"
             data-bs-trigger="focus" data-bs-title="Máquinas em Sobrecarga"
@@ -203,9 +200,10 @@
       </div>
 
       <div class="chart-item-wrapper" id="list-ociosas">
-        <h3 style="font-size: 1.1rem; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+        <h3
+          style="font-size: 1.1rem; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
           <span>Top 5 - Ociosas</span>
-          <button type="button" class="saber_mais btn btn-link p-0" data-bs-toggle="popover" data-bs-placement="right" 
+          <button type="button" class="saber_mais btn btn-link p-0" data-bs-toggle="popover" data-bs-placement="right"
             data-bs-trigger="focus" data-bs-title="Máquinas Ociosas"
             data-bs-content="Lista as 5 máquinas com menores médias. Clique em 'Média' para inverter a ordem.">
             <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" style="scale: 1.2" />
