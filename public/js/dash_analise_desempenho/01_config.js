@@ -175,6 +175,13 @@ const METRICAS = [
   { value: 'Alertas Osciosos', label: 'Alertas Ocioso', isAlert: true },
 ];
 
+const METRICAS_USO = [
+  { value: 'Uso RAM', label: 'Uso Médio RAM (%)', isAlert: false },
+  { value: 'Uso CPU', label: 'Uso Médio CPU (%)', isAlert: false },
+  { value: 'Uso DISCO', label: 'Uso Médio Disco (%)', isAlert: false },
+  { value: 'Uso REDE', label: 'Uso Médio Rede (%)', isAlert: false },
+];
+
 const COMPONENTES = [
   { value: 'RAM', label: 'RAM' },
   { value: 'CPU', label: 'CPU' },
@@ -242,7 +249,7 @@ const mockData = {
                 dataPrevisao: data_final, 
                 metricaAnalisar: "Total de Alertas",
                 variavelRelacionada: null,
-                fkEmpresa: 2, 
+                fkEmpresa: ID_EMPRESA, 
                 fkMaquina: null,
                 componente: null,
             };
@@ -359,6 +366,7 @@ function ativarModoAnalise(modo) {
         select.dispatchEvent(new Event('change'));
 
         if(typeof toggleFilterFields === 'function') {
+        aplicarFiltro()
         toggleFilterFields();
         }
     }
@@ -372,3 +380,27 @@ function ativarModoAnalise(modo) {
         }
     }
 }
+
+  function exibirToast(icone, texto) {
+    const COR_DE_FUNDO = '#1a1a1a';
+    const COR_DO_ICONE = 'white';
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      background: COR_DE_FUNDO,
+      iconColor: COR_DO_ICONE,
+      color: COR_DO_ICONE,
+
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      },
+    });
+    Toast.fire({
+      icon: icone,
+      title: texto,
+    });
+  }
