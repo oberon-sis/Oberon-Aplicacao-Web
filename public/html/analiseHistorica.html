@@ -67,7 +67,7 @@
             <section class="kpi-container" id="kpi-section">
                 <div class="kpi-card" id="kpi-disponibilidade" style="background-color: white;">
                     <div class="topo-kpi">
-                        <h6>Taxa De Funcionamento Do Sistema</h6>
+                        <h6>Tempo de Funcionamento da Máquina</h6>
                         <div class="icone-kpi"><i class="bi bi-box-arrow-in-up"></i></div>
                     </div>
 
@@ -150,8 +150,8 @@
                     <div class="data-card" id="garfico-linhas">
                         <h4 class="mb-3">Utilização Média de Recursos <button type="button"
                                 class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
-                                data-bs-trigger="focus" data-bs-title="O que são Alertas?"
-                                data-bs-content="Total de notificações geradas por exceder limites configurados de uso de recursos (CPU, RAM, etc.) ou falhas no sistema durante o bimestre.">
+                                data-bs-trigger="focus" data-bs-title="O que significa a utilização média de recursos??"
+                                data-bs-content="Percentual médio de uso dos recursos (como CPU, Memória RAM, Disco, Rede) em um determinado período (Semanal). Valores altos indicam sobrecarga.">
                                 <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
                             </button></h4>
                         <canvas id="mainChart"></canvas>
@@ -163,7 +163,7 @@
                         <h4 class="mb-3">Alertas por Componente (Últimos 30 Dias)
                             <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
                             data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que são Alertas?"
-                            data-bs-content="Total de notificações geradas por exceder limites configurados de uso de recursos (CPU, RAM, etc.) ou falhas no sistema durante o bimestre.">
+                            data-bs-content="Quantidade total de alertas gerados por componente (CPU, RAM, Disco, etc.) devido a limites excedidos ou falhas do sistema, contabilizada nos últimos 30 dias.">
                             <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
                         </button>
                         </h4>
@@ -176,8 +176,8 @@
                     <div class="data-card alert-events-card" id="tabela-eventos">
                         <h4 class="mb-3">Últimos Eventos de Alerta (24h)
                             <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
-                            data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que são Alertas?"
-                            data-bs-content="Total de notificações geradas por exceder limites configurados de uso de recursos (CPU, RAM, etc.) ou falhas no sistema durante o bimestre.">
+                            data-bs-placement="right" data-bs-trigger="focus" data-bs-title="Últimos eventos para que serve?"
+                            data-bs-content="Listagem detalhada dos alertas individuais mais recentes. Apresenta o tipo, horário e severidade de cada evento gerado por problemas de recursos ou falhas de sistema nas últimas 24 horas.">
                             <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
                         </button>
                         </h4>
@@ -255,19 +255,16 @@
         const listaSugestoesEl = document.getElementById('listaSugestoes');
         const termo = termoBusca.trim().toUpperCase();
 
-        // 1. Limpa e Oculta a lista se o termo estiver vazio
-        if (termo.length < 2) { // Começa a filtrar a partir de 2 ou 3 caracteres
+        if (termo.length < 2) {
             listaSugestoesEl.innerHTML = '';
             listaSugestoesEl.style.display = 'none';
             return;
         }
 
-        // 2. Filtra os dados
         const resultados = LISTA_MAQUINAS.filter(maquina =>
             maquina.nome.toUpperCase().includes(termo)
         );
 
-        // 3. Constrói o HTML da lista
         var html = '';
 
         if (resultados.length > 0) {
