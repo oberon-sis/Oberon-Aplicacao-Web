@@ -148,14 +148,25 @@
             <div class="row">
                 <div class="col-md-6" style="background-color: white;">
                     <div class="data-card" id="garfico-linhas">
-                        <h4 class="mb-3">Utilização Média de Recursos</h4>
+                        <h4 class="mb-3">Utilização Média de Recursos <button type="button"
+                                class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
+                                data-bs-trigger="focus" data-bs-title="O que são Alertas?"
+                                data-bs-content="Total de notificações geradas por exceder limites configurados de uso de recursos (CPU, RAM, etc.) ou falhas no sistema durante o bimestre.">
+                                <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
+                            </button></h4>
                         <canvas id="mainChart"></canvas>
                     </div>
                 </div>
 
                 <div class="col-md-6" style="background-color: white;">
                     <div class="data-card" style="background-color: white;" id="grafico-barras">
-                        <h4 class="mb-3">Alertas por Componente (Últimos 30 Dias)</h4>
+                        <h4 class="mb-3">Alertas por Componente (Últimos 30 Dias)
+                            <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
+                            data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que são Alertas?"
+                            data-bs-content="Total de notificações geradas por exceder limites configurados de uso de recursos (CPU, RAM, etc.) ou falhas no sistema durante o bimestre.">
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
+                        </button>
+                        </h4>
                         <canvas id="componentAlertsChart"></canvas>
                     </div>
                 </div>
@@ -163,7 +174,13 @@
             <div class="row">
                 <div class="col-md-12" style="background-color: white;">
                     <div class="data-card alert-events-card" id="tabela-eventos">
-                        <h4 class="mb-3">Últimos Eventos de Alerta (24h)</h4>
+                        <h4 class="mb-3">Últimos Eventos de Alerta (24h)
+                            <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover"
+                            data-bs-placement="right" data-bs-trigger="focus" data-bs-title="O que são Alertas?"
+                            data-bs-content="Total de notificações geradas por exceder limites configurados de uso de recursos (CPU, RAM, etc.) ou falhas no sistema durante o bimestre.">
+                            <img src="../assets/svg/saber.svg" alt="Saiba Mais" class="icone-info" />
+                        </button>
+                        </h4>
                         <div class="table-responsive">
                             <table class="table table-sm compact-alert-table">
                                 <thead>
@@ -211,26 +228,26 @@
 
     fetch(`/dashboardEspecifica/Maquinas_listagem/${idEmpresa}`, {
         method: "GET",
-      })
+    })
         .then(resposta => {
-          return resposta.json();
+            return resposta.json();
         })
         .then(resposta => {
-          console.log("Ola maquinas puxadas",resposta)
+            console.log("Ola maquinas puxadas", resposta)
 
-          var div = document.getElementById("lista_maquinas")
-          
+            var div = document.getElementById("lista_maquinas")
+
             div.innerHTML = '';
 
-          for(let i = 0; i < resposta.length; i++){
-                div.innerHTML+=`<li><a class="dropdown-item" onclick="atualizar_painelEspecifico(${resposta[i].idMaquina},'${resposta[i].nome}')">${resposta[i].nome}</a></li>`
-          }
+            for (let i = 0; i < resposta.length; i++) {
+                div.innerHTML += `<li><a class="dropdown-item" onclick="atualizar_painelEspecifico(${resposta[i].idMaquina},'${resposta[i].nome}')">${resposta[i].nome}</a></li>`
+            }
 
-          LISTA_MAQUINAS = resposta
-        
+            LISTA_MAQUINAS = resposta
+
         })
         .catch(function (resposta) {
-          console.log(`Erro no catch: ${resposta}`);
+            console.log(`Erro no catch: ${resposta}`);
         });
 
 
@@ -276,9 +293,9 @@
 
 
 
-    function atualizar_painelEspecifico(idMaquina,nome){
+    function atualizar_painelEspecifico(idMaquina, nome) {
         idMaquininha = idMaquina;
-        
+
         var div_select = document.getElementById('lista_maquinas')
         div_select.classList.remove('show')
 
@@ -291,20 +308,16 @@
         carregarInformacoesMaquina(idMaquina)
     }
 
-  
+
     function selecionarMaquina(nome, id) {
         const inputBuscaEl = document.getElementById('inputBusca');
         const listaSugestoesEl = document.getElementById('listaSugestoes');
 
-        // 1. Preenche o campo de busca com o nome selecionado
         inputBuscaEl.value = nome;
 
-        // 2. Oculta a lista de sugestões
         listaSugestoesEl.style.display = 'none';
 
-        // 3. Ação Principal: Atualiza o painel para a máquina selecionada
-        // Você deve chamar a função que carrega os dados da máquina aqui:
-        // por exemplo: atualizar_painelEspecifico(id);
+
 
         console.log(`Máquina selecionada: ${maquina.nome} (ID: ${maquina.idMaquina}). Iniciando carregamento do painel...`);
     }
@@ -313,7 +326,6 @@
         const nomeMaquina = sessionStorage.getItem('maquinaSelecionadaNome');
         const idMaquina = sessionStorage.getItem('maquinaSelecionadaId');
 
-        // 2. Identifica o elemento de destino (o <h1>)
         const tituloElemento = document.getElementById('tituloDoPainel');
 
         if (nomeMaquina && tituloElemento) {
@@ -323,5 +335,16 @@
                 tituloElemento.innerHTML = 'Maquina-001';
             }
         }
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl, {
+                trigger: 'focus',
+                html: true,
+            });
+        });
     });
 </script>

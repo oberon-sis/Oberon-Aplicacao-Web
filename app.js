@@ -43,7 +43,7 @@ var empresasRouter = require("./src/routes/Atualizar.empresas");
 
 const downloadRoutes = require('./src/routes/appInstalacao');
 var analiseRedeRoutes = require('./src/routes/analiseRede');
-const dashboardEspecificaRouter = require('./src/routes/dashboardEspecifica'); 
+var dashboardEspecificaRouter = require('./src/routes/dashboardEspecifica'); 
 
 const analiseGeralRoutes = require('./src/routes/analise-tendencia');
 var painelRoutes = require('./src/routes/painel');
