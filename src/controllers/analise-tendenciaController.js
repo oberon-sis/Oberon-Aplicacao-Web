@@ -4,7 +4,7 @@ async function procurar_dados_pagina(req, res) {
     const dataInicio = req.headers["data-inicio"];
     const idEmpresa = req.headers["id-empresa"];
     const idMaquina = req.headers["id-maquina"] == ''? null: req.headers["id-maquina"];
-    const limite_raning = 3;
+    const limite_raning = 4;
     if (!idEmpresa || !dataInicio) {
         return res.status(400).send('dado não fornecido.');
     }
@@ -61,7 +61,6 @@ function calcularVariacao(valorAtual, valorAnterior, tipo) {
         return { variacao: 'N/A', classe: 'text-secondary' };
     }
     const variacao = valorAtual - valorAnterior;
-    const variacaoRelativa = (variacao / valorAnterior) * 100;
     console.log("aqui")
     console.log(valorAtual)
     console.log("aqui")
@@ -73,7 +72,7 @@ function calcularVariacao(valorAtual, valorAnterior, tipo) {
     }
     const classe = variacao > 0 ? 'text-success' : (variacao < 0 ? 'text-danger' : 'text-secondary');
 
-    return { variacao: variacao > 0 ? `+${variacaoRelativa.toFixed(1)}%` : `${variacaoRelativa.toFixed(1)}%`, classe: classe };
+    return { variacao: variacao > 0 ? `+${variacao.toFixed(1)}%` : `${variacao.toFixed(1)}%`, classe: classe };
 }
 
 /**
