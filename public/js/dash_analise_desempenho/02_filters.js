@@ -110,15 +110,12 @@ function popularDropdownMaquinas(maquinas) {
     dropdownUl.innerHTML = ''; 
 
     maquinas.forEach(maq => {
-        console.log("===filtro maquina")
         const li = `<li><a class="dropdown-item" href="#" onclick="filtrar_maquina('${maq.nome}', ${maq.idMaquina})">${maq.nome}</a></li>`;
         dropdownUl.insertAdjacentHTML('beforeend', li);
     });
 
     if (maquinas.length > 0) {
         document.querySelector('#specific-machine-dropdown-group button').innerText = maquinas[0].nome;
-        maquinaSelecionada.nome = maquinas[0].nome;
-        maquinaSelecionada.id = maquinas[0].id;
     }
 }
 
@@ -130,24 +127,23 @@ function selecionarFiltroMaquina(filtro) {
 
     if (filtro === 'Máquina Específica') {
         dropdownMaquinaEspecifica.style.display = 'block';
-
         if(!maquinaSelecionada.id && listaDeMaquinas.length > 0) {
              maquinaSelecionada.nome = listaDeMaquinas[0].nome;
              maquinaSelecionada.id = listaDeMaquinas[0].id;
+             filtrar_maquina(listaDeMaquinas[0].nome, listaDeMaquinas[0].id);
         }
     } else {
         dropdownMaquinaEspecifica.style.display = 'none';
         maquinaSelecionada = { nome: 'Todas as Máquinas', id: null };
+        toggleFilterFields();
+        aplicarFiltro();
     }
-    updateDynamicFilterDisplay();
-    renderizarDados
 }
-
 function filtrar_maquina(nome, id) {
     document.querySelector('#specific-machine-dropdown-group button').innerText = nome;
     maquinaSelecionada = { nome, id };
-    updateDynamicFilterDisplay();
-    aplicarFiltro()
+    toggleFilterFields(); 
+    aplicarFiltro();
 }
 
 function toggleFilterArrow(element) {
@@ -155,25 +151,39 @@ function toggleFilterArrow(element) {
     icon.classList.toggle('bi-caret-down-fill');
     icon.classList.toggle('bi-caret-up-fill');
 }
-
 function toggleFilterFields() {
     const tipoGrafico = document.getElementById('selectTipoGrafico').value;
     const divComponente = document.getElementById('divComponente');
     const divVariavelRelacionada = document.getElementById('divVariavelRelacionada');
     const divDetalhesPrevisao = document.getElementById('divDetalhesPrevisao');
     const labelMetrica = document.getElementById('labelMetricaPrincipal');
-    
+    const isMaquinaEspecifica = maquinaSelecionada && maquinaSelecionada.id !== null;
+
+    let opcoesMetricas = [...METRICAS];
+    let opcoesCorrelacao = [...CORRELACAO_VARS];
+
+    if (isMaquinaEspecifica) {
+        opcoesMetricas = [...opcoesMetricas, ...METRICAS_USO];
+        opcoesCorrelacao = [...opcoesCorrelacao, ...METRICAS_USO];
+    }
+
     popularTempoSelect(tipoGrafico); 
     
     divVariavelRelacionada.style.display = 'none';
     divDetalhesPrevisao.style.display = 'none';
 
     if (tipoGrafico === 'correlacao') {
-        popularSelect('selectMetricaPrincipal', METRICAS.filter(m => ['Uptime', 'DownTime'].includes(m.value)));
-        popularSelect('selectVariavelRelacionada', CORRELACAO_VARS);
+        const metricasPermitidasCorrela = ['Uptime', 'DownTime', 'Total de Alertas'];
+        
+        const metricasY = opcoesMetricas.filter(m => metricasPermitidasCorrela.includes(m.value));
+        
+        popularSelect('selectMetricaPrincipal', metricasY);
+        
+        popularSelect('selectVariavelRelacionada', opcoesCorrelacao);
+        
         labelMetrica.innerText = 'Métrica Principal (Eixo Y)';
     } else {
-        popularSelect('selectMetricaPrincipal', METRICAS); 
+        popularSelect('selectMetricaPrincipal', opcoesMetricas); 
         labelMetrica.innerText = 'Métrica a analisar';
     }
     
@@ -184,11 +194,13 @@ function toggleFilterFields() {
     }
     
     const metrica = document.getElementById('selectMetricaPrincipal').value;
-    let isAlertMetric = METRICAS.find(m => m.value === metrica)?.isAlert;
+    
+    let isAlertMetric = [...METRICAS, ...METRICAS_USO].find(m => m.value === metrica)?.isAlert;
     
     if (tipoGrafico === 'correlacao') {
-        isAlertMetric = true
+        isAlertMetric = true; 
     }
+    
     divComponente.style.display = isAlertMetric ? 'block' : 'none';
     
     if (isAlertMetric) {
@@ -243,6 +255,7 @@ const titulosGrafico = {
 
 
 async function aplicarFiltro() {
+    exibirToast('success', 'Filtro Aplicado com sucesso, fazendo o tratamento de dados...');
     const tipoGrafico = document.getElementById('selectTipoGrafico').value;
     const metricaPrincipal = document.getElementById('selectMetricaPrincipal').value;
     const tempoSelecionado = document.getElementById('selectTempo').value; 
@@ -253,7 +266,7 @@ async function aplicarFiltro() {
     elementoTitulo.innerText = titulosGrafico[tipoGrafico];
     
     if (tipoGrafico === 'correlacao' && metricaPrincipal === variavelRelacionada) {
-        alert("Para Correlação, as métricas devem ser diferentes.");
+        exibirErro('Aconteceu uma falha', 'Para Correlação, as métricas devem ser diferentes.')
         return;
     }
 
@@ -272,6 +285,11 @@ async function aplicarFiltro() {
     console.log(tipoGrafico)
     console.log(variavelRelacionada)
     console.log("-===========")
+    let payload_componente = null;
+    if (!metricaPrincipal.includes('Uso') && componente !== 'TODOS') {
+        payload_componente = componente;
+    }
+
     const payloadGrafico = {
         tipoAnalise: tipoGrafico,
         dataInicio: dataInicioConsulta, 
@@ -279,11 +297,11 @@ async function aplicarFiltro() {
         variavelRelacionada: (tipoGrafico === 'correlacao' ? variavelRelacionada : null),
         fkEmpresa: ID_EMPRESA, 
         fkMaquina: maquinaSelecionada.id,
-        componente: componente != 'TODOS'? componente : null,
-        dataPrevisao: (tipoGrafico === 'comparar' ? null: dataFinalConsulta), 
+        componente: payload_componente, 
+        dataPrevisao: (tipoGrafico === 'comparar' ? null : dataFinalConsulta),           
     };
 
-    console.log(payloadGrafico)
+    console.log("Payload Corrigido:", payloadGrafico);
 
     toggleSkeleton(true);
 
@@ -304,12 +322,20 @@ async function aplicarFiltro() {
 
     } catch (e) {
         console.error('Falha ao aplicar filtro:', e);
-        alert('Erro ao buscar dados. Verifique o console.');
+        exibirErro('Aconteceu uma falha', 'Erro crítico comunicar-se com suporte');
     } finally {
         toggleSkeleton(false);
     }
 }
-
+function exibirErro(titulo, texto) {
+  Swal.fire({
+    title: titulo,
+    text: texto,
+    icon: 'error',
+    confirmButtonColor: '#0C8186',
+    confirmButtonText: 'OK',
+  });
+}
 function iniciarDashboard() {
     popularSelect('selectTipoGrafico', [
         { value: 'comparar', label: 'Comparação – ótimo para ver se está aumentando ou diminuindo.' },
