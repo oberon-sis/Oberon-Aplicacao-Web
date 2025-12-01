@@ -94,8 +94,8 @@ function preencherTabelaAlertas(alertas) {
 // FUNÇÃO PRINCIPAL
 // ============================
 
-async function carregarInformacoesMaquina() {
-    idMaquina = 1;
+async function carregarInformacoesMaquina(idMaquina) {
+    
 
     try {
         const resposta = await fetch(`/dashboardEspecifica/procurar_informacoes_maquina/${idMaquina}`);
@@ -129,7 +129,7 @@ async function carregarInformacoesMaquina() {
     }
 }
 
-window.onload = carregarInformacoesMaquina;
+window.onload = carregarInformacoesMaquina(1);
 
 
 
@@ -221,11 +221,27 @@ function montarGrafGraficoAlertas(dados) {
     };
 }
 
+
+
 function atualizarGraficoAlertas(dadosGrafico) {
+    if (!graficoCanvasAlertas) {
+        console.warn("ID componentAlertsChart não encontrado no HTML.");
+        return;
+    }
+
     const ctx2 = graficoCanvasAlertas.getContext("2d");
 
-    if (graficoAlertas) graficoAlertas.destroy();
+    if (graficoAlertas) {
+        graficoAlertas.destroy();
+    }
 
+    // Cores (para manter o padrão do mock, mas dinâmico)
+    const backgroundColors = dadosGrafico.labels.map(label => {
+        if (label === 'RAM') return 'rgba(0, 123, 255, 0.7)';
+        if (label === 'CPU') return 'rgba(220, 53, 69, 0.7)';
+        return 'rgba(40, 167, 69, 0.7)'; // DISCO
+    });
+    
     graficoAlertas = new Chart(ctx2, {
         type: 'bar',
         data: {
@@ -233,9 +249,16 @@ function atualizarGraficoAlertas(dadosGrafico) {
             datasets: [{
                 label: 'Total de Alertas',
                 data: dadosGrafico.data,
+                backgroundColor: backgroundColors,
                 borderWidth: 1
             }]
         },
-        options: { responsive: true, maintainAspectRatio: false }
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
     });
 }

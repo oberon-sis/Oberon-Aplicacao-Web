@@ -48,8 +48,8 @@
                         aria-expanded="false">
                         <span id="valor_pesquisa_maquina">Selecionar</span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end hover_verde">
-                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(1)">AAAAAAAAAA</a></li>
+                    <ul class="dropdown-menu dropdown-menu-end hover_verde" id="lista_maquinas">
+                        <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(1)"></a></li>
                         <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(2)"></a></li>
                         <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(3)"></a></li>
                         <li><a class="dropdown-item" onclick="atualizar_painelEspecifico(4)"></a></li>
@@ -67,7 +67,7 @@
             <section class="kpi-container" id="kpi-section">
                 <div class="kpi-card" id="kpi-disponibilidade" style="background-color: white;">
                     <div class="topo-kpi">
-                        <h6>Taxa De Disponibilidade Do Sistema</h6>
+                        <h6>Taxa De Funcionamento Do Sistema</h6>
                         <div class="icone-kpi"><i class="bi bi-box-arrow-in-up"></i></div>
                     </div>
 
@@ -148,14 +148,14 @@
             <div class="row">
                 <div class="col-md-6" style="background-color: white;">
                     <div class="data-card" id="garfico-linhas">
-                        <h4 class="mb-3">Utilização Média de Recursos (CPU, RAM, DISCO)</h4>
+                        <h4 class="mb-3">Utilização Média de Recursos</h4>
                         <canvas id="mainChart"></canvas>
                     </div>
                 </div>
 
                 <div class="col-md-6" style="background-color: white;">
                     <div class="data-card" style="background-color: white;" id="grafico-barras">
-                        <h4 class="mb-3">Total de Alertas por Componente (30 Dias)</h4>
+                        <h4 class="mb-3">Alertas por Componente (Últimos 30 Dias)</h4>
                         <canvas id="componentAlertsChart"></canvas>
                     </div>
                 </div>
@@ -195,28 +195,45 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Inicializa APENAS o gráfico restante (uptime/downtime)
-        initUptimeDowntimeChart();
 
-        // A inicialização do AlertTrendChart é feita no próprio script alertTrendChart.js
-
-        // Inicializa os popovers (se a função foi movida para utils.js)
         if (typeof initializeBootstrap === "function") {
             initializeBootstrap();
         }
     });
 
 
-    // MOCK DE DADOS: Lista de máquinas para simular a busca
-    const LISTA_MAQUINAS = [];
+    var idMaquininha = 1;
+    var LISTA_MAQUINAS = [];
+    var idEmpresa = sessionStorage.usuario
+    idEmpresa = JSON.parse(idEmpresa)
+    idEmpresa = idEmpresa.fkEmpresa
 
-    console.log("-------------AQUI--------")
+
+    fetch(`/dashboardEspecifica/Maquinas_listagem/${idEmpresa}`, {
+        method: "GET",
+      })
+        .then(resposta => {
+          return resposta.json();
+        })
+        .then(resposta => {
+          console.log("Ola maquinas puxadas",resposta)
+
+          var div = document.getElementById("lista_maquinas")
+          
+            div.innerHTML = '';
+
+          for(let i = 0; i < resposta.length; i++){
+                div.innerHTML+=`<li><a class="dropdown-item" onclick="atualizar_painelEspecifico(${resposta[i].idMaquina},'${resposta[i].nome}')">${resposta[i].nome}</a></li>`
+          }
+
+          LISTA_MAQUINAS = resposta
+        
+        })
+        .catch(function (resposta) {
+          console.log(`Erro no catch: ${resposta}`);
+        });
 
 
-    /**
-     * Função principal de autocompletar. Chamada no evento oninput do campo de busca.
-     * @param {string} termoBusca - O texto digitado pelo usuário.
-     */
     function filtrarSugestoes(termoBusca) {
         const listaSugestoesEl = document.getElementById('listaSugestoes');
         const termo = termoBusca.trim().toUpperCase();
@@ -232,40 +249,49 @@
         const resultados = LISTA_MAQUINAS.filter(maquina =>
             maquina.nome.toUpperCase().includes(termo)
         );
-        console.log("-------------AQUI--------")
-
-        console.log(LISTA_MAQUINAS)
 
         // 3. Constrói o HTML da lista
-        let html = '';
+        var html = '';
 
         if (resultados.length > 0) {
             resultados.forEach(maquina => {
-                // Usa a classe dropdown-item e adiciona um evento de clique
+                console.log(maquina)
                 html += `
                 <li>
                     <a class="dropdown-item" href="#" 
-                       onclick="selecionarMaquina('${nomeMaquina}', ${idMaquina}); return false;">
+                       onclick="atualizar_painelEspecifico('${maquina.idMaquina}', '${maquina.nome}'); return false;">
                         ${maquina.nome}
                     </a>
                 </li>
             `;
             });
         } else {
-            // Mensagem de "nenhum resultado"
             html = `<li><span class="dropdown-item text-muted">Nenhuma máquina encontrada.</span></li>`;
         }
 
-        // 4. Exibe os resultados
         listaSugestoesEl.innerHTML = html;
         listaSugestoesEl.style.display = 'block';
     }
 
-    /**
-     * Função chamada ao clicar em uma sugestão.
-     * @param {string} nome - Nome completo da máquina.
-     * @param {number} id - ID da máquina.
-     */
+
+
+
+    function atualizar_painelEspecifico(idMaquina,nome){
+        idMaquininha = idMaquina;
+        
+        var div_select = document.getElementById('lista_maquinas')
+        div_select.classList.remove('show')
+
+        var div_pesquisa = document.getElementById('listaSugestoes')
+        div_pesquisa.style.display = 'none';
+
+        var div_nome = document.getElementById('tituloDoPainel')
+        div_nome.innerHTML = nome;
+        console.log(nome, 'esse aqui é o nome da maquina')
+        carregarInformacoesMaquina(idMaquina)
+    }
+
+  
     function selecionarMaquina(nome, id) {
         const inputBuscaEl = document.getElementById('inputBusca');
         const listaSugestoesEl = document.getElementById('listaSugestoes');
@@ -280,7 +306,7 @@
         // Você deve chamar a função que carrega os dados da máquina aqui:
         // por exemplo: atualizar_painelEspecifico(id);
 
-        console.log(`Máquina selecionada: ${nome} (ID: ${id}). Iniciando carregamento do painel...`);
+        console.log(`Máquina selecionada: ${maquina.nome} (ID: ${maquina.idMaquina}). Iniciando carregamento do painel...`);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -297,6 +323,5 @@
                 tituloElemento.innerHTML = 'Maquina-001';
             }
         }
-        // carregarDadosDoGrafico(idMaquina); 
     });
 </script>
