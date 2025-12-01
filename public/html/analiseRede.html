@@ -216,7 +216,8 @@
         <div class="baixo-kpi">
           <div>
             <span id="txt_disponibilidade" class="text-danger"> Carregando... </span> <span class="text-danger">%<i
-                class="bi bi-arrow-" style="scale: 1.2"> </i> </span>
+                class="bi bi-arrow-" style="scale: 1.2"> </i>
+              <p>Análise em tempo real</p> </span>
 
 
           </div>
@@ -236,7 +237,7 @@
         <div class="baixo-kpi">
           <div>
             <span id="qntTotalAlertas" class="text-danger"> carregando... <i style="scale: 1.2"></i> </span>
-
+            <p>Análise em tempo real</p>
           </div>
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
             data-bs-trigger="focus" data-bs-title="O que são Alertas?"
@@ -257,6 +258,7 @@
           <div>
             <span id="txt_jitter" class="text-danger">carregando...<i class="bi bi-arrow-up" style="scale: 1.2"></i>
             </span>
+             <p>Análise em tempo real</p>
 
           </div>
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
@@ -276,7 +278,7 @@
           <div>
 
             <span id="kpiThroughput" class="text-danger"> Carregando... <i style="scale: 1.2"></i> </span>
-
+            <p>Análise em tempo real</p>
           </div>
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
             data-bs-trigger="focus" data-bs-title="O que é Throughput?"
@@ -295,7 +297,7 @@
           <div>
             <span id="pacotesPerdidosid" class="text-danger"> carregando... </span> <span class="text-danger"> % <i
                 class="bi bi-arrow-down" style="scale: 1.2"></i> </span>
-
+                 <p>Análise em tempo real</p>
           </div>
           <button type="button" class="saber_mais btn btn-link" data-bs-toggle="popover" data-bs-placement="right"
             data-bs-trigger="focus" data-bs-title="O que é pacotes perdidos?"
@@ -559,12 +561,21 @@
             labels: ["Pacotes Enviados", "Pacotes Recebidos"],
             datasets: [{
               data: [mediaEnviados, mediaRecebidos],
-              backgroundColor: ["#0097b1", "#113d57"]
+              backgroundColor: ["#0097b1", "#113d57"],
+            
             }]
           },
           options: {
             indexAxis: "y",
-            plugins: { legend: { display: false } }
+            plugins: { legend: { display: false } },
+              scales: {  
+      x: {
+        title: {
+          display: true,
+          text: "Média de Pacotes" 
+        }
+      }
+    }
           }
         });
 
@@ -572,10 +583,6 @@
         console.error("Erro geral:", erro);
       }
     }
-
-
-
-
 
 
     async function getLatenciaUltimas24h(idMaquina) {
