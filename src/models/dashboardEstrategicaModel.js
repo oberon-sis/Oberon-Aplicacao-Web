@@ -169,7 +169,7 @@ function buscarRanking(idEmpresa) {
           AND r.horario >= DATE_SUB(NOW(), INTERVAL 60 DAY)
         GROUP BY m.idMaquina
         ORDER BY total_alertas DESC
-        LIMIT 5;
+        LIMIT 4;
     `;
     return database.executar(query);
 }
