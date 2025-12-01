@@ -1,4 +1,3 @@
-
 var idUsuarioEdicao = null;
 let tipoBusca = 'nome';
 
@@ -8,51 +7,49 @@ var botaoEmail = document.getElementById('email_busca');
 var dropdownTexto = document.querySelector('.dropdown-toggle');
 var tabela = document.getElementById('Conteudo_real');
 
-
-if(botaoNome) {
-    botaoNome.addEventListener('click', (e) => {
-      e.preventDefault();
-      tipoBusca = 'nome';
-      dropdownTexto.textContent = 'Nome';
-    });
+if (botaoNome) {
+  botaoNome.addEventListener('click', (e) => {
+    e.preventDefault();
+    tipoBusca = 'nome';
+    dropdownTexto.textContent = 'Nome';
+  });
 }
 
-if(botaoEmail) {
-    botaoEmail.addEventListener('click', (e) => {
-      e.preventDefault();
-      tipoBusca = 'email';
-      dropdownTexto.textContent = 'E-mail';
-    });
+if (botaoEmail) {
+  botaoEmail.addEventListener('click', (e) => {
+    e.preventDefault();
+    tipoBusca = 'email';
+    dropdownTexto.textContent = 'E-mail';
+  });
 }
 
 var timeoutPesquisa = null;
-if(inputPesquisa) {
-    inputPesquisa.addEventListener('input', () => {
-      clearTimeout(timeoutPesquisa);
-      timeoutPesquisa = setTimeout(() => {
-        var valor = inputPesquisa.value.trim();
+if (inputPesquisa) {
+  inputPesquisa.addEventListener('input', () => {
+    clearTimeout(timeoutPesquisa);
+    timeoutPesquisa = setTimeout(() => {
+      var valor = inputPesquisa.value.trim();
 
-        if (valor === '') {
-          buscarUsuarios(1);
-          return;
-        }
-        PesquisarUsuarios(valor);
-      }, 300);
-    });
+      if (valor === '') {
+        buscarUsuarios(1);
+        return;
+      }
+      PesquisarUsuarios(valor);
+    }, 300);
+  });
 }
-
 
 document.addEventListener('DOMContentLoaded', function () {
   buscarUsuarios(1);
   getTipoUsuario();
 });
 
-
-
 function PesquisarUsuarios(valor) {
   tabela.innerHTML = `<tr><td colspan="7" class="text-center text-muted">Pesquisando...</td></tr>`;
 
-  fetch(`/gerenciamentoUsuario/PesquisarUsuario?campo=${tipoBusca}&valor=${encodeURIComponent(valor)}`)
+  fetch(
+    `/gerenciamentoUsuario/PesquisarUsuario?campo=${tipoBusca}&valor=${encodeURIComponent(valor)}`,
+  )
     .then((res) => {
       if (res.status === 200) return res.json();
       if (res.status === 204) {
@@ -74,11 +71,14 @@ function PesquisarUsuarios(valor) {
 function buscarUsuarios(pagina = 1) {
   var paginacao = document.querySelector('.pagination');
 
-
   tabela.innerHTML = `
-        ${Array.from({ length: 5 }).map(() => `
+        ${Array.from({ length: 5 })
+          .map(
+            () => `
             <tr><td colspan="7"><div class="placeholder-glow"><span class="placeholder col-12"></span></div></td></tr>
-        `).join('')}
+        `,
+          )
+          .join('')}
     `;
 
   fetch(`/gerenciamentoUsuario/listarFuncionarios?page=${pagina}`)
@@ -102,9 +102,8 @@ function buscarUsuarios(pagina = 1) {
 
       renderizarTabela(dados);
 
-
       fetch(`/gerenciamentoUsuario/listarFuncionarios?page=${pagina + 1}`)
-        .then((nextRes) => nextRes.ok ? nextRes.json() : [])
+        .then((nextRes) => (nextRes.ok ? nextRes.json() : []))
         .then((dadosProx) => {
           var temProxima = dadosProx && dadosProx.length > 0;
           paginacao.innerHTML = `
@@ -122,13 +121,13 @@ function buscarUsuarios(pagina = 1) {
 }
 
 function renderizarTabela(dados) {
-    tabela.innerHTML = '';
-    dados.forEach((u) => {
-      const tr = document.createElement('tr');
-      
-      const idReal = u.idFuncionario || u.id;
-      
-      tr.innerHTML = `
+  tabela.innerHTML = '';
+  dados.forEach((u) => {
+    const tr = document.createElement('tr');
+
+    const idReal = u.idFuncionario || u.id;
+
+    tr.innerHTML = `
           <td>${idReal}</td>
           <td>${u.nome}</td>
           <td>${u.cpf || '-'}</td>
@@ -145,10 +144,9 @@ function renderizarTabela(dados) {
               </span>
           </td>
       `;
-      tabela.appendChild(tr);
-    });
+    tabela.appendChild(tr);
+  });
 }
-
 
 function getTipoUsuario() {
   fetch('/gerenciamentoUsuario/getTipoUsuario')
@@ -158,7 +156,6 @@ function getTipoUsuario() {
       return res.json();
     })
     .then((tipos) => {
- 
       var selectCadastro = document.querySelector('#modalCadastrarMaquina select');
       if (selectCadastro) preencherSelect(selectCadastro, tipos);
 
@@ -169,35 +166,41 @@ function getTipoUsuario() {
 }
 
 function preencherSelect(elementoSelect, dadosTipos) {
-    elementoSelect.innerHTML = '<option value="" disabled selected>Selecione o tipo</option>';
-    dadosTipos.forEach((tipo) => {
-        const option = document.createElement('option');
-        option.value = tipo.idTipoUsuario;
-        option.text = tipo.nomeTipo;
-        elementoSelect.appendChild(option);
-    });
+  elementoSelect.innerHTML = '<option value="" disabled selected>Selecione o tipo</option>';
+  dadosTipos.forEach((tipo) => {
+    const option = document.createElement('option');
+    option.value = tipo.idTipoUsuario;
+    option.text = tipo.nomeTipo;
+    elementoSelect.appendChild(option);
+  });
 }
-
 
 function cadastrar() {
   var nome = document.getElementById('nome_input').value;
   var email = document.getElementById('email_input').value;
   var cpf = document.getElementById('cpf_input').value;
   var senha = document.getElementById('senha_input').value;
-  
 
-  var select = document.querySelector('#modalCadastrarMaquina select'); 
+  var select = document.querySelector('#modalCadastrarMaquina select');
   var fkTipoUsuario = select ? select.value : "";
-  
+
   var idFuncionario = sessionStorage.ID_USUARIO;
 
   if (!nome || !email || !cpf || !senha || !fkTipoUsuario) {
-    alert('Preencha todos os campos corretamente!');
+    Swal.fire({
+      icon: 'warning',
+      title: 'Campos obrigatórios',
+      text: 'Preencha todos os campos corretamente!',
+    });
     return;
   }
-  if (!idFuncionario || idFuncionario == "undefined") {
-      alert("Sessão expirada. Faça login novamente.");
-      return;
+  if (!idFuncionario || idFuncionario == 'undefined') {
+    Swal.fire({
+      icon: 'error',
+      title: 'Sessão expirada',
+      text: 'Faça login novamente.',
+    });
+    return;
   }
 
   fetch('/gerenciamentoUsuario/cadastrar', {
@@ -214,22 +217,38 @@ function cadastrar() {
   })
     .then((res) => {
       if (res.ok) {
-          alert('Cadastro realizado!');
+        Swal.fire({
+          icon: 'success',
+          title: 'Cadastro realizado!',
+          confirmButtonColor: '#0C8186',
+        }).then(() => {
           buscarUsuarios(1);
-      
-          document.getElementById('nome_input').value = "";
-          document.getElementById('email_input').value = "";
-          document.getElementById('cpf_input').value = "";
-          document.getElementById('senha_input').value = "";
+          document.getElementById('nome_input').value = '';
+          document.getElementById('email_input').value = '';
+          document.getElementById('cpf_input').value = '';
+          document.getElementById('senha_input').value = '';
+        });
+      } else {
+        res.json().then((json) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: `Erro: ${json}`,
+          });
+        });
       }
-      else res.json().then((json) => alert(`Erro: ${json}`));
     })
-    .catch((err) => alert('Erro de rede: ' + err));
+    .catch((err) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro de rede',
+        text: err,
+      });
+    });
 }
 
-
 function getUsuariobyID(idFuncionario) {
-  idUsuarioEdicao = idFuncionario; 
+  idUsuarioEdicao = idFuncionario;
 
   fetch(`/gerenciamentoUsuario/getUsuariobyID/${idFuncionario}`)
     .then((res) => res.json())
@@ -237,9 +256,13 @@ function getUsuariobyID(idFuncionario) {
       if (!dados || dados.length === 0) return alert('Usuário não encontrado!');
       var usuario = dados[0];
 
-      if(document.getElementById('nome_atual')) document.getElementById('nome_atual').innerText = usuario.nome;
-      if(document.getElementById('email_atual')) document.getElementById('email_atual').innerText = usuario.email;
-      if(document.getElementById('tipoUsuario_atual')) document.getElementById('tipoUsuario_atual').innerText = usuario.nomeTipoUsuario || usuario.tipoUsuario;
+      if (document.getElementById('nome_atual'))
+        document.getElementById('nome_atual').innerText = usuario.nome;
+      if (document.getElementById('email_atual'))
+        document.getElementById('email_atual').innerText = usuario.email;
+      if (document.getElementById('tipoUsuario_atual'))
+        document.getElementById('tipoUsuario_atual').innerText =
+          usuario.nomeTipoUsuario || usuario.tipoUsuario;
 
       document.getElementById('ipt_nome').value = usuario.nome;
       document.getElementById('ipt_email').value = usuario.email;
@@ -247,29 +270,35 @@ function getUsuariobyID(idFuncionario) {
 
       var selectTipo = document.getElementById('select_tipo_update_unico');
       if (selectTipo) {
-       
-          if (selectTipo.options.length <= 1) {
-              getTipoUsuario();
-              setTimeout(() => selectTipo.value = usuario.fkTipoUsuario, 500);
-          } else {
-              selectTipo.value = usuario.fkTipoUsuario;
-          }
+        if (selectTipo.options.length <= 1) {
+          getTipoUsuario();
+          setTimeout(() => (selectTipo.value = usuario.fkTipoUsuario), 500);
+        } else {
+          selectTipo.value = usuario.fkTipoUsuario;
+        }
       }
     })
     .catch((error) => console.error('Erro:', error));
 }
 
-
 function salvarEdicao() {
   if (!idUsuarioEdicao) {
-    alert("Erro: Nenhum usuário selecionado.");
+    Swal.fire({
+      icon: 'error',
+      title: 'Erro',
+      text: 'Nenhum usuário selecionado.',
+    });
     return;
   }
 
   var selectElement = document.getElementById('select_tipo_update_unico');
   if (!selectElement) {
-      alert("Erro crítico: Select de edição não encontrado.");
-      return;
+    Swal.fire({
+      icon: 'error',
+      title: 'Erro crítico',
+      text: 'Select de edição não encontrado.',
+    });
+    return;
   }
 
   var nome = document.getElementById('ipt_nome').value;
@@ -278,7 +307,11 @@ function salvarEdicao() {
   var fkTipoUsuario = selectElement.value;
 
   if (!nome || !email || !fkTipoUsuario) {
-    alert('Preencha todos os campos obrigatórios!');
+    Swal.fire({
+      icon: 'warning',
+      title: 'Campos obrigatórios',
+      text: 'Preencha todos os campos obrigatórios!',
+    });
     return;
   }
 
@@ -297,28 +330,40 @@ function salvarEdicao() {
   })
     .then((res) => {
       if (res.ok) {
-        alert('Alterações salvas!');
-        buscarUsuarios(1);
+        Swal.fire({
+          icon: 'success',
+          title: 'Alterações salvas!',
+          confirmButtonColor: '#0C8186',
+        }).then(() => buscarUsuarios(1));
       } else {
-        res.text().then((text) => alert(`Erro ao salvar: ${text}`));
+        res.text().then((text) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro ao salvar',
+            text: text,
+          });
+        });
       }
     })
-    .catch((err) => alert('Erro de rede: ' + err));
+    .catch((err) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro de rede',
+        text: err,
+      });
+    });
 }
 
 function ExcluirUsuario(idFuncionario) {
-  
-
   var idGerente = sessionStorage.ID_USUARIO;
-  if (!idGerente || idGerente == "undefined") {
-      Swal.fire({
-          icon: 'error',
-          title: 'Sessão Expirada',
-          text: 'Faça login novamente para excluir.'
-      });
-      return;
+  if (!idGerente || idGerente == 'undefined') {
+    Swal.fire({
+      icon: 'error',
+      title: 'Sessão Expirada',
+      text: 'Faça login novamente para excluir.',
+    });
+    return;
   }
-
 
   Swal.fire({
     title: 'Excluir Usuário',
@@ -350,34 +395,32 @@ function ExcluirUsuario(idFuncionario) {
       }
       return { senha: senha };
     },
-  })
-  .then((resultadoSwal) => {
-      if (resultadoSwal.isConfirmed) {
-        const senhaGerente = resultadoSwal.value.senha;
+  }).then((resultadoSwal) => {
+    if (resultadoSwal.isConfirmed) {
+      const senhaGerente = resultadoSwal.value.senha;
 
-        fetch(`/gerenciamentoUsuario/ExcluirUsuario/${idFuncionario}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ idGerente: idGerente, senha: senhaGerente }),
-          })
-            .then((res) => {
-              if (res.ok) {
-               
-                Swal.fire({
-                    title: 'Sucesso!',
-                    text: 'Usuário excluído.',
-                    icon: 'success',
-                    confirmButtonColor: '#0C8186'
-                }).then(() => {
-                    buscarUsuarios(1); 
-                });
-              } else {
-                res.text().then((msg) => exibirErro('Erro', msg));
-              }
-            })
-            .catch((err) => exibirErro('Erro', 'Falha na rede: ' + err));
-      }
-    });
+      fetch(`/gerenciamentoUsuario/ExcluirUsuario/${idFuncionario}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idGerente: idGerente, senha: senhaGerente }),
+      })
+        .then((res) => {
+          if (res.ok) {
+            Swal.fire({
+              title: 'Sucesso!',
+              text: 'Usuário excluído.',
+              icon: 'success',
+              confirmButtonColor: '#0C8186',
+            }).then(() => {
+              buscarUsuarios(1);
+            });
+          } else {
+            res.text().then((msg) => exibirErro('Erro', msg));
+          }
+        })
+        .catch((err) => exibirErro('Erro', 'Falha na rede: ' + err));
+    }
+  });
 }
 
 function exibirErro(titulo, texto) {
