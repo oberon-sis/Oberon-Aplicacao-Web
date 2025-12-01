@@ -16,20 +16,19 @@ const CORES_STATUS = {
     'NORMAL':  'bg-success' 
 };
 
-const tituloDoPainel = document.getElementById("tituloDoPainel");
-const txtDisponibilidade = document.getElementById("txt_disponibilidade");
-const txt_disponibilidade_passado = document.getElementById("txt_disponibilidade_passado");
-const txtTotalAlertas = document.getElementById("txt_total_alertas");
-const txtPercentualCritico = document.getElementById("txt_percentual_critico");
-const txtComponenteCritico = document.getElementById("txt_componente_critico");
-const tabelaAlertas = document.getElementById("tabela-alertas");
+var tituloDoPainel = document.getElementById("tituloDoPainel");
+var txtDisponibilidade = document.getElementById("txt_disponibilidade");
+var txtTotalAlertas = document.getElementById("txt_total_alertas");
+var txtPercentualCritico = document.getElementById("txt_percentual_critico");
+var txtComponenteCritico = document.getElementById("txt_componente_critico");
+var tabelaAlertas = document.getElementById("tabela-alertas");
 
-const graficoCanvasPrincipal = document.getElementById("mainChart");
-const graficoCanvasAlertas = document.getElementById("componentAlertsChart");
+var graficoCanvasPrincipal = document.getElementById("mainChart");
+var graficoCanvasAlertas = document.getElementById("componentAlertsChart");
 
-let graficoPrincipal;
-let graficoAlertas;
-let uptimeInterval;
+var graficoPrincipal;
+var graficoAlertas;
+var uptimeInterval;
 
 
 
@@ -150,14 +149,17 @@ async function carregarInformacoesMaquina(idMaquina) {
         const ultimosEventos = dados.dados_ultimos_eventos ?? [];
         const graficoLinha = dados.dados_coleta_24_horas ?? [];
         const graficoBarra = dados.dados_kpi_pico_24h ?? [];
+        const dadosComponenteCritico = dados.dados_kpi_componente_critico ?? 0;
 
         atualizarHeader(info);
-        atualizarKpis(kpiAlertas, kpiDisp);
+        atualizarKpis(kpiAlertas, kpiDisp, dadosComponenteCritico);
         preencherTabelaAlertas(ultimosEventos.map(normalizarAlerta));
        
         atualizarGraficoPrincipal(montarDadosGraficoLinha(graficoLinha));
         atualizarGraficoAlertas(montarDadosGraficoBarra(graficoBarra));
 
+        console.log(kpiAlertas);
+        console.log(dadosComponenteCritico);
     } catch (erro) {
         console.error("Erro:", erro);
     }
@@ -169,16 +171,20 @@ function atualizarHeader(info) {
     if (tituloDoPainel) tituloDoPainel.innerText = info?.nome || `Máquina ${idMaquina}`;
 }
 
-function atualizarKpis(dadosAlerta, dadosDisp) {
-    if (!dadosAlerta || !dadosDisp) return;
+function atualizarKpis(dadosAlerta, dadosDisp, dataComponenteCritico) {
+    if (!dadosAlerta || !dadosDisp || !dataComponenteCritico) return;
 
     const kpiTempo = formatarKpiTempo(dadosDisp.tempoLigadoUltimaSemana, dadosDisp.tempoLigadoSemanaPassada);
+    console.log(kpiTempo.valorPassadoFormatado, "<- Valor passado formatado")
     txtDisponibilidade.innerHTML = kpiTempo.html;
     txtDisponibilidade.className = kpiTempo.class;
-    txt_disponibilidade_passado.innerHTML = kpiTempo.valorPassadoFormatado;
     iniciarContadorUptime(dadosDisp.tempoLigadoUltimaSemana);
+    
 
     const totalAtual = dadosAlerta.totalAlertas30dias || 0;
+    const totalSemanal = dadosAlerta.totalAlertasdias || 0;
+
+
     const kpiAlertas = formatarKpiMenorMelhor(totalAtual, 380);
     txtTotalAlertas.innerHTML = kpiAlertas.html;
     txtTotalAlertas.className = kpiAlertas.class;
@@ -189,8 +195,10 @@ function atualizarKpis(dadosAlerta, dadosDisp) {
     const kpiPerc = formatarKpiMenorMelhor(percAtual, 8, "%");
     txtPercentualCritico.innerHTML = kpiPerc.html;
     txtPercentualCritico.className = kpiPerc.class;
-   
-    txtComponenteCritico.innerText = "RAM";
+
+    const componenteMaisCritico = dataComponenteCritico[0].tipoComponente;
+    txtComponenteCritico.innerHTML = componenteMaisCritico;
+    console.log(dataComponenteCritico[0].tipoComponente);
 }
 
 
