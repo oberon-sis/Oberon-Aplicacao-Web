@@ -69,8 +69,8 @@ function buscar_kpi_alertas_30_dias(idMaquina) {
 
   const instrucaoSql = `
         SELECT
-            COUNT(A.idAlerta) AS totalAlertas30dias,
-            SUM(CASE WHEN A.nivel = 'CRITICO' THEN 1 ELSE 0 END) AS totalCriticos30dias
+            COUNT(a.idAlerta) AS totalAlertas30dias,
+            SUM(CASE WHEN a.nivel = 'CRITICO' THEN 1 ELSE 0 END) AS totalCriticos30dias
             FROM Maquina m
             JOIN Componente c ON m.idMaquina = c.fkMaquina
             JOIN Registro r ON c.idComponente = r.fkComponente
