@@ -129,10 +129,48 @@ ORDER BY
   return database.executar(instrucaoSql);
 }
 
+function buscar_dados_cards_painel(idEmpresa, pagina_atual, tamanho_da_pagina, statusFiltro, nome_busqueda) {
+    console.log('[MODEL] - Buscando para os cards da pagina', idEmpresa, pagina_atual, tamanho_da_pagina, statusFiltro, nome_busqueda);
+    const sqlStatus = statusFiltro ? `'${statusFiltro}'` : 'NULL';
+    const sqlNome = nome_busqueda ? `'${nome_busqueda}'` : 'NULL';
+
+    var instrucaoSql = `CALL sp_listar_maquinas_filtradas(
+        ${idEmpresa}, 
+        ${pagina_atual}, 
+        ${tamanho_da_pagina},
+        ${sqlStatus}, 
+        ${sqlNome}
+    );`;
+    
+    console.log('Executando a instrução SQL: \n' + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function buscar_dados_filtros(idEmpresa) {
+  console.log('[MODEL] - Buscando para os cards da pagina', idEmpresa );
+
+    var instrucaoSql = `
+            SELECT
+                COUNT(*) AS Todas,
+                SUM(CASE WHEN BINARY CategoriaStatus = 'CRITICO' THEN 1 ELSE 0 END) AS Critico,
+                SUM(CASE WHEN BINARY CategoriaStatus = 'ATENCAO' THEN 1 ELSE 0 END) AS Atencao,
+                SUM(CASE WHEN BINARY CategoriaStatus = 'NORMAL' THEN 1 ELSE 0 END) AS Normal,
+                SUM(CASE WHEN BINARY CategoriaStatus = 'OCIOSO' THEN 1 ELSE 0 END) AS Ocioso,
+                SUM(CASE WHEN BINARY CategoriaStatus = 'OFFLINE' THEN 1 ELSE 0 END) AS \`Offline\`,
+                SUM(CASE WHEN BINARY CategoriaStatus = 'MANUTENCAO' THEN 1 ELSE 0 END) AS Manutencao
+            FROM vw_ClassificacaoMaquinas
+            WHERE fkEmpresa = ${idEmpresa};
+    `;
+
+  console.log('Executando a instrução SQL: \n' + instrucaoSql);
+  return database.executar(instrucaoSql);
+}
 module.exports = {
     buscar_info_maquina,
     buscar_info_componentes,
     buscar_dados_kpi, 
     buscar_parametros,
     buscar_info_24_horas_coleta,
+    buscar_dados_cards_painel,
+    buscar_dados_filtros
 };

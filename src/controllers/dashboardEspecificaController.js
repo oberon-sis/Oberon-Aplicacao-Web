@@ -1,4 +1,5 @@
 const dashboardespecifica = require('../models/dashboardEspecificaModel');
+const geralModel = require('../models/analise-tendenciaModel');
 
 async function procurar_informacoes_maquina(req, res) {
   const idMaquina = req.params.idMaquina;
@@ -56,6 +57,24 @@ async function procurar_informacoes_maquina(req, res) {
   }
 }
 
+async function Maquinas_listagem(req, res) {
+    const idEmpresa = req.params.idEmpresa;
+
+    if (!idEmpresa) return res.status(400).send('dado não fornecido.');
+
+    try {
+        const maquinas = await geralModel.buscar_maquinas(idEmpresa)
+
+        res.status(200).json(maquinas);
+    } catch (erro) {
+        res.status(500).json({
+            mensagem: 'Erro interno ao buscar dados das máquinas.',
+            detalhe: erro.message,
+        });
+    }
+}
+
 module.exports = {
   procurar_informacoes_maquina,
+  Maquinas_listagem
 };

@@ -85,7 +85,7 @@ function buscar_kpi_alertas_30_dias(idMaquina) {
             JOIN Registro r ON c.idComponente = r.fkComponente
             LEFT JOIN Alerta a ON r.idRegistro = a.fkRegistro
             WHERE m.idMaquina = ${idMaquina}
-            AND r.horario >= DATE_SUB(NOW(), INTERVAL 300 DAY);
+            AND r.horario >= DATE_SUB(NOW(), INTERVAL 30 DAY);
     `;
 
   return database.executar(instrucaoSql, [idMaquina]);

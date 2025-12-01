@@ -57,7 +57,7 @@ const dashboardTourSteps = [
     title: 'Passo 8/8: Últimos Eventos de Alerta (24h)',
     content:
       'Tabela com os alertas mais recentes, incluindo Hora, Componente, Tipo e Valor exato do recurso. Essencial para a análise imediata e confirmação dos alertas mais urgentes.',
-    position: 'bottom',
+    position: 'top',
   },
 ];
 document.addEventListener('DOMContentLoaded', () => {

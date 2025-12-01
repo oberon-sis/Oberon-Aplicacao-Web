@@ -126,13 +126,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var corMedia = 'inherit';
     if (media < parametrosAtuais.aceitavel) {
-      corMedia = '#3498db'; // Ocioso (azul)
+      corMedia = '#3498db';
     } else if (media >= parametrosAtuais.aceitavel && media < parametrosAtuais.atencao) {
-      corMedia = '#27ae60'; // Normal (verde)
+      corMedia = '#27ae60';
     } else if (media >= parametrosAtuais.atencao && media < parametrosAtuais.critico) {
-      corMedia = '#f39c12'; // Atenção (laranja)
+      corMedia = '#f39c12';
     } else if (media >= parametrosAtuais.critico) {
-      corMedia = '#e74c3c'; // Crítico (vermelho)
+      corMedia = '#e74c3c';
     }
 
     mediaUsoEl.textContent = `${media || 0}${unidade}`;
@@ -509,7 +509,7 @@ document.addEventListener('DOMContentLoaded', function () {
     btnSalvarParametros.innerHTML =
       '<span class="spinner-border spinner-border-sm me-2"></span>Salvando...';
     try {
-      const response = await fetch('/dashboardParametros/atualizar', {
+      const response = await fetch('/dashboardParametros/atualizarParametros', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -555,18 +555,20 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  function mostrarAlerta(mensagem, tipo) {
-    alertaFeedback.textContent = mensagem;
-    alertaFeedback.classList.remove('d-none', 'alert-success', 'alert-danger');
-    alertaFeedback.classList.add(`alert-${tipo}`);
-  }
-
   document
     .getElementById('modalDefinirParametros')
     .addEventListener('hidden.bs.modal', function () {
       btnSalvarParametros.disabled = false;
       btnSalvarParametros.innerHTML = '<i class="bi bi-check-circle me-1"></i>Salvar Parâmetros';
     });
+
+  const INTERVALO_ATUALIZACAO = 3600000; 
+  setInterval(function() {
+      if (componenteAtual) {
+          console.log(`Atualizando dados automaticamente para: ${componenteAtual}...`);
+          buscarERenderizarDados(componenteAtual);
+      }
+  }, INTERVALO_ATUALIZACAO);
 
   buscarERenderizarDados(componenteAtual);
 });
