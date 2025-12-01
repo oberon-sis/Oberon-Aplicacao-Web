@@ -171,10 +171,27 @@ function buscarRanking(req, res) {
 }
 
 
+async function listarMaquinas(req, res) {
+    const fkEmpresa = req.params.fkEmpresa;
+    try {
+        const resultado = await redeModel.listarMaquinas(fkEmpresa);
+        res.status(200).json(resultado); 
+    } catch (erro) {
+        console.error("Erro no Controller ao listar máquinas:", erro);
+       
+        res.status(500).json({ 
+            mensagem: "Erro ao buscar máquinas.", 
+            detalhe: erro.sqlMessage || erro.message 
+        }); 
+    }
+}
+
+
+
 
 
   
 
 
 module.exports = { getMediaLatencia, getSomaAlertas, getPerdaPacote, getDisponibilidade, getLatenciaUltimas24h, 
-    getPacotesEnviados, getPacotesRecebidos, getJitter, buscarRanking,autenticar };
+    getPacotesEnviados, getPacotesRecebidos, getJitter, buscarRanking,autenticar, listarMaquinas };
