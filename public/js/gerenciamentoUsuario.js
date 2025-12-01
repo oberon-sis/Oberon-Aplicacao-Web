@@ -1,3 +1,4 @@
+var idUsuarioEdicao = null;
 let tipoBusca = 'nome';
 
 var inputPesquisa = document.querySelector('.input_pesquisa');
@@ -6,41 +7,45 @@ var botaoEmail = document.getElementById('email_busca');
 var dropdownTexto = document.querySelector('.dropdown-toggle');
 var tabela = document.getElementById('Conteudo_real');
 
-botaoNome.addEventListener('click', (e) => {
-  e.preventDefault();
-  tipoBusca = 'nome';
-  dropdownTexto.textContent = 'Nome';
-});
+if (botaoNome) {
+  botaoNome.addEventListener('click', (e) => {
+    e.preventDefault();
+    tipoBusca = 'nome';
+    dropdownTexto.textContent = 'Nome';
+  });
+}
 
-botaoEmail.addEventListener('click', (e) => {
-  e.preventDefault();
-  tipoBusca = 'email';
-  dropdownTexto.textContent = 'E-mail';
-});
+if (botaoEmail) {
+  botaoEmail.addEventListener('click', (e) => {
+    e.preventDefault();
+    tipoBusca = 'email';
+    dropdownTexto.textContent = 'E-mail';
+  });
+}
 
 var timeoutPesquisa = null;
-inputPesquisa.addEventListener('input', () => {
-  clearTimeout(timeoutPesquisa);
-  timeoutPesquisa = setTimeout(() => {
-    var valor = inputPesquisa.value.trim();
+if (inputPesquisa) {
+  inputPesquisa.addEventListener('input', () => {
+    clearTimeout(timeoutPesquisa);
+    timeoutPesquisa = setTimeout(() => {
+      var valor = inputPesquisa.value.trim();
 
-    if (valor === '') {
-      if (typeof buscarUsuarios === 'function') {
+      if (valor === '') {
         buscarUsuarios(1);
+        return;
       }
-      return;
-    }
+      PesquisarUsuarios(valor);
+    }, 300);
+  });
+}
 
-    PesquisarUsuarios(valor);
-  }, 300);
+document.addEventListener('DOMContentLoaded', function () {
+  buscarUsuarios(1);
+  getTipoUsuario();
 });
 
 function PesquisarUsuarios(valor) {
-  tabela.innerHTML = `
-      <tr>
-          <td colspan="7" class="text-center text-muted">Pesquisando...</td>
-      </tr>
-  `;
+  tabela.innerHTML = `<tr><td colspan="7" class="text-center text-muted">Pesquisando...</td></tr>`;
 
   fetch(
     `/gerenciamentoUsuario/PesquisarUsuario?campo=${tipoBusca}&valor=${encodeURIComponent(valor)}`,
@@ -48,80 +53,29 @@ function PesquisarUsuarios(valor) {
     .then((res) => {
       if (res.status === 200) return res.json();
       if (res.status === 204) {
-        tabela.innerHTML = `
-            <tr>
-                <td colspan="7" class="text-center text-muted">
-                    Nenhum resultado encontrado.
-                </td>
-            </tr>
-        `;
+        tabela.innerHTML = `<tr><td colspan="7" class="text-center text-muted">Nenhum resultado encontrado.</td></tr>`;
         return [];
       }
       throw new Error('Erro ao buscar usuários.');
     })
     .then((dados) => {
       if (!dados || dados.length === 0) return;
-
-      tabela.innerHTML = '';
-
-      dados.forEach((u) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${u.idFuncionario || u.id}</td>
-            <td>${u.nome}</td>
-            <td>${u.cpf || '-'}</td>
-            <td>${u.email}</td>
-            <td>${u.funcao || '-'}</td>
-            <td>
-                <span class="opcao_crud text-primary" data-bs-toggle="modal"
-                      onclick="getUsuariobyID(${u.idFuncionario || u.id})"
-                      data-bs-target="#modalAtualizarMaquina">
-                    <img src="../assets/svg/atualizar_blue.svg" alt="">
-                    Editar
-                </span>
-            </td>
-            <td>
-                <span class="opcao_crud text-danger"
-                      onclick="ExcluirUsuario(${u.idFuncionario || u.id})">
-                    <img src="../assets/svg/excluir_red.svg" alt="">
-                    Excluir
-                </span>
-            </td>
-        `;
-        tabela.appendChild(tr);
-      });
+      renderizarTabela(dados);
     })
     .catch((erro) => {
       console.error('Erro na pesquisa:', erro);
-      tabela.innerHTML = `
-          <tr><td colspan="7" class="text-center text-danger">
-              Erro na pesquisa (${erro.message})
-          </td></tr>
-      `;
+      tabela.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Erro na pesquisa (${erro.message})</td></tr>`;
     });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  buscarUsuarios(1);
-});
-
-// LISTAGEM DOS USUARIOS COM PAGINAÇÃO
-
 function buscarUsuarios(pagina = 1) {
-  var tabela = document.getElementById('Conteudo_real');
   var paginacao = document.querySelector('.pagination');
 
   tabela.innerHTML = `
         ${Array.from({ length: 5 })
           .map(
             () => `
-            <tr>
-                <td colspan="7">
-                    <div class="placeholder-glow">
-                        <span class="placeholder col-12"></span>
-                    </div>
-                </td>
-            </tr>
+            <tr><td colspan="7"><div class="placeholder-glow"><span class="placeholder col-12"></span></div></td></tr>
         `,
           )
           .join('')}
@@ -133,92 +87,92 @@ function buscarUsuarios(pagina = 1) {
       return res.json();
     })
     .then((dados) => {
-      Estrutura_esqueleto_carregamento.style.display = 'none';
+      var loadingElement = document.getElementById('Estrutura_esqueleto_carregamento');
+      if (loadingElement) loadingElement.style.display = 'none';
 
       if (!dados || dados.length === 0) {
         tabela.innerHTML = `<tr><td colspan="7" class="text-center">Nenhum usuário encontrado.</td></tr>`;
         paginacao.innerHTML = `
-                    <li class="page-item ${pagina === 1 ? 'disabled' : ''}">
-                        <a class="page-link" href="#" onclick="buscarUsuarios(${pagina - 1})">Anterior</a>
-                    </li>
-                    <li class="page-item active"><a class="page-link" href="#">${pagina}</a></li>
-                    <li class="page-item disabled"><a class="page-link" href="#">Próxima</a></li>
-                `;
+            <li class="page-item ${pagina === 1 ? 'disabled' : ''}"><a class="page-link" href="#" onclick="buscarUsuarios(${pagina - 1})">Anterior</a></li>
+            <li class="page-item active"><a class="page-link" href="#">${pagina}</a></li>
+            <li class="page-item disabled"><a class="page-link" href="#">Próxima</a></li>
+        `;
         return;
       }
 
-      tabela.innerHTML = '';
-      dados.forEach((u) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-                    <td>${u.id}</td>
-                    <td>${u.nome}</td>
-                    <td>${u.cpf}</td>
-                    <td>${u.email}</td>
-                    <td>${u.funcao}</td>
-                    <td>
-                        <span class="opcao_crud text-primary" data-bs-toggle="modal" onclick="getUsuariobyID(${u.id})"
-                            data-bs-target="#modalAtualizarMaquina">
-                            <img src="../assets/svg/atualizar_blue.svg" alt="">
-                            Editar
-                        </span>
-                    </td>
-                    <td>
-                        <span class="opcao_crud text-danger" onclick="ExcluirUsuario(${u.id})">
-                            <img src="../assets/svg/excluir_red.svg" alt="">
-                            Excluir
-                        </span>
-                    </td>
-                `;
-        tabela.appendChild(tr);
-      });
+      renderizarTabela(dados);
 
-      return fetch(`/gerenciamentoUsuario/listarFuncionarios?page=${pagina + 1}`)
-        .then((nextRes) => {
-          if (!nextRes.ok) throw new Error();
-          return nextRes.json();
-        })
+      fetch(`/gerenciamentoUsuario/listarFuncionarios?page=${pagina + 1}`)
+        .then((nextRes) => (nextRes.ok ? nextRes.json() : []))
         .then((dadosProx) => {
           var temProxima = dadosProx && dadosProx.length > 0;
-
           paginacao.innerHTML = `
-                        <li class="page-item ${pagina === 1 ? 'disabled' : ''}">
-                            <a class="page-link" href="#" onclick="buscarUsuarios(${pagina - 1})">Anterior</a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">${pagina}</a></li>
-                        <li class="page-item ${!temProxima ? 'disabled' : ''}">
-                            <a class="page-link" href="#" onclick="buscarUsuarios(${pagina + 1})">Próxima</a>
-                        </li>
-                    `;
+                <li class="page-item ${pagina === 1 ? 'disabled' : ''}"><a class="page-link" href="#" onclick="buscarUsuarios(${pagina - 1})">Anterior</a></li>
+                <li class="page-item active"><a class="page-link" href="#">${pagina}</a></li>
+                <li class="page-item ${!temProxima ? 'disabled' : ''}"><a class="page-link" href="#" onclick="buscarUsuarios(${pagina + 1})">Próxima</a></li>
+            `;
         })
-        .catch(() => {
-          paginacao.innerHTML = `
-                        <li class="page-item ${pagina === 1 ? 'disabled' : ''}">
-                            <a class="page-link" href="#" onclick="buscarUsuarios(${pagina - 1})">Anterior</a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">${pagina}</a></li>
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#">Próxima</a>
-                        </li>
-                    `;
-        });
+        .catch(() => {});
     })
     .catch((err) => {
-      console.error('Erro ao carregar usuários:', err);
-      tabela.innerHTML = `
-                <tr><td colspan="7" class="text-center text-danger">
-                    Erro ao carregar usuários (${err.message})
-                </td></tr>
-            `;
-
-      paginacao.innerHTML = `
-                <li class="page-item ${pagina === 1 ? 'disabled' : ''}">
-                    <a class="page-link" href="#" onclick="buscarUsuarios(${pagina - 1})">Anterior</a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">${pagina}</a></li>
-                <li class="page-item disabled"><a class="page-link" href="#">Próxima</a></li>
-            `;
+      console.error('Erro ao carregar:', err);
+      tabela.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Erro ao carregar usuários.</td></tr>`;
     });
+}
+
+function renderizarTabela(dados) {
+  tabela.innerHTML = '';
+  dados.forEach((u) => {
+    const tr = document.createElement('tr');
+
+    const idReal = u.idFuncionario || u.id;
+
+    tr.innerHTML = `
+          <td>${idReal}</td>
+          <td>${u.nome}</td>
+          <td>${u.cpf || '-'}</td>
+          <td>${u.email}</td>
+          <td>${u.funcao || u.nomeTipoUsuario || u.tipoUsuario || '-'}</td>
+          <td>
+              <span class="opcao_crud text-primary" data-bs-toggle="modal" onclick="getUsuariobyID(${idReal})" data-bs-target="#modalAtualizarMaquina">
+                  <img src="../assets/svg/atualizar_blue.svg" alt=""> Editar
+              </span>
+          </td>
+          <td>
+              <span class="opcao_crud text-danger" onclick="ExcluirUsuario(${idReal})">
+                  <img src="../assets/svg/excluir_red.svg" alt=""> Excluir
+              </span>
+          </td>
+      `;
+    tabela.appendChild(tr);
+  });
+}
+
+function getTipoUsuario() {
+  fetch('/gerenciamentoUsuario/getTipoUsuario')
+    .then((res) => {
+      if (res.status === 204) throw new Error('Vazio');
+      if (!res.ok) throw new Error(res.status);
+      return res.json();
+    })
+    .then((tipos) => {
+      var selectCadastro = document.querySelector('#modalCadastrarMaquina select');
+      if (selectCadastro) preencherSelect(selectCadastro, tipos);
+
+      var selectEdicao = document.getElementById('select_tipo_update_unico');
+      if (selectEdicao) preencherSelect(selectEdicao, tipos);
+    })
+    .catch((erro) => console.error('Erro ao carregar tipos:', erro));
+}
+
+function preencherSelect(elementoSelect, dadosTipos) {
+  elementoSelect.innerHTML = '<option value="" disabled selected>Selecione o tipo</option>';
+  dadosTipos.forEach((tipo) => {
+    const option = document.createElement('option');
+    option.value = tipo.idTipoUsuario;
+    option.text = tipo.nomeTipo;
+    elementoSelect.appendChild(option);
+  });
 }
 
 function cadastrar() {
@@ -226,10 +180,26 @@ function cadastrar() {
   var email = document.getElementById('email_input').value;
   var cpf = document.getElementById('cpf_input').value;
   var senha = document.getElementById('senha_input').value;
-  var fkTipoUsuario = document.getElementById('tipo_usuario_select_tipos').value;
+
+  var select = document.querySelector('#modalCadastrarMaquina select');
+  var fkTipoUsuario = select ? select.value : "";
+
+  var idFuncionario = sessionStorage.ID_USUARIO;
 
   if (!nome || !email || !cpf || !senha || !fkTipoUsuario) {
-    alert('Preencha todos os campos corretamente!');
+    Swal.fire({
+      icon: 'warning',
+      title: 'Campos obrigatórios',
+      text: 'Preencha todos os campos corretamente!',
+    });
+    return;
+  }
+  if (!idFuncionario || idFuncionario == 'undefined') {
+    Swal.fire({
+      icon: 'error',
+      title: 'Sessão expirada',
+      text: 'Faça login novamente.',
+    });
     return;
   }
 
@@ -246,109 +216,112 @@ function cadastrar() {
     }),
   })
     .then((res) => {
-      if (res.ok) alert('Cadastro realizado com sucesso!');
-      else res.json().then((json) => alert(`Erro: ${json}`));
-    })
-    .catch((err) => alert('Erro de rede: ' + err));
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  getTipoUsuario();
-  // getUsuariobyID();
-});
-
-function getTipoUsuario() {
-  var select = document.getElementsByClassName('tipo_usuario_select_tipos');
-
-  fetch('/gerenciamentoUsuario/getTipoUsuario')
-    .then((res) => {
-      if (res.status === 204) {
-        select[0].innerHTML = '<option value="" disabled selected>Nenhum tipo cadastrado</option>';
-        select[1].innerHTML = '<option value="" disabled selected>Nenhum tipo cadastrado</option>';
-        throw new Error('Nenhum tipo de usuário encontrado.');
+      if (res.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Cadastro realizado!',
+          confirmButtonColor: '#0C8186',
+        }).then(() => {
+          buscarUsuarios(1);
+          document.getElementById('nome_input').value = '';
+          document.getElementById('email_input').value = '';
+          document.getElementById('cpf_input').value = '';
+          document.getElementById('senha_input').value = '';
+        });
+      } else {
+        res.json().then((json) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: `Erro: ${json}`,
+          });
+        });
       }
-      if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
-      return res.json();
     })
-    .then((tipos) => {
-      select[0].innerHTML =
-        '<option value="" disabled selected>Selecione o tipo de usuário</option>';
-      tipos.forEach((tipo) => {
-        const option = document.createElement('option');
-        option.value = tipo.idTipoUsuario;
-        option.text = tipo.nomeTipo;
-        select[0].appendChild(option);
+    .catch((err) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro de rede',
+        text: err,
       });
-      select[1].innerHTML =
-        '<option value="" disabled selected>Selecione o tipo de usuário</option>';
-      tipos.forEach((tipo) => {
-        const option = document.createElement('option');
-        option.value = tipo.idTipoUsuario;
-        option.text = tipo.nomeTipo;
-        select[1].appendChild(option);
-      });
-    })
-    .catch((erro) => {
-      console.error('Falha ao carregar tipos de usuário:', erro);
-      select[0].innerHTML = '<option value="" disabled selected>Erro ao carregar</option>';
-      select[1].innerHTML = '<option value="" disabled selected>Nenhum tipo cadastrado</option>';
     });
 }
 
 function getUsuariobyID(idFuncionario) {
-  fetch(`/gerenciamentoUsuario/getUsuariobyID/${idFuncionario}`)
-    .then((res) => {
-      if (!res.ok) throw new Error(`Erro na API: ${res.status}`);
-      return res.json();
-    })
-    .then((dados) => {
-      if (dados.length === 0) {
-        alert('Usuário não encontrado!');
-        return;
-      }
+  idUsuarioEdicao = idFuncionario;
 
+  fetch(`/gerenciamentoUsuario/getUsuariobyID/${idFuncionario}`)
+    .then((res) => res.json())
+    .then((dados) => {
+      if (!dados || dados.length === 0) return alert('Usuário não encontrado!');
       var usuario = dados[0];
 
-      document.getElementById('nome_atual').innerText = usuario.nome;
-      document.getElementById('email_atual').innerText = usuario.email;
-      document.getElementById('tipoUsuario_atual').innerText = usuario.tipoUsuario;
+      if (document.getElementById('nome_atual'))
+        document.getElementById('nome_atual').innerText = usuario.nome;
+      if (document.getElementById('email_atual'))
+        document.getElementById('email_atual').innerText = usuario.email;
+      if (document.getElementById('tipoUsuario_atual'))
+        document.getElementById('tipoUsuario_atual').innerText =
+          usuario.nomeTipoUsuario || usuario.tipoUsuario;
 
       document.getElementById('ipt_nome').value = usuario.nome;
       document.getElementById('ipt_email').value = usuario.email;
       document.getElementById('ipt_senha').value = usuario.senha || '';
 
-      var selectTipo = document.getElementById('tipo_usuario_select_tipos');
+      var selectTipo = document.getElementById('select_tipo_update_unico');
       if (selectTipo) {
-        const intervalo = setInterval(() => {
-          if (selectTipo.options.length > 1) {
-            selectTipo.value = usuario.fkTipoUsuario;
-            clearInterval(intervalo);
-          }
-        }, 100);
+        if (selectTipo.options.length <= 1) {
+          getTipoUsuario();
+          setTimeout(() => (selectTipo.value = usuario.fkTipoUsuario), 500);
+        } else {
+          selectTipo.value = usuario.fkTipoUsuario;
+        }
       }
     })
     .catch((error) => console.error('Erro:', error));
 }
 
-function salvarEdicao(idFuncionario) {
+function salvarEdicao() {
+  if (!idUsuarioEdicao) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Erro',
+      text: 'Nenhum usuário selecionado.',
+    });
+    return;
+  }
+
+  var selectElement = document.getElementById('select_tipo_update_unico');
+  if (!selectElement) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Erro crítico',
+      text: 'Select de edição não encontrado.',
+    });
+    return;
+  }
+
   var nome = document.getElementById('ipt_nome').value;
   var email = document.getElementById('ipt_email').value;
   var senha = document.getElementById('ipt_senha').value;
-  var fkTipoUsuario = document.getElementById('tipo_usuario_select_tipos').value;
+  var fkTipoUsuario = selectElement.value;
 
   if (!nome || !email || !fkTipoUsuario) {
-    alert('Preencha todos os campos obrigatórios!');
+    Swal.fire({
+      icon: 'warning',
+      title: 'Campos obrigatórios',
+      text: 'Preencha todos os campos obrigatórios!',
+    });
     return;
   }
 
   var bodyData = {
-    idFuncionarioServer: idFuncionario,
+    idFuncionarioServer: idUsuarioEdicao,
     nomeServer: nome,
     emailServer: email,
     senhaServer: senha,
     fkTipoUsuarioServer: fkTipoUsuario,
   };
-  console.log(bodyData);
 
   fetch('/gerenciamentoUsuario/salvarEdicao', {
     method: 'PUT',
@@ -357,131 +330,99 @@ function salvarEdicao(idFuncionario) {
   })
     .then((res) => {
       if (res.ok) {
-        alert('Alterações salvas com sucesso!');
+        Swal.fire({
+          icon: 'success',
+          title: 'Alterações salvas!',
+          confirmButtonColor: '#0C8186',
+        }).then(() => buscarUsuarios(1));
       } else {
-        res.json().then((json) => alert(`Erro ao salvar: ${json}`));
+        res.text().then((text) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro ao salvar',
+            text: text,
+          });
+        });
       }
     })
-    .catch((err) => alert('Erro de rede: ' + err));
-}
-
-function ExcluirUsuario(idFuncionario) {
-  Swal.fire({
-    title: 'Excluir Máquina',
-    html: `
-      <div class="form-group text-left mb-3">
-        <p class="text-muted mb-3">Para confirmar a exclusão da Máquina, por favor, confirme com sua senha:</p>
-        <label for="swal-input-senha" class="form-label font-weight-bold">Senha do Gerente</label>
-        <input type="password" id="swal-input-senha" class="form-control border-start-0  shadow-none input_pesquisa" placeholder="********">
-      </div>
-      <div class="form-group text-left">
-        <label for="swal-input-confirmar-senha" class="form-label font-weight-bold">Confirmar Senha</label>
-        <input type="password" id="swal-input-confirmar-senha" class="form-control border-start-0  shadow-none input_pesquisa" placeholder="********">
-      </div>
-    `,
-    icon: 'warning',
-    iconColor: '#ffc107',
-    showCancelButton: true,
-    confirmButtonText: 'Excluir',
-    cancelButtonText: 'Cancelar',
-    focusConfirm: false,
-    buttonsStyling: false,
-    customClass: {
-      confirmButton: 'btn btn-danger btn-lg mx-2',
-      cancelButton: 'btn btn-secondary btn-lg mx-2',
-      popup: 'shadow-lg',
-      input: 'form-control',
-    },
-    preConfirm: () => {
-      const senha = Swal.getPopup().querySelector('#swal-input-senha').value;
-      const confirmarSenha = Swal.getPopup().querySelector('#swal-input-confirmar-senha').value;
-
-      if (!senha || !confirmarSenha) {
-        Swal.showValidationMessage('Por favor, preencha ambos os campos de senha.');
-        return false;
-      }
-
-      // O ideal aqui é que a senha seja a do gerente autenticado na sessão,
-      // mas mantive a validação de confirmação que você criou.
-      if (senha !== confirmarSenha) {
-        Swal.showValidationMessage('As senhas digitadas não são iguais.');
-        return false;
-      }
-
-      return { senha: senha };
-    },
-  })
-    // Primeiro .then: Lida com o resultado do Swal (se foi confirmado ou cancelado)
-    .then((resultadoSwal) => {
-      // Verifica se o usuário clicou em 'Excluir'
-      if (resultadoSwal.isConfirmed) {
-        // Variáveis Mockadas (FIXAS)
-        const idFuncionarioGerente = sessionStorage.ID_USUARIO
-        const senhaGerente = resultadoSwal.value.senha; // Pega a senha digitada
-
-        // CHAMADA FETCH
-        return (
-          fetch(`/gerenciamentoUsuario/ExcluirUsuario/${idFuncionario}`, {
-            method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              idGerente: idFuncionarioGerente,
-              senha: senhaGerente,
-            }),
-          })
-            // Segundo .then: Lida com a RESPOSTA do servidor (res)
-            .then((res) => {
-              console.log('=====================');
-              console.log(res);
-              console.log('=====================');
-              // Se a resposta for OK (status 200, 204 etc.)
-              if (res.ok) {
-                exibirSucesso('Exclusão Concluída', 'A Máquina foi excluída com sucesso.');
-                // Aqui você deve chamar a função para atualizar sua tabela/lista
-                // Por exemplo: atualizarListaMaquinas();
-              } else {
-                // Se houver erro no servidor (400, 403, 404, 500)
-                // Tenta ler a mensagem de erro que o backend enviou
-                res.text().then((mensagemErro) => {
-                  // O controller que fizemos no exemplo anterior envia status 403, 404, etc.
-                  exibirErro(
-                    'Erro na Exclusão',
-                    mensagemErro || 'Erro desconhecido ao tentar excluir.',
-                  );
-                });
-              }
-            })
-            .catch((err) => {
-              // Erro de rede (fetch falhou)
-              exibirErro('Erro de Rede', 'Não foi possível conectar ao servidor: ' + err);
-            })
-        );
-      } else if (resultadoSwal.dismiss === Swal.DismissReason.cancel) {
-        // Se o usuário clicou em 'Cancelar'
-        exibirErro('Exclusão Cancelada', 'A exclusão da Máquina foi cancelada pelo usuário.');
-      }
+    .catch((err) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro de rede',
+        text: err,
+      });
     });
 }
 
-// Funções auxiliares para SweetAlert (melhora a organização)
-function exibirSucesso(titulo, texto) {
+function ExcluirUsuario(idFuncionario) {
+  var idGerente = sessionStorage.ID_USUARIO;
+  if (!idGerente || idGerente == 'undefined') {
+    Swal.fire({
+      icon: 'error',
+      title: 'Sessão Expirada',
+      text: 'Faça login novamente para excluir.',
+    });
+    return;
+  }
+
   Swal.fire({
-    title: titulo,
-    text: texto,
-    icon: 'success',
-    confirmButtonColor: '#0C8186',
-    confirmButtonText: 'OK',
+    title: 'Excluir Usuário',
+    html: `
+      <div class="form-group text-left mb-3">
+        <p class="text-muted mb-3">Confirme com sua senha:</p>
+        <label class="form-label font-weight-bold">Senha do Gerente</label>
+        <input type="password" id="swal-input-senha" class="form-control" placeholder="********">
+      </div>
+      <div class="form-group text-left">
+        <label class="form-label font-weight-bold">Confirmar Senha</label>
+        <input type="password" id="swal-input-confirmar-senha" class="form-control" placeholder="********">
+      </div>
+    `,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Excluir',
+    cancelButtonText: 'Cancelar',
+    preConfirm: () => {
+      const senha = Swal.getPopup().querySelector('#swal-input-senha').value;
+      const confirmarSenha = Swal.getPopup().querySelector('#swal-input-confirmar-senha').value;
+      if (!senha || !confirmarSenha) {
+        Swal.showValidationMessage('Preencha as senhas.');
+        return false;
+      }
+      if (senha !== confirmarSenha) {
+        Swal.showValidationMessage('As senhas não coincidem.');
+        return false;
+      }
+      return { senha: senha };
+    },
+  }).then((resultadoSwal) => {
+    if (resultadoSwal.isConfirmed) {
+      const senhaGerente = resultadoSwal.value.senha;
+
+      fetch(`/gerenciamentoUsuario/ExcluirUsuario/${idFuncionario}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idGerente: idGerente, senha: senhaGerente }),
+      })
+        .then((res) => {
+          if (res.ok) {
+            Swal.fire({
+              title: 'Sucesso!',
+              text: 'Usuário excluído.',
+              icon: 'success',
+              confirmButtonColor: '#0C8186',
+            }).then(() => {
+              buscarUsuarios(1);
+            });
+          } else {
+            res.text().then((msg) => exibirErro('Erro', msg));
+          }
+        })
+        .catch((err) => exibirErro('Erro', 'Falha na rede: ' + err));
+    }
   });
 }
 
 function exibirErro(titulo, texto) {
-  Swal.fire({
-    title: titulo,
-    text: texto,
-    icon: 'error',
-    confirmButtonColor: '#0C8186',
-    confirmButtonText: 'OK',
-  });
+  Swal.fire({ title: titulo, text: texto, icon: 'error', confirmButtonColor: '#0C8186' });
 }

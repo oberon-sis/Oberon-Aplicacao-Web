@@ -20,7 +20,7 @@ router.get('/listarMaquinas', function (req, res) {
   maquinasController.listarMaquinas(req, res);
 });
 
-router.put('/atualizarMaquina/:idMaquina', function (req, res) {
+router.put('/atualizarMaquina', function (req, res) {
   maquinasController.atualizarMaquina(req, res);
 });
 

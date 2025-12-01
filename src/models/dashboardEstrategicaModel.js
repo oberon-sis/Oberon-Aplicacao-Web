@@ -1,0 +1,205 @@
+var database = require("../database/config");
+
+function calcularIntervaloBimestre(ano, bimestre) {
+    if (!bimestre || bimestre < 1 || bimestre > 6) {
+        throw new Error(`Bimestre inválido: ${bimestre}`);
+    }
+
+    const mesInicio = (bimestre - 1) * 2 + 1;
+    const mesFim = mesInicio + 1;
+
+    const inicio = new Date(ano, mesInicio - 1, 1);
+    const fim = new Date(ano, mesFim, 0);
+
+    return {
+        inicio: inicio.toISOString().slice(0, 10),
+        fim: fim.toISOString().slice(0, 10)
+    };
+}
+
+// KPIs
+function buscarKpis(idEmpresa, ano, bimestre) {
+    const { inicio, fim } = calcularIntervaloBimestre(ano, bimestre);
+    const query = `
+        SELECT
+            (SELECT COUNT(*) FROM Incidente i
+             JOIN LogDetalheEvento lde ON lde.idLogDetalheEvento = i.fkLogDetalheEvento
+             JOIN LogSistema ls ON lde.fkLogSistema = ls.idLogSistema
+             JOIN Maquina m ON ls.fkMaquina = m.idMaquina
+             WHERE m.fkEmpresa = ${idEmpresa}
+               AND i.severidade = 'Critica'
+               AND i.dataCriacao BETWEEN '${inicio}' AND '${fim}'
+            ) AS kpi_incidentes_criticos,
+
+            (SELECT COUNT(DISTINCT m.idMaquina)
+             FROM Maquina m
+             JOIN Componente c ON c.fkMaquina = m.idMaquina
+             JOIN TipoComponente tc ON c.fkTipoComponente = tc.idTipoComponente
+             JOIN Registro r ON r.fkComponente = c.idComponente
+             WHERE m.fkEmpresa = ${idEmpresa}
+               AND tc.tipoComponete IN ('CPU','RAM')
+               AND r.horario BETWEEN '${inicio}' AND '${fim}'
+               AND r.valor > 85
+            ) AS kpi_maquinas_saturacao,
+
+            (SELECT 
+                CASE WHEN total = 0 THEN 0 ELSE ROUND(stable / total * 100,2) END
+             FROM (
+                SELECT 
+                    (SELECT COUNT(*) FROM LogSistema ls2 
+                     JOIN Maquina m2 ON ls2.fkMaquina = m2.idMaquina
+                     WHERE m2.fkEmpresa = ${idEmpresa}
+                       AND ls2.horarioInicio BETWEEN '${inicio}' AND '${fim}'
+                    ) AS total,
+                    (SELECT COUNT(*) FROM LogSistema ls3 
+                     JOIN Maquina m3 ON ls3.fkMaquina = m3.idMaquina
+                     WHERE m3.fkEmpresa = ${idEmpresa}
+                       AND ls3.horarioInicio BETWEEN '${inicio}' AND '${fim}'
+                       AND ls3.horarioFinal IS NOT NULL
+                    ) AS stable
+             ) q
+            ) AS kpi_comunicacao_estavel,
+
+            (SELECT COUNT(*) FROM LogDetalheEvento lde
+             JOIN LogSistema ls ON lde.fkLogSistema = ls.idLogSistema
+             JOIN Maquina m ON ls.fkMaquina = m.idMaquina
+             WHERE m.fkEmpresa = ${idEmpresa}
+               AND lde.horario BETWEEN '${inicio}' AND '${fim}'
+            ) AS kpi_integridade_logs,
+
+            (SELECT ROUND(AVG(cnt),2) FROM (
+                SELECT COUNT(*) AS cnt
+                FROM Alerta a
+                JOIN Registro r ON a.fkRegistro = r.idRegistro
+                JOIN Componente c ON r.fkComponente = c.idComponente
+                JOIN Maquina m ON c.fkMaquina = m.idMaquina
+                WHERE m.fkEmpresa = ${idEmpresa}
+                  AND r.horario BETWEEN '${inicio}' AND '${fim}'
+                GROUP BY m.idMaquina
+            ) t
+            ) AS kpi_score_risco;
+    `;
+    return database.executar(query);
+}
+
+// Tendência
+function buscarTendencia(idEmpresa, ano, bimestre) {
+    const { inicio, fim } = calcularIntervaloBimestre(ano, bimestre);
+    const query = `
+       SELECT DATE_FORMAT(r.horario, '%Y-%m') AS periodo,
+              SUM(CASE WHEN a.nivel = 'CRÍTICO' THEN 1 ELSE 0 END) AS critico,
+              SUM(CASE WHEN a.nivel = 'ATENÇÃO' THEN 1 ELSE 0 END) AS atencao,
+              SUM(CASE WHEN a.nivel = 'OCIOSO' THEN 1 ELSE 0 END) AS ocioso
+       FROM Alerta a
+       JOIN Registro r ON a.fkRegistro = r.idRegistro
+       JOIN Componente c ON r.fkComponente = c.idComponente
+       JOIN Maquina m ON c.fkMaquina = m.idMaquina
+       WHERE m.fkEmpresa = ${idEmpresa}
+         AND r.horario BETWEEN '${inicio}' AND '${fim}'
+       GROUP BY DATE_FORMAT(r.horario, '%Y-%m')
+       ORDER BY periodo ASC;
+    `;
+    return database.executar(query);
+}
+
+// Comparativo por Nível
+function buscarComparativoPorNivel(idEmpresa, ano, bimestre) {
+    const { inicio, fim } = calcularIntervaloBimestre(ano, bimestre);
+    const query = `
+        SELECT
+            a.nivel AS nivel_alerta,
+            SUM(CASE WHEN r.horario BETWEEN '${inicio}' AND '${fim}' THEN 1 ELSE 0 END) AS atual,
+            SUM(CASE WHEN r.horario < '${inicio}' 
+                     AND r.horario >= DATE_SUB('${inicio}', INTERVAL 2 MONTH) THEN 1 ELSE 0 END) AS passado
+        FROM Alerta a
+        JOIN Registro r ON a.fkRegistro = r.idRegistro
+        JOIN Componente c ON r.fkComponente = c.idComponente
+        JOIN Maquina m ON c.fkMaquina = m.idMaquina
+        WHERE m.fkEmpresa = ${idEmpresa}
+        GROUP BY a.nivel;
+    `;
+    return database.executar(query);
+}
+
+// Comparativo de Demanda
+function buscarComparativoDemanda(idEmpresa, ano, bimestre) {
+    const { inicio, fim } = calcularIntervaloBimestre(ano, bimestre);
+    const query = `
+        SELECT 
+            tc.tipoComponete AS componente,
+            ROUND(AVG(r.valor),2) AS quantidade
+        FROM Registro r
+        JOIN Componente c ON r.fkComponente = c.idComponente
+        JOIN TipoComponente tc ON c.fkTipoComponente = tc.idTipoComponente
+        JOIN Maquina m ON c.fkMaquina = m.idMaquina
+        WHERE m.fkEmpresa = ${idEmpresa}
+          AND r.horario BETWEEN '${inicio}' AND '${fim}'
+          AND tc.tipoComponete IN ('CPU','RAM','DISCO')
+        GROUP BY tc.tipoComponete;
+    `;
+    return database.executar(query);
+}
+
+// Comparativo Severidade por Componente
+function buscarComparativoSeveridadePorComponente(idEmpresa, ano, bimestre) {
+    const { inicio, fim } = calcularIntervaloBimestre(ano, bimestre);
+    const query = `
+        SELECT 
+            tc.tipoComponete AS componente,
+            i.severidade,
+            SUM(CASE WHEN i.dataCriacao BETWEEN '${inicio}' AND '${fim}' THEN 1 ELSE 0 END) AS atual,
+            SUM(CASE WHEN i.dataCriacao < '${inicio}' 
+                     AND i.dataCriacao >= DATE_SUB('${inicio}', INTERVAL 2 MONTH) THEN 1 ELSE 0 END) AS passado
+        FROM Incidente i
+        JOIN LogDetalheEvento lde ON i.fkLogDetalheEvento = lde.idLogDetalheEvento
+        JOIN LogSistema ls ON lde.fkLogSistema = ls.idLogSistema
+        JOIN Maquina m ON ls.fkMaquina = m.idMaquina
+        JOIN Componente c ON m.idMaquina = c.fkMaquina
+        JOIN TipoComponente tc ON c.fkTipoComponente = tc.idTipoComponente
+        WHERE m.fkEmpresa = ${idEmpresa}
+        GROUP BY tc.tipoComponete, i.severidade;
+    `;
+    return database.executar(query);
+}
+
+// Ranking
+function buscarRanking(idEmpresa, ano, bimestre) {
+    const { inicio, fim } = calcularIntervaloBimestre(ano, bimestre);
+    const query = `
+        SELECT 
+            m.nome AS maquina,
+            COUNT(a.idAlerta) AS total_alertas,
+            ROUND(AVG(CASE WHEN tc.tipoComponete = 'CPU' THEN r.valor END),1) AS cpuMedia,
+            ROUND(AVG(CASE WHEN tc.tipoComponete = 'RAM' THEN r.valor END),1) AS ramMedia,
+            ROUND(AVG(CASE WHEN tc.tipoComponete = 'DISCO' THEN r.valor END),1) AS discoUso,
+            COUNT(DISTINCT i.idIncidente) AS totalIncidentes,
+            MAX(i.severidade) AS severidadeMedia,
+            m.status
+        FROM Maquina m
+        LEFT JOIN Componente c ON c.fkMaquina = m.idMaquina
+        LEFT JOIN TipoComponente tc ON c.fkTipoComponente = tc.idTipoComponente
+        LEFT JOIN Registro r ON r.fkComponente = c.idComponente
+        LEFT JOIN Alerta a ON a.fkRegistro = r.idRegistro
+        LEFT JOIN Incidente i ON i.fkLogDetalheEvento IN 
+        (
+            SELECT lde.idLogDetalheEvento FROM LogDetalheEvento lde
+                JOIN LogSistema ls ON lde.fkLogSistema = ls.idLogSistema
+                WHERE ls.fkMaquina = m.idMaquina
+        )
+        WHERE m.fkEmpresa = ${idEmpresa}
+          AND r.horario >= DATE_SUB(NOW(), INTERVAL 60 DAY)
+        GROUP BY m.idMaquina
+        ORDER BY total_alertas DESC
+        LIMIT 4;
+    `;
+    return database.executar(query);
+}
+
+module.exports = {
+    buscarKpis,
+    buscarTendencia,
+    buscarComparativoPorNivel,
+    buscarComparativoDemanda,
+    buscarComparativoSeveridadePorComponente,
+    buscarRanking
+};

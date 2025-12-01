@@ -34,46 +34,62 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/oberon-app-web:${{ env.IMAGE_TAG }}, ${{ secrets.DOCKER_USERNAME }}/oberon-app-web:staging
 
       # --- 3. DEPLOY PARA EC2 VIA SSH ---
-      - name: Deploy para EC2 e Rodar Container (Staging)
+      - name: Deploy para EC2 e Atualizar Containers Staging
         uses: appleboy/ssh-action@v1.0.3 
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            CONTAINER_NAME=oberon-web-c
             APP_USER=${{ secrets.EC2_USERNAME }}
-            IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/oberon-app-web
-            # Usando a tag do SHA do commit (IMAGE_TAG) para garantir a versão correta
+            IMAGE_NAME=${{ env.IMAGE_FULL_NAME }}
             IMAGE_TAG=${{ env.IMAGE_TAG }}
             
-            cd /home/$APP_USER/oberon || exit 1 
-
-            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-            sudo docker pull $IMAGE_NAME:$IMAGE_TAG
-
-            # 2. CRIAÇÃO/SOBRESCRITA DO ARQUIVO .ENV NO SERVIDOR EC2
-            echo "# Arquivo .env gerado pelo GitHub Actions (Staging)" > .env
+            # Navegando para o diretorio principal
+            cd /home/$APP_USER/Oberon-Config-AWS
             
+            # 1. Login no Docker Hub na EC2
+            # docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            
+            echo "# Arquivo .env gerado pelo GitHub Actions (Production)" > .env
+            
+            echo "WEB_IMAGE=jhoeldiego/oberon-app-web:$IMAGE_TAG" >> .env 
+            echo "BANCO_IMAGE=jhoeldiego/oberon-banco-de-dados:latest" >> .env 
+            echo "PYTHON_IMAGE=jhoeldiego/oberon-analise-ia:latest" >> .env 
+
             echo "AMBIENTE_PROCESSO=producao" >> .env
-            echo "DB_HOST=${{ secrets.DB_HOST_PROD }}" >> .env
-            echo "DB_USER=${{ secrets.DB_USER_PROD }}" >> .env
-            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD_PROD }}" >> .env
-            echo "DB_DATABASE=${{ secrets.DB_DATABASE_PROD }}" >> .env
+
+            echo "DB_HOST='${{ secrets.DB_HOST_PROD }}'" >> .env
+            echo "DB_USER='${{ secrets.DB_USER_PROD }}'" >> .env
+            echo "DB_PASSWORD='${{ secrets.DB_PASSWORD_PROD }}'" >> .env
+            echo "DB_DATABASE='${{ secrets.DB_DATABASE_PROD }}'" >> .env
             echo "DB_PORT=${{ secrets.DB_PORT_PROD }}" >> .env
+
+
             echo "APP_HOST=${{ secrets.APP_HOST_PROD }}" >> .env
             echo "APP_PORT=${{ secrets.APP_PORT_PROD }}" >> .env
-            echo "EMAIL_USER=${{ secrets.EMAIL_USER_PROD }}" >> .env
-            echo "EMAIL_PASS=${{ secrets.EMAIL_PASS_PROD }}" >> .env
-            echo "FRONTEND_URL=${{ secrets.FRONTEND_URL_PROD }}" >> .env
 
+            echo "EMAIL_USER='${{ secrets.EMAIL_USER_PROD }}'" >> .env
+            echo "EMAIL_PASS='${{ secrets.EMAIL_PASS_PROD }}'" >> .env
 
-            # 3. Gerenciamento do Container Antigo
-            if [ $(sudo docker ps -a -q -f name=$CONTAINER_NAME) ]; then 
-              sudo docker stop $CONTAINER_NAME 
-              sudo docker rm $CONTAINER_NAME 
-            fi
+            echo "FRONTEND_URL='${{ secrets.FRONTEND_URL_PROD }}'" >> .env
 
-            # 4. Roda o Novo Container
-            sudo docker run -d --name $CONTAINER_NAME -p 80:80 --restart always --env-file .env $IMAGE_NAME:$IMAGE_TAG
-            sudo docker image prune -f
+            echo "PYTHON_HOST='${{ secrets.PYTHON_HOST }}'" >> .env
+            echo "SLACK_BOT_TOKEN='${{ secrets.SLACK_BOT_TOKEN }}'" >> .env
+            echo "BOT_PADRAO_IDS='${{ secrets.BOT_PADRAO_IDS }}'" >> .env
+            echo "ADMINS_PADRAO_EMAILS='${{ secrets.ADMINS_PADRAO_EMAILS }}'" >> .env
+
+            echo "HOST_DB='${{ secrets.DB_HOST_PROD }}'" >> .env
+            echo "USER_DB='${{ secrets.DB_USER_PROD }}'" >> .env
+            echo "PASSWORD_DB='${{ secrets.DB_PASSWORD_PROD }}'" >> .env
+            echo "GEMINI_API_KEY='${{ secrets.GEMINI_API_KEY }}'" >> .env
+            echo "PORT=5055" >> .env
+            echo "MYSQL_ROOT_PASSWORD: '${{secrets.MYSQL_PASSWORD}}'" >> .env
+
+            
+
+            # Fazendo o pull da imagem 
+            sudo docker compose pull web
+            
+            sudo docker compose up -d web --no-deps --force-recreate

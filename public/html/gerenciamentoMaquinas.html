@@ -57,14 +57,14 @@
           </ul>
         </div>
 
+        <!-- data-bs-toggle="modal" data-bs-target="#modalConfigParametros" -->
         <div class="d-flex gap-2 flex-grow-1 justify-content-end div_pesquisa div_botoes">
-          <button onmouseenter="mudar_icone_on('icone_conf')" onmouseleave="mudar_icone_lv('icone_conf')"
-            data-bs-toggle="modal" data-bs-target="#modalConfigParametros"
+          <button onmouseenter="mudar_icone_on('icone_conf')" onmouseleave="mudar_icone_lv('icone_conf')" onclick="ir_dash_pedro()" 
             class="btn btn-light border fw-semibold flex-fill flex-md-grow-0 botao_branco botao_configuracao verde_obscuro"
             style="color: #385e5c; white-space: nowrap;">
             <img src="../assets/svg/setting_preto.svg" data-hover-src="../assets/svg/setting_white.svg" alt=""
               class="icone_botao" id="icone_conf">
-            <i class=" me-2 espaco_branco"></i>Configurar Padrão
+            <i class=" me-2 espaco_branco"></i>Definição de Parâmetros da Empresa
           </button>
 
           <button onmouseenter="mudar_icone_on('icone_nova')" onmouseleave="mudar_icone_lv('icone_nova')"
@@ -73,7 +73,7 @@
             style=" white-space: nowrap;">
             <img src="../assets/svg/plus_preto.svg" data-hover-src="../assets/svg/plus_white.svg" alt=""
               class="icone_botao" id="icone_nova">
-            <i class=" me-2 espaco_branco "></i>Nova Máquina
+            <i class=" me-2 espaco_branco "></i>Adicionar Máquina
           </button>
         </div>
       </div>
@@ -284,11 +284,6 @@
                   placeholder="Insira o nome de identificação da máquina" maxlength="30">
               </div>
 
-              <div class="mb-3" style="display: none;">
-                <label for="modelo" class="form-label text-muted">Modelo (opcional)</label>
-                <input type="text" class="form-control shadow-none input_pesquisa" id="ipt_modelo_cad"
-                  placeholder="Insira o modelo do equipamento">
-              </div>
 
               <div class="mb-3">
                 <label for="mac" class="form-label text-muted d-block">
@@ -846,3 +841,8 @@
 <script src="../js/maquinas.js"></script>
 <script src="../js/mascaras.js"></script>
 <script src="../component/notificao/Notificacao.js"></script>
+<script>
+  function ir_dash_pedro() {
+      window.location.href = "./analiseParametros.html";
+  }
+</script>

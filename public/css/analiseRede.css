@@ -1,0 +1,311 @@
+header {
+  display: flex;
+}
+
+header div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+section {
+  margin-top: 0.4rem;
+  max-width: 100%;
+}
+
+.kpi-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.usage-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.charts-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.alerts-table-container {
+  width: 100%;
+}
+
+.kpi-card,
+.usage-card,
+.chart-item,
+.alerts-table-container {
+  background-color: #fff;
+  border-radius: 8px;
+  width: 220px;
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.usage-card {
+  padding: 5%;
+  padding-top: 0;
+}
+
+.kpi-card {
+  padding: 5%;
+  padding-top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.topo-kpi {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.topo-kpi h6 {
+  font-size: calc(0.86rem + 0.6vw);
+  margin: 0;
+  height: auto;
+  height: 100%;
+}
+
+.baixo-kpi {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+}
+
+.baixo-kpi span {
+  font-size: calc(0.86rem + 0.7vw);
+}
+
+.icone-kpi {
+  background-color: black;
+  position: relative;
+  bottom: 0.6rem;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+}
+
+.icone-kpi {
+  height: auto;
+}
+
+.icone-kpi img {
+  width: 40px;
+  height: 40px;
+  aspect-ratio: 1 / 1;
+}
+
+.saber_mais {
+  z-index: 10;
+  cursor: help;
+}
+
+.verde_claro_kpi {
+  background-color: var(--verde_claro);
+  border-radius: 8px;
+}
+
+canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 300px;
+}
+
+.par_topo {
+  display: flex;
+  flex-direction: column;
+}
+
+.par_topo img {
+  height: 30px;
+  width: 30px;
+}
+
+.par_topo {
+  font-size: calc(0.86rem + 0.4vw);
+}
+
+.par_baixo {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.valor_limite {
+  color: var(--verde_obscuro);
+  text-align: center;
+}
+
+.fundo_preto {
+  background-color: black;
+}
+
+.par_baixo {
+  text-align: center;
+}
+
+@media (min-width: 517px) {
+  .topo-kpi {
+    flex-direction: row;
+    gap: 5%;
+    align-items: center;
+    height: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .topo-kpi h6 {
+    height: auto;
+  }
+
+  .icone-kpi {
+    width: 50px;
+    height: 50px;
+  }
+
+  .icone-kpi img {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (min-width: 2000px) {
+  .botao_select {
+    font-size: 2rem;
+  }
+
+  .topo-kpi h6 {
+    font-size: 1.7rem;
+  }
+
+  .baixo-kpi span {
+    font-size: 1.6rem;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1800px) {
+  .alerts-table-container {
+    height: auto;
+    max-height: 10000px;
+    padding-bottom: 1rem;
+  }
+}
+
+.card_tendencia {
+  background-color: #fff;
+  border-radius: 8px;
+  /* padding: 1rem; */
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  padding-inline: 10%;
+  /* padding-top: 0; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card_tendencia_container {
+  display: grid;
+  grid-template-columns: repeat(1, 2fr);
+  gap: 1rem;
+}
+
+.card_tendencia p {
+  text-align: end;
+}
+
+.kpi-container {
+  gap: 20px;
+
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.kpi-card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  flex: 1 1 18%;
+  min-width: 180px;
+}
+
+.kpi-card .topo-kpi {
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.kpi-card .icone-kpi {
+  background-color: transparent;
+  padding: 0;
+  margin-right: 0;
+  width: auto;
+  height: auto;
+}
+
+.kpi-card .icone-kpi i {
+  color: black;
+  font-size: 1.5rem;
+}
+
+.kpi-card h6 {
+  font-size: 0.9rem;
+  font-weight: normal;
+}
+
+.kpi-card #txt_conteudo {
+  font-size: 1.8rem;
+  color: black;
+  font-weight: 500;
+  display: block;
+}
+
+.kpi-card p {
+  font-size: 0.8rem;
+  color: #888;
+  margin: 0;
+}
+
+.kpi-card .baixo-kpi {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.saber_mais img {
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+}
+
+.chart-item-wrapper {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  height: 220px;
+  width: 750px;
+}
+.ranking-scroll {
+  max-height: 135px;
+
+  overflow-x: auto;
+  padding-right: 10px;
+}

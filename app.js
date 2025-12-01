@@ -1,31 +1,56 @@
-var ambiente_processo = 'producao';
-// var ambiente_processo = "desenvolvimento";
+var ambiente_processo = 'desenvolvimento';
 
 var caminho_env = ambiente_processo === 'producao' ? '.env' : '.env.dev';
 
 require('dotenv').config({ path: caminho_env });
 
+require('dotenv').config();
+
 var express = require('express');
 var cors = require('cors');
 var path = require('path');
+var session = require('express-session');
 var PORTA_APP = process.env.APP_PORT;
 var HOST_APP = process.env.APP_HOST;
 
 var app = express();
 
-// --- IMPORTAÇÃO DAS ROTAS (agrupadas) ---
+
+app.use(session({
+    secret: 'sua_chave_secreta_muito_segura',
+    resave: false, 
+    saveUninitialized: true, 
+    cookie: { 
+        secure: false, 
+        maxAge: 3600000 
+    } 
+}));
+
+
+
 var indexRouter = require('./src/routes/index');
-var menuRouter = require('./src/routes/menu');
 var usuarioRouter = require('./src/routes/usuarios');
-var empresaRouter = require('./src/routes/empresas'); // Corrigido o nome do arquivo para 'empresas'
+var empresaRouter = require('./src/routes/empresas');
 var edicaoEmpresaRouter = require('./src/routes/edicaoEmpresa');
 var edicaoUsuarioRouter = require('./src/routes/edicaoUsuario');
 var maquinasRouter = require('./src/routes/maquinas');
 var gerenciamentoUsuarioRouter = require('./src/routes/gerenciamentoUsuario');
-var empresaRouter = require('./src/routes/empresas');
 var authRouter = require('./src/routes/email');
 var alertasRouter = require('./src/routes/alertas');
+var dashboardRouter = require("./src/routes/dashboardAtivos");
+var empresasRouter = require("./src/routes/Atualizar.empresas");
+
+
 const downloadRoutes = require('./src/routes/appInstalacao');
+var analiseRedeRoutes = require('./src/routes/analiseRede');
+var dashboardEspecificaRouter = require('./src/routes/dashboardEspecifica'); 
+
+const analiseGeralRoutes = require('./src/routes/analise-tendencia');
+var painelRoutes = require('./src/routes/painel');
+var homeRouter = require('./src/routes/home');
+var dashboardParametrosRouter = require('./src/routes/dashboardParametros')
+var dashboardEstrategicaRouter = require("./src/routes/dashboardEstrategica"); 
+var logAuditoriaRouter = require('./src/routes/logAuditoria');
 
 // --- CONFIGURAÇÃO DOS MIDDLEWARES ---
 app.use(express.json());
@@ -34,12 +59,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public', 'html')));
 app.use(cors());
 
+
 // --- REGISTRO DAS ROTAS ---
 app.use('/', indexRouter);
-app.use('/menu', menuRouter);
 app.use('/usuarios', usuarioRouter);
 app.use('/gerenciamentoUsuario', gerenciamentoUsuarioRouter);
-// CORRIGIDO: O prefixo agora está no plural para corresponder ao front-end
 app.use('/empresas', empresaRouter);
 app.use('/edicaoEmpresa', edicaoEmpresaRouter);
 app.use('/edicaoUsuario', edicaoUsuarioRouter);
@@ -47,23 +71,19 @@ app.use('/maquinas', maquinasRouter);
 app.use('/auth', authRouter);
 app.use('/alertas', alertasRouter);
 app.use('/api/download', downloadRoutes);
+app.use('/analiseRede', analiseRedeRoutes);
+app.use('/dashboardEspecifica', dashboardEspecificaRouter);
+app.use('/painel', painelRoutes);
+app.use('/api/desempenho', analiseGeralRoutes);
+app.use('/api/maquinas', homeRouter);
+app.use('/dashboardParametros', dashboardParametrosRouter);
+app.use("/dashboardEstrategica", dashboardEstrategicaRouter); 
+app.use("/logAuditoria", logAuditoriaRouter);
+app.use("/dashboard", dashboardRouter);
+app.use("/empresas", empresasRouter);
 
 app.listen(PORTA_APP, function () {
-  console.log(`
-
-      ------------                                                                                          
-  #+---------------  ##                                                                                     
-  ###+-------------- ##      ########       #########      ##########  #########        ########      ####       ###    
-  #####         ----- ##     ############     ###########   ##########  ###########     ############      #####       ###    
-  ##### --      ----- ##   ###          ###    ##       ###   ###         ###       ###   ###          ###    ######       ###    
-  ##### --      ----- ##   ##              ###   ##      ####   ###         ###       ###  ###              ###  ### ###      ###    
-  ##### --      ----- ##  ###              ###   ##########     #########   ##########   ###              ###  ###  ####     ###    
-  ##### --      ----- ##   ##              ###   ##       ###   ###         #########    ###              ###  ###   ####    ###    
-  ##### --      ----- ##   ###          ###    ##       ###   ###         ###      ###   ###          ###   ###      ######    
-  ######++######+--- ##      ###### #####     ###########   #########   ###       ###    ############    ###        #####    
-   ##############+- ##         #########       #########    ##########  ###        ###     ########      ###         ####     
-     ###########+-----+#                                                                                
-       # -----------                                                                                  
+  console.log(`                                                                            
 
        ##   ##  ######   #####          ####       ##      ######      ##                 ##  ##      ####      ######  
        ##   ##  ##       ##  ##          ## ##     ####        ##     ####                 ##  ##       ##          ##  

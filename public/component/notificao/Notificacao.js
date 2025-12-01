@@ -47,68 +47,18 @@ class NotificationComponent {
    * Simula uma chamada fetch para obter os alertas de hardware.
    */
   async fetchAlerts() {
-    await new Promise((resolve) => setTimeout(resolve, 300));
+  const usuarioString = sessionStorage.getItem('usuario');
+  const usuarioObjeto = usuarioString ? JSON.parse(usuarioString) : null;
+  let ID_EMPRESA = usuarioObjeto ? usuarioObjeto.fkEmpresa : 6; 
+  const resposta = await fetch('/alertas/listarFeedAlertas', {
+    method: 'GET',
+    headers: {
+      'id-empresa': ID_EMPRESA,
+    },
+  });
+  if (!resposta.ok) throw new Error(`Falha no fetch notificações: ${resposta.statusText}`);
 
-    const mockData = [
-      {
-        id: 1,
-        maquina: 'Máquina - 001',
-        tipo: 'Crítico',
-        mensagem: 'CPU atingiu 98% de uso.',
-        timestamp: '10 min atrás',
-      },
-      {
-        id: 2,
-        maquina: 'Máquina - 004',
-        tipo: 'Alerta',
-        mensagem: 'RAM em 85% de uso. Considere reiniciar.',
-        timestamp: '2h atrás',
-      },
-      {
-        id: 3,
-        maquina: 'Máquina - 006',
-        tipo: 'Atenção',
-        mensagem: 'Disco em 90% da capacidade.',
-        timestamp: 'Ontem',
-      },
-      {
-        id: 4,
-        maquina: 'Máquina - 012',
-        tipo: 'Crítico',
-        mensagem: 'Rede desconectada por 5 minutos.',
-        timestamp: '3 dias atrás',
-      },
-      {
-        id: 5,
-        maquina: 'Máquina - 002',
-        tipo: 'Alerta',
-        mensagem: 'Temperatura da CPU acima do limite.',
-        timestamp: '4 dias atrás',
-      },
-      {
-        id: 6,
-        maquina: 'Máquina - 009',
-        tipo: 'Atenção',
-        mensagem: 'Baixa latência de rede detectada.',
-        timestamp: '5 dias atrás',
-      },
-      {
-        id: 7,
-        maquina: 'Máquina - 005',
-        tipo: 'Alerta',
-        mensagem: 'RAM em 75% de uso.',
-        timestamp: '1 semana atrás',
-      },
-      {
-        id: 8,
-        maquina: 'Máquina - 015',
-        tipo: 'Crítico',
-        mensagem: 'Falha no disco primário.',
-        timestamp: '1 semana atrás',
-      },
-    ];
-
-    // Armazena todos os alertas para uso posterior e limita a exibição
+  const mockData = await resposta.json();
     this.alerts = mockData;
     return mockData.slice(0, this.maxAlerts);
   }
