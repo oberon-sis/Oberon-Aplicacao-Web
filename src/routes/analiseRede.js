@@ -39,4 +39,7 @@ router.get("/ranking/:fkEmpresa", function (req, res) {
      analiseRedeController.buscarRanking(req, res);
 });
 
+router.get("/maquinas/:fkEmpresa",
+     analiseRedeController.listarMaquinas);
+
 module.exports = router;
