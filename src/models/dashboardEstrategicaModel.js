@@ -1,7 +1,26 @@
 var database = require("../database/config");
 
+function calcularIntervaloBimestre(ano, bimestre) {
+    if (!bimestre || bimestre < 1 || bimestre > 6) {
+        throw new Error(`Bimestre inválido: ${bimestre}`);
+    }
+
+    const mesInicio = (bimestre - 1) * 2 + 1;
+    const mesFim = mesInicio + 1;
+
+    const inicio = new Date(ano, mesInicio - 1, 1);
+    const fim = new Date(ano, mesFim, 0);
+
+    return {
+        inicio: inicio.toISOString().slice(0, 10),
+        fim: fim.toISOString().slice(0, 10)
+    };
+}
+
+
 // KPIs
-function buscarKpis(idEmpresa) {
+function buscarKpis(idEmpresa, ano, bimestre) {
+    const { inicio, fim } = calcularIntervaloBimestre(ano, bimestre);
     const query = `
         SELECT
             (SELECT COUNT(*) FROM Incidente i
@@ -67,24 +86,25 @@ function buscarKpis(idEmpresa) {
 // Tendência
 function buscarTendencia(idEmpresa) {
     const query = `
-       SELECT 
-            DATE_FORMAT(r.horario, '%Y-%m') AS periodo,
-            SUM(CASE WHEN a.nivel = 'CRÍTICO' THEN 1 ELSE 0 END) AS critico,
-            SUM(CASE WHEN a.nivel = 'ATENÇÃO' THEN 1 ELSE 0 END) AS atencao,
-            SUM(CASE WHEN a.nivel = 'OCIOSO' THEN 1 ELSE 0 END) AS ocioso
-        FROM Alerta a
-        JOIN Registro r ON a.fkRegistro = r.idRegistro
-        JOIN Componente c ON r.fkComponente = c.idComponente
-        JOIN Maquina m ON c.fkMaquina = m.idMaquina
-        WHERE m.fkEmpresa = ${idEmpresa}
-        GROUP BY DATE_FORMAT(r.horario, '%Y-%m')
-        ORDER BY periodo ASC;
+       SELECT DATE_FORMAT(r.horario, '%Y-%m') AS periodo,
+              SUM(CASE WHEN a.nivel = 'CRÍTICO' THEN 1 ELSE 0 END) AS critico,
+              SUM(CASE WHEN a.nivel = 'ATENÇÃO' THEN 1 ELSE 0 END) AS atencao,
+              SUM(CASE WHEN a.nivel = 'OCIOSO' THEN 1 ELSE 0 END) AS ocioso
+       FROM Alerta a
+       JOIN Registro r ON a.fkRegistro = r.idRegistro
+       JOIN Componente c ON r.fkComponente = c.idComponente
+       JOIN Maquina m ON c.fkMaquina = m.idMaquina
+       WHERE m.fkEmpresa = ${idEmpresa}
+       GROUP BY DATE_FORMAT(r.horario, '%Y-%m')
+       ORDER BY periodo ASC;
     `;
     return database.executar(query);
 }
 
+
 // Comparativo por Nível
-function buscarComparativoPorNivel(idEmpresa) {
+function buscarComparativoPorNivel(idEmpresa, ano, bimestre) {
+    const { inicio, fim } = calcularIntervaloBimestre(ano, bimestre);
     const query = `
         SELECT
             a.nivel AS nivel_alerta,
@@ -103,7 +123,8 @@ function buscarComparativoPorNivel(idEmpresa) {
 }
 
 // Comparativo de Demanda
-function buscarComparativoDemanda(idEmpresa) {
+function buscarComparativoDemanda(idEmpresa, ano, bimestre) {
+    const { inicio, fim } = calcularIntervaloBimestre(ano, bimestre);
     const query = `
         SELECT 
             tc.tipoComponete AS componente,
@@ -121,7 +142,8 @@ function buscarComparativoDemanda(idEmpresa) {
 }
 
 // Comparativo Severidade por Componente
-function buscarComparativoSeveridadePorComponente(idEmpresa) {
+function buscarComparativoSeveridadePorComponente(idEmpresa, ano, bimestre) {
+    const { inicio, fim } = calcularIntervaloBimestre(ano, bimestre);
     const query = `
         SELECT 
             tc.tipoComponete AS componente,
@@ -143,7 +165,8 @@ function buscarComparativoSeveridadePorComponente(idEmpresa) {
 }
 
 // Ranking
-function buscarRanking(idEmpresa) {
+function buscarRanking(idEmpresa, ano, bimestre) {
+    const { inicio, fim } = calcularIntervaloBimestre(ano, bimestre);
     const query = `
         SELECT 
             m.nome AS maquina,
