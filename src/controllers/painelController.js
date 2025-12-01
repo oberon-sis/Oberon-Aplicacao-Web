@@ -23,13 +23,12 @@ async function procurar_informacoes_maquina(req, res) {
             painelModel.buscar_info_24_horas_coleta(idMaquina)
         ]);
         
-
         res.status(200).json({
-            info_tecnica_computador: info_tecnica_computador, 
-            info_tecnica_componentes: info_tecnica_componentes, 
-            dados_kpi_alertas: dados_kpi_alertas, 
-            dados_parametros_por_componente: dados_parametros_por_componente, 
-            dados_coleta_24_horas: dados_coleta_24_horas
+            info_tecnica_computador, 
+            info_tecnica_componentes, 
+            dados_kpi_alertas, 
+            dados_parametros_por_componente, 
+            dados_coleta_24_horas
         });
 
     } catch (erro) {
@@ -40,18 +39,19 @@ async function procurar_informacoes_maquina(req, res) {
         });
     }
 }
+
 async function procurar_dados_iniciais_painel(req, res) {
     const id_empresa = req.headers["id-empresa"];
     if (!id_empresa) {
         return res.status(400).send('dados não fornecidos');
     }
     try {
-        const dados_filtros = await painelModel.buscar_dados_filtros(id_empresa)
-        const dados_maquinas = await geralModel.buscar_maquinas(id_empresa)
+        const dados_filtros = await painelModel.buscar_dados_filtros(id_empresa);
+        const dados_maquinas = await geralModel.buscar_maquinas(id_empresa);
         
         res.status(200).json({ 
-            dados_filtros: dados_filtros, 
-            dados_maquinas:  dados_maquinas,
+            dados_filtros, 
+            dados_maquinas
         });
     } catch (erro) {
         console.error(`Erro ao buscar dados para a pagina Painel: ${erro.message}`);
@@ -66,18 +66,21 @@ async function procurar_cards_painel_dinamico(req, res) {
     const id_empresa = req.headers["id-empresa"];
     const pagina_atual = req.headers["pagina-atual"];
     const tamanho_da_pagina = req.headers["tamanho-pagina"];
-    const status_filtro = req.headers["status-filtro"] == ''? null: req.headers["status-filtro"] ;
-    const nome_busqueda = req.headers["nome-busqueda"]== ''? null: req.headers["nome-busqueda"];
+    const status_filtro = req.headers["status-filtro"] === '' ? null : req.headers["status-filtro"];
+    const nome_busqueda = req.headers["nome-busqueda"] === '' ? null : req.headers["nome-busqueda"];
+
     if (!id_empresa || !pagina_atual || !tamanho_da_pagina) {
         return res.status(400).send('dados não fornecidos');
     }
 
     try {
         const dados_brutos_card = await painelModel.buscar_dados_cards_painel(
-            id_empresa, pagina_atual, tamanho_da_pagina, status_filtro,nome_busqueda )
-        
+            id_empresa, pagina_atual, tamanho_da_pagina, status_filtro, nome_busqueda
+        );
+
+        // aqui garantimos que passamos apenas o array de máquinas
         const dados_cards_processados = mapearStatusParaApresentacao(dados_brutos_card);
-        
+
         res.status(200).json({ 
             dados_card: dados_cards_processados 
         });
@@ -90,15 +93,12 @@ async function procurar_cards_painel_dinamico(req, res) {
     }
 }
 
-/**
- * @param {Array<Object>} listaMaquinasBrutas Lista de objetos de máquina do banco de dados.
- * @returns {Array<Object>} Lista de objetos de máquina enriquecidos.
- */
 function mapearStatusParaApresentacao(listaMaquinasBrutas) {
     if (!Array.isArray(listaMaquinasBrutas) || listaMaquinasBrutas.length === 0) {
         return [];
     }
 
+    // agora tratamos corretamente o retorno do CALL
     const maquinasParaProcessar = listaMaquinasBrutas[0];
 
     if (!Array.isArray(maquinasParaProcessar)) {
@@ -137,9 +137,9 @@ function mapearStatusParaApresentacao(listaMaquinasBrutas) {
             icone_classe = 'bi-exclamation-circle-fill';
         }
         else if (statusAlerta.includes("OCIOSO")) {
-             status_normalizado = 'ocioso';
-             cor_classe = 'info';
-             icone_classe = 'bi-info-circle-fill';
+            status_normalizado = 'ocioso';
+            cor_classe = 'info';
+            icone_classe = 'bi-info-circle-fill';
         }
 
         return {
@@ -150,6 +150,7 @@ function mapearStatusParaApresentacao(listaMaquinasBrutas) {
         };
     });
 }
+
 module.exports = {
   procurar_informacoes_maquina,
   procurar_cards_painel_dinamico,
