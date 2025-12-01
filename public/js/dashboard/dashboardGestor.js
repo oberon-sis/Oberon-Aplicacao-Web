@@ -3,7 +3,7 @@
 // =========================================================
 let chartEvolucao = null;
 let chartSaudeAgregada = null;
-let bimestreAtual = 6; 
+let bimestreAtual = 1; 
 
 // Controle das Tabelas
 let listaSobrecargaAtual = [];
@@ -15,19 +15,24 @@ let ordemOciosaAsc = true;
 // 2. INICIALIZAÇÃO
 // =========================================================
 document.addEventListener("DOMContentLoaded", function() {
-    // Popovers
+    // Inicializa Popovers do Bootstrap
     const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
     popoverTriggerList.map(function (popoverTriggerEl) { 
         return new bootstrap.Popover(popoverTriggerEl); 
     });
 
+    // Inicializa gráficos vazios para não quebrar o layout
     initGraficosVazios();
 
-    // Define textos iniciais
+    // Define textos iniciais do Header
     document.getElementById('valor_pesquisa_periodo').innerText = `Bimestre ${bimestreAtual}`;
     document.querySelector(".header-top h2.fs-5").innerText = `2025 - Bimestre ${bimestreAtual}`;
 
+    // Busca dados iniciais
     carregarDadosDashboard(bimestreAtual);
+    
+    // Inicializa o Tour (Lógica no final do arquivo)
+    initTourGestor();
 });
 
 // =========================================================
@@ -83,6 +88,7 @@ function atualizarKPIs(kpis) {
 function atualizarListas(listas) {
     listaSobrecargaAtual = listas.topSobrecarga;
     listaOciosaAtual = listas.topOciosas;
+    // Reseta ordenação padrão ao carregar novos dados
     ordemSobrecargaDesc = true; 
     ordemOciosaAsc = true;
     renderizarTabelaSobrecarga(listaSobrecargaAtual);
@@ -305,31 +311,73 @@ function initGraficosVazios() {
 }
 
 // =========================================================
-// 6. TOUR GUIADO (ÚNICA INSTÂNCIA)
+// 6. TOUR GUIADO - ESPECÍFICO PARA GESTÃO DE ATIVOS
 // =========================================================
+
+// Definição dos Passos (Configurados pelos IDs do HTML fornecido)
+// =========================================================
+// 6. TOUR GUIADO - TEXTOS APRIMORADOS (Foco em Negócio)
+// =========================================================
+
 const gestorTourSteps = [
-    { id: 'kpi-section', title: 'Passo 1/6: Visão Macro', content: 'Visão geral da saúde da infraestrutura.', position: 'bottom' },
-    { id: 'valor_pesquisa_periodo', title: 'Passo 2/6: Filtro de Tempo', content: 'Navegue pelos bimestres para ver a evolução histórica.', position: 'left' },
-    { id: 'chart-tendencia-estabilidade', title: 'Passo 3/6: Tendência', content: 'Acompanhe se os problemas estão aumentando ou diminuindo.', position: 'right' },
-    { id: 'matrizOtimizacaoChart', title: 'Passo 4/6: Saúde da Frota', content: 'Proporção de máquinas Críticas (Vermelho), Ociosas (Azul) e Saudáveis (Verde).', position: 'left' },
-    { id: 'list-sobrecarga', title: 'Passo 5/6: Prioridade Alta', content: 'Máquinas sofrendo com alta carga. Clique em "Média" para ordenar.', position: 'top' },
-    { id: 'list-ociosas', title: 'Passo 6/6: Economia', content: 'Máquinas subutilizadas. Oportunidade de remanejamento.', position: 'top' }
+    { 
+        id: 'kpi-section', 
+        title: 'Passo 1/6: O Pulso da Operação', 
+        content: 'Aqui você tem o diagnóstico imediato da sua infraestrutura. Monitore desde gargalos de performance (Sobrecarga) até riscos físicos de perda de dados (Disco), tudo em uma única linha de visão.', 
+        position: 'bottom' 
+    },
+    { 
+        id: 'valor_pesquisa_periodo', 
+        title: 'Passo 2/6: Análise Histórica', 
+        content: 'Não olhe apenas para o hoje. Alterne entre os bimestres para identificar tendências sazonais, justificar orçamentos passados ou projetar investimentos futuros.', 
+        position: 'bottom' 
+    },
+    { 
+        id: 'chart-tendencia-estabilidade', 
+        title: 'Passo 3/6: Evolução de Incidentes', 
+        content: 'Sua infraestrutura está melhorando ou degradando? Acompanhe a curva de alertas para identificar qual componente (CPU, RAM ou Disco) é o maior ofensor da estabilidade atual.', 
+        position: 'right' 
+    },
+    { 
+        id: 'chart-saude-ativos', 
+        title: 'Passo 4/6: Raio-X da Frota', 
+        content: 'Entenda a eficiência do seu parque tecnológico:\n🔴 <b>Crítico:</b> Exige upgrade urgente.\n🔵 <b>Ocioso:</b> Equipamento subutilizado (desperdício).\n🟢 <b>Saudável:</b> Operação ideal.', 
+        position: 'left' 
+    },
+    { 
+        id: 'list-sobrecarga', 
+        title: 'Passo 5/6: Prioridade de Investimento', 
+        content: 'Estas máquinas estão limitando a produtividade da sua equipe. Use esta lista para direcionar upgrades de hardware para quem realmente precisa.', 
+        position: 'top' 
+    },
+    { 
+        id: 'list-ociosas', 
+        title: 'Passo 6/6: Oportunidade de Economia', 
+        content: 'Evite compras desnecessárias! Estas máquinas estão "sobrando". Considere realizar um remanejamento (downgrade) para otimizar seus custos.', 
+        position: 'top' 
+    }
 ];
 
-let tourGestorInstance = null;
-
-function iniciarTourGestor() {
+// Função de Inicialização do Tour
+function initTourGestor() {
+    // Verificação de segurança: Só roda se a biblioteca TourGuide estiver carregada
     if (typeof TourGuide === 'undefined') {
-        console.warn('A biblioteca TourGuide não foi carregada.');
+        console.warn('TourGuide library not found.');
         return;
     }
 
-    if (!tourGestorInstance) {
-        tourGestorInstance = new TourGuide(gestorTourSteps, { 
-            tourName: 'tour_dash_gestor_final', 
-            rememberStep: true,
-            confirmCancel: false
+    // Cria a instância do Tour
+    const gestorTour = new TourGuide(gestorTourSteps, {
+        tourName: 'gestorPageTour', // Nome único para salvar no localStorage se já foi visto
+        autoStart: false,           // Não inicia sozinho (controlado pelo botão)
+        createStartButton: false    // Evita criação de botões automáticos indesejados
+    });
+
+    // Vincula ao botão "Primeiros Passos" do HTML
+    const startTourBtn = document.getElementById('start-tour-btn');
+    if (startTourBtn) {
+        startTourBtn.addEventListener('click', () => {
+            gestorTour.startTour();
         });
     }
-    tourGestorInstance.startTour();
 }
