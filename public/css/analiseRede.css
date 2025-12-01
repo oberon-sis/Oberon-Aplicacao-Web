@@ -124,13 +124,10 @@ canvas {
   max-height: 300px;
 }
 
-
 .par_topo {
   display: flex;
   flex-direction: column;
 }
-
-
 
 .par_topo img {
   height: 30px;
@@ -186,12 +183,6 @@ canvas {
   }
 }
 
-
-
-
-
-
-
 @media (min-width: 2000px) {
   .botao_select {
     font-size: 2rem;
@@ -240,7 +231,7 @@ canvas {
 
 .kpi-container {
   gap: 20px;
- 
+
   display: flex;
   flex-wrap: wrap;
 }
@@ -318,9 +309,3 @@ canvas {
   overflow-x: auto;
   padding-right: 10px;
 }
-
-
-
-
-
-
