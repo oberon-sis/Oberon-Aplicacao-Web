@@ -85,7 +85,6 @@ jobs:
             echo "PASSWORD_DB='${{ secrets.DB_PASSWORD_PROD }}'" >> .env
             echo "GEMINI_API_KEY='${{ secrets.GEMINI_API_KEY }}'" >> .env
             echo "PORT=5055" >> .env
-            echo "MYSQL_ROOT_PASSWORD: '${{secrets.MYSQL_PASSWORD}}'" >> .env
 
             
 
