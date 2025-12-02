@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const usuario = JSON.parse(usuarioJson);
     idEmpresa = usuario.fkEmpresa || usuario.idEmpresa || usuario.ID_EMPRESA || usuario.empresa?.id;
     if (!idEmpresa) {
-      console.error('ERRO: ID da empresa não encontrado no objeto usuario!');
+      console.error('ERRO: ID da empresa não encontrado no objeto usuário!');
       alert('Erro: Não foi possível identificar sua empresa. Entre em contato com o suporte.');
       return;
     }
@@ -67,24 +67,24 @@ document.addEventListener('DOMContentLoaded', function () {
       return { mediana: null, q1: null, q3: null, p90: null, min: null, max: null, outliers: [] };
     }
 
-    const sorted = [...dadosBrutos].sort((a, b) => a - b);
-    const n = sorted.length;
+    const dadosOrdenados = [...dadosBrutos].sort((a, b) => a - b);
+    const n = dadosOrdenados.length;
 
-    const quantile = (arr, p) => {
+    const quartil = (arr, p) => {
       if (n === 0) return null;
       if (n === 1) return arr[0];
       const index = p * (n - 1);
-      const lower = Math.floor(index);
-      const upper = Math.ceil(index);
-      const weight = index - lower;
-      if (lower === upper) return arr[lower];
-      return arr[lower] * (1 - weight) + arr[upper] * weight;
+      const abaixo = Math.floor(index);
+      const acima = Math.ceil(index);
+      const peso = index - abaixo;
+      if (abaixo === acima) return arr[abaixo];
+      return arr[abaixo] * (1 - peso) + arr[acima] * peso;
     };
 
-    const q1 = quantile(sorted, 0.25);
-    const median = quantile(sorted, 0.5);
-    const q3 = quantile(sorted, 0.75);
-    const p90 = quantile(sorted, 0.9);
+    const q1 = quartil(dadosOrdenados, 0.25);
+    const median = quartil(dadosOrdenados, 0.5);
+    const q3 = quartil(dadosOrdenados, 0.75);
+    const p90 = quartil(dadosOrdenados, 0.9);
     const iqr = q3 - q1;
     const limiteInferior = q1 - 1.5 * iqr;
     const limiteSuperior = q3 + 1.5 * iqr;
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let minimo = null;
     let maximo = null;
 
-    sorted.forEach((valor) => {
+    dadosOrdenados.forEach((valor) => {
       if (valor < limiteInferior || valor > limiteSuperior) {
         outliers.push(valor);
       } else {
@@ -101,8 +101,8 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    if (minimo === null) minimo = sorted[0];
-    if (maximo === null) maximo = sorted[n - 1];
+    if (minimo === null) minimo = dadosOrdenados[0];
+    if (maximo === null) maximo = dadosOrdenados[n - 1];
 
     return {
       q1: q1,
@@ -354,7 +354,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     parametros.forEach((param) => {
       const limiteNum = parseFloat(param.limite_atual);
-      const unidade = componenteAtual === 'REDE' ? '%' : '%';
+      const unidade = '%';
       const limiteFormatado = `${limiteNum}${unidade}`;
       if (param.identificador === 'CRÍTICO') {
         limiteCritico = `≥ ${limiteFormatado}`;
