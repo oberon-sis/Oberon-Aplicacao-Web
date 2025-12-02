@@ -89,7 +89,8 @@ jobs:
 
             echo "HOST_DB='${{ secrets.DB_HOST_PROD }}'" >> .env
             echo "USER_DB='${{ secrets.DB_USER_PROD }}'" >> .env
-            echo "PASSWORD_DB='${{ secrets.DB_PASSWORD_PROD }}'" >> .env
+            echo "DATABASE_DB='${{ secrets.DB_USER_PROD }}'" >> .env
+            echo "PASSWORD_DB='${{ secrets.DB_DATABASE_PROD }}'" >> .env
             echo "GEMINI_API_KEY='${{ secrets.GEMINI_API_KEY }}'" >> .env
             echo "PORT=5055" >> .env
 
