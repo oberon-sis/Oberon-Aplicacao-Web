@@ -354,7 +354,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     parametros.forEach((param) => {
       const limiteNum = parseFloat(param.limite_atual);
-      const unidade = componenteAtual === 'REDE' ? '%' : '%';
+      const unidade = '%';
       const limiteFormatado = `${limiteNum}${unidade}`;
       if (param.identificador === 'CRÍTICO') {
         limiteCritico = `≥ ${limiteFormatado}`;
