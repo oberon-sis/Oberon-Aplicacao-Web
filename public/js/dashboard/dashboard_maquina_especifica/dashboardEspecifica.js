@@ -31,6 +31,7 @@ var graficoAlertas;
 var uptimeInterval;
 
 
+// Esse Bloco de codigo faz o tratamento de tempo e hora, fazendo com que fique dinamico os valores
 
 function corrigirDataHora(valor) {
     if (typeof valor === "string") return valor;
@@ -62,9 +63,19 @@ function normalizarAlerta(a) {
 
 function tempoParaSegundos(tempoString) {
     if (!tempoString || typeof tempoString !== 'string') return 0;
-    const partes = tempoString.split(':').map(Number);
-    return partes.length === 3 ? partes[0] * 3600 + partes[1] * 60 + partes[2] : 0;
+
+    const partesString = tempoString.split(':');
+    const partes = [];
+
+    for (let i = 0; i < partesString.length; i++) {
+        partes.push(Number(partesString[i]));
+    }
+
+    return partes.length === 3
+        ? partes[0] * 3600 + partes[1] * 60 + partes[2]
+        : 0;
 }
+
 
 function segundosParaTempo(segundos) {
     const h = Math.floor(segundos / 3600).toString().padStart(2, '0');
@@ -110,7 +121,7 @@ function formatarKpiMenorMelhor(valorAtual, valorPassado, sufixo = "") {
     return { html: `${atual}${sufixo} <i class="bi ${iconClass}" style="scale: 1.2"></i>`, class: colorClass };
 }
 
-
+// ------------------------------------------------
 
 function preencherTabelaAlertas(alertas) {
     tabelaAlertas.innerHTML = "";
@@ -136,53 +147,63 @@ function preencherTabelaAlertas(alertas) {
 }
 
 async function carregarInformacoesMaquina(idMaquina) {
-    try {
-        const resposta = await fetch(`/dashboardEspecifica/procurar_informacoes_maquina/${idMaquina}`);
-        if (!resposta.ok) throw new Error("Erro API");
-        const json = await resposta.json();
-        const dados = json.data;
-        if (!dados) throw new Error("Sem dados");
+   try {
+    const resposta = await fetch(`/dashboardEspecifica/procurar_informacoes_maquina/${idMaquina}`);
+    if (!resposta.ok) throw new Error("Erro API");
 
-        const info = dados.info_tecnica_computador?.[0];
-        const kpiAlertas = dados.dados_kpi_alertas_30d?.[0];
-        const kpiDisp = dados.dados_kpi_disponibilidade?.[0];
-        const ultimosEventos = dados.dados_ultimos_eventos ?? [];
-        const graficoLinha = dados.dados_coleta_24_horas ?? [];
-        const graficoBarra = dados.dados_kpi_pico_24h ?? [];
-        const dadosComponenteCritico = dados.dados_kpi_componente_critico ?? 0;
+    const json = await resposta.json();
+    const dados = json.data;
+    if (!dados) throw new Error("Sem dados");
 
-        atualizarHeader(info);
-        atualizarKpis(kpiAlertas, kpiDisp, dadosComponenteCritico);
-        preencherTabelaAlertas(ultimosEventos.map(normalizarAlerta));
-       
-        atualizarGraficoPrincipal(montarDadosGraficoLinha(graficoLinha));
-        atualizarGraficoAlertas(montarDadosGraficoBarra(graficoBarra));
+    const info = dados.info_tecnica_computador?.[0];
+    const kpiAlertas = dados.dados_kpi_alertas_30d?.[0];
+    const kpiDisp = dados.dados_kpi_disponibilidade?.[0];
+    const ultimosEventos = dados.dados_ultimos_eventos ?? [];
+    const graficoLinha = dados.dados_coleta_24_horas ?? [];
+    const graficoBarra = dados.dados_kpi_pico_24h ?? [];
+    const dadosComponenteCritico = dados.dados_kpi_componente_critico ?? 0;
 
-        console.log(kpiAlertas);
-        console.log(dadosComponenteCritico);
-    } catch (erro) {
-        console.error("Erro:", erro);
+    const eventosNormalizados = [];
+    for (let i = 0; i < ultimosEventos.length; i++) {
+        eventosNormalizados.push(normalizarAlerta(ultimosEventos[i]));
     }
+
+    atualizarHeader(info);
+    atualizarKpis(kpiAlertas, kpiDisp, dadosComponenteCritico);
+    preencherTabelaAlertas(eventosNormalizados);
+
+    atualizarGraficoPrincipal(montarDadosGraficoLinha(graficoLinha));
+    atualizarGraficoAlertas(montarDadosGraficoBarra(graficoBarra));
+
+    console.log(kpiAlertas);
+    console.log(dadosComponenteCritico);
+
+} catch (erro) {
+    console.error("Erro:", erro);
+}
+
 }
 
 window.onload = () => carregarInformacoesMaquina(idMaquina || 1);
+
+
 
 function atualizarHeader(info) {
     if (tituloDoPainel) tituloDoPainel.innerText = info?.nome || `Máquina ${idMaquina}`;
 }
 
+
+
 function atualizarKpis(dadosAlerta, dadosDisp, dataComponenteCritico) {
     if (!dadosAlerta || !dadosDisp || !dataComponenteCritico) return;
 
-    const kpiTempo = formatarKpiTempo(dadosDisp.tempoLigadoUltimaSemana, dadosDisp.tempoLigadoSemanaPassada);
-    console.log(kpiTempo.valorPassadoFormatado, "<- Valor passado formatado")
+    const kpiTempo = formatarKpiTempo(dadosDisp.tempoLigadoUltimaSemana);
     txtDisponibilidade.innerHTML = kpiTempo.html;
     txtDisponibilidade.className = kpiTempo.class;
     iniciarContadorUptime(dadosDisp.tempoLigadoUltimaSemana);
     
 
     const totalAtual = dadosAlerta.totalAlertas30dias || 0;
-    const totalSemanal = dadosAlerta.totalAlertasdias || 0;
 
 
     const kpiAlertas = formatarKpiMenorMelhor(totalAtual, 380);
@@ -203,31 +224,64 @@ function atualizarKpis(dadosAlerta, dadosDisp, dataComponenteCritico) {
 
 
 function montarDadosGraficoLinha(dados) {
-    const labels = [...new Set(dados.map(d => d.intervaloTempo))].sort();
+ 
+    const labelsSet = new Set();
+    for (let i = 0; i < dados.length; i++) {
+        labelsSet.add(dados[i].intervaloTempo);
+    }
+
+    const labels = Array.from(labelsSet).sort();
+
     const recursos = ['CPU', 'RAM', 'DISCO', 'REDE'];
-    const datasets = recursos.map(r => ({
-        label: `${r} (%)`,
-        data: labels.map(l => {
-            const item = dados.find(d => d.intervaloTempo === l && d.tipoRecurso === r);
-            return item ? item.valor_medio : null;
-        }),
-        borderColor: CORES_SISTEMA[r] || CORES_SISTEMA.DEFAULT,
-        backgroundColor: (CORES_SISTEMA[r] || CORES_SISTEMA.DEFAULT) + '20', 
-        tension: 0.4,
-        fill: false,
-        pointRadius: 3,
-        borderWidth: 2
-    }));
+
+    const datasets = [];
+
+    for (let r = 0; r < recursos.length; r++) {
+        const recurso = recursos[r];
+        const dataset = {
+            label: `${recurso} (%)`,
+            data: [],
+            borderColor: CORES_SISTEMA[recurso] || CORES_SISTEMA.DEFAULT,
+            backgroundColor: (CORES_SISTEMA[recurso] || CORES_SISTEMA.DEFAULT) + '20',
+            tension: 0.4,
+            fill: false,
+            pointRadius: 3,
+            borderWidth: 2
+        };
+
+        for (let l = 0; l < labels.length; l++) {
+            const labelAtual = labels[l];
+            let valor = null;
+
+            for (let d = 0; d < dados.length; d++) {
+                if (dados[d].intervaloTempo === labelAtual && dados[d].tipoRecurso === recurso) {
+                    valor = dados[d].valor_medio;
+                    break;
+                }
+            }
+
+            dataset.data.push(valor);
+        }
+
+        datasets.push(dataset);
+    }
 
     return { labels, datasets };
 }
 
+
 function montarDadosGraficoBarra(dados) {
-    return {
-        labels: dados.map(d => d.tipoRecurso),
-        data: dados.map(d => d.totalAlertas24h)
-    };
+    const labels = [];
+    const data = [];
+
+    for (let i = 0; i < dados.length; i++) {
+        labels.push(dados[i].tipoRecurso);
+        data.push(dados[i].totalAlertas24h);
+    }
+
+    return { labels, data };
 }
+
 
 function atualizarGraficoPrincipal(dadosGrafico) {
     const ctx = graficoCanvasPrincipal.getContext("2d");
@@ -290,7 +344,11 @@ function atualizarGraficoAlertas(dadosGrafico) {
     const ctx = graficoCanvasAlertas.getContext("2d");
     if (graficoAlertas) graficoAlertas.destroy();
 
-    const backgroundColors = dadosGrafico.labels.map(label => CORES_SISTEMA[label] || CORES_SISTEMA.DEFAULT);
+    const backgroundColors = [];
+    for (let i = 0; i < dadosGrafico.labels.length; i++) {
+        const label = dadosGrafico.labels[i];
+        backgroundColors.push(CORES_SISTEMA[label] || CORES_SISTEMA.DEFAULT);
+    }
 
     graficoAlertas = new Chart(ctx, {
         type: 'bar',
@@ -306,7 +364,7 @@ function atualizarGraficoAlertas(dadosGrafico) {
             }]
         },
         options: {
-            indexAxis: 'y', 
+            indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
