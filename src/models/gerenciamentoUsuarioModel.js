@@ -127,22 +127,20 @@ function getTipoUsuario() {
       return database.executar(instrucaoSql);
 }
 
-function ExcluirUsuario(idFuncionario) {
+function ExcluirUsuario(idFuncionario, idGerente) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function ExcluirUsuario():", idFuncionario);
     
    
     var instrucao1 = `DELETE FROM LogAuditoria WHERE fkFuncionario = ${idFuncionario};`;
     
     
-    var instrucao2 = `DELETE FROM Funcionario WHERE idFuncionario = ${idFuncionario};`;
+        var instrucao2 = `
+    SET @USUARIO_LOGADO = ${idGerente};
+    DELETE FROM Funcionario WHERE idFuncionario = ${idFuncionario};`;
 
     console.log("Executando exclusão de logs...");
     
-    return database.executar(instrucao1)
-        .then(() => {
-            console.log("Logs excluídos. Excluindo funcionário...");
-            return database.executar(instrucao2);
-        });
+    return database.executar(instrucao2)
 }
 
 function listarFuncionarios(limit, offset) {
@@ -157,6 +155,7 @@ function listarFuncionarios(limit, offset) {
                 t.tipoUsuario AS funcao
             FROM Funcionario AS f
             JOIN TipoUsuario AS t ON f.fkTipoUsuario = t.idTipoUsuario
+            WHERE f.fkEmpresa = 2
             ORDER BY f.nome ASC
             LIMIT ${limit} OFFSET ${offset};
         `;
@@ -171,7 +170,7 @@ function contarTotalUsuarios() {
       );
       var instrucaoSql = `
             SELECT COUNT(idFuncionario) AS totalItems 
-            FROM Funcionario;
+            FROM Funcionario Where fkFuncionario = 2;
         `;
       console.log('Executando a instrução SQL: \n' + instrucaoSql);
       return database.executar(instrucaoSql);
@@ -199,7 +198,7 @@ function PesquisarUsuario(campo, valor) {
              t.tipoUsuario AS funcao
             FROM Funcionario AS f
             JOIN TipoUsuario AS t ON f.fkTipoUsuario = t.idTipoUsuario
-          WHERE ${campo} LIKE '${valor}%';
+          WHERE ${campo}  LIKE '${valor}%' and fkEmpresa = 2;
     `;
 
     console.log('Executando a instrução SQL: \n' + instrucaoSql);

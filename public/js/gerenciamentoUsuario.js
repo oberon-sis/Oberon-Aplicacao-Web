@@ -405,6 +405,7 @@ function ExcluirUsuario(idFuncionario) {
         body: JSON.stringify({ idGerente: idGerente, senha: senhaGerente }),
       })
         .then((res) => {
+          console.log(res)
           if (res.ok) {
             Swal.fire({
               title: 'Sucesso!',

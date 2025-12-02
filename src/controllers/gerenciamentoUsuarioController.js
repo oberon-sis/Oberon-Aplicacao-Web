@@ -198,9 +198,9 @@ function ExcluirUsuario(req, res) {
 
             if (senhaCorreta) {
                 gerenciamentoUsuarioModel
-                    .ExcluirUsuario(idFuncionario)
+                    .ExcluirUsuario(idFuncionario, idGerente)
                     .then(function (resultadoExclusao) {
-                        if (resultadoExclusao.affectedRows > 0) {
+                        if (resultadoExclusao[1].affectedRows > 0) {
                             res.status(200).send('Funcionário excluído com sucesso.');
                         } else {
                             res.status(404).send('Funcionário não encontrado ou já excluído.');

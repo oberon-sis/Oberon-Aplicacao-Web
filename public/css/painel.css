@@ -232,7 +232,6 @@ body {
 }
 
 .resource-cards {
-  background-color: rgba(0, 47, 255, 0.315);
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
