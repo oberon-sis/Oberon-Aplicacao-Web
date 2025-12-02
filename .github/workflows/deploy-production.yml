@@ -62,8 +62,8 @@ jobs:
             echo "# Arquivo .env gerado pelo GitHub Actions (Production)" > .env
             
             echo "WEB_IMAGE=jhoeldiego/oberon-app-web:$IMAGE_TAG" >> .env 
-            echo "BANCO_IMAGE=jhoeldiego/oberon-banco-de-dados:latest >> .env 
-            echo "PYTHON_IMAGE=jhoeldiego/oberon-analise-ia:latest >> .env 
+            echo "BANCO_IMAGE=jhoeldiego/oberon-banco-de-dados:latest" >> .env 
+            echo "PYTHON_IMAGE=jhoeldiego/oberon-analise-ia:latest" >> .env 
 
             echo "AMBIENTE_PROCESSO=producao" >> .env
 
@@ -92,7 +92,7 @@ jobs:
             echo "PASSWORD_DB='${{ secrets.DB_PASSWORD_PROD }}'" >> .env
             echo "GEMINI_API_KEY='${{ secrets.GEMINI_API_KEY }}'" >> .env
             echo "PORT=5055" >> .env
-            echo "MYSQL_ROOT_PASSWORD: ${{secrets.MYSQL_PASSWORD}}" >> .env
+            echo "MYSQL_ROOT_PASSWORD: '${{secrets.MYSQL_PASSWORD}}'" >> .env
 
             
 

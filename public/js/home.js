@@ -139,7 +139,7 @@ async function loadTopCriticalMachines(fkEmpresa) {
         <div class="col-12">
           <div class="alert alert-info text-center" role="alert">
             <i class="fas fa-info-circle me-2"></i>
-            Nenhuma máquina em <strong>Alerta</strong> ou <strong>Crítico</strong> nas últimas 24 horas.
+            Nenhuma máquina em Alerta ou Crítico nas últimas 24 horas.
           </div>
         </div>
       `;
